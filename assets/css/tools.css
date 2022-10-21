@@ -1,0 +1,6 @@
+.input_user {
+    height: 50px;
+    border: none;
+    border-bottom: 1px solid coral;
+    transition: width 0.5s ease-in-out;
+}
