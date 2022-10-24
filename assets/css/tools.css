@@ -1,6 +1,66 @@
-.input_user {
+/*
+ * This is the style file for the form
+ */
+
+/* center state */
+.form-input-center {
+    justify-content: center;
+    opacity: 1;
+    transition-property: opacity, transform;
+    transition-duration: 500ms;
+}
+.form-header-center {
+    justify-content: center;
+    opacity: 1;
+    transition-property: opacity, transform;
+    transition-duration: 500ms;
+}
+/* right state */
+.form-input-right {
+    transition: opacity;
+    transition-duration: 500ms;
+    transition-timing-function: ease-in-out;
+    transition-property: opacity, transform;
+    opacity: 0;
+    transform: translateX(960px);
+}
+.form-header-right {
+    transition: opacity;
+    transition-duration: 500ms;
+    transition-timing-function: ease-in-out;
+    transition-property: opacity, transform;
+    opacity: 0;
+    transform: translateX(960px);
+}
+/* left state */
+.form-input-left {
+    transition: opacity;
+    transition-duration: 500ms;
+    transition-timing-function: ease-in-out;
+    transition-property: opacity, transform;
+    opacity: 0;
+    transform: translateX(-960px);
+}
+.form-header-left {
+    transition: opacity;
+    transition-duration: 500ms;
+    transition-timing-function: ease-in-out;
+    transition-property: opacity, transform;
+    opacity: 0;
+    transform: translateX(-960px);
+}
+
+/* other styles */
+.form-class {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+#form-header-id{
+    padding: 10px;
+}
+.form-input-style {
     height: 50px;
     border: none;
     border-bottom: 1px solid coral;
-    transition: width 0.5s ease-in-out;
 }
+
