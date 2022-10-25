@@ -4,9 +4,27 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
+
 document.addEventListener('DOMContentLoaded', () => {
   "use strict";
-
+    /* define the class for questions*/
+    let Questions = [];
+    class question {
+        constructor(question, Qidx){
+            this.question = question; // must be a text string
+            this.Qidx = Qidx;
+        }
+        pushData (){
+            Questions.push(this);
+        }
+    };
+    function questionCreate(){
+        let Obj = new question('what is your goal?', 0);
+        Obj.pushData(Obj);
+        Obj = new question('what is your name?', 1);
+        Obj.pushData(Obj);
+    }
+    questionCreate();
   /**
    * Preloader
    */
@@ -123,31 +141,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const moveright = document.querySelector('.form-go-right');
     if (moveright) {
         moveright.addEventListener('click', function(event) {
-            document.getElementsByClassName('form-input-center')[0].classList.toggle("form-input-right");
-            document.getElementsByClassName('form-header-center')[0].classList.toggle("form-header-right");
-
+            document.getElementsByClassName('form-input')[0].style.transform = "translateX(50%)";
+            document.getElementsByClassName('form-input')[0].style.opacity = 0;
+            document.getElementsByClassName('form-header')[0].style.transform = "translateX(50%)";
+            document.getElementsByClassName('form-header')[0].style.opacity = 0;
+            console.log(Questions[0].question);
+            // new form created
+ /*           let HeaderDiv = document.getElementsByClassName('form-header-center')[0];
+            let newP = document.createElement("p");
+            newP.setAttribute("id", "form-header-id");
+            HeaderDiv.appendChild(newP);
+            
+            let InputDiv = document.getElementsByClassName('form-input-center')[0];
+            let newIn = document.createElement("input");
+            newIn.setAttribute("type", "text");
+            newIn.setAttribute("class", "col-xs-6 col-sm-6 col-md-6 col-lg-6 form-input-style");
+            InputDiv.appendChild(newIn); */
       });
     }
 
     const moveleft = document.querySelector('.form-go-left');
     if (moveleft) {
         moveleft.addEventListener('click', function(event) {
-            document.getElementsByClassName('form-input-center')[0].classList.toggle("form-input-left");
-            document.getElementsByClassName('form-header-center')[0].classList.toggle("form-header-left");
-
-      });
+            document.getElementsByClassName('form-input-center')[0].style.transform = "translateX(-50%)";
+            document.getElementsByClassName('form-input-center')[0].style.opacity = 0;
+            document.getElementsByClassName('form-header-center')[0].style.transform = "translateX(-50%)";
+            document.getElementsByClassName('form-header-center')[0].style.opacity = 0;
+            
+        });
     }
     
-/*    const createform = document.querySelector('.form-go-forward');
-    if (createform) {
-        createform.addEventListener('click', function(event) {
-            document.getElementsByClassName('form-input-before')[0].classList.toggle("form-input-right");
-            document.getElementsByClassName('form-header-before')[0].classList.toggle("form-header-right");
 
-      });
-    } /*
-    
-    
     /*      let newFormDiv = document.createElement('div');
           newFormDiv.classList.add('justify-content-center d-flex');
           let newFormIn = document.createElement("input");
