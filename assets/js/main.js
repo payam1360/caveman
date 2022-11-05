@@ -9,22 +9,41 @@ document.addEventListener('DOMContentLoaded', () => {
   "use strict";
     /* define the class for questions*/
     let Questions = [];
+    let counter = 0;
+    let input = document.querySelectorAll('.form-input');
+    // reset the question bar
+    input[0].style.width = '0%';
+    input[1].style.opacity = 1;
+    input[2].style.width = '0%';
+    let MAX_cnt = 3;
     class question {
-        constructor(question, Qidx){
+        constructor(question, answer, Qidx){
             this.question = question; // must be a text string
+            this.answer = answer;
             this.Qidx = Qidx;
+            
         }
         pushData (){
             Questions.push(this);
         }
     };
     function questionCreate(){
-        let Obj = new question('what is your goal?', 0);
+        let Obj = new question('what is your goal?', '', 0);
         Obj.pushData(Obj);
-        Obj = new question('what is your name?', 1);
+        Obj = new question('what is your name?', '', 1);
+        Obj.pushData(Obj);
+        Obj = new question('what is your weight?', '', 2);
+        Obj.pushData(Obj);
+        Obj = new question('what is your height?', '', 3);
         Obj.pushData(Obj);
     }
+    // create the questions
     questionCreate();
+
+    
+    //document.getElementsByClassName('form-header')[counter].innerHTML = Questions[0].question;
+    //document.getElementById('answerId').value = '';
+    
   /**
    * Preloader
    */
@@ -141,47 +160,68 @@ document.addEventListener('DOMContentLoaded', () => {
     const moveright = document.querySelector('.form-go-right');
     if (moveright) {
         moveright.addEventListener('click', function(event) {
-            document.getElementsByClassName('form-input')[0].style.transform = "translateX(50%)";
-            document.getElementsByClassName('form-input')[0].style.opacity = 0;
-            document.getElementsByClassName('form-header')[0].style.transform = "translateX(50%)";
-            document.getElementsByClassName('form-header')[0].style.opacity = 0;
-            console.log(Questions[0].question);
-            // new form created
- /*           let HeaderDiv = document.getElementsByClassName('form-header-center')[0];
-            let newP = document.createElement("p");
-            newP.setAttribute("id", "form-header-id");
-            HeaderDiv.appendChild(newP);
             
-            let InputDiv = document.getElementsByClassName('form-input-center')[0];
-            let newIn = document.createElement("input");
-            newIn.setAttribute("type", "text");
-            newIn.setAttribute("class", "col-xs-6 col-sm-6 col-md-6 col-lg-6 form-input-style");
-            InputDiv.appendChild(newIn); */
+            //Questions[counter].answer = document.getElementById('answerId').value;
+            let input = document.querySelectorAll('.form-input');
+            let gap = [];
+            gap[0] = input[1].getBoundingClientRect().left-input[0].getBoundingClientRect().left;
+            gap[1] = input[2].getBoundingClientRect().left-input[1].getBoundingClientRect().left;
+
+            input[0].style.transitionDuration = '500ms';
+            input[0].style.transform = ["translateX(" + gap[0].toString() + "px)"];
+            input[0].style.opacity = 1;
+            input[0].style.width = '40%';
+            input[1].style.transitionDuration = '500ms';
+            input[1].style.transform = ["translateX(" + gap[1].toString() + "px)"];
+            input[1].style.opacity = 0;
+            input[1].style.width = '0%';
+            counter++;
       });
     }
+    const resetTransition = document.querySelectorAll('.form-input');
+    resetTransition[0].addEventListener('transitionend', () => {
+        //Reset
+        input[0].style.transitionDuration = '0.001ms';
+        input[0].style.transform = 'translateX(0px)';
+        input[0].style.opacity = 0;
+        input[0].style.width = '0%';
+    });
+    resetTransition[1].addEventListener('transitionend', () => {
+        //Reset
+        input[1].style.transitionDuration = '0.001ms';
+        input[1].style.transform = 'translateX(0px)';
+        input[1].style.opacity = 1;
+        input[1].style.width = '40%';
+    });
+    resetTransition[2].addEventListener('transitionend', () => {
+        //Reset
+        input[2].style.transitionDuration = '0.001ms';
+        input[2].style.transform = 'translateX(0px)';
+        input[2].style.opacity = 0;
+        input[2].style.width = '0%';
 
+    });
     const moveleft = document.querySelector('.form-go-left');
     if (moveleft) {
         moveleft.addEventListener('click', function(event) {
-            document.getElementsByClassName('form-input-center')[0].style.transform = "translateX(-50%)";
-            document.getElementsByClassName('form-input-center')[0].style.opacity = 0;
-            document.getElementsByClassName('form-header-center')[0].style.transform = "translateX(-50%)";
-            document.getElementsByClassName('form-header-center')[0].style.opacity = 0;
+            //Questions[counter].answer = document.getElementById('answerId').value;
+            let input = document.querySelectorAll('.form-input');
+            let gap = [];
+            gap[0] = input[1].getBoundingClientRect().right-input[2].getBoundingClientRect().right;
+            gap[1] = input[0].getBoundingClientRect().right-input[1].getBoundingClientRect().right;
+
+            input[2].style.transitionDuration = '500ms';
+            input[2].style.transform = ["translateX(" + gap[0].toString() + "px)"];
+            input[2].style.opacity = 1;
+            input[2].style.width = '40%';
+            input[1].style.transitionDuration = '500ms';
+            input[1].style.transform = ["translateX(" + gap[1].toString() + "px)"];
+            input[1].style.opacity = 0;
+            input[1].style.width = '0%';
+            counter--;
             
         });
     }
-    
-
-    /*      let newFormDiv = document.createElement('div');
-          newFormDiv.classList.add('justify-content-center d-flex');
-          let newFormIn = document.createElement("input");
-          newFormIn.setAttribute("type", "text");
-          newFormIn.classList.add('col-xs-6 col-sm-6 col-md-6 col-lg-6 form-input-style');
-          newFormDiv.appendChild(newFormIn);
-          let newFormParent = document.createElement('div');
-          newFormParent.classList.add('form-input-js');
-          newFormParent.appendChild(newFormDiv);
-      */
     
     
 });
