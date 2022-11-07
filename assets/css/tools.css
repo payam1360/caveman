@@ -13,7 +13,9 @@
 /* other styles */
 .form-class {
     margin-top: 100px;
-    margin-bottom: 100px;
+    margin-bottom: 100px; 
+    justify-content: center;
+
 }
 #form-header-id{
     padding: 50px;
@@ -27,4 +29,40 @@
 .form-input-parent {
     justify-content: space-between;
 }
+.form-go-left{
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    color: coral;
+    background-color: white;
+    border-radius: 10%;
+    border: 1px solid coral;
+    margin: 5px;
+}
 
+.form-go-right{
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    color: coral;
+    background-color: white;
+    border-radius: 10%;
+    border: 1px solid coral;
+    margin: 5px;
+}
+
+.form-ok{
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    color: coral;
+    background-color: white;
+    border-radius: 10%;
+    border: 1px solid coral;
+    margin: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.form-ok:hover{
+    background-color: grey;
+}
+.form-go-right:hover{
+    background-color: grey;
+}
+.form-go-left:hover{
+    background-color: grey;
+}
