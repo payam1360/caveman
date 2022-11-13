@@ -38,39 +38,38 @@
 <header></header>
 
 <body>
-    <!--progress bar-->
-    <div class="progress">
-          <div class="progress-bar bg-warning" role="progressbar" style="width: 0%; color: black;">0%</div>
-    </div>
-    <!--end of progress bar -->
-<section>
 
-              
+<section>
+    <!--progress circular indicator-->
+    <div class="d-flex progress-pie" >
+      <canvas id="ProgressCircle"></canvas>
+    </div>
+    <!--end of progress circular indicator-->
     <!-- Start form -->
     <form class= "form-class">
         <!-- Form header question -->
         <div class="d-flex form-header-parent">
             <div class="form-header">
-                <p  class= "form-header-style" id="headerId">
+                <p class="form-header-style" ></p>
             </div>
             <div class="form-header">
-                <p  class= "form-header-style" id="headerId">
+                <p class="form-header-style" ></p>
             </div>
             <div class="form-header">
-                <p  class= "form-header-style" id="headerId">
+                <p class="form-header-style" ></p>
             </div>
         </div>
         
         <!-- Form input -->
         <div class="d-flex form-input-parent">
             <div class="form-input">
-                <input type="text" class= "form-input-style" id="answerId">
+                <input type="text" class= "form-input-style">
             </div>
             <div class="form-input">
-                <input type="text" class= "form-input-style" id="answerId">
+                <input type="text" class= "form-input-style">
             </div>
             <div class="form-input">
-                <input type="text" class= "form-input-style" id="answerId">
+                <input type="text" class= "form-input-style">
             </div>
         </div>
         <!-- form navigation buttons -->
@@ -93,6 +92,7 @@
 
 <!-- Template Main JS File -->
 <script src="assets/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 
 </html>
