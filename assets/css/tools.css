@@ -14,6 +14,7 @@
 .form-input {
     opacity: 0.0;
     width: 40%;
+    border-bottom: 2px solid coral;
     transition-property: opacity, width, transform;
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out;
@@ -32,8 +33,8 @@
     width: 100%;
     height: 60px;
     border: none;
-    border-bottom: 2px solid coral;
 }
+
 .form-header-style {
     color: coral;
     font-size: 25px;

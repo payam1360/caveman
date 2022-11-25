@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let counter = 0;
     let prog = 0;
     let input = document.querySelectorAll('.form-input');
+    let inputStyle = document.querySelectorAll('.form-input-style');
     let header = document.querySelectorAll('.form-header');
     let headerTxt = document.querySelectorAll('.form-header-style');
     // reset the question bar
@@ -23,32 +24,38 @@ document.addEventListener('DOMContentLoaded', () => {
     header[2].style.width = '0%';
     let MAX_cnt = 5;
     class question {
-        constructor(question, answer, Qidx){
+        constructor(question, answer, Qidx, Type, Options){
             this.question = question; // must be a text string
             this.answer = answer;
             this.Qidx = Qidx;
+            this.type = Type;
+            this.options = Options;
         }
         pushData (){
             Questions.push(this);
         }
     };
+    
+    // this function eventually comes from user costomization and design of his app.
     function questionCreate(){
-        let Obj = new question('1. what is your goal?', '', 0);
+        let Obj = new question('1. what is your goal?', '', 0, 'image', ['assets/img/arrow-through-heart.svg','assets/img/arrow-through-heart.svg','assets/img/arrow-through-heart.svg']);
         Obj.pushData(Obj);
-        Obj = new question('2. what is your name?', '', 1);
+        Obj = new question('2. what is your name?', '', 1, 'text', '');
         Obj.pushData(Obj);
-        Obj = new question('3. what is your weight?', '', 2);
+        Obj = new question('3. what is your weight?', '', 2, 'list', ['kir','kos']);
         Obj.pushData(Obj);
-        Obj = new question('4. what is your height?', '', 3);
+        Obj = new question('4. what is your height?', '', 3, 'list', ['hamed','ali']);
         Obj.pushData(Obj);
-        Obj = new question('5. how is your sleep?', '', 4);
+        Obj = new question('5. how is your sleep?', '', 4, 'image', ['assets/img/arrow-through-heart.svg','assets/img/arrow-through-heart.svg']);
         Obj.pushData(Obj);
     }
     // create the questions
     questionCreate();
     // initialize header
     headerTxt[1].innerHTML = [Questions[counter].question];
-    
+    // initialize the input based on form Type
+    resetFormType(input[1]);
+    setFormType(input[1], Questions[counter]);
     // Progress circular indicator
     let ctx = document.querySelector('#ProgressCircle');
     const progress = {
@@ -69,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cutout: 40,
       }
     };
-    const myChart = new Chart(
+    const progChart = new Chart(
       ctx,
       config
     );
@@ -187,16 +194,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // aux functions
     const moveright = document.querySelector('.form-go-right');
     if (moveright) {
-
-            moveright.addEventListener('click', function(event) {
-            let input = document.querySelectorAll('.form-input');
-            let header = document.querySelectorAll('.form-header');
-            let headerTxt = document.querySelectorAll('.form-header-style');
+        moveright.addEventListener('click', function(event) {
             counter++;
             if(counter == MAX_cnt){
                 counter = 0;
             }
+            // set form 0 header
             headerTxt[0].innerHTML = Questions[counter].question;
+            // set form 0 type
+            resetFormType(input[0]);
+            setFormType(input[0], Questions[counter]);
             let gap = [];
             gap[0] = input[1].getBoundingClientRect().left-input[0].getBoundingClientRect().left;
             gap[1] = input[2].getBoundingClientRect().left-input[1].getBoundingClientRect().left;
@@ -205,6 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
             input[0].addEventListener('transitionend', () => {
                 //Reset
                 ChangeForm(input[0], '0.0s', '0', 0, '0%');
+                resetFormType(input[0]);
             });
             ChangeForm(header[0], '0.5s', gap[0].toString(), 1, '40%');
             header[0].addEventListener('transitionend', () => {
@@ -214,8 +222,11 @@ document.addEventListener('DOMContentLoaded', () => {
             ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
             input[1].addEventListener('transitionend', () => {
                 //Reset
+                resetFormType(input[1]);
+                setFormType(input[1], Questions[counter]);
                 ChangeForm(input[1], '0.0s', '0', 1, '40%');
             });
+            
             ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
             header[1].addEventListener('transitionend', () => {
                 //Reset
@@ -227,10 +238,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const moveleft = document.querySelector('.form-go-left');
     if (moveleft) {
         moveleft.addEventListener('click', function(event) {
-            //Questions[counter].answer = document.getElementById('answerId').value;
-            let input = document.querySelectorAll('.form-input');
-            let header = document.querySelectorAll('.form-header');
-            let headerTxt = document.querySelectorAll('.form-header-style');
             if(counter == 0){
                 counter = MAX_cnt;
             }
@@ -267,17 +274,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (move_ok) {
         move_ok.addEventListener('click', function(event) {
             
-            let input = document.querySelectorAll('.form-input');
-            let inputVal = document.querySelectorAll('.form-input-style');
-            let header = document.querySelectorAll('.form-header');
-            let headerTxt = document.querySelectorAll('.form-header-style');
             let valid = false;
             // get the user answer
-            valid = validate_input(inputVal[1].value);
+            valid = validate_input(inputStyle[1].value);
             if(valid == true){
                 prog++;
-                Questions[counter].answer = inputVal[1].value;
-                inputVal[1].value = '';
+                Questions[counter].answer = inputStyle[1].value;
+                inputStyle[1].value = '';
             }
             
             counter++;
@@ -313,24 +316,72 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             // updating the progress
-            myChart.data.datasets[0].data.pop(0);
-            myChart.data.datasets[0].data.pop(1);
-            myChart.data.datasets[0].data.push(prog / MAX_cnt * 100);
-            myChart.data.datasets[0].data.push((1 - prog / MAX_cnt) * 100);
-            myChart.update();
+            progChart.data.datasets[0].data.pop(0);
+            progChart.data.datasets[0].data.pop(1);
+            progChart.data.datasets[0].data.push(prog / MAX_cnt * 100);
+            progChart.data.datasets[0].data.push((1 - prog / MAX_cnt) * 100);
+            progChart.update();
             
             });
         }
 
 });
 
-
+// function to set styles for animation
 function ChangeForm(querySel, sec, pixel, opacity, width){
     querySel.style.transitionDuration = sec;
     querySel.style.transform = ["translateX(" + pixel + "px)"];
     querySel.style.opacity = opacity;
     querySel.style.width = width;
 }
+
+// function to set the form type
+function setFormType(querySelIn, userStruct){
+    let newIn = document.createElement('input');
+    switch(userStruct.type) {
+        case 'text':
+            newIn.setAttribute('class', 'form-input-style');
+            newIn.setAttribute('type', 'text');
+            querySelIn.appendChild(newIn);
+            querySelIn.style.borderBottom = '2px solid coral';
+            break;
+        case 'list':
+            newIn.setAttribute('class', 'form-input-style');
+            newIn.setAttribute('type', 'text');
+            newIn.setAttribute('list', 'inputList');
+            querySelIn.appendChild(newIn);
+            const dataList = document.createElement("datalist");
+            dataList.setAttribute('id', 'inputList');
+            userStruct.options.forEach(function(item){
+                let Option = document.createElement("option");
+                Option.value = item;
+                dataList.appendChild(Option);
+            });
+            querySelIn.appendChild(dataList);
+            break;
+        case 'image':
+            let width = Math.floor(100/userStruct.options.length);
+            width = width.toString().concat('%');
+            userStruct.options.forEach(function(item){
+                let newIn = document.createElement('input');
+                newIn.setAttribute('src', item);
+                newIn.setAttribute('class', 'form-input-style');
+                newIn.style.width = width;
+                newIn.type = 'image';
+                querySelIn.appendChild(newIn);
+            });
+            querySelIn.style.borderBottom = '2px solid white';
+            break;
+    }
+}
+
+// function to reset the form type back to normal text
+function resetFormType(querySelIn){
+    while( querySelIn.childElementCount > 0){
+        querySelIn.removeChild(querySelIn.children[0]);
+    }
+}
+
 
 function validate_input(input){
     return(true);
