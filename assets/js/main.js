@@ -243,6 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             counter--;
             headerTxt[2].innerHTML = Questions[counter].question;
+            // set form 0 type
+            resetFormType(input[2]);
+            setFormType(input[2], Questions[counter]);
             let gap = [];
             gap[0] = input[1].getBoundingClientRect().right-input[2].getBoundingClientRect().right;
             gap[1] = input[0].getBoundingClientRect().right-input[1].getBoundingClientRect().right;
@@ -250,6 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
             input[2].addEventListener('transitionend', () => {
                 //Reset
                 ChangeForm(input[2], '0.0s', '0', 0, '0%');
+                resetFormType(input[2]);
             });
             ChangeForm(header[2], '0.5s', gap[0].toString(), 1, '40%');
             header[2].addEventListener('transitionend', () => {
@@ -259,6 +263,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
             input[1].addEventListener('transitionend', () => {
                 //Reset
+                resetFormType(input[1]);
+                setFormType(input[1], Questions[counter]);
                 ChangeForm(input[1], '0.0s', '0', 1, '40%');
             });
             ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
@@ -288,7 +294,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 counter = 0;
             }
             headerTxt[0].innerHTML = Questions[counter].question;
-            
+            // set form 0 type
+            resetFormType(input[0]);
+            setFormType(input[0], Questions[counter]);
             let gap = [];
             gap[0] = input[1].getBoundingClientRect().left-input[0].getBoundingClientRect().left;
             gap[1] = input[2].getBoundingClientRect().left-input[1].getBoundingClientRect().left;
@@ -297,6 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
             input[0].addEventListener('transitionend', () => {
                 //Reset
                 ChangeForm(input[0], '0.0s', '0', 0, '0%');
+                resetFormType(input[0]);
             });
             ChangeForm(header[0], '0.5s', gap[0].toString(), 1, '40%');
             header[0].addEventListener('transitionend', () => {
@@ -307,6 +316,8 @@ document.addEventListener('DOMContentLoaded', () => {
             input[1].addEventListener('transitionend', () => {
                 //Reset
                 ChangeForm(input[1], '0.0s', '0', 1, '40%');
+                resetFormType(input[1]);
+                setFormType(input[1], Questions[counter]);
             });
             ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
             header[1].addEventListener('transitionend', () => {
@@ -349,6 +360,7 @@ function setFormType(querySelIn, userStruct){
             newIn.setAttribute('class', 'form-input-style');
             newIn.setAttribute('type', 'text');
             newIn.setAttribute('list', 'inputList');
+            newIn.placeholder = 'select';
             querySelIn.appendChild(newIn);
             const dataList = document.createElement("datalist");
             dataList.setAttribute('id', 'inputList');
@@ -358,6 +370,7 @@ function setFormType(querySelIn, userStruct){
                 dataList.appendChild(Option);
             });
             querySelIn.appendChild(dataList);
+            querySelIn.style.borderBottom = '2px solid coral';
             break;
         case 'image':
             let width = Math.floor(100/userStruct.options.length);
