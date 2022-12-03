@@ -10,6 +10,7 @@ let prog = 0;
 let MAX_cnt = 6;
 let progChart = [];
 let ctx = document.querySelector('#ProgressCircle');
+let userid = Math.round(Math.random() * 1000).toString();
 const progress = {
   datasets: [{
     data: [0, 100],
@@ -29,12 +30,13 @@ const config = {
   }
 };
 class question {
-    constructor(question, answer, Qidx, Type, Options){
+    constructor(userid, question, answer, Qidx, Type, Options){
         this.question = question; // must be a text string
         this.answer = answer;
         this.Qidx = Qidx;
         this.type = Type;
         this.options = Options;
+        this.userid = userid;
     }
     pushData (){
         Questions.push(this);
@@ -66,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     header[1].style.opacity = 1;
     header[2].style.width = '0%';
     // create the questions
-    questionCreate();
+    questionCreate(userid);
     // initialize header
     headerTxt[1].innerHTML = [Questions[counter].question];
     // initialize the input based on form Type
@@ -221,11 +223,15 @@ document.addEventListener('DOMContentLoaded', () => {
             
             
             // updating the progress
+            let p = (prog / MAX_cnt);
             progChart.data.datasets[0].data.pop(0);
             progChart.data.datasets[0].data.pop(1);
-            progChart.data.datasets[0].data.push(prog / MAX_cnt * 100);
-            progChart.data.datasets[0].data.push((1 - prog / MAX_cnt) * 100);
+            progChart.data.datasets[0].data.push(p * 100);
+            progChart.data.datasets[0].data.push((1 - p) * 100);
             progChart.update();
+            let percent = document.querySelector('.progress-percent');
+            let p_string = Math.round(p * 100);
+            percent.innerHTML = p_string.toString() + '%';
             if(prog == MAX_cnt) {
                 submitUserData(Questions);
             }
@@ -352,10 +358,14 @@ function getUserButtonSelection(alt, progChart, Questions){
         headerTxt[1].innerHTML = Questions[counter].question;
         ChangeForm(header[1], '0.0s', '0', 1, '40%');
     });
+    let p = (prog / MAX_cnt);
+    let percent = document.querySelector('.progress-percent');
+    let p_string = Math.round(p * 100);
+    percent.innerHTML = p_string.toString() + '%';
     progChart.data.datasets[0].data.pop(0);
     progChart.data.datasets[0].data.pop(1);
-    progChart.data.datasets[0].data.push(prog / MAX_cnt * 100);
-    progChart.data.datasets[0].data.push((1 - prog / MAX_cnt) * 100);
+    progChart.data.datasets[0].data.push(p * 100);
+    progChart.data.datasets[0].data.push((1 - p) * 100);
     progChart.update();
     if(prog == MAX_cnt) {
         submitUserData(Questions);
@@ -364,18 +374,18 @@ function getUserButtonSelection(alt, progChart, Questions){
 
 //
 // this function eventually comes from user costomization and design of his app.
-function questionCreate(){
-    let Obj = new question('1. what is your goal?', '', 0, 'button', ['assets/img/arrow-through-heart.svg','assets/img/bank2.svg','assets/img/cart3.svg']);
+function questionCreate(userid){
+    let Obj = new question(userid, '1. what is your goal?', '', 0, 'button', ['assets/img/arrow-through-heart.svg','assets/img/bank2.svg','assets/img/cart3.svg']);
     Obj.pushData(Obj);
-    Obj = new question('2. what is your name?', '', 1, 'text', ['']);
+    Obj = new question(userid, '2. what is your name?', '', 1, 'text', ['']);
     Obj.pushData(Obj);
-    Obj = new question('3. what is your weight?', '', 2, 'list', ['kir','kos']);
+    Obj = new question(userid, '3. what is your weight?', '', 2, 'list', ['kir','kos']);
     Obj.pushData(Obj);
-    Obj = new question('4. what is your height?', '', 3, 'list', ['hamed','ali']);
+    Obj = new question(userid, '4. what is your height?', '', 3, 'list', ['hamed','ali']);
     Obj.pushData(Obj);
-    Obj = new question('5. how is your sleep?', '', 4, 'button', ['assets/img/arrow-through-heart.svg','assets/img/arrow-through-heart.svg']);
+    Obj = new question(userid, '5. how is your sleep?', '', 4, 'button', ['assets/img/arrow-through-heart.svg','assets/img/arrow-through-heart.svg']);
     Obj.pushData(Obj);
-    Obj = new question('6. what is your email?', '', 5, 'text', ['']);
+    Obj = new question(userid, '6. what is your email?', '', 5, 'text', ['']);
     Obj.pushData(Obj);
 }
 

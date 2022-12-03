@@ -26,7 +26,6 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
   <link href="assets/css/tools.css" rel="stylesheet">
-
   <!-- =======================================================
   * Template Name: HeroBiz - v2.3.1
   * Template URL: https://bootstrapmade.com/herobiz-bootstrap-business-template/
@@ -41,8 +40,13 @@
 
 <section>
     <!--progress circular indicator-->
-    <div class="d-flex progress-pie" >
-      <canvas id="ProgressCircle"></canvas>
+    <div class="relative">
+        <div class="d-flex progress-pie" >
+            <canvas id="ProgressCircle"></canvas>
+        </div>
+        <div class="absolute-center text-center">
+            <p class="progress-percent" style= "color: coral; margin-top: -58px;">0%</p>
+        </div>
     </div>
     <!--end of progress circular indicator-->
     <!-- Start form -->
@@ -93,6 +97,7 @@
 <!-- Template Main JS File -->
 <script src="assets/js/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </body>
 
 </html>
