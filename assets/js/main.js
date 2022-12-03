@@ -7,7 +7,7 @@
 let Questions = [];
 let counter = 0;
 let prog = 0;
-let MAX_cnt = 5;
+let MAX_cnt = 6;
 let progChart = [];
 let ctx = document.querySelector('#ProgressCircle');
 const progress = {
@@ -226,6 +226,9 @@ document.addEventListener('DOMContentLoaded', () => {
             progChart.data.datasets[0].data.push(prog / MAX_cnt * 100);
             progChart.data.datasets[0].data.push((1 - prog / MAX_cnt) * 100);
             progChart.update();
+            if(prog == MAX_cnt) {
+                submitUserData(Questions);
+            }
             });
         }
 
@@ -354,6 +357,9 @@ function getUserButtonSelection(alt, progChart, Questions){
     progChart.data.datasets[0].data.push(prog / MAX_cnt * 100);
     progChart.data.datasets[0].data.push((1 - prog / MAX_cnt) * 100);
     progChart.update();
+    if(prog == MAX_cnt) {
+        submitUserData(Questions);
+    }
 }
 
 //
@@ -361,7 +367,7 @@ function getUserButtonSelection(alt, progChart, Questions){
 function questionCreate(){
     let Obj = new question('1. what is your goal?', '', 0, 'button', ['assets/img/arrow-through-heart.svg','assets/img/bank2.svg','assets/img/cart3.svg']);
     Obj.pushData(Obj);
-    Obj = new question('2. what is your name?', '', 1, 'text', '');
+    Obj = new question('2. what is your name?', '', 1, 'text', ['']);
     Obj.pushData(Obj);
     Obj = new question('3. what is your weight?', '', 2, 'list', ['kir','kos']);
     Obj.pushData(Obj);
@@ -369,4 +375,27 @@ function questionCreate(){
     Obj.pushData(Obj);
     Obj = new question('5. how is your sleep?', '', 4, 'button', ['assets/img/arrow-through-heart.svg','assets/img/arrow-through-heart.svg']);
     Obj.pushData(Obj);
+    Obj = new question('6. what is your email?', '', 5, 'text', ['']);
+    Obj.pushData(Obj);
 }
+
+
+
+function submitUserData(inputDataBlob) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            //  let data = JSON.parse(this.response);
+            //if(data.ok == true){
+                console.log(this.response);
+                //plot(data);
+            //}
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/main.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var userdata = "userInfo="+JSON.stringify(inputDataBlob);
+    xmlhttp.send(userdata);
+}
+
