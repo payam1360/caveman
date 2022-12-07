@@ -14,7 +14,8 @@
 .form-input {
     opacity: 0.0;
     width: 40%;
-    max-height: 60px;
+    max-height: 140px;
+    height: 60px;
     border-bottom: 2px solid coral;
     transition-property: opacity, width, transform;
     transition-duration: 0.5s;
@@ -24,7 +25,7 @@
 .form-header {
     opacity: 0.0;
     width: 40%;
-    height: 100px;
+    height: 60px;
     transition-property: opacity, width, transform;
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out;
@@ -32,15 +33,15 @@
 
 .form-input-style {
     width: 100%;
-    height: 100px;
-    max-height: 60px;
+    height: 60px;
+    max-height: 140px;
     border: none;
     background-color: transparent;
 }
 
 .form-button-style {
     width: 100%;
-    height: 100px;
+    height: 60px;
     border: none; /* Green */
     background-color: white;
     border-radius: 10px;
@@ -105,3 +106,28 @@
     color: white;
 }
 
+/* Plotting Canvas styling start here */
+
+.row {
+    justify-content: space-around;
+}
+.Bmi,
+.IntermittentFasting,
+.Macro,
+.Micro {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    color: coral;
+    background-color: white;
+    border-radius: 5%;
+    border: none;
+    opacity: 0;
+    height: 400px;
+}
+.BMI_text,
+.IF_text,
+.MACRO_text,
+.MICRO_text {
+    font-size: 24px;
+    font-weight: bold;
+    opacity: 0;
+}

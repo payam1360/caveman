@@ -80,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx,
       config
     );
-    
     const moveright = document.querySelector('.form-go-right');
     if (moveright) {
         
@@ -289,12 +288,14 @@ function setFormType(querySelIn, userStruct){
                 newInbtn.style.width = width;
                 newInbtn.type = 'button';
                 newInbtn.setAttribute('class', 'form-input-style');
+                newInbtn.style.height = '140px';
                 let newImg = document.createElement('img');
                 newImg.setAttribute('src', item);
-                newImg.style.width = width;
+                newImg.style.width = '100%';
                 newImg.setAttribute('id', 'form-button');
                 newImg.setAttribute('class', 'form-button-style');
                 newImg.setAttribute('alt', i);
+                newImg.style.height = '100px';
                 newInbtn.appendChild(newImg);
                 querySelIn.appendChild(newInbtn);
                 i++;
@@ -379,9 +380,9 @@ function questionCreate(userid){
     Obj.pushData(Obj);
     Obj = new question(userid, '2. what is your name?', '', 1, 'text', ['']);
     Obj.pushData(Obj);
-    Obj = new question(userid, '3. what is your weight?', '', 2, 'list', ['kir','kos']);
+    Obj = new question(userid, '3. what is your weight?', '', 2, 'list', ['80lb-90lb','90lb-100lb','100lb-110lb','110lb-120lb','120lb-130lb','130lb-140lb','140lb-150lb','150lb-160lb','160lb-170lb','170lb-180lb','180lb-190lb','190lb-200lb','200lb-210lb','210lb-220lb','220lb-230lb','230lb-240lb','240lb-250lb','250lb+']);
     Obj.pushData(Obj);
-    Obj = new question(userid, '4. what is your height?', '', 3, 'list', ['hamed','ali']);
+    Obj = new question(userid, '4. what is your height?', '', 3, 'list', ['<5ft','5ft-5.1ft','5.1ft-5.2ft','5.2ft-5.3ft','5.3ft-5.4ft','5.4ft-5.5ft','5.5ft-5.6ft','5.6ft-5.7ft','5.7ft-5.8ft','5.8ft-5.9ft','5.9ft-5.10ft','5.10ft-5.11ft','5.11ft-6.0ft','6.0ft-6.1ft','6.1ft-6.2ft','6.2ft-6.3ft','6.3ft-6.4ft','6.4ft-6.5ft', '6.5ft+']);
     Obj.pushData(Obj);
     Obj = new question(userid, '5. how is your sleep?', '', 4, 'button', ['assets/img/arrow-through-heart.svg','assets/img/arrow-through-heart.svg']);
     Obj.pushData(Obj);
@@ -395,11 +396,14 @@ function submitUserData(inputDataBlob) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            //  let data = JSON.parse(this.response);
-            //if(data.ok == true){
-                console.log(this.response);
-                //plot(data);
-            //}
+            let data = JSON.parse(this.response);
+            if(data.ok == true){
+                plotBmi(data.bmi);
+                plotIf(data.If);
+                plotMacro(data.macro);
+                plotMicro(data.micro);
+            }
+            
         }
     };
     // sending the request
@@ -409,3 +413,173 @@ function submitUserData(inputDataBlob) {
     xmlhttp.send(userdata);
 }
 
+
+// function to plot BMI data returned by the server for the given user
+function plotBmi(bmi){
+    // Canvas element section
+    let bmiElement = document.querySelector('#Bmi');
+    let bmiDiv = document.querySelector('.Bmi');
+    let bmiTxt = document.querySelector('.BMI_text');
+    bmiDiv.style.opacity = 1;
+    bmiTxt.style.opacity = 1;
+    // Config section
+    let meanBmi = 25;
+    let varBmi = 3.1;
+    const pdf = (x) => {
+      const m = Math.sqrt(varBmi * 2 * Math.PI);
+      const e =  Math.exp(-Math.pow(x - meanBmi, 2) / (2 * varBmi));
+      return e / m;
+    };
+    const bell = [];
+    const xAxis = [];
+    const pointBackgroundColor = [];
+    const pointRadius = [];
+    const startX = meanBmi - 3.5 * varBmi;
+    const endX = meanBmi + 3.5 * varBmi;
+    const step = varBmi / 10;
+    for(let x = startX; x<=endX; x+=step) {
+      bell.push(pdf(x));
+      xAxis.push(Math.round(x * 100) / 100);
+        if(x < bmi && x > bmi - step){
+            pointBackgroundColor.push('limegreen');
+            pointRadius.push(6);
+        } else {
+            pointBackgroundColor.push('coral');
+            pointRadius.push(1);
+        }
+    }
+    const bmiData = {
+      labels: xAxis,
+      datasets: [{
+        label: 'BMI',
+        fill: false,
+        data: bell,
+        borderColor: 'coral',
+        backgroundColor: pointBackgroundColor,
+        pointRadius: pointRadius,
+      },{
+        label: 'You',
+        backgroundColor: 'limegreen',
+      }]
+    };
+    const bmiConfig = {
+      type: 'line',
+      data: bmiData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+      }
+    };
+    
+    bmiChart = new Chart(
+      bmiElement,
+      bmiConfig,
+    );
+}
+
+// function to plot IF data returned by the server for the given user
+function plotIf(If){
+    // Canvas element section
+    let ifElement  = document.querySelector('#IntermittentFasting');
+    let ifDiv = document.querySelector('.IntermittentFasting');
+    let ifTxt = document.querySelector('.IF_text');
+    ifTxt.style.opacity = 1;
+    ifDiv.style.opacity = 1;
+
+    const ifData = {
+      labels: ['Eating interval (hrs)', 'Fasting interval (hrs)'],
+      datasets: [{
+        data: [24-If, If],
+        backgroundColor: [
+          'coral',
+          'lightblue'
+        ],
+      }]
+    };
+    const config = {
+      type: 'doughnut',
+      data: ifData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: 35,
+      }
+    };
+    ifChart = new Chart(
+      ifElement,
+      config
+    );
+}
+
+// function to plot Macro data returned by the server for the given user
+function plotMacro(macro){
+    // Canvas element section
+    let macroElement  = document.querySelector('#Macro');
+    let macroDiv = document.querySelector('.Macro');
+    let macroTxt = document.querySelector('.MACRO_text');
+    macroTxt.style.opacity = 1;
+    macroDiv.style.opacity = 1;
+
+    const macroData = {
+      labels: ['fat','carbs', 'protein', 'fiber'],
+      datasets: [{
+        data: macro,
+        backgroundColor: [
+          'coral',
+          'lightblue',
+          'limegreen',
+          'cyan'
+        ],
+      }]
+    };
+    const config = {
+      type: 'pie',
+      data: macroData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+      }
+    };
+    macroChart = new Chart(
+      macroElement,
+      config
+    );
+}
+// function to plot Micro data returned by the server for the given user
+function plotMicro(micro){
+    // Canvas element section
+    let microElement  = document.querySelector('#Micro');
+    let microDiv = document.querySelector('.Micro');
+    let microTxt = document.querySelector('.MICRO_text');
+    microTxt.style.opacity = 1;
+    microDiv.style.opacity = 1;
+
+    const microData = {
+      labels: ['calcium','folate', 'iron', 'vitamin B-6', 'vitamin B-12', 'vitamin C', 'vitamin E', 'zinc'],
+      datasets: [{
+        data: micro,
+        backgroundColor: [
+          'coral',
+          'lightblue',
+          'limegreen',
+          'cyan',
+          'blue',
+          'green',
+          'orange',
+          'magenta',
+        ],
+      }]
+    };
+    const config = {
+      type: 'polarArea',
+      data: microData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+      }
+    };
+    microChart = new Chart(
+      microElement,
+      config
+    );
+}

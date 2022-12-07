@@ -1,4 +1,6 @@
 <?php
+define("WEIGHT", 2);
+define("HEIGHT", 3);
 define("DBG", false);
 define("MAX_cnt", 6);
 // class user
@@ -56,6 +58,48 @@ function saveUserDataIntoDB($Questions) {
     return true;
 }
 
+function calculateBmi($weight, $height){
+    preg_match_all('!\d+\.*\d*!', $weight, $matches_weight);
+    preg_match_all('!\d+\.*\d*!', $height, $matches_height);
+    $Userweight = ($matches_weight[0][0] + $matches_weight[0][1]) / 2 * 0.45359237;
+    $Userheight = ($matches_height[0][0] + $matches_height[0][1]) / 2 * 0.3048;
+    return($Userweight / pow($Userheight, 2));
+}
+function calculateIf($weight, $height){
+    preg_match_all('!\d+\.*\d*!', $weight, $matches_weight);
+    preg_match_all('!\d+\.*\d*!', $height, $matches_height);
+    $Userweight = ($matches_weight[0][0] + $matches_weight[0][1]) / 2 * 0.45359237;
+    $Userheight = ($matches_height[0][0] + $matches_height[0][1]) / 2 * 0.3048;
+// calculate intermittent fasting interval
+    return(16);
+}
+function calculateMacro($weight, $height){
+    preg_match_all('!\d+\.*\d*!', $weight, $matches_weight);
+    preg_match_all('!\d+\.*\d*!', $height, $matches_height);
+    $Userweight = ($matches_weight[0][0] + $matches_weight[0][1]) / 2 * 0.45359237;
+    $Userheight = ($matches_height[0][0] + $matches_height[0][1]) / 2 * 0.3048;
+// calculate intermittent fasting interval
+    return([20, 40, 10, 30]);
+}
+function calculateMicro($weight, $height){
+    preg_match_all('!\d+\.*\d*!', $weight, $matches_weight);
+    preg_match_all('!\d+\.*\d*!', $height, $matches_height);
+    $Userweight = ($matches_weight[0][0] + $matches_weight[0][1]) / 2 * 0.45359237;
+    $Userheight = ($matches_height[0][0] + $matches_height[0][1]) / 2 * 0.3048;
+// calculate intermittent fasting interval
+    return([5,7,8,10,2,4,12,5.2]);
+}
+
+function dataPrep($user_bmi, $user_if, $user_macro, $user_micro){
+    $data = array('ok' => true,
+                 'bmi' => $user_bmi,
+                 'If'  => $user_if,
+                 'macro' => $user_macro,
+                 'micro' => $user_micro,
+                 );
+    return $data;
+}
+
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
@@ -67,15 +111,13 @@ if($dbflag == false and DBG) {
     echo "user data is saved.\n";
 }
 
-//$user_info   = new user;
-//$user_info   = estimatealluserparams($userwaist, $userthigh, $userinseam, $useroutseam, $userstyle);
-//$Alldata     = fetchdata();
-//$bestfit_idx = solveLS($Alldata, $user_info, $userpricemin, $userpricemax, NUM_BEST_FIT);
-//$figureMerit = calculateFigureofMerit($Alldata, $user_info, $userpricemin, $userpricemax);
-//$DataBlob    = CreateBlob4Js($Alldata, $figureMerit, $bestfit_idx, $userpricemax, $userpricemin, $username);
+$user_bmi      = calculateBmi($userdata[WEIGHT]->answer, $userdata[HEIGHT]->answer);
+$user_if       = calculateIf($userdata[WEIGHT]->answer, $userdata[HEIGHT]->answer);
+$user_macro    = calculateMacro($userdata[WEIGHT]->answer, $userdata[HEIGHT]->answer);
+$user_micro    = calculateMicro($userdata[WEIGHT]->answer, $userdata[HEIGHT]->answer);
+$data          = dataPrep($user_bmi, $user_if, $user_macro, $user_micro);
 
-
-//echo json_encode($DataBlob);
+echo json_encode($data);
 
 
 ?>
