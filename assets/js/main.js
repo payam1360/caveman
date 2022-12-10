@@ -420,8 +420,13 @@ function plotBmi(bmi){
     let bmiElement = document.querySelector('#Bmi');
     let bmiDiv = document.querySelector('.Bmi');
     let bmiTxt = document.querySelector('.BMI_text');
-    bmiDiv.style.opacity = 1;
-    bmiTxt.style.opacity = 1;
+    let bmiDesc = document.querySelector('.BMI_text_description');
+    
+    bmiTxt.style.display = 'block';
+    bmiDiv.style.display = 'block';
+    bmiDesc.style.display = 'block';
+    
+    bmiDesc.innerHTML = 'This text must come from the server about BMI!';
     // Config section
     let meanBmi = 25;
     let varBmi = 3.1;
@@ -434,8 +439,8 @@ function plotBmi(bmi){
     const xAxis = [];
     const pointBackgroundColor = [];
     const pointRadius = [];
-    const startX = meanBmi - 3.5 * varBmi;
-    const endX = meanBmi + 3.5 * varBmi;
+    const startX = meanBmi - 2.5 * varBmi;
+    const endX = meanBmi + 2.5 * varBmi;
     const step = varBmi / 10;
     for(let x = startX; x<=endX; x+=step) {
       bell.push(pdf(x));
@@ -468,6 +473,7 @@ function plotBmi(bmi){
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        aspectRatio: 1,
       }
     };
     
@@ -483,8 +489,13 @@ function plotIf(If){
     let ifElement  = document.querySelector('#IntermittentFasting');
     let ifDiv = document.querySelector('.IntermittentFasting');
     let ifTxt = document.querySelector('.IF_text');
-    ifTxt.style.opacity = 1;
-    ifDiv.style.opacity = 1;
+    let ifDesc = document.querySelector('.IF_text_description');
+    
+    
+    ifDesc.innerHTML = 'This text must come from the server about IF!';
+    ifTxt.style.display = 'block';
+    ifDiv.style.display = 'block';
+    ifDesc.style.display = 'block';
 
     const ifData = {
       labels: ['Eating interval (hrs)', 'Fasting interval (hrs)'],
@@ -517,9 +528,13 @@ function plotMacro(macro){
     let macroElement  = document.querySelector('#Macro');
     let macroDiv = document.querySelector('.Macro');
     let macroTxt = document.querySelector('.MACRO_text');
-    macroTxt.style.opacity = 1;
-    macroDiv.style.opacity = 1;
+    let macroDesc = document.querySelector('.MACRO_text_description');
+    macroTxt.style.display = 'block';
+    macroDiv.style.display = 'block';
+    macroDesc.style.display = 'block';
 
+    macroDesc.innerHTML = 'This text must come from the server about Macro!';
+    
     const macroData = {
       labels: ['fat','carbs', 'protein', 'fiber'],
       datasets: [{
@@ -551,9 +566,13 @@ function plotMicro(micro){
     let microElement  = document.querySelector('#Micro');
     let microDiv = document.querySelector('.Micro');
     let microTxt = document.querySelector('.MICRO_text');
-    microTxt.style.opacity = 1;
-    microDiv.style.opacity = 1;
-
+    let microDesc = document.querySelector('.MICRO_text_description');
+    microTxt.style.display = 'block';
+    microDiv.style.display = 'block';
+    microDesc.style.display = 'block';
+    
+    microDesc.innerHTML = 'This text must come from the server about Micro!';
+    
     const microData = {
       labels: ['calcium','folate', 'iron', 'vitamin B-6', 'vitamin B-12', 'vitamin C', 'vitamin E', 'zinc'],
       datasets: [{

@@ -116,12 +116,14 @@
 .Macro,
 .Micro {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    color: coral;
+    color: black;
     background-color: white;
     border-radius: 5%;
     border: none;
-    opacity: 0;
-    height: 400px;
+    display: none;
+    height: 700px;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
 }
 .BMI_text,
 .IF_text,
@@ -129,5 +131,15 @@
 .MICRO_text {
     font-size: 24px;
     font-weight: bold;
-    opacity: 0;
+    display: none;
+    padding-top: 10px;
+}
+.BMI_text_description,
+.IF_text_description,
+.MACRO_text_description,
+.MICRO_text_description {
+    font-size: 16px;
+    font-style: normal;
+    display: none;
+    padding-top: 10px;
 }
