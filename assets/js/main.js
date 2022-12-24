@@ -80,6 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx,
       config
     );
+    // log in button handle
+    const login = document.querySelector('.login');
+    if (login) {
+        login.addEventListener('click', function(event) {
+            window.location.assign('login.html');
+        })
+    }
+    
     const moveright = document.querySelector('.form-go-right');
     if (moveright) {
         
@@ -402,6 +410,7 @@ function submitUserData(inputDataBlob) {
                 plotIf(data.If);
                 plotMacro(data.macro);
                 plotMicro(data.micro);
+                displayMeal(data.mealData)
             }
             
         }
@@ -601,4 +610,24 @@ function plotMicro(micro){
       microElement,
       config
     );
+}
+
+// function to display meal plan data returned by the server for the given user
+function displayMeal(mealData){
+    // Canvas element section
+    let meal0_txt  = document.querySelector('.meal_text0');
+    let meal1_txt  = document.querySelector('.meal_text1');
+    let meal2_txt  = document.querySelector('.meal_text2');
+    let meal0  = document.querySelector('.meal_plan0');
+    let meal1  = document.querySelector('.meal_plan1');
+    let meal2  = document.querySelector('.meal_plan2');
+
+
+    meal0.style.display = 'block';
+    meal1.style.display = 'block';
+    meal2.style.display = 'block';
+    
+    meal0_txt.innerHTML = mealData.info0;
+    meal1_txt.innerHTML = mealData.info1;
+    meal2_txt.innerHTML = mealData.info2;
 }

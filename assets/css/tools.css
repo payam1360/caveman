@@ -143,3 +143,17 @@
     display: none;
     padding-top: 10px;
 }
+
+.meal_plan0,
+.meal_plan1,
+.meal_plan2 {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    color: black;
+    background-color: white;
+    border-radius: 5%;
+    border: none;
+    display: none;
+    height: 700px;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+}

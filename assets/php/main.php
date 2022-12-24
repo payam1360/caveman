@@ -89,14 +89,25 @@ function calculateMicro($weight, $height){
 // calculate intermittent fasting interval
     return([5,7,8,10,2,4,12,5.2]);
 }
+function calculateMeals(){
+    
+    $info0 = "this is info0";
+    $info1 = "this is info1";
+    $info2 = "this is info2";
 
-function dataPrep($user_bmi, $user_if, $user_macro, $user_micro){
+    $user_meal = array('info0' => $info0,
+                       'info1' => $info1,
+                       'info2' => $info2);
+// calculate intermittent fasting interval
+    return($user_meal);
+}
+function dataPrep($user_bmi, $user_if, $user_macro, $user_micro, $user_meal){
     $data = array('ok' => true,
                  'bmi' => $user_bmi,
                  'If'  => $user_if,
                  'macro' => $user_macro,
                  'micro' => $user_micro,
-                 );
+                 'mealData' => $user_meal);
     return $data;
 }
 
@@ -115,7 +126,8 @@ $user_bmi      = calculateBmi($userdata[WEIGHT]->answer, $userdata[HEIGHT]->answ
 $user_if       = calculateIf($userdata[WEIGHT]->answer, $userdata[HEIGHT]->answer);
 $user_macro    = calculateMacro($userdata[WEIGHT]->answer, $userdata[HEIGHT]->answer);
 $user_micro    = calculateMicro($userdata[WEIGHT]->answer, $userdata[HEIGHT]->answer);
-$data          = dataPrep($user_bmi, $user_if, $user_macro, $user_micro);
+$user_meal     = calculateMeals();
+$data          = dataPrep($user_bmi, $user_if, $user_macro, $user_micro, $user_meal);
 
 echo json_encode($data);
 
