@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
             header[1].addEventListener('transitionend', () => {
                 //Reset
-                headerTxt[1].innerHTML = Questions[counter].question;
+                headerTxt[1].innerHTML = User[counter].question;
                 ChangeForm(header[1], '0.0s', '0', 1, '40%');
             });
       });
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
             header[1].addEventListener('transitionend', () => {
                 //Reset
-                headerTxt[1].innerHTML = Questions[counter].question;
+                headerTxt[1].innerHTML = User[counter].question;
                 ChangeForm(header[1], '0.0s', '0', 1, '40%');
             });
         });
