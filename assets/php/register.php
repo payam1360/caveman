@@ -4,7 +4,7 @@ define("DBG", false);
 define("MAX_cnt", 2);
 
 
-function validateUserCredentials($userInfo) {
+function registerUserCredentials($userInfo) {
        
     $servername  = "127.0.0.1";
     $loginname   = "root";
@@ -23,30 +23,24 @@ function validateUserCredentials($userInfo) {
     }
     // first check if the username exists:
     
-    $sql = "SELECT password " . "FROM " . $tablename . " WHERE username = '" . $userInfo[0]->answer . "';";
+    $sql = "INSERT INTO " . $tablename . " (password, username) VALUES('" . $userInfo[1]->answer . "','" .  $userInfo[0]->answer . "');";
     if(DBG) {
         echo $sql;
     }
-    $password = $conn->query($sql);
+    
     // user already registered, get the corresponding password
-    if($password->num_rows == 0 ) {
-        $result = 2; // user is not registered
+    if($conn->query($sql) === TRUE) {
+        $result = 0; // user is not registered
         if (DBG) {
-            echo "user not registered";
+            echo "user is registered";
         }
     }
-    else if($userInfo[1]->answer === $password->fetch_column(0)) {
-        $result = 0; // user name password are ok
+    else  {
+        $result = 1; // user name password are ok
         if (DBG) {
-            echo "user exists and ok";
-        }
-    } else {
-        $result = 1; // user name password are wrong
-        if (DBG) {
-            echo "user exists but password wrong";
+            echo "user is not registered";
         }
     }
-
     $conn->close();
     return $result;
 }
@@ -55,12 +49,9 @@ function validateUserCredentials($userInfo) {
 function dataPrep($ok){
     if($ok === 0) {
         $data = array('flag' => 0);
-        }
+    }
     else if($ok === 1) {
         $data = array('flag' => 1);
-        }
-    else if($ok === 2) {
-        $data = array('flag' => 2);
     }
     return $data;
 }
@@ -69,7 +60,7 @@ function dataPrep($ok){
 /// main routin starts here.
 /// -------------------------
 $userdata      = json_decode($_POST['userInfo']);
-$dbflag        = validateUserCredentials($userdata);
+$dbflag        = registerUserCredentials($userdata);
 $data          = dataPrep($dbflag);
 echo json_encode($data);
 

@@ -87,6 +87,13 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.assign('login.html');
         })
     }
+    // log in button handle
+    const register = document.querySelector('.register');
+    if (register) {
+        register.addEventListener('click', function(event) {
+            window.location.assign('register.html');
+        })
+    }
     
     const moveright = document.querySelector('.form-go-right');
     if (moveright) {

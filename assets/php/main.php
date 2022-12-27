@@ -43,7 +43,7 @@ function saveUserDataIntoDB($Questions) {
                 $options = $options . "," . $Questions[$kk]->options[$kx];
             }
         }
-        $sql = $sql = "INSERT INTO " . $table1name . " (userid, Qidx, type, question, answer, options) VALUES('" . $Questions[$kk]->userid . "','" .  $Questions[$kk]->Qidx . "','" . $Questions[$kk]->type . "','" . $Questions[$kk]->question . "','" . $Questions[$kk]->answer . "','" . $options . "')";
+        $sql = "INSERT INTO " . $table1name . " (userid, Qidx, type, question, answer, options) VALUES('" . $Questions[$kk]->userid . "','" .  $Questions[$kk]->Qidx . "','" . $Questions[$kk]->type . "','" . $Questions[$kk]->question . "','" . $Questions[$kk]->answer . "','" . $options . "')";
         if(DBG) {
             echo $sql;
         }

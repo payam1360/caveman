@@ -45,13 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resetFormType(input[1]);
     resetFormType(input[2]);
     setFormType(input[1]);
-    // log in button handle
-    const register = document.querySelector('.register');
-    if (register) {
-        register.addEventListener('click', function(event) {
-            window.location.assign('register.html');
-        })
-    }
+
     
     const moveright = document.querySelector('.form-go-right');
     if (moveright) {
@@ -201,9 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-
 // AUX functions start here
-
 // function to set styles for animation
 function ChangeForm(querySel, sec, pixel, opacity, width){
     querySel.style.transitionDuration = sec;
@@ -238,9 +230,9 @@ function validate_input(input){
 // this function eventually comes from user costomization and design of his app.
 function questionCreate(){
 
-    let Obj = new user('1. what is your username?', '');
+    let Obj = new user('1. register your username:', '');
     Obj.pushData(Obj);
-    Obj = new user('2. what is your password?', '');
+    Obj = new user('2. register your password', '');
     Obj.pushData(Obj);
 }
 
@@ -251,15 +243,12 @@ function submitUserData(userDataBlob) {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
             if(data.flag == 0){
-                window.location.assign('admin.html');
-            } else if(data.flag == 2) {
-                reg = document.querySelector('.register_txt');
-                reg.innerHTML = 'please register';
-            }
+                window.location.assign('login.html');
+            } 
         }
     };
     // sending the request
-    xmlhttp.open("POST", "assets/php/login.php", true);
+    xmlhttp.open("POST", "assets/php/register.php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     var userdata = "userInfo="+JSON.stringify(userDataBlob);
     xmlhttp.send(userdata);
