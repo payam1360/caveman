@@ -8,6 +8,9 @@
         <meta name="author" content="" />
         <title>ManHub - Admin</title>
         <link href="assets/css/admin.css" rel="stylesheet">
+        <link href="assets/css/tools.css" rel="stylesheet">
+        <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+        <link rel="shortcut icon" href="#">
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
@@ -66,6 +69,67 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
+                <h1 class="mt-4" style="margin-left: 10px; color: coral">Form design tool:</h1>
+                <ol>
+                    <!--<li>Use this tool to design the form questions you wish to ask your clients.</li>
+                    <li>For analysis tools to work properly, asking for height and weight is mandatory.</li>
+                    <li>For questions with multiple choice answers, separate choices using semicolon.</li> -->
+                </ol>
+                
+                <!-- Dynamically generated forms to get user inputs-->
+                <!-- Start form -->
+                <form class= "form-class">
+                    <!-- Form header question -->
+                    <div class="d-flex form-header-parent">
+                        <div class="form-header">
+                            <p class="form-header-style" ></p>
+                        </div>
+                        <div class="form-header">
+                            <p class="form-header-style" ></p>
+                        </div>
+                        <div class="form-header">
+                            <p class="form-header-style" ></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Form input -->
+                    <div class="d-flex form-input-parent">
+                        <div class="form-input">
+                            <input type="text" class= "form-input-style">
+                        </div>
+                        <div class="form-input">
+                            <input type="text" class= "form-input-style">
+                        </div>
+                        <div class="form-input">
+                            <input type="text" class= "form-input-style">
+                        </div>
+                    </div>
+                    <!-- form navigation buttons -->
+                    <div class= "d-flex form-class">
+                        <!-- left swipe -->
+                        <div class="d-flex">
+                            <button type="button" class="form-go-left"><span class="bi bi-chevron-left" style="font-size:30px"></span></button>
+                        </div>
+                        <!-- ok button -->
+                        <div class ="d-flex">
+                            <button type="button" class="form-ok"><span class="bi bi-check2"
+                                style="font-size:30px"></span></button>
+                        </div>
+                        <!-- right swipe -->
+                        <div class ="d-flex">
+                            <button type="button" class="form-go-right"><span class="bi bi-chevron-right" style="font-size:30px"></span></button>
+                        </div>
+                    </div>
+                </form>
+    
+                <!--
+                <div class="container">
+                    <div class="row">
+                        <button type="button" class="add_form btn btn-outline-primary">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div> -->
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">

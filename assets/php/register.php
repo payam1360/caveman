@@ -22,8 +22,10 @@ function registerUserCredentials($userInfo) {
         echo "Connected successfully";
     }
     // first check if the username exists:
+    $userId = uniqid();
     
-    $sql = "INSERT INTO " . $tablename . " (password, username) VALUES('" . $userInfo[1]->answer . "','" .  $userInfo[0]->answer . "');";
+    $sql = "INSERT INTO " . $tablename . " (userId, password, username) VALUES('" . $userId . "','" . $userInfo[1]->answer . "','" .  $userInfo[0]->answer . "');";
+    
     if(DBG) {
         echo $sql;
     }

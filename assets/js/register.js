@@ -7,7 +7,7 @@
 let User = [];
 let counter = 0;
 let prog = 0;
-let MAX_cnt = 2;
+let MAX_cnt = 3;
 
 class user {
     constructor(question, answer){
@@ -46,92 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
     resetFormType(input[2]);
     setFormType(input[1]);
 
-    
     const moveright = document.querySelector('.form-go-right');
-    if (moveright) {
-        
-        moveright.addEventListener('click', function(event) {
-            counter++;
-            if(counter == MAX_cnt){
-                counter = 0;
-            }
-            // set form 0 header
-            headerTxt[0].innerHTML = User[counter].question;
-            // set form 0 type
-            resetFormType(input[0]);
-            setFormType(input[0]);
-            let gap = [];
-            gap[0] = input[1].getBoundingClientRect().left-input[0].getBoundingClientRect().left;
-            gap[1] = input[2].getBoundingClientRect().left-input[1].getBoundingClientRect().left;
-            
-            ChangeForm(input[0], '0.5s', gap[0].toString(), 1, '40%');
-            input[0].addEventListener('transitionend', () => {
-                //Reset
-                ChangeForm(input[0], '0.0s', '0', 0, '0%');
-                resetFormType(input[0]);
-            });
-            ChangeForm(header[0], '0.5s', gap[0].toString(), 1, '40%');
-            header[0].addEventListener('transitionend', () => {
-                //Reset
-                ChangeForm(header[0], '0.0s', '0', 0, '0%');
-            });
-            ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
-            input[1].addEventListener('transitionend', () => {
-                //Reset
-                resetFormType(input[1]);
-                setFormType(input[1]);
-                ChangeForm(input[1], '0s', '0', 1, '40%');
-            });
-            
-            ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
-            header[1].addEventListener('transitionend', () => {
-                //Reset
-                headerTxt[1].innerHTML = User[counter].question;
-                ChangeForm(header[1], '0.0s', '0', 1, '40%');
-            });
-      });
-    }
+    moveRight(moveright, input, header, headerTxt, User);
     
     const moveleft = document.querySelector('.form-go-left');
-    if (moveleft) {
-        moveleft.addEventListener('click', function(event) {
-            if(counter == 0){
-                counter = MAX_cnt;
-            }
-            counter--;
-            headerTxt[2].innerHTML = User[counter].question;
-            // set form 0 type
-            resetFormType(input[2]);
-            setFormType(input[2]);
-            let gap = [];
-            gap[0] = input[1].getBoundingClientRect().right-input[2].getBoundingClientRect().right;
-            gap[1] = input[0].getBoundingClientRect().right-input[1].getBoundingClientRect().right;
-            ChangeForm(input[2], '0.5s', gap[0].toString(), 1, '40%');
-            input[2].addEventListener('transitionend', () => {
-                //Reset
-                ChangeForm(input[2], '0.0s', '0', 0, '0%');
-                resetFormType(input[2]);
-            });
-            ChangeForm(header[2], '0.5s', gap[0].toString(), 1, '40%');
-            header[2].addEventListener('transitionend', () => {
-                //Reset
-                ChangeForm(header[2], '0.0s', '0', 0, '0%');
-            });
-            ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
-            input[1].addEventListener('transitionend', () => {
-                //Reset
-                resetFormType(input[1]);
-                setFormType(input[1]);
-                ChangeForm(input[1], '0.0s', '0', 1, '40%');
-            });
-            ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
-            header[1].addEventListener('transitionend', () => {
-                //Reset
-                headerTxt[1].innerHTML = User[counter].question;
-                ChangeForm(header[1], '0.0s', '0', 1, '40%');
-            });
-        });
-    }
+    moveLeft(moveleft, input, header, headerTxt, User);
     
     const move_ok = document.querySelector('.form-ok');
     if (move_ok) {
@@ -230,9 +149,11 @@ function validate_input(input){
 // this function eventually comes from user costomization and design of his app.
 function questionCreate(){
 
-    let Obj = new user('1. register your username:', '');
+    let Obj = new user('1/3. register your email', '');
     Obj.pushData(Obj);
-    Obj = new user('2. register your password', '');
+    Obj = new user('2/3. register your password', '');
+    Obj.pushData(Obj);
+    Obj = new user('3/3. re-enter your password', '');
     Obj.pushData(Obj);
 }
 
@@ -244,7 +165,7 @@ function submitUserData(userDataBlob) {
             let data = JSON.parse(this.response);
             if(data.flag == 0){
                 window.location.assign('login.html');
-            } 
+            }
         }
     };
     // sending the request
