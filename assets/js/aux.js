@@ -15,13 +15,17 @@ function moveRight(moveright, input, header, headerTxt, Questions){
             let valid = false;
             let inputStyle = document.querySelector('.form-input-style');
             // get the user answer
-            valid = validate_input(inputStyle, Questions[counter]);
-            if(valid == true && Questions[counter].visited == false){
-                prog++;
-                Questions[counter].visited = true;
-                if(Questions[counter].type == 'text') {
+            valid = validate_input(inputStyle, inputStyle.value);
+            if(valid == true){
+                if(Questions[counter].type != 'button') {
                     Questions[counter].answer = inputStyle.value;
                 }
+            } else {
+                window.alert('input incorrect');
+            }
+            if(valid == true && Questions[counter].visited == false) {
+                Questions[counter].visited = true;
+                prog++;
             }
             counter++;
             if(counter == MAX_cnt){
@@ -71,6 +75,7 @@ function moveRight(moveright, input, header, headerTxt, Questions){
             progChart.data.datasets[0].data.push(p * 100);
             progChart.data.datasets[0].data.push((1 - p) * 100);
             progChart.update();
+            
             let percent = document.querySelector('.progress-percent');
             let p_string = Math.round(p * 100);
             percent.innerHTML = p_string.toString() + '%';
@@ -126,18 +131,36 @@ function moveLeft(moveleft, input, header, headerTxt, Questions){
 
 // function to set the form type
 function setFormType(querySelIn, userStruct){
+    let newIn = [];
     switch(userStruct.type) {
         case 'text':
-            let newIn = document.createElement('input');
+            newIn = document.createElement('input');
             newIn.setAttribute('class', 'form-input-style');
-            newIn.setAttribute('type', 'text');
+            newIn.setAttribute('pattern', '[A-Za-z0-9]+');
+            newIn.setAttribute('type', userStruct.type);
+            querySelIn.appendChild(newIn);
+            querySelIn.style.borderBottom = '2px solid coral';
+            break;
+        case 'email':
+            newIn = document.createElement('input');
+            newIn.setAttribute('class', 'form-input-style');
+            newIn.setAttribute('pattern', '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$');
+            newIn.setAttribute('type', userStruct.type);
+            querySelIn.appendChild(newIn);
+            querySelIn.style.borderBottom = '2px solid coral';
+            break;
+        case 'password':
+            newIn = document.createElement('input');
+            newIn.setAttribute('class', 'form-input-style');
+            newIn.setAttribute('pattern', '.{8,}');
+            newIn.setAttribute('type', userStruct.type);
             querySelIn.appendChild(newIn);
             querySelIn.style.borderBottom = '2px solid coral';
             break;
         case 'list':
             let newInList = document.createElement('select');
             newInList.setAttribute('class', 'form-input-style');
-            newInList.setAttribute('type', 'text');
+            newInList.setAttribute('type', 'list');
             newInList.setAttribute('name', 'inputList');
             newInList.setAttribute('id', 'inputList');
             // placeholder
@@ -213,7 +236,7 @@ function resetStart(Questions, input, header, headerTxt) {
 
 function restorePrevAnswer() {
     // restore the previous answer on the screen
-    if(Questions[counter].type == 'text') {
+    if(Questions[counter].type == 'text' || Questions[counter].type == 'email' || Questions[counter].type == 'password') {
         let inputStyle = document.querySelector('.form-input-style');
         inputStyle.value = Questions[counter].answer;
     } else if(Questions[counter].type == 'button'){
@@ -222,7 +245,17 @@ function restorePrevAnswer() {
         for(let kk = 0; kk < formButtonStyle.length; kk++){
             formButtonStyle[kk].style.backgroundColor = '#ffffff';
         }
-        formButtonStyle[Questions[counter].answer].style.backgroundColor = '#f08080';
+        if(Questions[counter].answer.length != 0) {
+            formButtonStyle[Questions[counter].answer].style.backgroundColor = '#f08080';
+        }
+        
+    } else if(Questions[counter].type == 'list'){
+        
+        let formButtonStyle = document.querySelector('.form-input-style');
+        if(Questions[counter].answer.length == 0) {
+            Questions[counter].answer = '--Select options--';
+        }
+        formButtonStyle.value = Questions[counter].answer;
     }
 }
 
@@ -234,11 +267,15 @@ function validate_input(input, Questions){
         } else {
             return(true);
         }
-    } else if(Questions.type == 'text') {
-        if(input.validity.valid) {
-            return(true);
-        } else {
+    } else if(Questions.type == 'list') {
+        
+        if(input.value == '--Select options--') {
             return(false);
+        } else {
+            return(true);
         }
+        // use text pattern match results
+    } else  {
+        return(input.validity.valid);
     }
 }

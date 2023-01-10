@@ -7,7 +7,7 @@
 let Questions = [];
 let counter = 0;
 let prog = 0;
-let MAX_cnt = 6;
+let MAX_cnt = 7;
 let progChart = [];
 let ctx = document.querySelector('#ProgressCircle');
 let userid = Math.round(Math.random() * 1000).toString();
@@ -147,9 +147,11 @@ function questionCreate(userid){
     Obj.pushData(Obj);
     Obj = new question(userid, '4. what is your height?', '', 3, 'list', ['<5ft','5ft-5.1ft','5.1ft-5.2ft','5.2ft-5.3ft','5.3ft-5.4ft','5.4ft-5.5ft','5.5ft-5.6ft','5.6ft-5.7ft','5.7ft-5.8ft','5.8ft-5.9ft','5.9ft-5.10ft','5.10ft-5.11ft','5.11ft-6.0ft','6.0ft-6.1ft','6.1ft-6.2ft','6.2ft-6.3ft','6.3ft-6.4ft','6.4ft-6.5ft', '6.5ft+'], false);
     Obj.pushData(Obj);
-    Obj = new question(userid, '5. how is your sleep?', '', 4, 'button', ['assets/img/arrow-through-heart.svg','assets/img/arrow-through-heart.svg'], false);
+    Obj = new question(userid, '5. how is your sleep?', '', 4, 'button', ['fa-regular fa-moon','fa-solid fa-battery-quarter'], false);
     Obj.pushData(Obj);
-    Obj = new question(userid, '6. what is your email?', '', 5, 'text', [''], false);
+    Obj = new question(userid, '6. what is your email?', '', 5, 'email', [''], false);
+    Obj.pushData(Obj);
+    Obj = new question(userid, '7. what is your password?', '', 6, 'password', [''], false);
     Obj.pushData(Obj);
 }
 
