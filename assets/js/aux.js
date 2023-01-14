@@ -4,21 +4,44 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
-
+// user <-> client class definition
+class question {
+    constructor(userId, qContent, qAnswer, qIdx, qType, Options, OptionsText, visited, qRequired){
+        this.qContent = qContent; // must be a text string
+        this.qAnswer = qAnswer;
+        this.qIdx = qIdx;
+        this.qType = qType;
+        this.qRequired = qRequired;
+        this.options = Options;
+        this.optionsText = OptionsText;
+        this.visited = visited;
+        this.userId = userId;
+    }
+    pushData (){
+        Questions.push(this);
+    }
+};
 // AUX functions start here
 // function to set styles for animation
-function moveRight(moveright, input, header, headerTxt, Questions){
+function moveRight(moveright, input, header, headerTxt, Questions, page){
     if (moveright) {
         moveright.addEventListener('click', function(event) {
             
             // validate the current input
-            let valid = false;
+            
             let inputStyle = document.querySelector('.form-input-style');
-            // get the user answer
-            valid = validate_input(inputStyle, inputStyle.value);
+            let valid = inputStyle.validity.valid;
+            let userResponse = [];
+            if(Questions[counter].qType == 'button') {
+                userResponse = Questions[counter].qAnswer;
+            } else {
+                userResponse = inputStyle.value;
+            }
+            // get the answer validation
+            valid = validate_input(valid, Questions[counter].qType, Questions[counter].qRequired, userResponse);
             if(valid == true){
-                if(Questions[counter].type != 'button') {
-                    Questions[counter].answer = inputStyle.value;
+                if(Questions[counter].qType != 'button') {
+                    Questions[counter].qAnswer = inputStyle.value;
                 }
             } else {
                 window.alert('input incorrect');
@@ -28,11 +51,28 @@ function moveRight(moveright, input, header, headerTxt, Questions){
                 prog++;
             }
             counter++;
-            if(counter == MAX_cnt){
+            // submit the users data here
+            if(counter == MAX_cnt) {
+                let allReq = true;
                 counter = 0;
+                // check if all required questions are answered correctly
+                for(let kk = 0; kk < MAX_cnt; kk++){
+                    if(Questions[kk].qRequired) {
+                        if(Questions[kk].visited) {
+                            allReq = allReq && true;
+                        } else {
+                            allReq = allReq && false;
+                        }
+                    } else {
+                        allReq = allReq && true;
+                    }
+                }
+                if(allReq) {
+                    submitUserData(Questions, page);
+                }
             }
             // set form 0 header
-            headerTxt[0].innerHTML = Questions[counter].question;
+            headerTxt[0].innerHTML = Questions[counter].qContent;
             // set form 0 type
             resetFormType(input[0]);
             setFormType(input[0], Questions[counter]);
@@ -63,7 +103,7 @@ function moveRight(moveright, input, header, headerTxt, Questions){
             ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
             header[1].addEventListener('transitionend', () => {
                 //Reset
-                headerTxt[1].innerHTML = Questions[counter].question;
+                headerTxt[1].innerHTML = Questions[counter].qContent;
                 ChangeForm(header[1], '0.0s', '0', 1, '40%');
             });
             
@@ -79,9 +119,6 @@ function moveRight(moveright, input, header, headerTxt, Questions){
             let percent = document.querySelector('.progress-percent');
             let p_string = Math.round(p * 100);
             percent.innerHTML = p_string.toString() + '%';
-            if(prog == MAX_cnt) {
-                submitUserData(Questions);
-            }
         });
     }
 }
@@ -93,7 +130,7 @@ function moveLeft(moveleft, input, header, headerTxt, Questions){
                 counter = MAX_cnt;
             }
             counter--;
-            headerTxt[2].innerHTML = Questions[counter].question;
+            headerTxt[2].innerHTML = Questions[counter].qContent;
             // set form 0 type
             resetFormType(input[2]);
             setFormType(input[2], Questions[counter]);
@@ -122,7 +159,7 @@ function moveLeft(moveleft, input, header, headerTxt, Questions){
             ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
             header[1].addEventListener('transitionend', () => {
                 //Reset
-                headerTxt[1].innerHTML = Questions[counter].question;
+                headerTxt[1].innerHTML = Questions[counter].qContent;
                 ChangeForm(header[1], '0.0s', '0', 1, '40%');
             });
         });
@@ -132,12 +169,13 @@ function moveLeft(moveleft, input, header, headerTxt, Questions){
 // function to set the form type
 function setFormType(querySelIn, userStruct){
     let newIn = [];
-    switch(userStruct.type) {
+    switch(userStruct.qType) {
         case 'text':
             newIn = document.createElement('input');
             newIn.setAttribute('class', 'form-input-style');
-            newIn.setAttribute('pattern', '[A-Za-z0-9]+');
-            newIn.setAttribute('type', userStruct.type);
+            newIn.setAttribute('pattern', '[A-Za-z0-9]{1,}');
+            newIn.setAttribute('required', userStruct.qRequired);
+            newIn.setAttribute('type', userStruct.qType);
             querySelIn.appendChild(newIn);
             querySelIn.style.borderBottom = '2px solid coral';
             break;
@@ -145,7 +183,8 @@ function setFormType(querySelIn, userStruct){
             newIn = document.createElement('input');
             newIn.setAttribute('class', 'form-input-style');
             newIn.setAttribute('pattern', '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$');
-            newIn.setAttribute('type', userStruct.type);
+            newIn.setAttribute('type', userStruct.qType);
+            newIn.setAttribute('required', userStruct.qRequired);
             querySelIn.appendChild(newIn);
             querySelIn.style.borderBottom = '2px solid coral';
             break;
@@ -153,7 +192,8 @@ function setFormType(querySelIn, userStruct){
             newIn = document.createElement('input');
             newIn.setAttribute('class', 'form-input-style');
             newIn.setAttribute('pattern', '.{8,}');
-            newIn.setAttribute('type', userStruct.type);
+            newIn.setAttribute('type', userStruct.qType);
+            newIn.setAttribute('required', userStruct.qRequired);
             querySelIn.appendChild(newIn);
             querySelIn.style.borderBottom = '2px solid coral';
             break;
@@ -163,6 +203,7 @@ function setFormType(querySelIn, userStruct){
             newInList.setAttribute('type', 'list');
             newInList.setAttribute('name', 'inputList');
             newInList.setAttribute('id', 'inputList');
+            newInList.setAttribute('required', userStruct.qRequired);
             // placeholder
             let Option = document.createElement('option');
             Option.value = '--Select options--';
@@ -188,7 +229,6 @@ function setFormType(querySelIn, userStruct){
                 newInbtn.type = 'button';
                 newInbtn.setAttribute('class', 'form-input-style');
                 newInbtn.style.height = '140px';
-                
                 let newImgSpan = document.createElement('span');
                 newImgSpan.setAttribute('class', 'form-button-style');
                 newImgSpan.setAttribute('id', 'form-button');
@@ -203,13 +243,65 @@ function setFormType(querySelIn, userStruct){
                 newI.style.color = 'grey';
                 newI.style.height = '50px';
                 newI.style.paddingTop = '40px';
+                let newP = document.createElement('p');
+                newP.setAttribute('class', 'form-button-back-text');
+                newP.innerHTML = userStruct.optionsText[i];
+                newP.style.opacity = 0;
                 newImgSpan.appendChild(newI);
+                newImgSpan.appendChild(newP);
+                newImgSpan.addEventListener('mouseenter',function(e) {
+                    e.target.children[0].style.opacity = 0;
+                    e.target.children[1].style.opacity = 1;
+                });
+                newImgSpan.addEventListener('mouseleave',function(e) {
+                    e.target.children[0].style.opacity = 1;
+                    e.target.children[1].style.opacity = 0;
+                });
+                newImgSpan.addEventListener('click',function(e){
+                    let alt = [];
+                    if(e.target && e.target.id == 'form-button') {
+                        alt = e.target.attributes.alt;
+                        getUserButtonSelection(alt);
+                    }
+                    else if(e.target && e.target.parentNode.id == 'form-button') {
+                        alt = e.target.parentNode.attributes.alt;
+                        getUserButtonSelection(alt);
+                    }
+                    else if(e.target && e.target.firstChild && e.target.firstChild.id == 'form-button') {
+                        alt = e.target.firstChild.attributes.alt;
+                        getUserButtonSelection(alt);
+                    }
+                });
                 newInbtn.appendChild(newImgSpan);
                 querySelIn.appendChild(newInbtn);
                 i++;
             });
             querySelIn.style.borderBottom = '2px solid white';
             break;
+    }
+}
+
+function getUserButtonSelection(alt){
+    Questions[counter].qAnswer = alt.value;
+    let formButtonStyle = document.querySelectorAll('.form-button-style');
+    for(let kk = 0; kk < formButtonStyle.length; kk++){
+        formButtonStyle[kk].style.backgroundColor = '#ffffff';
+    }
+    formButtonStyle[alt.value].style.backgroundColor = '#f08080';
+}
+
+// function to set styles for animation
+function ChangeForm(querySel, sec, pixel, opacity, width){
+    querySel.style.transitionDuration = sec;
+    querySel.style.transform = ["translateX(" + pixel + "px)"];
+    querySel.style.opacity = opacity;
+    querySel.style.width = width;
+}
+
+// function to reset the form type back to normal text
+function resetFormType(querySelIn){
+    while( querySelIn.childElementCount > 0){
+        querySelIn.removeChild(querySelIn.children[0]);
     }
 }
 
@@ -226,7 +318,7 @@ function resetStart(Questions, input, header, headerTxt) {
     header[MDL_IDX].style.opacity = 1;
     header[LFT_IDX].style.width = '0%';
     // initialize header
-    headerTxt[MDL_IDX].innerHTML = Questions[counter].question;
+    headerTxt[MDL_IDX].innerHTML = Questions[counter].qContent;
     // initialize the input based on form Type
     resetFormType(input[RHT_IDX]);
     resetFormType(input[MDL_IDX]);
@@ -236,46 +328,286 @@ function resetStart(Questions, input, header, headerTxt) {
 
 function restorePrevAnswer() {
     // restore the previous answer on the screen
-    if(Questions[counter].type == 'text' || Questions[counter].type == 'email' || Questions[counter].type == 'password') {
+    if(Questions[counter].qType == 'text' || Questions[counter].qType == 'email' || Questions[counter].qType == 'password') {
         let inputStyle = document.querySelector('.form-input-style');
-        inputStyle.value = Questions[counter].answer;
-    } else if(Questions[counter].type == 'button'){
+        inputStyle.value = Questions[counter].qAnswer;
+    } else if(Questions[counter].qType == 'button'){
         
         let formButtonStyle = document.querySelectorAll('.form-button-style');
         for(let kk = 0; kk < formButtonStyle.length; kk++){
             formButtonStyle[kk].style.backgroundColor = '#ffffff';
         }
-        if(Questions[counter].answer.length != 0) {
-            formButtonStyle[Questions[counter].answer].style.backgroundColor = '#f08080';
+        if(Questions[counter].qAnswer.length != 0) {
+            formButtonStyle[Questions[counter].qAnswer].style.backgroundColor = '#f08080';
         }
         
-    } else if(Questions[counter].type == 'list'){
+    } else if(Questions[counter].qType == 'list'){
         
         let formButtonStyle = document.querySelector('.form-input-style');
-        if(Questions[counter].answer.length == 0) {
-            Questions[counter].answer = '--Select options--';
+        if(Questions[counter].qAnswer.length == 0) {
+            Questions[counter].qAnswer = '--Select options--';
         }
-        formButtonStyle.value = Questions[counter].answer;
+        formButtonStyle.value = Questions[counter].qAnswer;
     }
 }
 
 
-function validate_input(input, Questions){
-    if(Questions.type == 'button') {
-        if(Questions.answer.length == 0) {
-            return(false);
+function validate_input(valid, type, required, value){
+    if(type == 'button') {
+        if(required && value.length == 0) {
+            return(false && valid);
         } else {
-            return(true);
+            return(true && valid);
         }
-    } else if(Questions.type == 'list') {
+    } else if(type == 'list') {
         
-        if(input.value == '--Select options--') {
-            return(false);
+        if(value == '--Select options--') {
+            return(false && valid);
         } else {
-            return(true);
+            return(true && valid);
         }
         // use text pattern match results
     } else  {
-        return(input.validity.valid);
+        return(valid);
     }
+}
+
+// submitting the form
+function submitUserData(inputDataBlob, page) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let data = JSON.parse(this.response);
+            
+            if(data.ok == true, page == 'main'){
+                plotBmi(data.bmi);
+                plotIf(data.If);
+                plotMacro(data.macro);
+                plotMicro(data.micro);
+                displayMeal(data.mealData)
+            } else if(data.ok == true, page == 'login') {
+                if(data.flag == 0){
+                    window.location.assign('admin.html');
+                } else if(data.flag == 2) {
+                    reg = document.querySelector('.register_txt');
+                    reg.innerHTML = 'please register';
+                }
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/" + page + ".php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var userdata = "userInfo="+JSON.stringify(inputDataBlob);
+    xmlhttp.send(userdata);
+}
+
+
+// function to plot BMI data returned by the server for the given user
+function plotBmi(bmi){
+    // Canvas element section
+    let bmiElement = document.querySelector('#Bmi');
+    let bmiDiv = document.querySelector('.Bmi');
+    let bmiTxt = document.querySelector('.BMI_text');
+    let bmiDesc = document.querySelector('.BMI_text_description');
+    
+    bmiTxt.style.display = 'block';
+    bmiDiv.style.display = 'block';
+    bmiDesc.style.display = 'block';
+    
+    bmiDesc.innerHTML = 'This text must come from the server about BMI!';
+    // Config section
+    let meanBmi = 25;
+    let varBmi = 3.1;
+    const pdf = (x) => {
+      const m = Math.sqrt(varBmi * 2 * Math.PI);
+      const e =  Math.exp(-Math.pow(x - meanBmi, 2) / (2 * varBmi));
+      return e / m;
+    };
+    const bell = [];
+    const xAxis = [];
+    const pointBackgroundColor = [];
+    const pointRadius = [];
+    const startX = meanBmi - 2.5 * varBmi;
+    const endX = meanBmi + 2.5 * varBmi;
+    const step = varBmi / 10;
+    for(let x = startX; x<=endX; x+=step) {
+      bell.push(pdf(x));
+      xAxis.push(Math.round(x * 100) / 100);
+        if(x < bmi && x > bmi - step){
+            pointBackgroundColor.push('limegreen');
+            pointRadius.push(6);
+        } else {
+            pointBackgroundColor.push('coral');
+            pointRadius.push(1);
+        }
+    }
+    const bmiData = {
+      labels: xAxis,
+      datasets: [{
+        label: 'BMI',
+        fill: false,
+        data: bell,
+        borderColor: 'coral',
+        backgroundColor: pointBackgroundColor,
+        pointRadius: pointRadius,
+      },{
+        label: 'You',
+        backgroundColor: 'limegreen',
+      }]
+    };
+    const bmiConfig = {
+      type: 'line',
+      data: bmiData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        aspectRatio: 1,
+      }
+    };
+    
+    bmiChart = new Chart(
+      bmiElement,
+      bmiConfig,
+    );
+}
+
+// function to plot IF data returned by the server for the given user
+function plotIf(If){
+    // Canvas element section
+    let ifElement  = document.querySelector('#IntermittentFasting');
+    let ifDiv = document.querySelector('.IntermittentFasting');
+    let ifTxt = document.querySelector('.IF_text');
+    let ifDesc = document.querySelector('.IF_text_description');
+    
+    
+    ifDesc.innerHTML = 'This text must come from the server about IF!';
+    ifTxt.style.display = 'block';
+    ifDiv.style.display = 'block';
+    ifDesc.style.display = 'block';
+
+    const ifData = {
+      labels: ['Eating interval (hrs)', 'Fasting interval (hrs)'],
+      datasets: [{
+        data: [24-If, If],
+        backgroundColor: [
+          'coral',
+          'lightblue'
+        ],
+      }]
+    };
+    const config = {
+      type: 'doughnut',
+      data: ifData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: 35,
+      }
+    };
+    ifChart = new Chart(
+      ifElement,
+      config
+    );
+}
+
+// function to plot Macro data returned by the server for the given user
+function plotMacro(macro){
+    // Canvas element section
+    let macroElement  = document.querySelector('#Macro');
+    let macroDiv = document.querySelector('.Macro');
+    let macroTxt = document.querySelector('.MACRO_text');
+    let macroDesc = document.querySelector('.MACRO_text_description');
+    macroTxt.style.display = 'block';
+    macroDiv.style.display = 'block';
+    macroDesc.style.display = 'block';
+
+    macroDesc.innerHTML = 'This text must come from the server about Macro!';
+    
+    const macroData = {
+      labels: ['fat','carbs', 'protein', 'fiber'],
+      datasets: [{
+        data: macro,
+        backgroundColor: [
+          'coral',
+          'lightblue',
+          'limegreen',
+          'cyan'
+        ],
+      }]
+    };
+    const config = {
+      type: 'pie',
+      data: macroData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+      }
+    };
+    macroChart = new Chart(
+      macroElement,
+      config
+    );
+}
+// function to plot Micro data returned by the server for the given user
+function plotMicro(micro){
+    // Canvas element section
+    let microElement  = document.querySelector('#Micro');
+    let microDiv = document.querySelector('.Micro');
+    let microTxt = document.querySelector('.MICRO_text');
+    let microDesc = document.querySelector('.MICRO_text_description');
+    microTxt.style.display = 'block';
+    microDiv.style.display = 'block';
+    microDesc.style.display = 'block';
+    
+    microDesc.innerHTML = 'This text must come from the server about Micro!';
+    
+    const microData = {
+      labels: ['calcium','folate', 'iron', 'vitamin B-6', 'vitamin B-12', 'vitamin C', 'vitamin E', 'zinc'],
+      datasets: [{
+        data: micro,
+        backgroundColor: [
+          'coral',
+          'lightblue',
+          'limegreen',
+          'cyan',
+          'blue',
+          'green',
+          'orange',
+          'magenta',
+        ],
+      }]
+    };
+    const config = {
+      type: 'polarArea',
+      data: microData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+      }
+    };
+    microChart = new Chart(
+      microElement,
+      config
+    );
+}
+
+// function to display meal plan data returned by the server for the given user
+function displayMeal(mealData){
+    // Canvas element section
+    let meal0_txt  = document.querySelector('.meal_text0');
+    let meal1_txt  = document.querySelector('.meal_text1');
+    let meal2_txt  = document.querySelector('.meal_text2');
+    let meal0  = document.querySelector('.meal_plan0');
+    let meal1  = document.querySelector('.meal_plan1');
+    let meal2  = document.querySelector('.meal_plan2');
+
+
+    meal0.style.display = 'block';
+    meal1.style.display = 'block';
+    meal2.style.display = 'block';
+    
+    meal0_txt.innerHTML = mealData.info0;
+    meal1_txt.innerHTML = mealData.info1;
+    meal2_txt.innerHTML = mealData.info2;
 }

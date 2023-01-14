@@ -2,7 +2,7 @@
 define("WEIGHT", 2);
 define("HEIGHT", 3);
 define("DBG", false);
-define("MAX_cnt", 6);
+define("MAX_cnt", 7);
 // class user
 class user {
     var $name;
@@ -37,13 +37,20 @@ function saveUserDataIntoDB($Questions) {
 
     for($kk = 0; $kk < MAX_cnt; $kk++){
         $options = "";
+        $optionsTxt = "";
+        $clientId = "0";
         if($Questions[$kk]->options == ""){
         } else {
             for($kx = 0; $kx < count($Questions[$kk]->options); $kx++){
                 $options = $options . "," . $Questions[$kk]->options[$kx];
             }
         }
-        $sql = "INSERT INTO " . $table1name . " (userid, Qidx, type, question, answer, options) VALUES('" . $Questions[$kk]->userid . "','" .  $Questions[$kk]->Qidx . "','" . $Questions[$kk]->type . "','" . $Questions[$kk]->question . "','" . $Questions[$kk]->answer . "','" . $options . "')";
+        if($Questions[$kk]->qType == "button"){
+            for($kx = 0; $kx < count($Questions[$kk]->optionsText); $kx++){
+                $optionsTxt = $optionsTxt . "," . $Questions[$kk]->optionsText[$kx];
+            }
+        }
+        $sql = "INSERT INTO " . $table1name . " (userId, clientId, qIdx, qType, qContent, qAnswer, options, optionsText) VALUES('" . $Questions[$kk]->userId . "','" . $clientId . "','" . $Questions[$kk]->qIdx . "','" . $Questions[$kk]->qType . "','" . $Questions[$kk]->qContent . "','" . $Questions[$kk]->qAnswer . "','" . $options . "','" . $optionsTxt . "')";
         if(DBG) {
             echo $sql;
         }
@@ -122,13 +129,12 @@ if($dbflag == false and DBG) {
     echo "user data is saved.\n";
 }
 
-$user_bmi      = calculateBmi($userdata[WEIGHT]->answer, $userdata[HEIGHT]->answer);
-$user_if       = calculateIf($userdata[WEIGHT]->answer, $userdata[HEIGHT]->answer);
-$user_macro    = calculateMacro($userdata[WEIGHT]->answer, $userdata[HEIGHT]->answer);
-$user_micro    = calculateMicro($userdata[WEIGHT]->answer, $userdata[HEIGHT]->answer);
+$user_bmi      = calculateBmi($userdata[WEIGHT]->qAnswer, $userdata[HEIGHT]->qAnswer);
+$user_if       = calculateIf($userdata[WEIGHT]->qAnswer, $userdata[HEIGHT]->qAnswer);
+$user_macro    = calculateMacro($userdata[WEIGHT]->qAnswer, $userdata[HEIGHT]->qAnswer);
+$user_micro    = calculateMicro($userdata[WEIGHT]->qAnswer, $userdata[HEIGHT]->qAnswer);
 $user_meal     = calculateMeals();
 $data          = dataPrep($user_bmi, $user_if, $user_macro, $user_micro, $user_meal);
-
 echo json_encode($data);
 
 
