@@ -109,16 +109,18 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             
             
             // updating the progress
-            let p = (prog / MAX_cnt);
-            progChart.data.datasets[0].data.pop(0);
-            progChart.data.datasets[0].data.pop(1);
-            progChart.data.datasets[0].data.push(p * 100);
-            progChart.data.datasets[0].data.push((1 - p) * 100);
-            progChart.update();
-            
-            let percent = document.querySelector('.progress-percent');
-            let p_string = Math.round(p * 100);
-            percent.innerHTML = p_string.toString() + '%';
+            if(page == 'main') {
+                let p = (prog / MAX_cnt);
+                progChart.data.datasets[0].data.pop(0);
+                progChart.data.datasets[0].data.pop(1);
+                progChart.data.datasets[0].data.push(p * 100);
+                progChart.data.datasets[0].data.push((1 - p) * 100);
+                progChart.update();
+                
+                let percent = document.querySelector('.progress-percent');
+                let p_string = Math.round(p * 100);
+                percent.innerHTML = p_string.toString() + '%';
+            }
         });
     }
 }
@@ -392,9 +394,15 @@ function submitUserData(inputDataBlob, page) {
                     reg = document.querySelector('.register_txt');
                     reg.innerHTML = 'please register';
                 }
+            } else if(data.ok == true, page == 'register') {
+                if(data.flag == 0){
+                    window.location.assign('login.html');
+                } 
             }
         }
     };
+    
+    
     // sending the request
     xmlhttp.open("POST", "assets/php/" + page + ".php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

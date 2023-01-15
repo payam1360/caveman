@@ -1,7 +1,7 @@
 <?php
 
 define("DBG", false);
-define("MAX_cnt", 2);
+define("MAX_cnt", 3);
 
 
 function registerUserCredentials($userInfo) {
@@ -24,7 +24,7 @@ function registerUserCredentials($userInfo) {
     // first check if the username exists:
     $userId = uniqid();
     
-    $sql = "INSERT INTO " . $tablename . " (userId, password, username) VALUES('" . $userId . "','" . $userInfo[1]->answer . "','" .  $userInfo[0]->answer . "');";
+    $sql = "INSERT INTO " . $tablename . " (userId, password, username) VALUES('" . $userId . "','" . $userInfo[1]->qAnswer . "','" .  $userInfo[0]->qAnswer . "');";
     
     if(DBG) {
         echo $sql;

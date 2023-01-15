@@ -23,7 +23,7 @@ function validateUserCredentials($userInfo) {
     }
     // first check if the username exists:
     
-    $sql = "SELECT password " . "FROM " . $tablename . " WHERE username = '" . $userInfo[0]->answer . "';";
+    $sql = "SELECT password " . "FROM " . $tablename . " WHERE username = '" . $userInfo[0]->qAnswer . "';";
     if(DBG) {
         echo $sql;
     }
@@ -35,7 +35,7 @@ function validateUserCredentials($userInfo) {
             echo "user not registered";
         }
     }
-    else if($userInfo[1]->answer === $password->fetch_column(0)) {
+    else if($userInfo[1]->qAnswer === $password->fetch_column(0)) {
         $result = 0; // user name password are ok
         if (DBG) {
             echo "user exists and ok";
