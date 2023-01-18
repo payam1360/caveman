@@ -11,7 +11,10 @@ function validateUserCredentials($userInfo) {
     $password    = "@Ssia123";
     $dbname      = "Users";
     $tablename   = "authentication";
-    $result      = -1;
+    $result['status']   = -1;
+    $result['userName'] = '';
+    $result['userId']   = '';
+
     // Create connection
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
     // Check connection
@@ -24,24 +27,34 @@ function validateUserCredentials($userInfo) {
     // first check if the username exists:
     
     $sql = "SELECT password " . "FROM " . $tablename . " WHERE username = '" . $userInfo[0]->qAnswer . "';";
+    $password = $conn->query($sql);
+
     if(DBG) {
         echo $sql;
     }
-    $password = $conn->query($sql);
+    
     // user already registered, get the corresponding password
     if($password->num_rows == 0 ) {
-        $result = 2; // user is not registered
+        $result['status']   = 2; // user is not registered
+        $result['userName'] = '';
+        $result['userId']   = '';
         if (DBG) {
             echo "user not registered";
         }
     }
     else if($userInfo[1]->qAnswer === $password->fetch_column(0)) {
-        $result = 0; // user name password are ok
+        $sql = "SELECT userId " . "FROM " . $tablename . " WHERE username = '" . $userInfo[0]->qAnswer . "';";
+        $userId = $conn->query($sql);
+        $result['status']   = 0; // user is not registered
+        $result['userName'] = $userInfo[0]->qAnswer;
+        $result['userId']   = $userId->fetch_column(0);
         if (DBG) {
             echo "user exists and ok";
         }
     } else {
-        $result = 1; // user name password are wrong
+        $result['status']   = 1; // user is not registered
+        $result['userName'] = '';
+        $result['userId']   = '';
         if (DBG) {
             echo "user exists but password wrong";
         }
@@ -52,25 +65,18 @@ function validateUserCredentials($userInfo) {
 }
 
 
-function dataPrep($ok){
-    if($ok === 0) {
-        $data = array('flag' => 0);
-        }
-    else if($ok === 1) {
-        $data = array('flag' => 1);
-        }
-    else if($ok === 2) {
-        $data = array('flag' => 2);
-    }
-    return $data;
-}
 
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
 $userdata      = json_decode($_POST['userInfo']);
-$dbflag        = validateUserCredentials($userdata);
-$data          = dataPrep($dbflag);
+$data          = validateUserCredentials($userdata);
+
+if($data['status'] == 0) {
+    session_start();
+    $_SESSION['userName'] = $data['userName'];
+    $_SESSION['userId'] = $data['userId'];
+}
 echo json_encode($data);
 
 

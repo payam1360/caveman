@@ -11718,4 +11718,7 @@ body {
 }
 .admin-dash-icon{
     color: coral;
+    transition-property: transform;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
 }

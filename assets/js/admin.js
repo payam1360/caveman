@@ -8,13 +8,12 @@
 * License: https://bootstrapmade.com/license/
 */
 
-
 document.addEventListener('DOMContentLoaded', () => {
   "use strict";
     /* define the class for questions*/
-    
+    let userTxt = document.querySelector('.user-text');
+    getUserInfo(userTxt);
     let container = document.querySelectorAll('.admin-dashbord');
-    
     for(let kk = 0; kk < container.length; kk++) {
         container[kk].addEventListener('mouseenter',function(e) {
             e.target.children[1].style.transform = 'scale(1.3, 1.3)';
@@ -33,6 +32,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
 
 

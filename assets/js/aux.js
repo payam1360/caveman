@@ -51,6 +51,13 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 prog++;
             }
             counter++;
+            // design questions
+            
+            if(page == 'questions') {
+                updateQuestion(prog);
+            }
+            
+            
             // submit the users data here
             if(counter == MAX_cnt) {
                 let allReq = true;
@@ -109,7 +116,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             
             
             // updating the progress
-            if(page == 'main') {
+            if(page == 'main' || page == 'questions') {
                 let p = (prog / MAX_cnt);
                 progChart.data.datasets[0].data.pop(0);
                 progChart.data.datasets[0].data.pop(1);
@@ -175,7 +182,7 @@ function setFormType(querySelIn, userStruct){
         case 'text':
             newIn = document.createElement('input');
             newIn.setAttribute('class', 'form-input-style');
-            newIn.setAttribute('pattern', '[A-Za-z0-9]{1,}');
+            newIn.setAttribute('pattern', '[A-Za-z0-9\\s\\?;-]{1,}');
             newIn.setAttribute('required', userStruct.qRequired);
             newIn.setAttribute('type', userStruct.qType);
             querySelIn.appendChild(newIn);
@@ -380,21 +387,18 @@ function submitUserData(inputDataBlob, page) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
-            
-            if(data.ok == true, page == 'main'){
+            if(data.status == 0 && page == 'main'){
                 plotBmi(data.bmi);
                 plotIf(data.If);
                 plotMacro(data.macro);
                 plotMicro(data.micro);
                 displayMeal(data.mealData)
-            } else if(data.ok == true, page == 'login') {
-                if(data.flag == 0){
-                    window.location.assign('admin.html');
-                } else if(data.flag == 2) {
-                    reg = document.querySelector('.register_txt');
-                    reg.innerHTML = 'please register';
-                }
-            } else if(data.ok == true, page == 'register') {
+            } else if(data.status == 0 && page == 'login') {
+                window.location.assign('admin.html');
+            } else if(data.status == 1 && page == 'login') {
+                reg = document.querySelector('.register_txt');
+                reg.innerHTML = 'please register';
+            } else if(data.status == 0 && page == 'register') {
                 if(data.flag == 0){
                     window.location.assign('login.html');
                 } 
@@ -402,12 +406,63 @@ function submitUserData(inputDataBlob, page) {
         }
     };
     
-    
     // sending the request
     xmlhttp.open("POST", "assets/php/" + page + ".php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     var userdata = "userInfo="+JSON.stringify(inputDataBlob);
     xmlhttp.send(userdata);
+}
+
+function getUserInfo(userTxt){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            user = JSON.parse(this.response);
+            userTxt.innerHTML = user.username;
+        }
+    };
+    
+    // sending the request
+    xmlhttp.open("GET", "assets/php/admin.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send();
+}
+
+// questions page: updating the Questions struct dynamically
+function updateQuestion(progCnt) {
+    if(progCnt == 1) {
+        Obj = new question(0, '2. what is the content of your question?', '', 1, 'text', [''], [''], false, true);
+        Obj.pushData(Obj);
+        if(Questions[0].qAnswer == 0) {
+            MAX_cnt = 5; // list question type
+        } else if(Questions[0].qAnswer == 1) {
+            MAX_cnt = 4; // text question type
+        } else if(Questions[0].qAnswer == 2) {
+            MAX_cnt = 6; // multiple choice question type
+        }
+    } else if (progCnt == 2){
+        Obj = new question(0, '3. is this question REQUIRED to be answered by the client?', '', 0, 'button', ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ['YES', 'NO'], false, true);
+        Obj.pushData(Obj);
+    } else if (progCnt == 3 && Questions[0].qAnswer == 1){
+        Obj = new question(0, '4. are you done with your questions?', '', 1, 'text', [''], [''], false, true);
+        Obj.pushData(Obj);
+    } else if (progCnt == 3 && Questions[0].qAnswer == 0){
+        Obj = new question(0, '4. enter your list items separated by SEMICOLON (;)', '', 1, 'text', [''], [''], false, true);
+        Obj.pushData(Obj);
+    } else if (progCnt == 4 && Questions[0].qAnswer == 0){
+        Obj = new question(0, '5. are you done with your questions?', '', 1, 'text', [''], [''], false, true);
+        Obj.pushData(Obj);
+    } else if (progCnt == 3 && Questions[0].qAnswer == 2){
+        Obj = new question(0, '4. enter choice icons seperated by SEMICOLON (;). e.g.: fa-regular fa-thumbs-up; fa-regular fa-thumbs-down', '', 1, 'text', [''], [''], false, true);
+        Obj.pushData(Obj);
+    } else if (progCnt == 4 && Questions[0].qAnswer == 2){
+        Obj = new question(0, '5. enter choice text seperated by SEMICOLON (;). e.g.: YES; NO', '', 1, 'text', [''], [''], false, true);
+        Obj.pushData(Obj);
+    } else if (progCnt == 5 && Questions[0].qAnswer == 2){
+        Obj = new question(0, '6. are you done with your questions?', '', 1, 'text', [''], [''], false, true);
+        Obj.pushData(Obj);
+    }
+    
 }
 
 
