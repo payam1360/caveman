@@ -109,7 +109,7 @@ function calculateMeals(){
     return($user_meal);
 }
 function dataPrep($user_bmi, $user_if, $user_macro, $user_micro, $user_meal){
-    $data = array('ok' => true,
+    $data = array('status' => true,
                  'bmi' => $user_bmi,
                  'If'  => $user_if,
                  'macro' => $user_macro,

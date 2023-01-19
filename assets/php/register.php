@@ -22,7 +22,7 @@ function registerUserCredentials($userInfo) {
         echo "Connected successfully";
     }
     // first check if the username exists:
-    $userId = uniqid();
+    $userId = mt_rand();
     
     $sql = "INSERT INTO " . $tablename . " (userId, password, username) VALUES('" . $userId . "','" . $userInfo[1]->qAnswer . "','" .  $userInfo[0]->qAnswer . "');";
     
@@ -49,11 +49,11 @@ function registerUserCredentials($userInfo) {
 
 
 function dataPrep($ok){
-    if($ok === 0) {
-        $data = array('flag' => 0);
+    if($ok == 0) {
+        $data = array('status' => 0);
     }
-    else if($ok === 1) {
-        $data = array('flag' => 1);
+    else if($ok == 1) {
+        $data = array('status' => 1);
     }
     return $data;
 }

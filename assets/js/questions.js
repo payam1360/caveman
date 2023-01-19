@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     FirstquestionCreate();
     // initialize the first question and init the load page
     resetStart(Questions, input, header, headerTxt);
-    // generate the chart
+    // generate the progress chart
     progChart = new Chart(
       ctx,
       config
@@ -60,13 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
 });
 
-//
-// this function eventually comes from user customization and design of his app.
-
-function FirstquestionCreate(){
-    let Obj = new question(0, '1. what is the TYPE of question you want to ask your client?', '', 0, 'button', ['fa-solid fa-list-ul','fa-solid fa-comment-dots', 'fa-solid fa-hand-pointer'], ['list options', 'write text', 'multiple choice'], false, true);
-    Obj.pushData(Obj);
-}
 
 
 

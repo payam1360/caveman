@@ -87,13 +87,13 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             gap[0] = input[1].getBoundingClientRect().left-input[0].getBoundingClientRect().left;
             gap[1] = input[2].getBoundingClientRect().left-input[1].getBoundingClientRect().left;
             
-            ChangeForm(input[0], '0.5s', gap[0].toString(), 1, '40%');
+            ChangeForm(input[0], '0.5s', gap[0].toString(), 1, '50%');
             input[0].addEventListener('transitionend', () => {
                 //Reset
                 ChangeForm(input[0], '0.0s', '0', 0, '0%');
                 resetFormType(input[0]);
             });
-            ChangeForm(header[0], '0.5s', gap[0].toString(), 1, '40%');
+            ChangeForm(header[0], '0.5s', gap[0].toString(), 1, '50%');
             header[0].addEventListener('transitionend', () => {
                 //Reset
                 ChangeForm(header[0], '0.0s', '0', 0, '0%');
@@ -103,7 +103,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 //Reset
                 resetFormType(input[1]);
                 setFormType(input[1], Questions[counter]);
-                ChangeForm(input[1], '0s', '0', 1, '40%');
+                ChangeForm(input[1], '0s', '0', 1, '50%');
                 restorePrevAnswer();
             });
             
@@ -111,7 +111,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             header[1].addEventListener('transitionend', () => {
                 //Reset
                 headerTxt[1].innerHTML = Questions[counter].qContent;
-                ChangeForm(header[1], '0.0s', '0', 1, '40%');
+                ChangeForm(header[1], '0.0s', '0', 1, '50%');
             });
             
             
@@ -146,13 +146,13 @@ function moveLeft(moveleft, input, header, headerTxt, Questions){
             let gap = [];
             gap[0] = input[1].getBoundingClientRect().right-input[2].getBoundingClientRect().right;
             gap[1] = input[0].getBoundingClientRect().right-input[1].getBoundingClientRect().right;
-            ChangeForm(input[2], '0.5s', gap[0].toString(), 1, '40%');
+            ChangeForm(input[2], '0.5s', gap[0].toString(), 1, '50%');
             input[2].addEventListener('transitionend', () => {
                 //Reset
                 ChangeForm(input[2], '0.0s', '0', 0, '0%');
                 resetFormType(input[2]);
             });
-            ChangeForm(header[2], '0.5s', gap[0].toString(), 1, '40%');
+            ChangeForm(header[2], '0.5s', gap[0].toString(), 1, '50%');
             header[2].addEventListener('transitionend', () => {
                 //Reset
                 ChangeForm(header[2], '0.0s', '0', 0, '0%');
@@ -161,7 +161,7 @@ function moveLeft(moveleft, input, header, headerTxt, Questions){
             input[1].addEventListener('transitionend', () => {
                 //Reset
                 resetFormType(input[1]);
-                ChangeForm(input[1], '0.0s', '0', 1, '40%');
+                ChangeForm(input[1], '0.0s', '0', 1, '50%');
                 setFormType(input[1], Questions[counter]);
                 restorePrevAnswer();
             });
@@ -169,7 +169,7 @@ function moveLeft(moveleft, input, header, headerTxt, Questions){
             header[1].addEventListener('transitionend', () => {
                 //Reset
                 headerTxt[1].innerHTML = Questions[counter].qContent;
-                ChangeForm(header[1], '0.0s', '0', 1, '40%');
+                ChangeForm(header[1], '0.0s', '0', 1, '50%');
             });
         });
     }
@@ -396,12 +396,13 @@ function submitUserData(inputDataBlob, page) {
             } else if(data.status == 0 && page == 'login') {
                 window.location.assign('admin.html');
             } else if(data.status == 1 && page == 'login') {
-                reg = document.querySelector('.register_txt');
-                reg.innerHTML = 'please register';
+                window.alert('wrong password!');
+            } else if(data.status == 2 && page == 'login') {
+                window.alert('please register');
             } else if(data.status == 0 && page == 'register') {
-                if(data.flag == 0){
-                    window.location.assign('login.html');
-                } 
+                window.location.assign('login.html');
+            } else if(data.status == 0 && page == 'questions') {
+                window.alert('data saved');
             }
         }
     };
@@ -428,6 +429,14 @@ function getUserInfo(userTxt){
     xmlhttp.send();
 }
 
+//
+// this function eventually comes from user customization and design of his app.
+
+function FirstquestionCreate(){
+    let Obj = new question(0, '1. what is the TYPE of question you want to ask your client?', '', 0, 'button', ['fa-solid fa-list-ul','fa-solid fa-comment-dots', 'fa-solid fa-hand-pointer', 'fa-solid fa-envelope'], ['list options', 'write text', 'multiple choice', 'email'], false, true);
+    Obj.pushData(Obj);
+}
+
 // questions page: updating the Questions struct dynamically
 function updateQuestion(progCnt) {
     if(progCnt == 1) {
@@ -439,27 +448,29 @@ function updateQuestion(progCnt) {
             MAX_cnt = 4; // text question type
         } else if(Questions[0].qAnswer == 2) {
             MAX_cnt = 6; // multiple choice question type
+        } else if(Questions[0].qAnswer == 3) {
+            MAX_cnt = 4; //email question type
         }
     } else if (progCnt == 2){
-        Obj = new question(0, '3. is this question REQUIRED to be answered by the client?', '', 0, 'button', ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ['YES', 'NO'], false, true);
+        Obj = new question(0, '3. is this question REQUIRED to be answered by the client?', '', 2, 'button', ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ['YES', 'NO'], false, true);
         Obj.pushData(Obj);
-    } else if (progCnt == 3 && Questions[0].qAnswer == 1){
-        Obj = new question(0, '4. are you done with your questions?', '', 1, 'text', [''], [''], false, true);
+    } else if (progCnt == 3 && (Questions[0].qAnswer == 1 || Questions[0].qAnswer == 3)){
+        Obj = new question(0, '4. are you done with your questions?', '', 3, 'button', ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ['YES', 'NO'], false, true);
         Obj.pushData(Obj);
     } else if (progCnt == 3 && Questions[0].qAnswer == 0){
-        Obj = new question(0, '4. enter your list items separated by SEMICOLON (;)', '', 1, 'text', [''], [''], false, true);
+        Obj = new question(0, '4. enter your list items separated by SEMICOLON (;)', '', 3, 'text', [''], [''], false, true);
         Obj.pushData(Obj);
     } else if (progCnt == 4 && Questions[0].qAnswer == 0){
-        Obj = new question(0, '5. are you done with your questions?', '', 1, 'text', [''], [''], false, true);
+        Obj = new question(0, '5. are you done with your questions?', '', 4, 'button', ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ['YES', 'NO'], false, true);
         Obj.pushData(Obj);
     } else if (progCnt == 3 && Questions[0].qAnswer == 2){
-        Obj = new question(0, '4. enter choice icons seperated by SEMICOLON (;). e.g.: fa-regular fa-thumbs-up; fa-regular fa-thumbs-down', '', 1, 'text', [''], [''], false, true);
+        Obj = new question(0, '4. enter choice icons seperated by SEMICOLON (;). e.g.: fa-regular fa-thumbs-up; fa-regular fa-thumbs-down', '', 3, 'text', [''], [''], false, true);
         Obj.pushData(Obj);
     } else if (progCnt == 4 && Questions[0].qAnswer == 2){
-        Obj = new question(0, '5. enter choice text seperated by SEMICOLON (;). e.g.: YES; NO', '', 1, 'text', [''], [''], false, true);
+        Obj = new question(0, '5. enter choice text seperated by SEMICOLON (;). e.g.: YES; NO', '', 4, 'text', [''], [''], false, true);
         Obj.pushData(Obj);
     } else if (progCnt == 5 && Questions[0].qAnswer == 2){
-        Obj = new question(0, '6. are you done with your questions?', '', 1, 'text', [''], [''], false, true);
+        Obj = new question(0, '6. are you done with your questions?', '', 5, 'button', ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ['YES', 'NO'], false, true);
         Obj.pushData(Obj);
     }
     
