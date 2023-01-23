@@ -4,6 +4,11 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
+let Questions = [];
+let counter   = 0;
+let prog      = 0;
+let progChart = [];
+let MAX_cnt   = 0;
 // user <-> client class definition
 class question {
     constructor(userId, qContent, qAnswer, qIdx, qType, Options, OptionsText, visited, qRequired){
@@ -79,6 +84,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 }
             }
             // set form 0 header
+            dynamicQcontent();
             headerTxt[0].innerHTML = Questions[counter].qContent;
             // set form 0 type
             resetFormType(input[0]);
@@ -290,6 +296,13 @@ function setFormType(querySelIn, userStruct){
     }
 }
 
+
+function dynamicQcontent() {
+    if(counter > 0) {
+        let dyno = Questions[counter].qContent.replace('#Name', Questions[counter-1].qAnswer);
+        Questions[counter].qContent = dyno;
+    }
+}
 function getUserButtonSelection(alt){
     Questions[counter].qAnswer = alt.value;
     let formButtonStyle = document.querySelectorAll('.form-button-style');
@@ -314,25 +327,20 @@ function resetFormType(querySelIn){
     }
 }
 
-function resetStart(Questions, input, header, headerTxt) {
+function resetStart(input, header, headerTxt, page) {
 
-    let LFT_IDX = 0;
-    let MDL_IDX = 1;
-    let RHT_IDX = 2;
+    questionCreate(headerTxt[1], input[1], page);
     // reset the question bar
-    input[RHT_IDX].style.width = '0%';
-    input[MDL_IDX].style.opacity = 1;
-    input[LFT_IDX].style.width = '0%';
-    header[RHT_IDX].style.width = '0%';
-    header[MDL_IDX].style.opacity = 1;
-    header[LFT_IDX].style.width = '0%';
-    // initialize header
-    headerTxt[MDL_IDX].innerHTML = Questions[counter].qContent;
+    input[2].style.width = '0%';
+    input[1].style.opacity = 1;
+    input[0].style.width = '0%';
+    header[2].style.width = '0%';
+    header[1].style.opacity = 1;
+    header[0].style.width = '0%';
     // initialize the input based on form Type
-    resetFormType(input[RHT_IDX]);
-    resetFormType(input[MDL_IDX]);
-    resetFormType(input[LFT_IDX]);
-    setFormType(input[MDL_IDX], Questions[counter]);
+    resetFormType(input[2]);
+    resetFormType(input[1]);
+    resetFormType(input[0]);
 }
 
 function restorePrevAnswer() {
@@ -474,6 +482,33 @@ function updateQuestion(progCnt) {
         Obj.pushData(Obj);
     }
     
+}
+
+
+// this function eventually comes from user costomization and design of his app.
+function questionCreate(headerTxt, input, page){
+
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let data = JSON.parse(this.response);
+            MAX_cnt = data.MAX_cnt;
+            let Obj = new question();
+            for(let kk = 0; kk < MAX_cnt; kk++){
+                Obj = new question(kk, data.qContent[kk], '', data.qIdx[kk], data.qType[kk], data.options[kk], data.optionsText[kk], false, data.qRequired[kk]);
+                Obj.pushData(Obj);
+            }
+            // initialize header
+            headerTxt.innerHTML = Questions[counter].qContent;
+            // initialize the input based on form Type
+            setFormType(input, Questions[counter]);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/filler.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let request = "request="+JSON.stringify(page);
+    xmlhttp.send(request);
 }
 
 

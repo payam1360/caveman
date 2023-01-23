@@ -82,8 +82,6 @@ function saveUserDataIntoDB($Questions) {
     return $flag;
 }
 
-
-
 /// -------------------------
 /// main routin starts here.
 /// -------------------------

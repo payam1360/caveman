@@ -4,13 +4,6 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
-let Questions = [];
-let counter = 0;
-let prog = 0;
-let MAX_cnt = 2;
-let userid = Math.round(Math.random() * 1000).toString();
-
-
 document.addEventListener('DOMContentLoaded', () => {
   "use strict";
     /* define the class for questions*/
@@ -18,13 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let input = document.querySelectorAll('.form-input');
     let header = document.querySelectorAll('.form-header');
     let headerTxt = document.querySelectorAll('.form-header-style');
-    
-
-    // create the questions
-    questionCreate(userid);
     // initialize header
     // initialize the first question and init the load page
-    resetStart(Questions, input, header, headerTxt);
+    resetStart(input, header, headerTxt, 'login');
     
     // log in button handle
     const register = document.querySelector('.register');
@@ -44,13 +33,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-//
-// this function eventually comes from user costomization and design of his app.
-function questionCreate(userid){
-
-    let Obj = new question(userid, '1. what is your email?', '', 0, 'email', [''], [''], false, true);
-    Obj.pushData(Obj);
-    Obj     = new question(userid, '2. what is your password?', '', 1, 'password', [''], [''], false, true);
-    Obj.pushData(Obj);
-}
 

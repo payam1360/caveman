@@ -4,11 +4,6 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
-let Questions = [];
-let counter = 0;
-let prog = 0;
-let MAX_cnt = 0;
-let progChart = [];
 let ctx = document.querySelector('#ProgressCircle');
 const progress = {
   datasets: [{
@@ -45,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // For now, t is generating questions locally
     FirstquestionCreate();
     // initialize the first question and init the load page
-    resetStart(Questions, input, header, headerTxt);
+    resetStart(Questions, input, header, headerTxt, '');
     // generate the progress chart
     progChart = new Chart(
       ctx,

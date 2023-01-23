@@ -1,21 +1,9 @@
 <?php
+
+define("DBG", false);
 define("WEIGHT", 2);
 define("HEIGHT", 3);
-define("DBG", false);
-define("MAX_cnt", 7);
-// class user
-class user {
-    var $name;
-    var $email;
-    var $id;
-    var $questions;
-    function set_name($value) {
-        $this->name = $value;
-    }
-    function get_name() {
-        return $this->name;
-    }
-};
+define("MAX_cnt", 4);
 
 
 function saveUserDataIntoDB($Questions) {
@@ -37,8 +25,11 @@ function saveUserDataIntoDB($Questions) {
 
     for($kk = 0; $kk < MAX_cnt; $kk++){
         $options = "";
-        $optionsTxt = "";
-        $clientId = "0";
+        $optionsText = "";
+        $clientId = mt_rand();
+        $campaignId = mt_rand();
+        $campaignTime = date("Y-m-d", time());
+        $userId = "0";
         if($Questions[$kk]->options == ""){
         } else {
             for($kx = 0; $kx < count($Questions[$kk]->options); $kx++){
@@ -47,10 +38,11 @@ function saveUserDataIntoDB($Questions) {
         }
         if($Questions[$kk]->qType == "button"){
             for($kx = 0; $kx < count($Questions[$kk]->optionsText); $kx++){
-                $optionsTxt = $optionsTxt . "," . $Questions[$kk]->optionsText[$kx];
+                $optionsText = $optionsText . "," . $Questions[$kk]->optionsText[$kx];
             }
         }
-        $sql = "INSERT INTO " . $table1name . " (userId, clientId, qIdx, qType, qContent, qAnswer, options, optionsText) VALUES('" . $Questions[$kk]->userId . "','" . $clientId . "','" . $Questions[$kk]->qIdx . "','" . $Questions[$kk]->qType . "','" . $Questions[$kk]->qContent . "','" . $Questions[$kk]->qAnswer . "','" . $options . "','" . $optionsTxt . "')";
+        $sql = "INSERT INTO " . $table1name . " (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired) VALUES('" . $userId . "','" . $clientId . "','" . $campaignId . "','" . $campaignTime . "','" . $Questions[$kk]->qIdx . "','" . $Questions[$kk]->qType . "','" . $Questions[$kk]->qContent . "','" . $Questions[$kk]->qAnswer . "','" . $options . "','" . $optionsText . "','" . $Questions[$kk]->visited . "','" . $Questions[$kk]->qRequired . "')";
+
         if(DBG) {
             echo $sql;
         }
@@ -108,8 +100,8 @@ function calculateMeals(){
 // calculate intermittent fasting interval
     return($user_meal);
 }
-function dataPrep($user_bmi, $user_if, $user_macro, $user_micro, $user_meal){
-    $data = array('status' => true,
+function dataPrep($status, $user_bmi, $user_if, $user_macro, $user_micro, $user_meal){
+    $data = array('status' => $status,
                  'bmi' => $user_bmi,
                  'If'  => $user_if,
                  'macro' => $user_macro,
@@ -125,8 +117,8 @@ $userdata      = json_decode($_POST['userInfo']);
 $dbflag        = saveUserDataIntoDB($userdata);
 if($dbflag == false and DBG) {
     echo "user has not registered. no data is saved";
-}elseif(DBG){
-    echo "user data is saved.\n";
+}else{
+    $status = 0;
 }
 
 $user_bmi      = calculateBmi($userdata[WEIGHT]->qAnswer, $userdata[HEIGHT]->qAnswer);
@@ -134,7 +126,7 @@ $user_if       = calculateIf($userdata[WEIGHT]->qAnswer, $userdata[HEIGHT]->qAns
 $user_macro    = calculateMacro($userdata[WEIGHT]->qAnswer, $userdata[HEIGHT]->qAnswer);
 $user_micro    = calculateMicro($userdata[WEIGHT]->qAnswer, $userdata[HEIGHT]->qAnswer);
 $user_meal     = calculateMeals();
-$data          = dataPrep($user_bmi, $user_if, $user_macro, $user_micro, $user_meal);
+$data          = dataPrep($status, $user_bmi, $user_if, $user_macro, $user_micro, $user_meal);
 echo json_encode($data);
 
 
