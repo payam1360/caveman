@@ -37,10 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let userTxt = document.querySelector('.user-text');
     getUserInfo(userTxt);
     // this function will be getting the info from the Admin Panel.
-    // For now, t is generating questions locally
-    FirstquestionCreate();
     // initialize the first question and init the load page
-    resetStart(Questions, input, header, headerTxt, '');
+    resetStart(input, header, headerTxt, 'questions');
     // generate the progress chart
     progChart = new Chart(
       ctx,

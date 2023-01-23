@@ -36,6 +36,17 @@ function getRegisterForm() {
     $data['MAX_cnt'] = 3;
     return $data;
 }
+
+function firstQuestionBackendForm() {
+    $data['qContent'] = ["1. what is the TYPE of question you want to ask your client?"];
+    $data['qType'] = ["button"];
+    $data['qIdx'] = [0];
+    $data['options'] = [["fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope"]];
+    $data['optionsText'] = [["list options", "write text", "multiple choice", "email"]];
+    $data['qRequired'] = [1, 1, 1, 1];
+    $data['MAX_cnt'] = 1;
+    return $data;
+}
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
@@ -46,6 +57,8 @@ if($page == 'login') {
     $data      = getRegisterForm();
 } elseif($page == 'main') {
     $data      = getPublicForm();
+} elseif($page == 'questions') {
+    $data      = firstQuestionBackendForm();
 }
 echo json_encode($data);
 

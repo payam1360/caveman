@@ -440,10 +440,6 @@ function getUserInfo(userTxt){
 //
 // this function eventually comes from user customization and design of his app.
 
-function FirstquestionCreate(){
-    let Obj = new question(0, '1. what is the TYPE of question you want to ask your client?', '', 0, 'button', ['fa-solid fa-list-ul','fa-solid fa-comment-dots', 'fa-solid fa-hand-pointer', 'fa-solid fa-envelope'], ['list options', 'write text', 'multiple choice', 'email'], false, true);
-    Obj.pushData(Obj);
-}
 
 // questions page: updating the Questions struct dynamically
 function updateQuestion(progCnt) {
@@ -492,6 +488,7 @@ function questionCreate(headerTxt, input, page){
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
+            
             MAX_cnt = data.MAX_cnt;
             let Obj = new question();
             for(let kk = 0; kk < MAX_cnt; kk++){
