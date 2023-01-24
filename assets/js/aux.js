@@ -57,7 +57,6 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             }
             counter++;
             // design questions
-            
             if(page == 'questions') {
                 updateQuestion(prog);
             }
@@ -122,7 +121,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             
             
             // updating the progress
-            if(page == 'main' || page == 'questions') {
+            if(page == 'main' || page == 'questions' || page == 'analysis') {
                 let p = (prog / MAX_cnt);
                 progChart.data.datasets[0].data.pop(0);
                 progChart.data.datasets[0].data.pop(1);
@@ -410,6 +409,8 @@ function submitUserData(inputDataBlob, page) {
             } else if(data.status == 0 && page == 'register') {
                 window.location.assign('login.html');
             } else if(data.status == 0 && page == 'questions') {
+                window.alert('data saved');
+            } else if(data.status == 0 && page == 'analysis') {
                 window.alert('data saved');
             }
         }

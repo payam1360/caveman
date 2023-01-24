@@ -47,6 +47,17 @@ function firstQuestionBackendForm() {
     $data['MAX_cnt'] = 1;
     return $data;
 }
+
+function analysisForm() {
+    $data['qContent'] = ["1. How do you want food analysis be done? (Macro/Mico nutrients)", "2. How do you want meal planning be done?", "3. How do like to perform sleep analysis for your clients"];
+    $data['qType'] = ["button", "button", "button"];
+    $data['qIdx'] = [0, 1, 2];
+    $data['options'] = [["fa-solid fa-brain", "fa-brands fa-nutritionix"], ["fa-solid fa-brain", "fa-brands fa-nutritionix"], ["fa-solid fa-brain", "fa-brands fa-nutritionix"]];
+    $data['optionsText'] = [["AI", "Nutritionist"], ["AI", "Nutritionist"], ["AI", "Nutritionist"]];
+    $data['qRequired'] = [1, 1, 1];
+    $data['MAX_cnt'] = 3;
+    return $data;
+}
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
@@ -59,6 +70,8 @@ if($page == 'login') {
     $data      = getPublicForm();
 } elseif($page == 'questions') {
     $data      = firstQuestionBackendForm();
+} elseif($page == 'analysis') {
+    $data      = analysisForm();
 }
 echo json_encode($data);
 
