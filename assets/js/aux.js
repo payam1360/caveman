@@ -83,7 +83,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 }
             }
             // set form 0 header
-            dynamicQcontent();
+            dynamicQcontent(page);
             headerTxt[0].innerHTML = Questions[counter].qContent;
             // set form 0 type
             resetFormType(input[0]);
@@ -295,10 +295,20 @@ function setFormType(querySelIn, userStruct){
     }
 }
 
-
-function dynamicQcontent() {
-    if(counter > 0) {
-        let dyno = Questions[counter].qContent.replace('#Name', Questions[counter-1].qAnswer);
+function dynamicQcontent(page) {
+    if(page == 'clients') {
+        let searchTag = [];
+        if(Questions[counter-1].qAnswer == 0) {
+            searchTag = 'ID';
+        } else if(Questions[counter-1].qAnswer == 1) {
+            searchTag = 'email';
+        } else if(Questions[counter-1].qAnswer == 2) {
+            searchTag = 'name';
+        }
+        let dyno = Questions[counter].qContent.replace('#clientsTag', searchTag);
+        Questions[counter].qContent = dyno;
+    } else if(page == 'main' && counter > 0) {
+        let dyno = Questions[counter].qContent.replace('#mainNameTag', Questions[counter-1].qAnswer);
         Questions[counter].qContent = dyno;
     }
 }
@@ -718,3 +728,22 @@ function displayMeal(mealData){
     meal1_txt.innerHTML = mealData.info1;
     meal2_txt.innerHTML = mealData.info2;
 }
+
+
+// function to handle listing clients
+function listClients(clients, Questions) {
+    if(clients) {
+        clients.forEach(item => item.addEventListener('click', function(event) {
+            item.style.width = '60%';
+            item.style.height = '85%';
+            item.style.bottom = '5%';
+            item.style.borderRadius = '1%'
+            item.style.backgroundColor = 'lightblue';
+            item.style.position = 'fixed';
+            item.style.zIndex = '2';
+            item.style.opacity = 0.8;
+        }))
+    }
+    
+}
+

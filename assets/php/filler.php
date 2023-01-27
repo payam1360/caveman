@@ -5,7 +5,7 @@ define("MAX_cnt", 3);
 
 
 function getPublicForm() {
-    $data['qContent'] = ["1. Hey there, what is your name?", "2. Hi #Name, what is your nutritional goal?", "3. How much do you weigh?", "4. How tall are you?", "5. How is your sleep?"];
+    $data['qContent'] = ["1. Hey there, what is your name?", "2. Hi #mainNameTag, what is your nutritional goal?", "3. How much do you weigh?", "4. How tall are you?", "5. How is your sleep?"];
     $data['qType'] = ["text", "button", "list", "list", "button"];
     $data['qIdx'] = [0, 1, 2, 3, 4];
     $data['options'] = ["", ["fa-solid fa-weight-scale","fa-solid fa-dumbbell","fa-solid fa-heart-pulse"],['80lb-90lb','90lb-100lb','100lb-110lb','110lb-120lb','120lb-130lb','130lb-140lb','140lb-150lb','150lb-160lb','160lb-170lb','170lb-180lb','180lb-190lb','190lb-200lb','200lb-210lb','210lb-220lb','220lb-230lb','230lb-240lb','240lb-250lb','250lb+'],['<5ft','5ft-5.1ft','5.1ft-5.2ft','5.2ft-5.3ft','5.3ft-5.4ft','5.4ft-5.5ft','5.5ft-5.6ft','5.6ft-5.7ft','5.7ft-5.8ft','5.8ft-5.9ft','5.9ft-5.10ft','5.10ft-5.11ft','5.11ft-6.0ft','6.0ft-6.1ft','6.1ft-6.2ft','6.2ft-6.3ft','6.3ft-6.4ft','6.4ft-6.5ft', '6.5ft+'],["fa-solid fa-moon","fa-solid fa-face-tired"]];
@@ -58,6 +58,17 @@ function analysisForm() {
     $data['MAX_cnt'] = 3;
     return $data;
 }
+
+function clientsSearchForm() {
+    $data['qContent'] = ["1. search clients:", "2. client's #clientsTag"];
+    $data['qType'] = ["button", "text"];
+    $data['qIdx'] = [0, 1];
+    $data['options'] = [["fa-solid fa-fingerprint", "fa-regular fa-envelope", "fa-solid fa-signature"], [""]];
+    $data['optionsText'] = [["Client's ID", "Client's email", "Client's name"], [""]];
+    $data['qRequired'] = [1, 1];
+    $data['MAX_cnt'] = 2;
+    return $data;
+}
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
@@ -72,6 +83,8 @@ if($page == 'login') {
     $data      = firstQuestionBackendForm();
 } elseif($page == 'analysis') {
     $data      = analysisForm();
+} elseif($page == 'clients') {
+    $data      = clientsSearchForm();
 }
 echo json_encode($data);
 
