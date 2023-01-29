@@ -55,13 +55,14 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 Questions[counter].visited = true;
                 prog++;
             }
+            if(page == 'register') {
+                callRegister(Questions);
+            }
             counter++;
             // design questions
             if(page == 'questions') {
                 updateQuestion(prog);
             }
-            
-            
             // submit the users data here
             if(counter == MAX_cnt) {
                 let allReq = true;
@@ -184,6 +185,21 @@ function moveLeft(moveleft, input, header, headerTxt, Questions){
 function setFormType(querySelIn, userStruct){
     let newIn = [];
     switch(userStruct.qType) {
+        case 'message':
+            mDiv = document.createElement('p');
+            mDiv.setAttribute('class', 'message-style');
+            mDiv.innerHTML =  userStruct.optionsText[userStruct.qIdx];
+            iconDiv = document.createElement('div');
+            iDiv = document.createElement('i');
+            iDiv.setAttribute('class', userStruct.options[userStruct.qIdx]);
+            iDiv.style.display = 'inline-block';
+            iDiv.style.color = 'orange';
+            iDiv.style.height = '80px';
+            iconDiv.appendChild(iDiv);
+            mDiv.appendChild(iconDiv);
+            querySelIn.appendChild(mDiv);
+            querySelIn.style.borderBottom = '0px';
+            break;
         case 'text':
             newIn = document.createElement('input');
             newIn.setAttribute('class', 'form-input-style');
@@ -310,6 +326,9 @@ function dynamicQcontent(page) {
     } else if(page == 'main' && counter > 0) {
         let dyno = Questions[counter].qContent.replace('#mainNameTag', Questions[counter-1].qAnswer);
         Questions[counter].qContent = dyno;
+    } else if (page == 'register' && counter > 0) {
+        let dyno = Questions[counter].qContent.replace('#nameRegister', Questions[counter-1].qAnswer);
+        Questions[counter].qContent = dyno;
     }
 }
 function getUserButtonSelection(alt){
@@ -398,6 +417,25 @@ function validate_input(valid, type, required, value){
     }
 }
 
+    
+function callRegister(inputDataBlob) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.response);
+            let data = JSON.parse(this.response);
+            console.log(data);
+            //window.alert(data);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/register.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var userdata = "userInfo="+JSON.stringify(inputDataBlob);
+    xmlhttp.send(userdata);
+}
+
+
 // submitting the form
 function submitUserData(inputDataBlob, page) {
     var xmlhttp = new XMLHttpRequest();
@@ -417,6 +455,10 @@ function submitUserData(inputDataBlob, page) {
             } else if(data.status == 2 && page == 'login') {
                 window.alert('please register');
             } else if(data.status == 0 && page == 'register') {
+                window.alert('register successful');
+                window.location.assign('login.html');
+            } else if(data.status == 1 && page == 'register') {
+                window.alert('email already registered');
                 window.location.assign('login.html');
             } else if(data.status == 0 && page == 'questions') {
                 window.alert('data saved');

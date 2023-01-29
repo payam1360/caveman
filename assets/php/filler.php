@@ -27,13 +27,13 @@ function getLoginForm() {
     return $data;
 }
 function getRegisterForm() {
-    $data['qContent'] = ["1/3. enter your email:", "2/3. enter your password:", "3/3. re-enter your password:"];
-    $data['qType'] = ["email", "password", "password"];
-    $data['qIdx'] = [0, 1, 2];
-    $data['options'] = ["", "", ""];
-    $data['optionsText'] = ["", "", ""];
-    $data['qRequired'] = [1, 1, 1];
-    $data['MAX_cnt'] = 3;
+    $data['qContent'] = ["1. enter your name:", "2. Hi #nameRegister, what is your email?", "3. please enter your verification code we just emailed you:", "4. enter your password:", "5. re-enter your password:"];
+    $data['qType'] = ["text", "text", "email", "text", "password", "password"];
+    $data['qIdx'] = [0, 1, 2, 3, 4];
+    $data['options'] = [["", "", "", "", ""]];
+    $data['optionsText'] = [["", "", "", "", ""]];
+    $data['qRequired'] = [1, 1, 1, 1, 1];
+    $data['MAX_cnt'] = 5;
     return $data;
 }
 
