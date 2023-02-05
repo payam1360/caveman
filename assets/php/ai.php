@@ -5,7 +5,7 @@ header('Cache-Control: no-cache');
 require '../../vendor/autoload.php';
 use Orhanerday\OpenAi\OpenAi;
     
-$open_ai_key = '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';
+$open_ai_key = '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';
 $open_ai = new OpenAi($open_ai_key);
 $opts = [
     'model' => 'text-davinci-003',

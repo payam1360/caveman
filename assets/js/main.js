@@ -64,13 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const moveleft = document.querySelector('.form-go-left');
     moveLeft(moveleft, input, header, headerTxt, Questions);
     
-    const resultBtn = document.querySelector('.results-btn');
-    if(resultBtn) {
-        resultBtn.addEventListener('click', function(event) {
-            callsubmitUserData('main');
-        })
-    }
-    
 });
 
 

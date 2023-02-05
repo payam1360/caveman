@@ -25,16 +25,18 @@ function validateUserCredentials($userInfo) {
         $result['userName'] = '';
         $result['userId']   = '';
     }
-    else if(password_verify($userInfo[1]->qAnswer, $password->fetch_column(0))) {
-        $sql = "SELECT userId, name " . "FROM " . $tablename . " WHERE email = '" . $userInfo[0]->qAnswer . "';";
-        $userId = $conn->query($sql);
-        $result['status']   = 0; // user is not registered
-        $result['userName'] = $userId->fetch_column(1);
-        $result['userId']   = $userId->fetch_column(0);
-    } else {
-        $result['status']   = 1; // user is not registered
-        $result['userName'] = '';
-        $result['userId']   = '';
+    else {
+        if(password_verify($userInfo[1]->qAnswer, $password->fetch_column(0))) {
+            $sql = "SELECT userId, name " . "FROM " . $tablename . " WHERE email = '" . $userInfo[0]->qAnswer . "';";
+            $userId = $conn->query($sql);
+            $result['status']   = 0; // log in verified
+            $result['userName'] = $userId->fetch_column(1);
+            $result['userId']   = $userId->fetch_column(0);
+        } else {
+            $result['status']   = 1; // wrong password
+            $result['userName'] = '';
+            $result['userId']   = '';
+        }
     }
     $conn->close();
     return $result;

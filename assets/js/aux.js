@@ -33,6 +33,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
         moveright.addEventListener('click', function(event) {
             // validate the current input
             let valid = false;
+            let called = false;
             let inputStyle = document.querySelector('.form-input-style');
             if(Questions[counter].qType != 'message') {
                 valid = inputStyle.validity.valid;
@@ -54,19 +55,22 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 Questions[counter].visited = true;
                 prog++;
             }
-            if(page == 'register') {
-                callRegister(Questions);
-            }
             counter++;
             // design questions
             if(page == 'questions') {
                 updateQuestion(prog);
             }
+            //
             // submit the users data here
             if(counter == MAX_cnt - 1) {
                 let resultBtn = document.querySelector('.results-btn');
                 let moveleft = document.querySelector('.form-go-left');
-                resultBtn.style.display = 'block';
+                if(resultBtn){
+                    resultBtn.style.display = 'block';
+                    resultBtn.addEventListener('click', function(event) {
+                        callsubmitUserData('main');
+                    });
+                }
                 moveright.style.display = 'none';
                 moveleft.style.display = 'none';
             }
@@ -96,6 +100,13 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 //Reset
                 resetFormType(input[1]);
                 setFormType(input[1], Questions[counter]);
+                if(counter == MAX_cnt - 1 && page == 'login') {
+                    callLoginUser(input[1], Questions);
+                }
+                if(page == 'register' && !called) {
+                    callRegister(input[1], Questions);
+                    called = true;
+                }
                 ChangeForm(input[1], '0s', '0', 1, '50%');
                 restorePrevAnswer();
             });
@@ -106,7 +117,6 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 headerTxt[1].innerHTML = Questions[counter].qContent;
                 ChangeForm(header[1], '0.0s', '0', 1, '50%');
             });
-            
             
             // updating the progress
             if(page == 'main' || page == 'questions' || page == 'analysis') {
@@ -193,16 +203,16 @@ function callsubmitUserData(page){
 }
 
 // function to set the form type
-function setFormType(querySelIn, userStruct){
+function setFormType(querySelIn, userStruct, serverStruct = 0){
     let newIn = [];
     switch(userStruct.qType) {
         case 'message':
             mDiv = document.createElement('p');
             mDiv.setAttribute('class', 'message-style');
-            mDiv.innerHTML =  userStruct.optionsText[0];
+            mDiv.innerHTML =  userStruct.optionsText[serverStruct];
             iconDiv = document.createElement('div');
             iDiv = document.createElement('i');
-            iDiv.setAttribute('class', userStruct.options[0]);
+            iDiv.setAttribute('class', 'message-icon ' + userStruct.options[serverStruct]);
             iDiv.style.display = 'inline-block';
             iDiv.style.color = 'green';
             iDiv.style.height = '80px';
@@ -428,15 +438,52 @@ function validate_input(valid, type, required, value){
     }
 }
 
-    
-function callRegister(inputDataBlob) {
+
+function callLoginUser(querySelIn, inputDataBlob){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.response);
             let data = JSON.parse(this.response);
-            console.log(data);
-            //window.alert(data);
+            if(data.status == 0) {
+                window.location.assign('admin.html');
+            } else {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], data.status);
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/login.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var userdata = "userInfo="+JSON.stringify(inputDataBlob);
+    xmlhttp.send(userdata);
+}
+
+
+function callRegister(querySelIn, inputDataBlob) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let data = JSON.parse(this.response);
+            if(data.status == 0) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 1);
+            } else if(data.status == 1) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 1);
+            } else if(data.status == 2) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 0);
+            } else if(data.status == 3) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 0);
+            } else if(data.status == 4) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 0);
+            } else if(data.status == 5) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 1);
+            }
         }
     };
     // sending the request
@@ -459,18 +506,6 @@ function submitUserData(inputDataBlob, page) {
                 plotMacro(data.macro);
                 plotMicro(data.micro);
                 displayMeal();
-            } else if(data.status == 0 && page == 'login') {
-                window.location.assign('admin.html');
-            } else if(data.status == 1 && page == 'login') {
-                window.alert('wrong password!');
-            } else if(data.status == 2 && page == 'login') {
-                window.alert('please register');
-            } else if(data.status == 0 && page == 'register') {
-                window.alert('register successful');
-                window.location.assign('login.html');
-            } else if(data.status == 1 && page == 'register') {
-                window.alert('email already registered');
-                window.location.assign('login.html');
             } else if(data.status == 0 && page == 'questions') {
                 window.alert('data saved');
             } else if(data.status == 0 && page == 'analysis') {

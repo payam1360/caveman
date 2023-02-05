@@ -17,23 +17,23 @@ function getPublicForm() {
 
 // set login form
 function getLoginForm() {
-    $data['qContent'] = ["1. enter your email:", "2. enter your password:"];
-    $data['qType'] = ["email", "password"];
-    $data['qIdx'] = [0, 1];
-    $data['options'] = ["", ""];
-    $data['optionsText'] = ["", ""];
-    $data['qRequired'] = [1, 1];
-    $data['MAX_cnt'] = 2;
+    $data['qContent'] = ["1. enter your email:", "2. enter your password:", ""];
+    $data['qType'] = ["email", "password", "message"];
+    $data['qIdx'] = [0, 1, 2];
+    $data['options'] = ["", "", ["fa-regular fa-circle-check", "fa-solid fa-xmark", "fa-solid fa-signature"]];
+    $data['optionsText'] = ["", "", ["logging in ...", "wrong password", "user not found, please register!"]];
+    $data['qRequired'] = [1, 1, 0];
+    $data['MAX_cnt'] = 3;
     return $data;
 }
 function getRegisterForm() {
-    $data['qContent'] = ["1. enter your name:", "2. Hi #nameRegister, what is your email?", "3. please enter your verification code we just emailed you:", "4. enter your password:", "5. re-enter your password:"];
-    $data['qType'] = ["text", "text", "email", "text", "password", "password"];
-    $data['qIdx'] = [0, 1, 2, 3, 4];
-    $data['options'] = [["", "", "", "", ""]];
-    $data['optionsText'] = [["", "", "", "", ""]];
-    $data['qRequired'] = [1, 1, 1, 1, 1];
-    $data['MAX_cnt'] = 5;
+    $data['qContent'] = ["1. enter your name:", "2. Hi #nameRegister, what is your email?", "please on the next screen, enter the verification code we just emailed you:", "3. verification code:", "", "4. enter your password:", "5. re-enter your password:", ""];
+    $data['qType'] = ["text", "email", "message", "text", "message", "password", "password", "message"];
+    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7];
+    $data['options'] = ["", "", ["fa-regular fa-registered", "fa-solid fa-user-tie"], "", ["fa-solid fa-xmark", "fa-regular fa-circle-check"], "", "", ["fa-solid fa-not-equal","fa-regular fa-circle-check"]];
+    $data['optionsText'] = ["", "", ["user already registered", "new user"], "", ["incorrect code", "continue to password"], "", "", ["password not matching", "All done! please login"]];
+    $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1];
+    $data['MAX_cnt'] = 8;
     return $data;
 }
 

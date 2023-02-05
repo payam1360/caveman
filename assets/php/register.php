@@ -1,15 +1,19 @@
 <?php
 
-define("DBG", false);
-define("MAX_cnt", 3);
+
+define("NAME", 0);
+define("EMAIL", 1);
+define("VERC", 3);
+define("PASS", 5);
+define("PASSC", 6);
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require '../../vendor/autoload.php';
-require '../../vendor/SMTP.php';
-require '../../vendor/PHPMailer.php';
-require '../../vendor/Exception.php';
+require '../../vendor/phpmailer/phpmailer/src/SMTP.php';
+require '../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require '../../vendor/phpmailer/phpmailer/src/Exception.php';
 
 
 function registerUserCredentials($password, $email) {
@@ -48,7 +52,7 @@ function sendEmail($emailAddr) {
     // Mail subject
     $mail->Subject = 'Verify your email';
     $verification_code = mt_rand(10000, 99999);
-    
+    $verification_code = '00000';
     // Mail body content
     $bodyContent  = 'your verification code is: <b>' . $verification_code . '</b>';
     $bodyContent .= '<p>This email is sent from Nutrition4guys </p>';
@@ -110,31 +114,33 @@ function checkEmailExists($email) {
 /// main routin starts here.
 /// -------------------------
 $userdata  = json_decode($_POST['userInfo']);
-$data['status']    = 1;
+$data['status']    = -1;
 $data['verification'] = '';
 $verified = false;
-
-if($userdata[1]->qAnswer != '' && $userdata[2]->qAnswer == '') { // if email is provided send verification code
-    $ex = checkEmailExists($userdata[1]->qAnswer);
+if($userdata[EMAIL]->qAnswer != '' && $userdata[VERC]->qAnswer == '') { // if email is provided send verification code
+    $ex = checkEmailExists($userdata[EMAIL]->qAnswer);
     if($ex == false) {
-        $verification_code = sendEmail($userdata[1]->qAnswer);
-        saveVerificationAndEmail($verification_code, $userdata[1]->qAnswer, $userdata[0]->qAnswer);
-        $data['verification'] = $verification_code;
+        $verification_code = sendEmail($userdata[EMAIL]->qAnswer);
+        saveVerificationAndEmail($verification_code, $userdata[EMAIL]->qAnswer, $userdata[NAME]->qAnswer);
+        $data['status'] = 5; // new user
     } else {
-        $data['status'] = 2;
+        $data['status'] = 2; // user already exists
     }
-} elseif($userdata[2]->qAnswer != '') { // if verification code is provided check the code
-    $verification_code = readVerification($userdata[1]->qAnswer);
-    if($verification_code == $userdata[2]->qAnswer) {
+} elseif($userdata[VERC]->qAnswer != '') { // if verification code is provided check the code
+    $verification_code = readVerification($userdata[EMAIL]->qAnswer);
+    if($verification_code == $userdata[VERC]->qAnswer) {
         $verified = true;
+        $data['status']    = 1; // email is verified
+    } else {
+        $data['status']    = 3; // wrong verification code .. email not verified
     }
 }
-if($verified == true) {
-    if($userdata[3]->qAnswer == $userdata[4]->qAnswer && $userdata[3]->qAnswer != '') {
-        registerUserCredentials($userdata[3]->qAnswer, $userdata[1]->qAnswer);
-        $data['status'] = 0;
-    } elseif($userdata[3]->qAnswer != $userdata[4]->qAnswer && $userdata[3]->qAnswer != '') {
-        $data['status'] = 1;
+if($verified == 1) {
+    if($userdata[PASS]->qAnswer == $userdata[PASSC]->qAnswer && $userdata[PASS]->qAnswer != '') {
+        registerUserCredentials($userdata[PASS]->qAnswer, $userdata[EMAIL]->qAnswer);
+        $data['status'] = 0; // password good ... user is registered
+    } elseif($userdata[PASS]->qAnswer != $userdata[PASSC]->qAnswer && $userdata[PASS]->qAnswer != '') {
+        $data['status'] = 4; // password not matching 
     }
 }
 echo json_encode($data);
