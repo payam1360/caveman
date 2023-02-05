@@ -1,12 +1,9 @@
 <?php
 
-define("DBG", false);
 define("WEIGHT", 2);
 define("HEIGHT", 3);
-define("MAX_cnt", 4);
 
-
-function saveUserDataIntoDB($Questions) {
+function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $campaignTime) {
        
     $servername  = "127.0.0.1";
     $loginname   = "root";
@@ -15,21 +12,20 @@ function saveUserDataIntoDB($Questions) {
     $table1name  = "Users";
     // Create connection
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+    // check if the client exists.
+    $sql         = "SELECT EXISTS (SELECT clientId FROM " . $table1name . " WHERE clientId = '" . $clientId . "');";
+    $ex          = $conn->query($sql);
+    if($ex->fetch_column(0) == 0){
+        $ex = false;
+    } else {
+        $ex = true;
     }
-    if(DBG) {
-        echo "Connected successfully";
-    }
-
-    for($kk = 0; $kk < MAX_cnt; $kk++){
+    $kk          = 0;
+    while($Questions[$kk]->qIdx >= 0 && $Questions[$kk]->qType != 'message'){
+        $kk = $Questions[$kk]->qIdx;
         $options = "";
         $optionsText = "";
-        $clientId = mt_rand();
-        $campaignId = mt_rand();
-        $campaignTime = date("Y-m-d", time());
-        $userId = "0";
+        
         if($Questions[$kk]->options == ""){
         } else {
             for($kx = 0; $kx < count($Questions[$kk]->options); $kx++){
@@ -41,17 +37,20 @@ function saveUserDataIntoDB($Questions) {
                 $optionsText = $optionsText . "," . $Questions[$kk]->optionsText[$kx];
             }
         }
-        $sql = "INSERT INTO " . $table1name . " (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired) VALUES('" . $userId . "','" . $clientId . "','" . $campaignId . "','" . $campaignTime . "','" . $Questions[$kk]->qIdx . "','" . $Questions[$kk]->qType . "','" . $Questions[$kk]->qContent . "','" . $Questions[$kk]->qAnswer . "','" . $options . "','" . $optionsText . "','" . $Questions[$kk]->visited . "','" . $Questions[$kk]->qRequired . "')";
-
-        if(DBG) {
-            echo $sql;
-        }
+        $qIdx = $Questions[$kk]->qIdx;
+        $qType = $Questions[$kk]->qType;
+        $qContent = $Questions[$kk]->qContent;
+        $qAnswer = $Questions[$kk]->qAnswer;
+        $visited = $Questions[$kk]->visited;
+        $qRequired = $Questions[$kk]->qRequired;
         
-        if ($conn->query($sql) === TRUE and DBG) {
-            echo "New record created successfully";
-        } elseif(DBG) {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+        if($ex) { // update the already exists entry
+            $sql = "UPDATE $table1name SET userId =  '$userId', clientId = '$clientId', campaignId = '$campaignId', campaignTime = '$campaignTime', qIdx = '$qIdx', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired' WHERE qIdx = '$qIdx';";
+        } else {
+            $sql = "INSERT INTO " . $table1name . " (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired) VALUES('" . $userId . "','" . $clientId . "','" . $campaignId . "','" . $campaignTime . "','" . $Questions[$kk]->qIdx . "','" . $Questions[$kk]->qType . "','" . $Questions[$kk]->qContent . "','" . $Questions[$kk]->qAnswer . "','" . $options . "','" . $optionsText . "','" . $Questions[$kk]->visited . "','" . $Questions[$kk]->qRequired . "')";
         }
+        $conn->query($sql);
+        $kk++;
     }
     $conn->close();
     return true;
@@ -88,25 +87,13 @@ function calculateMicro($weight, $height){
 // calculate intermittent fasting interval
     return([5,7,8,10,2,4,12,5.2]);
 }
-function calculateMeals(){
-    
-    $info0 = "this is info0";
-    $info1 = "this is info1";
-    $info2 = "this is info2";
 
-    $user_meal = array('info0' => $info0,
-                       'info1' => $info1,
-                       'info2' => $info2);
-// calculate intermittent fasting interval
-    return($user_meal);
-}
-function dataPrep($status, $user_bmi, $user_if, $user_macro, $user_micro, $user_meal){
-    $data = array('status' => $status,
+function dataPrep($user_bmi, $user_if, $user_macro, $user_micro){
+    $data = array('status' => 0,
                  'bmi' => $user_bmi,
                  'If'  => $user_if,
                  'macro' => $user_macro,
-                 'micro' => $user_micro,
-                 'mealData' => $user_meal);
+                 'micro' => $user_micro);
     return $data;
 }
 
@@ -114,21 +101,39 @@ function dataPrep($status, $user_bmi, $user_if, $user_macro, $user_micro, $user_
 /// main routin starts here.
 /// -------------------------
 $userdata      = json_decode($_POST['userInfo']);
-$dbflag        = saveUserDataIntoDB($userdata);
-if($dbflag == false and DBG) {
-    echo "user has not registered. no data is saved";
-}else{
-    $status = 0;
+$cookie_name   = 'nutrition4guys';
+if(!isset($_COOKIE[$cookie_name])) {
+    $clientId = mt_rand(10000, 99999);
+    $userId = 0;
+    $campaignId = 0;
+    $campaignTime = date('Y-m-d');
+    $cookie_value = 'UI' . $userId . '_' . 'CI' . $clientId;
+    $expire = time() + (86400 * 30);
+    $arr_cookie_options = array (
+                    'expires' => $expire,
+                    'path' => '/',
+                    'secure' => true,
+                    'httponly' => true,
+                    'samesite' => 'None'
+                    );
+    setcookie($cookie_name, $cookie_value, $arr_cookie_options);
+} else {
+    $cookie = $_COOKIE[$cookie_name];
+    $idx    = strpos($cookie, '_');
+    $userId = substr($cookie, 2, $idx - 2);
+    $clientId = substr($cookie, $idx+3, 5);
+    $campaignId = 0;
+    $campaignTime = date('Y-m-d');
 }
-
+$dbflag        = saveUserDataIntoDB($userdata, $userId, $clientId, $campaignId, $campaignTime);
 $user_bmi      = calculateBmi($userdata[WEIGHT]->qAnswer, $userdata[HEIGHT]->qAnswer);
 $user_if       = calculateIf($userdata[WEIGHT]->qAnswer, $userdata[HEIGHT]->qAnswer);
 $user_macro    = calculateMacro($userdata[WEIGHT]->qAnswer, $userdata[HEIGHT]->qAnswer);
 $user_micro    = calculateMicro($userdata[WEIGHT]->qAnswer, $userdata[HEIGHT]->qAnswer);
-$user_meal     = calculateMeals();
-$data          = dataPrep($status, $user_bmi, $user_if, $user_macro, $user_micro, $user_meal);
+$data          = dataPrep($user_bmi, $user_if, $user_macro, $user_micro);
 echo json_encode($data);
 
 
 ?>
+
 

@@ -11,14 +11,14 @@ let progChart = [];
 let MAX_cnt   = 0;
 // user <-> client class definition
 class question {
-    constructor(userId, qContent, qAnswer, qIdx, qType, Options, OptionsText, visited, qRequired){
+    constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired){
         this.qContent = qContent; // must be a text string
         this.qAnswer = qAnswer;
         this.qIdx = qIdx;
         this.qType = qType;
         this.qRequired = qRequired;
-        this.options = Options;
-        this.optionsText = OptionsText;
+        this.options = options;
+        this.optionsText = optionsText;
         this.visited = visited;
         this.userId = userId;
     }
@@ -31,15 +31,16 @@ class question {
 function moveRight(moveright, input, header, headerTxt, Questions, page){
     if (moveright) {
         moveright.addEventListener('click', function(event) {
-            
             // validate the current input
-            
+            let valid = false;
             let inputStyle = document.querySelector('.form-input-style');
-            let valid = inputStyle.validity.valid;
+            if(Questions[counter].qType != 'message') {
+                valid = inputStyle.validity.valid;
+            }
             let userResponse = [];
             if(Questions[counter].qType == 'button') {
                 userResponse = Questions[counter].qAnswer;
-            } else {
+            } else if(Questions[counter].qType != 'message') {
                 userResponse = inputStyle.value;
             }
             // get the answer validation
@@ -48,8 +49,6 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 if(Questions[counter].qType != 'button') {
                     Questions[counter].qAnswer = inputStyle.value;
                 }
-            } else {
-                window.alert('input incorrect');
             }
             if(valid == true && Questions[counter].visited == false) {
                 Questions[counter].visited = true;
@@ -64,24 +63,12 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 updateQuestion(prog);
             }
             // submit the users data here
-            if(counter == MAX_cnt) {
-                let allReq = true;
-                counter = 0;
-                // check if all required questions are answered correctly
-                for(let kk = 0; kk < MAX_cnt; kk++){
-                    if(Questions[kk].qRequired) {
-                        if(Questions[kk].visited) {
-                            allReq = allReq && true;
-                        } else {
-                            allReq = allReq && false;
-                        }
-                    } else {
-                        allReq = allReq && true;
-                    }
-                }
-                if(allReq) {
-                    submitUserData(Questions, page);
-                }
+            if(counter == MAX_cnt - 1) {
+                let resultBtn = document.querySelector('.results-btn');
+                let moveleft = document.querySelector('.form-go-left');
+                resultBtn.style.display = 'block';
+                moveright.style.display = 'none';
+                moveleft.style.display = 'none';
             }
             // set form 0 header
             dynamicQcontent(page);
@@ -123,7 +110,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             
             // updating the progress
             if(page == 'main' || page == 'questions' || page == 'analysis') {
-                let p = (prog / MAX_cnt);
+                let p = (prog / (MAX_cnt - 1));
                 progChart.data.datasets[0].data.pop(0);
                 progChart.data.datasets[0].data.pop(1);
                 progChart.data.datasets[0].data.push(p * 100);
@@ -181,6 +168,30 @@ function moveLeft(moveleft, input, header, headerTxt, Questions){
     }
 }
 
+function callsubmitUserData(page){
+    counter++;
+    if(counter == MAX_cnt) {
+        let allReq = true;
+        counter = 0;
+        // check if all required questions are answered correctly
+        for(let kk = 0; kk < MAX_cnt; kk++){
+            if(Questions[kk].qRequired) {
+                if(Questions[kk].visited) {
+                    allReq = allReq && true;
+                } else {
+                    allReq = allReq && false;
+                }
+            } else {
+                allReq = allReq && true;
+            }
+        }
+        if(allReq) {
+            
+            submitUserData(Questions, page);
+        }
+    }
+}
+
 // function to set the form type
 function setFormType(querySelIn, userStruct){
     let newIn = [];
@@ -188,12 +199,12 @@ function setFormType(querySelIn, userStruct){
         case 'message':
             mDiv = document.createElement('p');
             mDiv.setAttribute('class', 'message-style');
-            mDiv.innerHTML =  userStruct.optionsText[userStruct.qIdx];
+            mDiv.innerHTML =  userStruct.optionsText[0];
             iconDiv = document.createElement('div');
             iDiv = document.createElement('i');
-            iDiv.setAttribute('class', userStruct.options[userStruct.qIdx]);
+            iDiv.setAttribute('class', userStruct.options[0]);
             iDiv.style.display = 'inline-block';
-            iDiv.style.color = 'orange';
+            iDiv.style.color = 'green';
             iDiv.style.height = '80px';
             iconDiv.appendChild(iDiv);
             mDiv.appendChild(iconDiv);
@@ -447,7 +458,7 @@ function submitUserData(inputDataBlob, page) {
                 plotIf(data.If);
                 plotMacro(data.macro);
                 plotMicro(data.micro);
-                displayMeal(data.mealData)
+                displayMeal();
             } else if(data.status == 0 && page == 'login') {
                 window.location.assign('admin.html');
             } else if(data.status == 1 && page == 'login') {
@@ -752,23 +763,23 @@ function plotMicro(micro){
 }
 
 // function to display meal plan data returned by the server for the given user
-function displayMeal(mealData){
-    // Canvas element section
-    let meal0_txt  = document.querySelector('.meal_text0');
-    let meal1_txt  = document.querySelector('.meal_text1');
-    let meal2_txt  = document.querySelector('.meal_text2');
-    let meal0  = document.querySelector('.meal_plan0');
-    let meal1  = document.querySelector('.meal_plan1');
-    let meal2  = document.querySelector('.meal_plan2');
-
-
-    meal0.style.display = 'block';
-    meal1.style.display = 'block';
-    meal2.style.display = 'block';
+function displayMeal(){
     
-    meal0_txt.innerHTML = mealData.info0;
-    meal1_txt.innerHTML = mealData.info1;
-    meal2_txt.innerHTML = mealData.info2;
+    let eventSource = new EventSource("/assets/php/ai.php");
+    let meal_txt = document.querySelector('.meal_text');
+    let meal = document.querySelector('.meal_plan');
+    meal.style.display = 'block';
+    meal_txt.innerHTML = '<br> The following information is created by the openAI chatGPT:<br><br>';
+    eventSource.onmessage = function (e) {
+        if(e.data == "[DONE]")
+        {
+            meal_txt.innerHTML += "<br><br>Thank you!";
+            eventSource.close();
+        }
+        else {
+            meal_txt.innerHTML += JSON.parse(e.data).choices[0].text;
+        }
+    };
 }
 
 

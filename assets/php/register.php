@@ -6,10 +6,10 @@ define("MAX_cnt", 3);
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '../../PHPMailer/autoload.php';
-require '../../PHPMailer/SMTP.php';
-require '../../PHPMailer/PHPMailer.php';
-require '../../PHPMailer/Exception.php';
+require '../../vendor/autoload.php';
+require '../../vendor/SMTP.php';
+require '../../vendor/PHPMailer.php';
+require '../../vendor/Exception.php';
 
 
 function registerUserCredentials($password, $email) {
