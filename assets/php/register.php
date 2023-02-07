@@ -99,7 +99,9 @@ function checkEmailExists($email) {
     $dbname      = "Users";
     $tablename   = "authentication";
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
-    $sql         = "SELECT EXISTS (SELECT userId FROM " . $tablename . " WHERE email = '" . $email . "');";
+    $sql         = "DELETE FROM $tablename WHERE email = '$email' AND password = '';";
+    $conn->query($sql);
+    $sql         = "SELECT EXISTS (SELECT userId FROM $tablename WHERE email = '$email');";
     $ex          = $conn->query($sql);
     if($ex->fetch_column(0) == 0){
         $ex = false;

@@ -64,15 +64,26 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             // submit the users data here
             if(counter == MAX_cnt - 1) {
                 let resultBtn = document.querySelector('.results-btn');
-                let moveleft = document.querySelector('.form-go-left');
+                moveright.disabled = true;
+                moveright.style.opacity = 0;
+                if(page == 'register') {
+                    let moveleft = document.querySelector('.form-go-left');
+                    moveleft.disabled = true;
+                    moveleft.style.opacity = 0;
+                }
                 if(resultBtn){
                     resultBtn.style.display = 'block';
                     resultBtn.addEventListener('click', function(event) {
                         callsubmitUserData('main');
                     });
                 }
-                moveright.style.display = 'none';
-                moveleft.style.display = 'none';
+            }
+            if(counter == 1) {
+                let moveleft = document.querySelector('.form-go-left');
+                if(moveleft.disabled == true) {
+                    moveleft.style.opacity = 1;
+                    moveleft.disabled = false;
+                }
             }
             // set form 0 header
             dynamicQcontent(page);
@@ -104,7 +115,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                     callLoginUser(input[1], Questions);
                 }
                 if(page == 'register' && !called) {
-                    callRegister(input[1], Questions);
+                    callRegister(input[1], Questions, headerTxt);
                     called = true;
                 }
                 ChangeForm(input[1], '0s', '0', 1, '50%');
@@ -138,8 +149,17 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
 function moveLeft(moveleft, input, header, headerTxt, Questions){
     if (moveleft) {
         moveleft.addEventListener('click', function(event) {
-            if(counter == 0){
+            if(counter == 0) {
                 counter = MAX_cnt;
+            }
+            if(counter == 1 && moveleft.disabled == false){
+                moveleft.style.opacity = 0;
+                moveleft.disabled = true;
+            }
+            let moveright = document.querySelector('.form-go-right');
+            if(moveright.disabled == true) {
+                moveright.style.opacity = 1;
+                moveright.disabled = false;
             }
             counter--;
             headerTxt[2].innerHTML = Questions[counter].qContent;
@@ -390,6 +410,9 @@ function resetStart(input, header, headerTxt, page) {
     resetFormType(input[2]);
     resetFormType(input[1]);
     resetFormType(input[0]);
+    let moveleft = document.querySelector('.form-go-left');
+    moveleft.disabled = true;
+    moveleft.style.opacity = 0;
 }
 
 function restorePrevAnswer() {
@@ -460,7 +483,7 @@ function callLoginUser(querySelIn, inputDataBlob){
 }
 
 
-function callRegister(querySelIn, inputDataBlob) {
+function callRegister(querySelIn, inputDataBlob, headerTxt) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -474,9 +497,16 @@ function callRegister(querySelIn, inputDataBlob) {
             } else if(data.status == 2) {
                 resetFormType(querySelIn);
                 setFormType(querySelIn, inputDataBlob[counter], 0);
+                let moveright = document.querySelector('.form-go-right');
+                moveright.style.opacity = 0;
+                moveright.disabled = true;
+                headerTxt[1].innerHTML = '';
             } else if(data.status == 3) {
                 resetFormType(querySelIn);
                 setFormType(querySelIn, inputDataBlob[counter], 0);
+                let moveright = document.querySelector('.form-go-right');
+                moveright.style.opacity = 0;
+                moveright.disabled = true;
             } else if(data.status == 4) {
                 resetFormType(querySelIn);
                 setFormType(querySelIn, inputDataBlob[counter], 0);
