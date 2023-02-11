@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     moveRight(moveright, input, header, headerTxt, Questions, 'main');
     
     const moveleft = document.querySelector('.form-go-left');
-    moveLeft(moveleft, input, header, headerTxt, Questions);
+    moveLeft(moveleft, input, header, headerTxt, Questions, 'main');
     
 });
 

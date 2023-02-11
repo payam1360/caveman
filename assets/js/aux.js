@@ -83,6 +83,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 if(moveleft.disabled == true) {
                     moveleft.style.opacity = 1;
                     moveleft.disabled = false;
+                    moveleft.firstChild.style.color = '#f08080';
                 }
             }
             // set form 0 header
@@ -146,7 +147,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
     }
 }
 
-function moveLeft(moveleft, input, header, headerTxt, Questions){
+function moveLeft(moveleft, input, header, headerTxt, Questions, page){
     if (moveleft) {
         moveleft.addEventListener('click', function(event) {
             if(counter == 0) {
@@ -162,6 +163,7 @@ function moveLeft(moveleft, input, header, headerTxt, Questions){
                 moveright.disabled = false;
             }
             counter--;
+            resetDynamicQcontent(page);
             headerTxt[2].innerHTML = Questions[counter].qContent;
             // set form 0 type
             resetFormType(input[2]);
@@ -353,6 +355,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0){
 }
 
 function dynamicQcontent(page) {
+    
     if(page == 'clients') {
         let searchTag = [];
         if(Questions[counter-1].qAnswer == 0) {
@@ -372,6 +375,30 @@ function dynamicQcontent(page) {
         Questions[counter].qContent = dyno;
     }
 }
+
+function resetDynamicQcontent(page) {
+    
+    if(page == 'clients') {
+        let searchTag = [];
+        if(Questions[counter].qAnswer == 0) {
+            searchTag = 'ID';
+        } else if(Questions[counter].qAnswer == 1) {
+            searchTag = 'email';
+        } else if(Questions[counter].qAnswer == 2) {
+            searchTag = 'name';
+        }
+        let dyno = Questions[counter + 1].qContent.replace(searchTag, '#clientsTag');
+        Questions[counter + 1].qContent = dyno;
+    } else if(page == 'main' && counter == 0) {
+        let dyno = Questions[counter + 1].qContent.replace(Questions[counter].qAnswer, '#mainNameTag');
+        Questions[counter + 1].qContent = dyno;
+    } else if (page == 'register' && counter == 0) {
+        let dyno = Questions[counter + 1].qContent.replace(Questions[counter].qAnswer, '#nameRegister');
+        Questions[counter + 1].qContent = dyno;
+    }
+}
+
+
 function getUserButtonSelection(alt){
     Questions[counter].qAnswer = alt.value;
     let formButtonStyle = document.querySelectorAll('.form-button-style');
