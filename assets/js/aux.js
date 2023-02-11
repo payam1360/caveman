@@ -551,12 +551,14 @@ function submitUserData(inputDataBlob, page) {
     xmlhttp.send(userdata);
 }
 
-function getUserInfo(userTxt){
+
+function getUserInfo(userTxt, welcomeTxt){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             user = JSON.parse(this.response);
             userTxt.innerHTML = user.username;
+            welcomeTxt.innerHTML = 'What\'s up ' + user.username;
         }
     };
     

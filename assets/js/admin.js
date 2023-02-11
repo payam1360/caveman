@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
   "use strict";
     /* define the class for questions*/
     let userTxt = document.querySelector('.user-text');
-    getUserInfo(userTxt);
+    let welcomeTxt = document.querySelector('.navbar-brand');
+    getUserInfo(userTxt, welcomeTxt);
     let container = document.querySelectorAll('.admin-dashbord');
     for(let kk = 0; kk < container.length; kk++) {
         container[kk].addEventListener('mouseenter',function(e) {
