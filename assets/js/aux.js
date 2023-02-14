@@ -56,10 +56,6 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 prog++;
             }
             counter++;
-            // design questions
-            if(page == 'questions') {
-                updateQuestion(prog);
-            }
             //
             // submit the users data here
             if(counter == MAX_cnt - 1) {
@@ -112,11 +108,16 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 //Reset
                 resetFormType(input[1]);
                 setFormType(input[1], Questions[counter]);
-                if(counter == MAX_cnt - 1 && page == 'login') {
+                if(counter == MAX_cnt - 1 && page == 'login' && !called) {
                     callLoginUser(input[1], Questions);
+                    called = true;
                 }
                 if(page == 'register' && !called) {
                     callRegister(input[1], Questions, headerTxt);
+                    called = true;
+                }
+                if(page == 'questions'&& !called) {
+                    submitQuestionBackEndData(input[1], Questions, headerTxt);
                     called = true;
                 }
                 ChangeForm(input[1], '0s', '0', 1, '50%');
@@ -225,16 +226,17 @@ function callsubmitUserData(page){
 }
 
 // function to set the form type
-function setFormType(querySelIn, userStruct, serverStruct = 0){
+function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOption = 0){
     let newIn = [];
-    switch(userStruct.qType) {
+    
+    switch(userStruct.qType[serverStruct]) {
         case 'message':
             mDiv = document.createElement('p');
             mDiv.setAttribute('class', 'message-style');
-            mDiv.innerHTML =  userStruct.optionsText[serverStruct];
+            mDiv.innerHTML =  userStruct.optionsText[serverStructOption][serverStruct];
             iconDiv = document.createElement('div');
             iDiv = document.createElement('i');
-            iDiv.setAttribute('class', 'message-icon ' + userStruct.options[serverStruct]);
+            iDiv.setAttribute('class', 'message-icon ' + userStruct.options[serverStructOption][serverStruct]);
             iDiv.style.display = 'inline-block';
             iDiv.style.color = 'green';
             iDiv.style.height = '80px';
@@ -248,7 +250,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0){
             newIn.setAttribute('class', 'form-input-style');
             newIn.setAttribute('pattern', '[A-Za-z0-9\\s\\?;-]{1,}');
             newIn.setAttribute('required', userStruct.qRequired);
-            newIn.setAttribute('type', userStruct.qType);
+            newIn.setAttribute('type', userStruct.qType[serverStruct]);
             querySelIn.appendChild(newIn);
             querySelIn.style.borderBottom = '2px solid coral';
             break;
@@ -256,7 +258,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0){
             newIn = document.createElement('input');
             newIn.setAttribute('class', 'form-input-style');
             newIn.setAttribute('pattern', '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$');
-            newIn.setAttribute('type', userStruct.qType);
+            newIn.setAttribute('type', userStruct.qType[serverStruct]);
             newIn.setAttribute('required', userStruct.qRequired);
             querySelIn.appendChild(newIn);
             querySelIn.style.borderBottom = '2px solid coral';
@@ -265,7 +267,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0){
             newIn = document.createElement('input');
             newIn.setAttribute('class', 'form-input-style');
             newIn.setAttribute('pattern', '.{8,}');
-            newIn.setAttribute('type', userStruct.qType);
+            newIn.setAttribute('type', userStruct.qType[serverStruct]);
             newIn.setAttribute('required', userStruct.qRequired);
             querySelIn.appendChild(newIn);
             querySelIn.style.borderBottom = '2px solid coral';
@@ -283,7 +285,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0){
             Option.innerHTML = '--Select options--';
             // add the list
             newInList.appendChild(Option);
-            userStruct.options.forEach(function(item){
+            userStruct.options[serverStructOption].forEach(function(item){
                 let Option = document.createElement('option');
                 Option.value = item;
                 Option.innerHTML = item;
@@ -293,10 +295,10 @@ function setFormType(querySelIn, userStruct, serverStruct = 0){
             querySelIn.style.borderBottom = '2px solid coral';
             break;
         case 'button':
-            let width = Math.floor(100/userStruct.options.length);
+            let width = Math.floor(100/userStruct.options[serverStructOption].length);
             width = width.toString().concat('%');
             let i = 0;
-            userStruct.options.forEach(function(item){
+            userStruct.options[serverStructOption].forEach(function(item){
                 let newInbtn = document.createElement('button');
                 newInbtn.style.width = width;
                 newInbtn.type = 'button';
@@ -318,7 +320,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0){
                 newI.style.paddingTop = '40px';
                 let newP = document.createElement('p');
                 newP.setAttribute('class', 'form-button-back-text');
-                newP.innerHTML = userStruct.optionsText[i];
+                newP.innerHTML = userStruct.optionsText[serverStructOption][i];
                 newP.style.opacity = 0;
                 newImgSpan.appendChild(newI);
                 newImgSpan.appendChild(newP);
@@ -365,14 +367,14 @@ function dynamicQcontent(page) {
         } else if(Questions[counter-1].qAnswer == 2) {
             searchTag = 'name';
         }
-        let dyno = Questions[counter].qContent.replace('#clientsTag', searchTag);
-        Questions[counter].qContent = dyno;
+        let dyno = Questions[counter].qContent[0].replace('#clientsTag', searchTag);
+        Questions[counter].qContent[0] = dyno;
     } else if(page == 'main' && counter > 0) {
-        let dyno = Questions[counter].qContent.replace('#mainNameTag', Questions[counter-1].qAnswer);
-        Questions[counter].qContent = dyno;
+        let dyno = Questions[counter].qContent[0].replace('#mainNameTag', Questions[counter-1].qAnswer);
+        Questions[counter].qContent[0] = dyno;
     } else if (page == 'register' && counter > 0) {
-        let dyno = Questions[counter].qContent.replace('#nameRegister', Questions[counter-1].qAnswer);
-        Questions[counter].qContent = dyno;
+        let dyno = Questions[counter].qContent[0].replace('#nameRegister', Questions[counter-1].qAnswer);
+        Questions[counter].qContent[0] = dyno;
     }
 }
 
@@ -387,14 +389,15 @@ function resetDynamicQcontent(page) {
         } else if(Questions[counter].qAnswer == 2) {
             searchTag = 'name';
         }
-        let dyno = Questions[counter + 1].qContent.replace(searchTag, '#clientsTag');
-        Questions[counter + 1].qContent = dyno;
+        let dyno = Questions[counter + 1].qContent[0].replace(searchTag, '#clientsTag');
+        Questions[counter + 1].qContent[0] = dyno;
     } else if(page == 'main' && counter == 0) {
-        let dyno = Questions[counter + 1].qContent.replace(Questions[counter].qAnswer, '#mainNameTag');
-        Questions[counter + 1].qContent = dyno;
+        let dyno = Questions[counter + 1].qContent[0].replace(Questions[counter].qAnswer, '#mainNameTag');
+        Questions[counter + 1].qContent[0] = dyno;
     } else if (page == 'register' && counter == 0) {
-        let dyno = Questions[counter + 1].qContent.replace(Questions[counter].qAnswer, '#nameRegister');
-        Questions[counter + 1].qContent = dyno;
+        
+        let dyno = Questions[counter + 1].qContent[0].replace(Questions[counter].qAnswer, '#nameRegister');
+        Questions[counter + 1].qContent[0] = dyno;
     }
 }
 
@@ -517,29 +520,29 @@ function callRegister(querySelIn, inputDataBlob, headerTxt) {
             let data = JSON.parse(this.response);
             if(data.status == 0) {
                 resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 1);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 1);
             } else if(data.status == 1) {
                 resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 1);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 1);
             } else if(data.status == 2) {
                 resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
                 moveright.disabled = true;
                 headerTxt[1].innerHTML = '';
             } else if(data.status == 3) {
                 resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
                 moveright.disabled = true;
             } else if(data.status == 4) {
                 resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
             } else if(data.status == 5) {
                 resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 1);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 1);
             }
         }
     };
@@ -550,6 +553,65 @@ function callRegister(querySelIn, inputDataBlob, headerTxt) {
     xmlhttp.send(userdata);
 }
 
+// submitting the form
+function submitQuestionBackEndData(querySelIn, inputDataBlob, headerTxt) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let data = JSON.parse(this.response);
+            //console.log(this.response)
+            if(data.status == 0) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 1);
+                let moveright = document.querySelector('.form-go-right');
+                moveright.style.opacity = 0;
+                moveright.disabled = true;
+            } else if(data.status == 1) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 1, 0);
+                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
+            } else if(data.status == 2) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
+                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[0];
+            } else if(data.status == 3) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 1, 0);
+                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
+            } else if(data.status == 4) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 1, 0);
+                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
+            } else if(data.status == 5) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
+                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[0];
+            } else if(data.status == 6) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 1, 0);
+                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
+            } else if(data.status == 7) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 1, 0);
+                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
+            } else if(data.status == 8) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 1, 0);
+                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
+            } else if(data.status == 9) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
+                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[0];
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/questions.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let inputDataAndCntBlob = {'data': inputDataBlob, 'counter': counter};
+    var userdata = "userInfo="+JSON.stringify(inputDataAndCntBlob);
+    xmlhttp.send(userdata);
+}
 
 // submitting the form
 function submitUserData(inputDataBlob, page) {
@@ -595,49 +657,6 @@ function getUserInfo(userTxt, welcomeTxt){
     xmlhttp.send();
 }
 
-//
-// this function eventually comes from user customization and design of his app.
-
-
-// questions page: updating the Questions struct dynamically
-function updateQuestion(progCnt) {
-    if(progCnt == 1) {
-        Obj = new question(0, '2. what is the content of your question?', '', 1, 'text', [''], [''], false, true);
-        Obj.pushData(Obj);
-        if(Questions[0].qAnswer == 0) {
-            MAX_cnt = 5; // list question type
-        } else if(Questions[0].qAnswer == 1) {
-            MAX_cnt = 4; // text question type
-        } else if(Questions[0].qAnswer == 2) {
-            MAX_cnt = 6; // multiple choice question type
-        } else if(Questions[0].qAnswer == 3) {
-            MAX_cnt = 4; //email question type
-        }
-    } else if (progCnt == 2){
-        Obj = new question(0, '3. is this question REQUIRED to be answered by the client?', '', 2, 'button', ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ['YES', 'NO'], false, true);
-        Obj.pushData(Obj);
-    } else if (progCnt == 3 && (Questions[0].qAnswer == 1 || Questions[0].qAnswer == 3)){
-        Obj = new question(0, '4. are you done with your questions?', '', 3, 'button', ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ['YES', 'NO'], false, true);
-        Obj.pushData(Obj);
-    } else if (progCnt == 3 && Questions[0].qAnswer == 0){
-        Obj = new question(0, '4. enter your list items separated by SEMICOLON (;)', '', 3, 'text', [''], [''], false, true);
-        Obj.pushData(Obj);
-    } else if (progCnt == 4 && Questions[0].qAnswer == 0){
-        Obj = new question(0, '5. are you done with your questions?', '', 4, 'button', ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ['YES', 'NO'], false, true);
-        Obj.pushData(Obj);
-    } else if (progCnt == 3 && Questions[0].qAnswer == 2){
-        Obj = new question(0, '4. enter choice icons seperated by SEMICOLON (;). e.g.: fa-regular fa-thumbs-up; fa-regular fa-thumbs-down', '', 3, 'text', [''], [''], false, true);
-        Obj.pushData(Obj);
-    } else if (progCnt == 4 && Questions[0].qAnswer == 2){
-        Obj = new question(0, '5. enter choice text seperated by SEMICOLON (;). e.g.: YES; NO', '', 4, 'text', [''], [''], false, true);
-        Obj.pushData(Obj);
-    } else if (progCnt == 5 && Questions[0].qAnswer == 2){
-        Obj = new question(0, '6. are you done with your questions?', '', 5, 'button', ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ['YES', 'NO'], false, true);
-        Obj.pushData(Obj);
-    }
-    
-}
-
 
 // this function eventually comes from user costomization and design of his app.
 function questionCreate(headerTxt, input, page){
@@ -650,7 +669,8 @@ function questionCreate(headerTxt, input, page){
             MAX_cnt = data.MAX_cnt;
             let Obj = new question();
             for(let kk = 0; kk < MAX_cnt; kk++){
-                Obj = new question(kk, data.qContent[kk], '', data.qIdx[kk], data.qType[kk], data.options[kk], data.optionsText[kk], false, data.qRequired[kk]);
+                Obj = new question(kk, data.qContent[kk], '', data.qIdx[kk], data.qType[kk],
+                                   data.options[kk], data.optionsText[kk], false, data.qRequired[kk]);
                 Obj.pushData(Obj);
             }
             // initialize header

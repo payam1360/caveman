@@ -1,6 +1,5 @@
 <?php
 
-define("DBG", false);
 
 function saveUserDataIntoDB($Questions) {
        
@@ -13,12 +12,6 @@ function saveUserDataIntoDB($Questions) {
     // Create connection
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
     // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    if(DBG) {
-        echo "Connected successfully";
-    }
     
     // get the user ID
     session_start();
@@ -69,33 +62,34 @@ function saveUserDataIntoDB($Questions) {
     }
         
     $sql = "INSERT INTO " . $tablename . " (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired) VALUES('" . $userId . "','" . $clientId . "','" . $campaignId . "','" . $campaignTime . "','" . $qIdx . "','" . $qType . "','" . $qContent . "','" . $qAnswer . "','" . $options . "','" . $optionsText . "','" . $visited . "','" . $qRequired . "')";
-    if(DBG) {
-        echo $sql;
-    }
-    $flag = $conn->query($sql);
-    if ($flag == true and DBG) {
-        echo "New record created successfully";
-    } elseif(DBG || $flag == false) {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
+    $conn->query($sql);
     $conn->close();
-    return $flag;
 }
 
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
 $userdata       = json_decode($_POST['userInfo']);
-$flag           = saveUserDataIntoDB($userdata);
-if($flag == true) {
+if($userdata->data[0]->qAnswer == '') {
     $data['status'] = 0;
-} else {
+} elseif($userdata->data[0]->qAnswer == '1' && $userdata->counter == 3) {
     $data['status'] = 1;
-}
-if($data['status'] == 1 and DBG) {
-    echo "user has not registered. no data is saved";
-}elseif(DBG){
-    echo "user data is saved.\n";
+} elseif($userdata->data[0]->qAnswer == '3' && $userdata->counter == 3) {
+    $data['status'] = 2;
+} elseif($userdata->data[0]->qAnswer == '0' && $userdata->counter == 3) {
+    $data['status'] = 3;
+} elseif($userdata->data[0]->qAnswer == '0' && $userdata->counter == 5) {
+    $data['status'] = 4;
+} elseif($userdata->data[0]->qAnswer == '0' && $userdata->counter == 6) {
+    $data['status'] = 5;
+} elseif($userdata->data[0]->qAnswer == '2' && $userdata->counter == 3) {
+    $data['status'] = 6;
+} elseif($userdata->data[0]->qAnswer == '2' && $userdata->counter == 5) {
+    $data['status'] = 7;
+} elseif($userdata->data[0]->qAnswer == '2' && $userdata->counter == 6) {
+    $data['status'] = 8;
+} else {
+    $data['status'] = 9;
 }
 echo json_encode($data);
 

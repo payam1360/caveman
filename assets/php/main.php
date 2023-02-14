@@ -21,25 +21,25 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $campai
         $ex = true;
     }
     $kk          = 0;
-    while($Questions[$kk]->qIdx >= 0 && $Questions[$kk]->qType != 'message'){
+    while($Questions[$kk]->qIdx >= 0 && $Questions[$kk]->qType[0] != 'message'){
         $kk = $Questions[$kk]->qIdx;
         $options = "";
         $optionsText = "";
         
-        if($Questions[$kk]->options == ""){
+        if($Questions[$kk]->options[0] == ""){
         } else {
-            for($kx = 0; $kx < count($Questions[$kk]->options); $kx++){
-                $options = $options . "," . $Questions[$kk]->options[$kx];
+            for($kx = 0; $kx < count($Questions[$kk]->options[0]); $kx++){
+                $options = $options . "," . $Questions[$kk]->options[0][$kx];
             }
         }
-        if($Questions[$kk]->qType == "button"){
-            for($kx = 0; $kx < count($Questions[$kk]->optionsText); $kx++){
-                $optionsText = $optionsText . "," . $Questions[$kk]->optionsText[$kx];
+        if($Questions[$kk]->qType[0] == "button"){
+            for($kx = 0; $kx < count($Questions[$kk]->optionsText[0]); $kx++){
+                $optionsText = $optionsText . "," . $Questions[$kk]->optionsText[0][$kx];
             }
         }
         $qIdx = $Questions[$kk]->qIdx;
-        $qType = $Questions[$kk]->qType;
-        $qContent = $Questions[$kk]->qContent;
+        $qType = $Questions[$kk]->qType[0];
+        $qContent = $Questions[$kk]->qContent[0];
         $qAnswer = $Questions[$kk]->qAnswer;
         $visited = $Questions[$kk]->visited;
         $qRequired = $Questions[$kk]->qRequired;
@@ -47,7 +47,7 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $campai
         if($ex) { // update the already exists entry
             $sql = "UPDATE $table1name SET userId =  '$userId', clientId = '$clientId', campaignId = '$campaignId', campaignTime = '$campaignTime', qIdx = '$qIdx', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired' WHERE qIdx = '$qIdx';";
         } else {
-            $sql = "INSERT INTO " . $table1name . " (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired) VALUES('" . $userId . "','" . $clientId . "','" . $campaignId . "','" . $campaignTime . "','" . $Questions[$kk]->qIdx . "','" . $Questions[$kk]->qType . "','" . $Questions[$kk]->qContent . "','" . $Questions[$kk]->qAnswer . "','" . $options . "','" . $optionsText . "','" . $Questions[$kk]->visited . "','" . $Questions[$kk]->qRequired . "')";
+            $sql = "INSERT INTO " . $table1name . " (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired) VALUES('" . $userId . "','" . $clientId . "','" . $campaignId . "','" . $campaignTime . "','" . $Questions[$kk]->qIdx . "','" . $Questions[$kk]->qType[0] . "','" . $Questions[$kk]->qContent[0] . "','" . $Questions[$kk]->qAnswer . "','" . $options . "','" . $optionsText . "','" . $Questions[$kk]->visited . "','" . $Questions[$kk]->qRequired . "')";
         }
         $conn->query($sql);
         $kk++;
