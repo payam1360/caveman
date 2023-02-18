@@ -70,6 +70,17 @@ function saveUserDataIntoDB($Questions) {
 /// main routin starts here.
 /// -------------------------
 $userdata       = json_decode($_POST['userInfo']);
+
+if($userdata->data[0]->qAnswer == '0') {
+    $data['MAX_cnt'] = 7;
+} elseif($userdata->data[0]->qAnswer == '1') {
+    $data['MAX_cnt'] = 6;
+} elseif($userdata->data[0]->qAnswer == '2') {
+    $data['MAX_cnt'] = 8;
+} elseif($userdata->data[0]->qAnswer == '3') {
+    $data['MAX_cnt'] = 3;
+}
+
 if($userdata->data[0]->qAnswer == '') {
     $data['status'] = 0;
 } elseif($userdata->data[0]->qAnswer == '1' && $userdata->counter == 3) {
@@ -90,6 +101,15 @@ if($userdata->data[0]->qAnswer == '') {
     $data['status'] = 8;
 } else {
     $data['status'] = 9;
+}
+
+if($data['MAX_cnt']  == $userdata->counter && $userdata->data[$userdata->counter - 1]->qAnswer == 1 ) {
+    $data['status'] = 10;
+    saveUserDataIntoDB($userdata->data);
+} elseif($data['MAX_cnt'] == $userdata->counter && $userdata->data[$userdata->counter - 1]->qAnswer == 0) {
+    $data['status'] = 11;
+    $data['MAX_cnt'] = 9;
+    saveUserDataIntoDB($userdata->data);
 }
 echo json_encode($data);
 

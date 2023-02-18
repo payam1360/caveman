@@ -32,23 +32,27 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
     if (moveright) {
         moveright.addEventListener('click', function(event) {
             // validate the current input
-            let valid = false;
-            let called = false;
+            let valid      = false;
+            let called     = false;
+            let qTypeLen   =  Questions[counter].qType.length;
             let inputStyle = document.querySelector('.form-input-style');
-            if(Questions[counter].qType != 'message') {
-                valid = inputStyle.validity.valid;
-            }
-            let userResponse = [];
-            if(Questions[counter].qType == 'button') {
-                userResponse = Questions[counter].qAnswer;
-            } else if(Questions[counter].qType != 'message') {
-                userResponse = inputStyle.value;
-            }
-            // get the answer validation
-            valid = validate_input(valid, Questions[counter].qType, Questions[counter].qRequired, userResponse);
-            if(valid == true){
-                if(Questions[counter].qType != 'button') {
-                    Questions[counter].qAnswer = inputStyle.value;
+            for(let kk = 0; kk < qTypeLen; kk++) {
+                if(Questions[counter].qType[kk] != 'undefined') {
+                    if(Questions[counter].qType[kk] != 'message') {
+                        valid = inputStyle.validity.valid;
+                    }
+                    let userResponse = [];
+                    if(Questions[counter].qType[kk] == 'button') {
+                        userResponse = Questions[counter].qAnswer;
+                    } else if(Questions[counter].qType[kk] != 'message') {
+                        userResponse = inputStyle.value;
+                    }
+                    
+                    // get the answer validation
+                    valid = validate_input(valid, Questions[counter].qType[kk], Questions[counter].qRequired, userResponse);
+                    if(valid == true){
+                        Questions[counter].qAnswer = userResponse;
+                    }
                 }
             }
             if(valid == true && Questions[counter].visited == false) {
@@ -58,7 +62,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             counter++;
             //
             // submit the users data here
-            if(counter == MAX_cnt - 1) {
+            if(counter == MAX_cnt - 1 && page != 'questions') {
                 let resultBtn = document.querySelector('.results-btn');
                 moveright.disabled = true;
                 moveright.style.opacity = 0;
@@ -83,8 +87,9 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 }
             }
             // set form 0 header
+            
             dynamicQcontent(page);
-            headerTxt[0].innerHTML = Questions[counter].qContent;
+            headerTxt[0].innerHTML = Questions[counter].qContent[0];
             // set form 0 type
             resetFormType(input[0]);
             setFormType(input[0], Questions[counter]);
@@ -486,8 +491,10 @@ function validate_input(valid, type, required, value){
             return(true && valid);
         }
         // use text pattern match results
-    } else  {
-        return(valid);
+    } else if(type == 'text' && value.length == 0) {
+        return(false && valid);
+    } else {
+        return (valid);
     }
 }
 
@@ -498,11 +505,17 @@ function callLoginUser(querySelIn, inputDataBlob){
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
             if(data.status == 0) {
-                window.location.assign('admin.html');
-            } else {
                 resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], data.status);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
+                window.location.assign('admin.html');
+            } else if(data.status == 1) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 1);
+            } else if(data.status == 2) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 2);
             }
+            
         }
     };
     // sending the request
@@ -559,7 +572,7 @@ function submitQuestionBackEndData(querySelIn, inputDataBlob, headerTxt) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
-            //console.log(this.response)
+            MAX_cnt = data.MAX_cnt;
             if(data.status == 0) {
                 resetFormType(querySelIn);
                 setFormType(querySelIn, inputDataBlob[counter], 0, 1);
@@ -599,6 +612,17 @@ function submitQuestionBackEndData(querySelIn, inputDataBlob, headerTxt) {
                 setFormType(querySelIn, inputDataBlob[counter], 1, 0);
                 headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
             } else if(data.status == 9) {
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
+                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[0];
+            } else if(data.status == 10) {
+                counter = 0;
+                resetFormType(querySelIn);
+                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
+                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[0];
+            }
+            else if(data.status == 11) {
+                counter = MAX_cnt - 1;
                 resetFormType(querySelIn);
                 setFormType(querySelIn, inputDataBlob[counter], 0, 0);
                 headerTxt[1].innerHTML = inputDataBlob[counter].qContent[0];

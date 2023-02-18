@@ -63,12 +63,12 @@ function getLoginForm() {
     $data['options'] = [
                             [[""]],
                             [[""]],
-                            [["fa-regular fa-circle-check", "fa-solid fa-xmark", "fa-solid fa-signature"]]
+                            [["fa-regular fa-circle-check"], ["fa-solid fa-xmark"], ["fa-solid fa-signature"]]
                        ];
     $data['optionsText'] = [
                                 [[""]],
                                 [[""]],
-                                [["logging in ...", "wrong password", "user not found, please register!"]]
+                                [["logging in ..."], ["wrong password"], ["user not found, please register!"]]
                            ];
     
     $data['qRequired'] = [1, 1, 0];
@@ -133,7 +133,8 @@ function QuestionBackendForm() {
                             ["4. what is the purpose of your question?"],
                             ["5. are you done?", "5. enter your items description seperated by SEMICOLON (;)"],
                             ["6. are you done?", "6. enter your choice icons seperated by SEMICOLON (;)"],
-                            ["7. are you done?"]
+                            ["7. are you done?"],
+                            [""]
                         ];
     $data['qType'] = [
                         ["button"],
@@ -143,10 +144,11 @@ function QuestionBackendForm() {
                         ["list"],
                         ["button", "text"],
                         ["button", "text"],
-                        ["button"]
+                        ["button"],
+                        ["message"]
                     ];
     
-    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7];
+    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     
     $data['options'] = [
                             [["fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope"]],
@@ -156,7 +158,8 @@ function QuestionBackendForm() {
                             [["client's water intake","client's calories intake", "client's weight", "client's height", "client's macros"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
-                            [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']]
+                            [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
+                            [['fa-regular fa-circle-check']],
                        ];
     
     $data['optionsText'] = [
@@ -167,11 +170,12 @@ function QuestionBackendForm() {
                                 [[""]],
                                 [["YES", "NO"], [""]],
                                 [["YES", "NO"], [""]],
-                                [["YES", "NO"]]
+                                [["YES", "NO"]],
+                                [["All Done!"]]
                            ];
     
-    $data['qRequired'] = [1, 0, 0, 1, 1, 1, 1, 1];
-    $data['MAX_cnt'] = 8;
+    $data['qRequired'] = [1, 0, 0, 1, 1, 1, 1, 1, 1];
+    $data['MAX_cnt'] = 9;
     return $data;
 }
 
