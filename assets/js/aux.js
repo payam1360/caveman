@@ -33,7 +33,6 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
         moveright.addEventListener('click', function(event) {
             // validate the current input
             let valid      = false;
-            let called     = false;
             let qTypeLen   =  Questions[counter].qType.length;
             let inputStyle = document.querySelector('.form-input-style');
             for(let kk = 0; kk < qTypeLen; kk++) {
@@ -86,56 +85,19 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                     moveleft.firstChild.style.color = '#f08080';
                 }
             }
-            // set form 0 header
-            
             dynamicQcontent(page);
-            headerTxt[0].innerHTML = Questions[counter].qContent[0];
-            // set form 0 type
-            resetFormType(input[0]);
-            setFormType(input[0], Questions[counter]);
-            let gap = [];
-            gap[0] = input[1].getBoundingClientRect().left-input[0].getBoundingClientRect().left;
-            gap[1] = input[2].getBoundingClientRect().left-input[1].getBoundingClientRect().left;
             
-            ChangeForm(input[0], '0.5s', gap[0].toString(), 1, '50%');
-            input[0].addEventListener('transitionend', () => {
-                //Reset
-                ChangeForm(input[0], '0.0s', '0', 0, '0%');
-                resetFormType(input[0]);
-            });
-            ChangeForm(header[0], '0.5s', gap[0].toString(), 1, '50%');
-            header[0].addEventListener('transitionend', () => {
-                //Reset
-                ChangeForm(header[0], '0.0s', '0', 0, '0%');
-            });
-            ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
-            input[1].addEventListener('transitionend', () => {
-                //Reset
-                resetFormType(input[1]);
-                setFormType(input[1], Questions[counter]);
-                if(counter == MAX_cnt - 1 && page == 'login' && !called) {
-                    callLoginUser(input[1], Questions);
-                    called = true;
-                }
-                if(page == 'register' && !called) {
-                    callRegister(input[1], Questions, headerTxt);
-                    called = true;
-                }
-                if(page == 'questions'&& !called) {
-                    submitQuestionBackEndData(input[1], Questions, headerTxt);
-                    called = true;
-                }
-                ChangeForm(input[1], '0s', '0', 1, '50%');
-                restorePrevAnswer();
-            });
-            
-            ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
-            header[1].addEventListener('transitionend', () => {
-                //Reset
-                headerTxt[1].innerHTML = Questions[counter].qContent;
-                ChangeForm(header[1], '0.0s', '0', 1, '50%');
-            });
-            
+            if(counter == MAX_cnt - 1 && page == 'login') {
+                callLoginUser(header, headerTxt, input, Questions);
+            }
+            else if(page == 'register') {
+                callRegister(header, headerTxt, input, Questions);
+            }
+            else if(page == 'questions') {
+                submitQuestionBackEndData(header, headerTxt, input, Questions);
+            } else {
+                transition2Right(header, headerTxt, input, Questions, 0, 0);
+            }
             // updating the progress
             if(page == 'main' || page == 'questions' || page == 'analysis') {
                 let p = (prog / (MAX_cnt - 1));
@@ -151,6 +113,45 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             }
         });
     }
+}
+
+function transition2Right(header, headerTxt, input, Questions, serverStruct = 0, serverStructOption = 0) {
+    headerTxt[0].innerHTML = Questions[counter].qContent[serverStruct];
+    // set form 0 type
+    resetFormType(input[0]);
+    setFormType(input[0], Questions[counter], serverStruct, serverStructOption);
+    let gap = [];
+    gap[0] = input[1].getBoundingClientRect().left-input[0].getBoundingClientRect().left;
+    gap[1] = input[2].getBoundingClientRect().left-input[1].getBoundingClientRect().left;
+    
+    ChangeForm(input[0], '0.5s', gap[0].toString(), 1, '50%');
+    input[0].addEventListener('transitionend', () => {
+        //Reset
+        ChangeForm(input[0], '0.0s', '0', 0, '0%');
+        resetFormType(input[0]);
+    });
+    ChangeForm(header[0], '0.5s', gap[0].toString(), 1, '50%');
+    header[0].addEventListener('transitionend', () => {
+        //Reset
+        ChangeForm(header[0], '0.0s', '0', 0, '0%');
+    });
+    ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
+    input[1].addEventListener('transitionend', () => {
+        //Reset
+        resetFormType(input[1]);
+        setFormType(input[1], Questions[counter], serverStruct, serverStructOption);
+        ChangeForm(input[1], '0s', '0', 1, '50%');
+        restorePrevAnswer(serverStruct, serverStructOption);
+    });
+    
+    ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
+    header[1].addEventListener('transitionend', () => {
+        //Reset
+        headerTxt[1].innerHTML = Questions[counter].qContent[serverStruct];
+        ChangeForm(header[1], '0.0s', '0', 1, '50%');
+    });
+
+    
 }
 
 function moveLeft(moveleft, input, header, headerTxt, Questions, page){
@@ -194,7 +195,7 @@ function moveLeft(moveleft, input, header, headerTxt, Questions, page){
                 resetFormType(input[1]);
                 ChangeForm(input[1], '0.0s', '0', 1, '50%');
                 setFormType(input[1], Questions[counter]);
-                restorePrevAnswer();
+                restorePrevAnswer(serverStruct, serverStructOption);
             });
             ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
             header[1].addEventListener('transitionend', () => {
@@ -450,12 +451,12 @@ function resetStart(input, header, headerTxt, page) {
     moveleft.style.opacity = 0;
 }
 
-function restorePrevAnswer() {
+function restorePrevAnswer(serverStruct, serverStructOption) {
     // restore the previous answer on the screen
-    if(Questions[counter].qType == 'text' || Questions[counter].qType == 'email' || Questions[counter].qType == 'password') {
+    if(Questions[counter].qType[serverStruct] == 'text' || Questions[counter].qType[serverStruct] == 'email' || Questions[counter].qType[serverStruct] == 'password') {
         let inputStyle = document.querySelector('.form-input-style');
         inputStyle.value = Questions[counter].qAnswer;
-    } else if(Questions[counter].qType == 'button'){
+    } else if(Questions[counter].qType[serverStruct] == 'button'){
         
         let formButtonStyle = document.querySelectorAll('.form-button-style');
         for(let kk = 0; kk < formButtonStyle.length; kk++){
@@ -465,7 +466,7 @@ function restorePrevAnswer() {
             formButtonStyle[Questions[counter].qAnswer].style.backgroundColor = '#f08080';
         }
         
-    } else if(Questions[counter].qType == 'list'){
+    } else if(Questions[counter].qType[serverStruct] == 'list'){
         
         let formButtonStyle = document.querySelector('.form-input-style');
         if(Questions[counter].qAnswer.length == 0) {
@@ -499,21 +500,18 @@ function validate_input(valid, type, required, value){
 }
 
 
-function callLoginUser(querySelIn, inputDataBlob){
+function callLoginUser(header, headerTxt, querySelIn, inputDataBlob){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
             if(data.status == 0) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
                 window.location.assign('admin.html');
             } else if(data.status == 1) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
             } else if(data.status == 2) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 2);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 2);
             }
             
         }
@@ -526,36 +524,32 @@ function callLoginUser(querySelIn, inputDataBlob){
 }
 
 
-function callRegister(querySelIn, inputDataBlob, headerTxt) {
+function callRegister(header, headerTxt, querySelIn, inputDataBlob) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
-            if(data.status == 0) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 1);
+            if(data.status == -1) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+            } else if(data.status == 0) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
             } else if(data.status == 1) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
             } else if(data.status == 2) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
                 moveright.disabled = true;
                 headerTxt[1].innerHTML = '';
             } else if(data.status == 3) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
                 moveright.disabled = true;
             } else if(data.status == 4) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 5) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
             }
         }
     };
@@ -567,65 +561,42 @@ function callRegister(querySelIn, inputDataBlob, headerTxt) {
 }
 
 // submitting the form
-function submitQuestionBackEndData(querySelIn, inputDataBlob, headerTxt) {
+function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
             MAX_cnt = data.MAX_cnt;
             if(data.status == 0) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
                 moveright.disabled = true;
             } else if(data.status == 1) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 1, 0);
-                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 2) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
-                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[0];
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 3) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 1, 0);
-                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 4) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 1, 0);
-                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 5) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
-                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[0];
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 6) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 1, 0);
-                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 7) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 1, 0);
-                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 8) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 1, 0);
-                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[1];
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 9) {
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
-                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[0];
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 10) {
                 counter = 0;
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
-                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[0];
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             }
             else if(data.status == 11) {
                 counter = MAX_cnt - 1;
-                resetFormType(querySelIn);
-                setFormType(querySelIn, inputDataBlob[counter], 0, 0);
-                headerTxt[1].innerHTML = inputDataBlob[counter].qContent[0];
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             }
         }
     };
