@@ -25,6 +25,9 @@ class question {
     pushData (){
         Questions.push(this);
     }
+    popData (){
+        Questions.pop();
+    }
 };
 // AUX functions start here
 // function to set styles for animation
@@ -592,7 +595,8 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 10) {
                 counter = 0;
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+                prog = 0;
+                resetStart(querySelIn, header, headerTxt, 'questions');
             }
             else if(data.status == 11) {
                 counter = MAX_cnt - 1;
@@ -660,9 +664,13 @@ function questionCreate(headerTxt, input, page){
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
-            
             MAX_cnt = data.MAX_cnt;
+            
             let Obj = new question();
+            // reset the global Questions
+            for(let kk = 0; kk < MAX_cnt; kk++){
+                Obj.popData();
+            }
             for(let kk = 0; kk < MAX_cnt; kk++){
                 Obj = new question(kk, data.qContent[kk], '', data.qIdx[kk], data.qType[kk],
                                    data.options[kk], data.optionsText[kk], false, data.qRequired[kk]);

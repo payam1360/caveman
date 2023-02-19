@@ -155,7 +155,7 @@ function QuestionBackendForm() {
                             [["fa-solid fa-gears"], ["fa-regular fa-hand-point-right"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
-                            [["client's water intake","client's calories intake", "client's weight", "client's height", "client's macros"]],
+                            [["client water intake","client calories intake", "client weight", "client height", "client macros"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],

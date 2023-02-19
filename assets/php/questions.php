@@ -1,7 +1,7 @@
 <?php
 
 
-function saveUserDataIntoDB($Questions) {
+function saveUserDataIntoDB($Questions, $qIdx) {
        
     $servername  = "127.0.0.1";
     $loginname   = "root";
@@ -12,16 +12,11 @@ function saveUserDataIntoDB($Questions) {
     // Create connection
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
     // Check connection
-    
     // get the user ID
     session_start();
     $userId = $_SESSION['userId'];
-    // get question content:
-    $qContent = $Questions[1]->qAnswer;
     // question answer is empty
     $qAnswer = "";
-    // get question index (Not sure what to do here) FIXME
-    $qIdx = 0;
     // get question type
     if($Questions[0]->qAnswer == 0) {
         $qType = "list";
@@ -32,16 +27,24 @@ function saveUserDataIntoDB($Questions) {
     } else if($Questions[0]->qAnswer == 3) {
         $qType = "email";
     }
+    if($qType != 'email') {
+    // get question content:
+        $qContent = $Questions[3]->qAnswer;
+    } else {
+        $qContent = 'Hey #nameRegister, what is your email address?';
+    }
+    // Keyword of the question
+    $qKey = $Questions[4]->qAnswer;
     // visited field
     $visited = 0;
     // required field
     $qRequired = $Questions[2]->qAnswer;
     // get the options and options texts parsing the user text input response;
     if($qType == "button") {
-        $options = $Questions[3]->qAnswer;
-        $optionsText = $Questions[4]->qAnswer;
+        $options = $Questions[5]->qAnswer;
+        $optionsText = $Questions[6]->qAnswer;
     } else if($qType == "list") {
-        $options = $Questions[3]->qAnswer;
+        $options = $Questions[5]->qAnswer;
         $optionsText = "";
     } else if($qType == "text") {
         $options = "";
@@ -61,7 +64,7 @@ function saveUserDataIntoDB($Questions) {
         $clientId = mt_rand();
     }
         
-    $sql = "INSERT INTO " . $tablename . " (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired) VALUES('" . $userId . "','" . $clientId . "','" . $campaignId . "','" . $campaignTime . "','" . $qIdx . "','" . $qType . "','" . $qContent . "','" . $qAnswer . "','" . $options . "','" . $optionsText . "','" . $visited . "','" . $qRequired . "')";
+    $sql = "INSERT INTO $tablename (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId','$campaignId', '$campaignTime','$qIdx','$qType','$qContent','$qAnswer','$options','$optionsText','$visited','$qRequired','$qKey')";
     $conn->query($sql);
     $conn->close();
 }
@@ -70,7 +73,7 @@ function saveUserDataIntoDB($Questions) {
 /// main routin starts here.
 /// -------------------------
 $userdata       = json_decode($_POST['userInfo']);
-
+static $qIdx = 0;
 if($userdata->data[0]->qAnswer == '0') {
     $data['MAX_cnt'] = 7;
 } elseif($userdata->data[0]->qAnswer == '1') {
@@ -104,12 +107,13 @@ if($userdata->data[0]->qAnswer == '') {
 }
 
 if($data['MAX_cnt']  == $userdata->counter && $userdata->data[$userdata->counter - 1]->qAnswer == 1 ) {
-    $data['status'] = 10;
-    saveUserDataIntoDB($userdata->data);
+    $data['status'] = 10; // keep asking
+    saveUserDataIntoDB($userdata->data, $qIdx);
+    $qIdx++;
 } elseif($data['MAX_cnt'] == $userdata->counter && $userdata->data[$userdata->counter - 1]->qAnswer == 0) {
-    $data['status'] = 11;
+    $data['status'] = 11; // End the form builder
     $data['MAX_cnt'] = 9;
-    saveUserDataIntoDB($userdata->data);
+    saveUserDataIntoDB($userdata->data, $qIdx);
 }
 echo json_encode($data);
 
