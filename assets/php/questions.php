@@ -73,7 +73,7 @@ function saveUserDataIntoDB($Questions, $qIdx) {
 /// main routin starts here.
 /// -------------------------
 $userdata       = json_decode($_POST['userInfo']);
-static $qIdx = 0;
+
 if($userdata->data[0]->qAnswer == '0') {
     $data['MAX_cnt'] = 7;
 } elseif($userdata->data[0]->qAnswer == '1') {
@@ -81,7 +81,7 @@ if($userdata->data[0]->qAnswer == '0') {
 } elseif($userdata->data[0]->qAnswer == '2') {
     $data['MAX_cnt'] = 8;
 } elseif($userdata->data[0]->qAnswer == '3') {
-    $data['MAX_cnt'] = 3;
+    $data['MAX_cnt'] = 4;
 }
 
 if($userdata->data[0]->qAnswer == '') {
@@ -108,12 +108,11 @@ if($userdata->data[0]->qAnswer == '') {
 
 if($data['MAX_cnt']  == $userdata->counter && $userdata->data[$userdata->counter - 1]->qAnswer == 1 ) {
     $data['status'] = 10; // keep asking
-    saveUserDataIntoDB($userdata->data, $qIdx);
-    $qIdx++;
+    saveUserDataIntoDB($userdata->data, $userdata->qIdx);
 } elseif($data['MAX_cnt'] == $userdata->counter && $userdata->data[$userdata->counter - 1]->qAnswer == 0) {
     $data['status'] = 11; // End the form builder
     $data['MAX_cnt'] = 9;
-    saveUserDataIntoDB($userdata->data, $qIdx);
+    saveUserDataIntoDB($userdata->data, $userdata->qIdx);
 }
 echo json_encode($data);
 

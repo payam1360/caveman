@@ -9,6 +9,7 @@ let counter   = 0;
 let prog      = 0;
 let progChart = [];
 let MAX_cnt   = 0;
+let globalQidx = 0;
 // user <-> client class definition
 class question {
     constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired){
@@ -597,6 +598,7 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
                 counter = 0;
                 prog = 0;
                 resetStart(querySelIn, header, headerTxt, 'questions');
+                globalQidx++;
             }
             else if(data.status == 11) {
                 counter = MAX_cnt - 1;
@@ -607,7 +609,7 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
     // sending the request
     xmlhttp.open("POST", "assets/php/questions.php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    let inputDataAndCntBlob = {'data': inputDataBlob, 'counter': counter};
+    let inputDataAndCntBlob = {'data': inputDataBlob, 'counter': counter, 'qIdx': globalQidx};
     var userdata = "userInfo="+JSON.stringify(inputDataAndCntBlob);
     xmlhttp.send(userdata);
 }
