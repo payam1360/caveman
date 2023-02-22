@@ -10,6 +10,9 @@ let prog      = 0;
 let progChart = [];
 let MAX_cnt   = 0;
 let globalQidx = 0;
+let choiceTracker = [[0], [0]];
+
+
 // user <-> client class definition
 class question {
     constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired){
@@ -122,6 +125,8 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
 function transition2Right(header, headerTxt, input, Questions, serverStruct = 0, serverStructOption = 0) {
     headerTxt[0].innerHTML = Questions[counter].qContent[serverStruct];
     // set form 0 type
+    choiceTracker[0].push(serverStruct);
+    choiceTracker[1].push(serverStructOption);
     resetFormType(input[0]);
     setFormType(input[0], Questions[counter], serverStruct, serverStructOption);
     let gap = [];
@@ -154,8 +159,6 @@ function transition2Right(header, headerTxt, input, Questions, serverStruct = 0,
         headerTxt[1].innerHTML = Questions[counter].qContent[serverStruct];
         ChangeForm(header[1], '0.0s', '0', 1, '50%');
     });
-
-    
 }
 
 function moveLeft(moveleft, input, header, headerTxt, Questions, page){
@@ -173,43 +176,58 @@ function moveLeft(moveleft, input, header, headerTxt, Questions, page){
                 moveright.style.opacity = 1;
                 moveright.disabled = false;
             }
-            counter--;
+            
             resetDynamicQcontent(page);
-            headerTxt[2].innerHTML = Questions[counter].qContent;
-            // set form 0 type
-            resetFormType(input[2]);
-            setFormType(input[2], Questions[counter]);
-            let gap = [];
-            gap[0] = input[1].getBoundingClientRect().right-input[2].getBoundingClientRect().right;
-            gap[1] = input[0].getBoundingClientRect().right-input[1].getBoundingClientRect().right;
-            ChangeForm(input[2], '0.5s', gap[0].toString(), 1, '50%');
-            input[2].addEventListener('transitionend', () => {
-                //Reset
-                ChangeForm(input[2], '0.0s', '0', 0, '0%');
-                resetFormType(input[2]);
-            });
-            ChangeForm(header[2], '0.5s', gap[0].toString(), 1, '50%');
-            header[2].addEventListener('transitionend', () => {
-                //Reset
-                ChangeForm(header[2], '0.0s', '0', 0, '0%');
-            });
-            ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
-            input[1].addEventListener('transitionend', () => {
-                //Reset
-                resetFormType(input[1]);
-                ChangeForm(input[1], '0.0s', '0', 1, '50%');
-                setFormType(input[1], Questions[counter]);
-                restorePrevAnswer(serverStruct, serverStructOption);
-            });
-            ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
-            header[1].addEventListener('transitionend', () => {
-                //Reset
-                headerTxt[1].innerHTML = Questions[counter].qContent;
-                ChangeForm(header[1], '0.0s', '0', 1, '50%');
-            });
+            transition2Left(header, headerTxt, input, Questions);
+            counter--;
         });
     }
 }
+
+
+function transition2Left(header, headerTxt, input, Questions) {
+    
+    // Need to pop twice to get back to the state of the previous
+    choiceTracker[0].pop();
+    choiceTracker[1].pop();
+    serverStruct = choiceTracker[0].pop();
+    serverStructOption = choiceTracker[1].pop();
+    choiceTracker[0].push(serverStruct);
+    choiceTracker[1].push(serverStructOption);
+    headerTxt[2].innerHTML = Questions[counter].qContent[serverStruct];
+    // set form 0 type
+    resetFormType(input[2]);
+    setFormType(input[2], Questions[counter], serverStruct, serverStructOption);
+    let gap = [];
+    gap[0] = input[1].getBoundingClientRect().right-input[2].getBoundingClientRect().right;
+    gap[1] = input[0].getBoundingClientRect().right-input[1].getBoundingClientRect().right;
+    ChangeForm(input[2], '0.5s', gap[0].toString(), 1, '50%');
+    input[2].addEventListener('transitionend', () => {
+        //Reset
+        ChangeForm(input[2], '0.0s', '0', 0, '0%');
+        resetFormType(input[2]);
+    });
+    ChangeForm(header[2], '0.5s', gap[0].toString(), 1, '50%');
+    header[2].addEventListener('transitionend', () => {
+        //Reset
+        ChangeForm(header[2], '0.0s', '0', 0, '0%');
+    });
+    ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
+    input[1].addEventListener('transitionend', () => {
+        //Reset
+        resetFormType(input[1]);
+        ChangeForm(input[1], '0.0s', '0', 1, '50%');
+        setFormType(input[1], Questions[counter], serverStruct, serverStructOption);
+        restorePrevAnswer(serverStruct, serverStructOption);
+    });
+    ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
+    header[1].addEventListener('transitionend', () => {
+        //Reset
+        headerTxt[1].innerHTML = Questions[counter].qContent[serverStruct];
+        ChangeForm(header[1], '0.0s', '0', 1, '50%');
+    });
+}
+
 
 function callsubmitUserData(page){
     counter++;
@@ -248,7 +266,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
             iDiv = document.createElement('i');
             iDiv.setAttribute('class', 'message-icon ' + userStruct.options[serverStructOption][serverStruct]);
             iDiv.style.display = 'inline-block';
-            iDiv.style.color = 'green';
+            iDiv.style.color = 'mediumseagreen';
             iDiv.style.height = '80px';
             iconDiv.appendChild(iDiv);
             mDiv.appendChild(iconDiv);
@@ -325,7 +343,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
                 newI.setAttribute('class', item);
                 newI.setAttribute('id', 'form-button');
                 newI.setAttribute('alt', i);
-                newI.style.color = 'grey';
+                newI.style.color = 'mediumseagreen';
                 newI.style.height = '50px';
                 newI.style.paddingTop = '40px';
                 let newP = document.createElement('p');
@@ -418,7 +436,7 @@ function getUserButtonSelection(alt){
     for(let kk = 0; kk < formButtonStyle.length; kk++){
         formButtonStyle[kk].style.backgroundColor = '#ffffff';
     }
-    formButtonStyle[alt.value].style.backgroundColor = '#f08080';
+    formButtonStyle[alt.value].style.backgroundColor = 'lightgrey';
 }
 
 // function to set styles for animation
@@ -455,21 +473,26 @@ function resetStart(input, header, headerTxt, page) {
     moveleft.style.opacity = 0;
 }
 
-function restorePrevAnswer(serverStruct, serverStructOption) {
+function restorePrevAnswer(serverStruct = 0, serverStructOption = 0) {
     // restore the previous answer on the screen
     if(Questions[counter].qType[serverStruct] == 'text' || Questions[counter].qType[serverStruct] == 'email' || Questions[counter].qType[serverStruct] == 'password') {
         let inputStyle = document.querySelector('.form-input-style');
-        inputStyle.value = Questions[counter].qAnswer;
-    } else if(Questions[counter].qType[serverStruct] == 'button'){
         
+        inputStyle.value = Questions[counter].qAnswer;
+        
+    } else if(Questions[counter].qType[serverStruct] == 'button'){
         let formButtonStyle = document.querySelectorAll('.form-button-style');
         for(let kk = 0; kk < formButtonStyle.length; kk++){
             formButtonStyle[kk].style.backgroundColor = '#ffffff';
         }
-        if(Questions[counter].qAnswer.length != 0) {
-            formButtonStyle[Questions[counter].qAnswer].style.backgroundColor = '#f08080';
+        if(Questions[counter].qAnswer.length != 0 && !isNaN(Number(Questions[counter].qAnswer))) {
+            formButtonStyle[Number(Questions[counter].qAnswer)].style.backgroundColor = 'lightgrey';
+        } else if(counter > 0 && Questions[counter-1].qAnswer.length != 0 && !isNaN(Number(Questions[counter-1].qAnswer))) {
+            formButtonStyle[Number(Questions[counter-1].qAnswer)].style.backgroundColor = 'lightgrey';
+        } else if(Questions[counter-1].qAnswer.length != 0 && !isNaN(Number(Questions[counter+1].qAnswer))) {
+            formButtonStyle[Number(Questions[counter+1].qAnswer)].style.backgroundColor = 'lightgrey';
         }
-        
+            
     } else if(Questions[counter].qType[serverStruct] == 'list'){
         
         let formButtonStyle = document.querySelector('.form-input-style');

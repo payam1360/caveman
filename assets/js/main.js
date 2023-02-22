@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.assign('register.html');
         })
     }
-    
     const moveright = document.querySelector('.form-go-right');
     moveRight(moveright, input, header, headerTxt, Questions, 'main');
     

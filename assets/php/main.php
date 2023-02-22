@@ -43,11 +43,12 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $campai
         $qAnswer = $Questions[$kk]->qAnswer;
         $visited = $Questions[$kk]->visited;
         $qRequired = $Questions[$kk]->qRequired;
+        $qKey = '';
         
         if($ex) { // update the already exists entry
-            $sql = "UPDATE $table1name SET userId =  '$userId', clientId = '$clientId', campaignId = '$campaignId', campaignTime = '$campaignTime', qIdx = '$qIdx', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired' WHERE qIdx = '$qIdx';";
+            $sql = "UPDATE $table1name SET userId =  '$userId', clientId = '$clientId', campaignId = '$campaignId', campaignTime = '$campaignTime', qIdx = '$qIdx', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired', qKey = '$qKey' WHERE qIdx = '$qIdx';";
         } else {
-            $sql = "INSERT INTO " . $table1name . " (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired) VALUES('" . $userId . "','" . $clientId . "','" . $campaignId . "','" . $campaignTime . "','" . $Questions[$kk]->qIdx . "','" . $Questions[$kk]->qType[0] . "','" . $Questions[$kk]->qContent[0] . "','" . $Questions[$kk]->qAnswer . "','" . $options . "','" . $optionsText . "','" . $Questions[$kk]->visited . "','" . $Questions[$kk]->qRequired . "')";
+            $sql = "INSERT INTO " . $table1name . " (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('" . $userId . "','" . $clientId . "','" . $campaignId . "','" . $campaignTime . "','" . $Questions[$kk]->qIdx . "','" . $Questions[$kk]->qType[0] . "','" . $Questions[$kk]->qContent[0] . "','" . $Questions[$kk]->qAnswer . "','" . $options . "','" . $optionsText . "','" . $Questions[$kk]->visited . "','" . $Questions[$kk]->qRequired . "', '')";
         }
         $conn->query($sql);
         $kk++;
