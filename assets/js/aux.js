@@ -33,6 +33,7 @@ class question {
         Questions.pop();
     }
 };
+
 // AUX functions start here
 // function to set styles for animation
 function moveRight(moveright, input, header, headerTxt, Questions, page){
@@ -123,6 +124,8 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
 }
 
 function transition2Right(header, headerTxt, input, Questions, serverStruct = 0, serverStructOption = 0) {
+    
+    
     headerTxt[0].innerHTML = Questions[counter].qContent[serverStruct];
     // set form 0 type
     choiceTracker[0].push(serverStruct);
@@ -132,33 +135,10 @@ function transition2Right(header, headerTxt, input, Questions, serverStruct = 0,
     let gap = [];
     gap[0] = input[1].getBoundingClientRect().left-input[0].getBoundingClientRect().left;
     gap[1] = input[2].getBoundingClientRect().left-input[1].getBoundingClientRect().left;
-    
-    ChangeForm(input[0], '0.5s', gap[0].toString(), 1, '50%');
-    input[0].addEventListener('transitionend', () => {
-        //Reset
-        ChangeForm(input[0], '0.0s', '0', 0, '0%');
-        resetFormType(input[0]);
-    });
     ChangeForm(header[0], '0.5s', gap[0].toString(), 1, '50%');
-    header[0].addEventListener('transitionend', () => {
-        //Reset
-        ChangeForm(header[0], '0.0s', '0', 0, '0%');
-    });
-    ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
-    input[1].addEventListener('transitionend', () => {
-        //Reset
-        resetFormType(input[1]);
-        setFormType(input[1], Questions[counter], serverStruct, serverStructOption);
-        ChangeForm(input[1], '0s', '0', 1, '50%');
-        restorePrevAnswer(serverStruct, serverStructOption);
-    });
-    
     ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
-    header[1].addEventListener('transitionend', () => {
-        //Reset
-        headerTxt[1].innerHTML = Questions[counter].qContent[serverStruct];
-        ChangeForm(header[1], '0.0s', '0', 1, '50%');
-    });
+    ChangeForm(input[0], '0.5s', gap[0].toString(), 1, '50%');
+    ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
 }
 
 function moveLeft(moveleft, input, header, headerTxt, Questions, page){
@@ -176,10 +156,9 @@ function moveLeft(moveleft, input, header, headerTxt, Questions, page){
                 moveright.style.opacity = 1;
                 moveright.disabled = false;
             }
-            
+            counter--;
             resetDynamicQcontent(page);
             transition2Left(header, headerTxt, input, Questions);
-            counter--;
         });
     }
 }
@@ -202,30 +181,9 @@ function transition2Left(header, headerTxt, input, Questions) {
     gap[0] = input[1].getBoundingClientRect().right-input[2].getBoundingClientRect().right;
     gap[1] = input[0].getBoundingClientRect().right-input[1].getBoundingClientRect().right;
     ChangeForm(input[2], '0.5s', gap[0].toString(), 1, '50%');
-    input[2].addEventListener('transitionend', () => {
-        //Reset
-        ChangeForm(input[2], '0.0s', '0', 0, '0%');
-        resetFormType(input[2]);
-    });
     ChangeForm(header[2], '0.5s', gap[0].toString(), 1, '50%');
-    header[2].addEventListener('transitionend', () => {
-        //Reset
-        ChangeForm(header[2], '0.0s', '0', 0, '0%');
-    });
     ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
-    input[1].addEventListener('transitionend', () => {
-        //Reset
-        resetFormType(input[1]);
-        ChangeForm(input[1], '0.0s', '0', 1, '50%');
-        setFormType(input[1], Questions[counter], serverStruct, serverStructOption);
-        restorePrevAnswer(serverStruct, serverStructOption);
-    });
     ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
-    header[1].addEventListener('transitionend', () => {
-        //Reset
-        headerTxt[1].innerHTML = Questions[counter].qContent[serverStruct];
-        ChangeForm(header[1], '0.0s', '0', 1, '50%');
-    });
 }
 
 
@@ -459,11 +417,21 @@ function resetStart(input, header, headerTxt, page) {
     questionCreate(headerTxt[1], input[1], page);
     // reset the question bar
     input[2].style.width = '0%';
+    input[2].setAttribute('serverStruct', 0);
+    input[2].setAttribute('serverStructOption', 0);
     input[1].style.opacity = 1;
+    input[1].setAttribute('serverStruct', 0);
+    input[1].setAttribute('serverStructOption', 0);
     input[0].style.width = '0%';
+    input[0].setAttribute('serverStruct', 0);
+    input[0].setAttribute('serverStructOption', 0);
     header[2].style.width = '0%';
+    header[2].setAttribute('serverStruct', 0);
     header[1].style.opacity = 1;
+    header[1].setAttribute('serverStruct', 0);
     header[0].style.width = '0%';
+    header[0].setAttribute('serverStruct', 0);
+
     // initialize the input based on form Type
     resetFormType(input[2]);
     resetFormType(input[1]);
@@ -471,10 +439,38 @@ function resetStart(input, header, headerTxt, page) {
     let moveleft = document.querySelector('.form-go-left');
     moveleft.disabled = true;
     moveleft.style.opacity = 0;
+
+    
+    header[0].addEventListener('transitionend', function(event) {
+        ChangeForm(event.target, '0.0s', '0', 0, '0%');
+    });
+    header[1].addEventListener('transitionend', function(event) {
+        headerTxt[1].innerHTML = Questions[counter].qContent[event.target.getAttribute('serverStruct')];
+        ChangeForm(event.target, '0.0s', '0', 1, '50%');
+    });
+    header[2].addEventListener('transitionend', function(event) {
+        ChangeForm(event.target, '0.0s', '0', 0, '0%');
+    });
+
+    input[0].addEventListener('transitionend', function(event) {
+        ChangeForm(event.target, '0.0s', '0', 0, '0%');
+        resetFormType(event.target);
+    });
+    input[1].addEventListener('transitionend', function(event) {
+        resetFormType(event.target);
+        setFormType(event.target, Questions[counter], event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'));
+            ChangeForm(event.target, '0s', '0', 1, '50%');
+            restorePrevAnswer(event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'));
+    });
+    input[2].addEventListener('transitionend', function(event) {
+        ChangeForm(event.target, '0.0s', '0', 0, '0%');
+        resetFormType(event.target);
+    });
+    
 }
 
 function restorePrevAnswer(serverStruct = 0, serverStructOption = 0) {
-    // restore the previous answer on the screen
+    
     if(Questions[counter].qType[serverStruct] == 'text' || Questions[counter].qType[serverStruct] == 'email' || Questions[counter].qType[serverStruct] == 'password') {
         let inputStyle = document.querySelector('.form-input-style');
         
@@ -485,12 +481,8 @@ function restorePrevAnswer(serverStruct = 0, serverStructOption = 0) {
         for(let kk = 0; kk < formButtonStyle.length; kk++){
             formButtonStyle[kk].style.backgroundColor = '#ffffff';
         }
-        if(Questions[counter].qAnswer.length != 0 && !isNaN(Number(Questions[counter].qAnswer))) {
+        if(Questions[counter].qAnswer.length != 0 ) {
             formButtonStyle[Number(Questions[counter].qAnswer)].style.backgroundColor = 'lightgrey';
-        } else if(counter > 0 && Questions[counter-1].qAnswer.length != 0 && !isNaN(Number(Questions[counter-1].qAnswer))) {
-            formButtonStyle[Number(Questions[counter-1].qAnswer)].style.backgroundColor = 'lightgrey';
-        } else if(Questions[counter-1].qAnswer.length != 0 && !isNaN(Number(Questions[counter+1].qAnswer))) {
-            formButtonStyle[Number(Questions[counter+1].qAnswer)].style.backgroundColor = 'lightgrey';
         }
             
     } else if(Questions[counter].qType[serverStruct] == 'list'){
