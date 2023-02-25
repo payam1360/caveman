@@ -135,9 +135,15 @@ function transition2Right(header, headerTxt, input, Questions, serverStruct = 0,
     let gap = [];
     gap[0] = input[1].getBoundingClientRect().left-input[0].getBoundingClientRect().left;
     gap[1] = input[2].getBoundingClientRect().left-input[1].getBoundingClientRect().left;
+    header[0].setAttribute('serverStruct', serverStruct);
     ChangeForm(header[0], '0.5s', gap[0].toString(), 1, '50%');
+    header[1].setAttribute('serverStruct', serverStruct);
     ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
+    input[0].setAttribute('serverStruct', serverStruct);
+    input[0].setAttribute('serverStructOption', serverStructOption);
     ChangeForm(input[0], '0.5s', gap[0].toString(), 1, '50%');
+    input[1].setAttribute('serverStruct', serverStruct);
+    input[1].setAttribute('serverStructOption', serverStructOption);
     ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
 }
 
@@ -180,9 +186,16 @@ function transition2Left(header, headerTxt, input, Questions) {
     let gap = [];
     gap[0] = input[1].getBoundingClientRect().right-input[2].getBoundingClientRect().right;
     gap[1] = input[0].getBoundingClientRect().right-input[1].getBoundingClientRect().right;
+    
+    input[2].setAttribute('serverStruct', serverStruct);
+    input[2].setAttribute('serverStructOption', serverStructOption);
     ChangeForm(input[2], '0.5s', gap[0].toString(), 1, '50%');
+    header[2].setAttribute('serverStruct', serverStruct);
     ChangeForm(header[2], '0.5s', gap[0].toString(), 1, '50%');
+    input[1].setAttribute('serverStruct', serverStruct);
+    input[1].setAttribute('serverStructOption', serverStructOption);
     ChangeForm(input[1], '0.5s', gap[1].toString(), 0, '0%');
+    header[1].setAttribute('serverStruct', serverStruct);
     ChangeForm(header[1], '0.5s', gap[1].toString(), 0, '0%');
 }
 
