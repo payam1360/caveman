@@ -1,9 +1,5 @@
 <?php
 
-define("DBG", false);
-define("MAX_cnt", 2);
-
-
 function validateUserCredentials($userInfo) {
        
     $servername  = "127.0.0.1";
@@ -29,9 +25,10 @@ function validateUserCredentials($userInfo) {
         if(password_verify($userInfo[1]->qAnswer, $password->fetch_column(0))) {
             $sql = "SELECT userId, name " . "FROM " . $tablename . " WHERE email = '" . $userInfo[0]->qAnswer . "';";
             $userId = $conn->query($sql);
+            $data = $userId->fetch_assoc();
+            $result['userName'] = $data['name'];
+            $result['userId']   = $data['userId'];
             $result['status']   = 0; // log in verified
-            $result['userName'] = $userId->fetch_column(1);
-            $result['userId']   = $userId->fetch_column(0);
         } else {
             $result['status']   = 1; // wrong password
             $result['userName'] = '';

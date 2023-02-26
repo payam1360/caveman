@@ -27,7 +27,6 @@ const config = {
 
 // event delegate for click on the dynamic button elements
 
-
 document.addEventListener('DOMContentLoaded', () => {
   "use strict";
     /* define the class for questions*/
@@ -43,20 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx,
       config
     );
-    // log in button handle
-    const login = document.querySelector('.login');
-    if (login) {
-        login.addEventListener('click', function(event) {
-            window.location.assign('login.html');
-        })
-    }
-    // register button handle
-    const register = document.querySelector('.register');
-    if (register) {
-        register.addEventListener('click', function(event) {
-            window.location.assign('register.html');
-        })
-    }
     const moveright = document.querySelector('.form-go-right');
     moveRight(moveright, input, header, headerTxt, Questions, 'main');
     

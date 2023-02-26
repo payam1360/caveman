@@ -171,7 +171,7 @@ function QuestionBackendForm() {
                                 [["YES", "NO"], [""]],
                                 [["YES", "NO"], [""]],
                                 [["YES", "NO"]],
-                                [["All Done!"]]
+                                [["Your campaign is added to your account."]]
                            ];
     
     $data['qRequired'] = [1, 0, 0, 1, 1, 1, 1, 1, 1];

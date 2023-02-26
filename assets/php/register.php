@@ -15,6 +15,27 @@ require '../../vendor/phpmailer/phpmailer/src/SMTP.php';
 require '../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require '../../vendor/phpmailer/phpmailer/src/Exception.php';
 
+function createClientIdandCampaign($email, $numAllocation) {
+    
+    $servername  = "127.0.0.1";
+    $loginname   = "root";
+    $password    = "@Ssia123";
+    $dbname      = "Users";
+    $table1name  = "userAllocation";
+    $table2name  = "authentication";
+    $conn        = new mysqli($servername, $loginname, $password, $dbname);
+    $sql         = "SELECT userId FROM $table2name WHERE email = '$email';";
+    $data        = $conn->query($sql);
+    $userId      = $data->fetch_column(0);
+    for($kk = 0; $kk < $numAllocation; $kk++){
+        $clientId    = mt_rand(10000, 99999);
+        $campaignId  = substr(md5(rand()), 0, 7);
+        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, used, completed) VALUES('$userId','$clientId','$campaignId', '0', '0');";
+        $conn->query($sql);
+    }
+    $conn->close();
+    
+}
 
 function registerUserCredentials($password, $email) {
        
@@ -140,6 +161,7 @@ if($userdata[EMAIL]->qAnswer != '' && $userdata[VERC]->qAnswer == '') { // if em
 if($verified == 1) {
     if($userdata[PASS]->qAnswer == $userdata[PASSC]->qAnswer && $userdata[PASS]->qAnswer != '') {
         registerUserCredentials($userdata[PASS]->qAnswer, $userdata[EMAIL]->qAnswer);
+        createClientIdandCampaign($userdata[EMAIL]->qAnswer, 10);
         $data['status'] = 0; // password good ... user is registered
     } elseif($userdata[PASS]->qAnswer != $userdata[PASSC]->qAnswer && $userdata[PASS]->qAnswer != '') {
         $data['status'] = 4; // password not matching 

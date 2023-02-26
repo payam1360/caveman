@@ -1,20 +1,32 @@
 <?php
 
 
-function saveUserDataIntoDB($Questions, $qIdx) {
+function buildClientPage($userId, $clientId, $campaignId){
+    $servername  = "127.0.0.1";
+    $loginname   = "root";
+    $password    = "@Ssia123";
+    $dbname      = "Users";
+    $tablename   = "Users";
+    $conn        = new mysqli($servername, $loginname, $password, $dbname);
+    copy("../../userPages/template.html","../../userPages/$clientId$campaignId.html");
+    
+}
+
+
+
+function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId) {
        
     $servername  = "127.0.0.1";
     $loginname   = "root";
     $password    = "@Ssia123";
     $dbname      = "Users";
     $tablename   = "Users";
+    $table1name  = "userAllocation";
     $flag        = false;
     // Create connection
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
     // Check connection
-    // get the user ID
-    session_start();
-    $userId = $_SESSION['userId'];
+
     // question answer is empty
     $qAnswer = "";
     // get question type
@@ -53,27 +65,50 @@ function saveUserDataIntoDB($Questions, $qIdx) {
         $options = "";
         $optionsText = "";
     }
-    
-    // set campaignId
-    if($qIdx == 0) {
-        $campaignId = mt_rand();
-        $campaignTime = date("Y-m-d", time());
+    // first check if there is incomplete campaigns
+    $sql = "SELECT clientId, campaignId FROM $table1name WHERE userId = '$userId' AND used = '1' AND completed = '0';";
+    $data = $conn->query($sql);
+    if($data->num_rows == 1 && $complete == 0) {
+        $data = $data->fetch_assoc();
+        $clientId = $data['clientId'];
+        $campaignId = $data['campaignId'];
+        $campaignTime = date("Y-m-d");
+        $sql = "INSERT INTO $tablename (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId','$campaignId', '$campaignTime','$qIdx','$qType','$qContent','$qAnswer','$options','$optionsText','$visited','$qRequired','$qKey')";
+        $conn->query($sql);
+    } elseif($complete == 1) {
+        $data = $data->fetch_assoc();
+        $clientId = $data['clientId'];
+        $campaignId = $data['campaignId'];
+        $campaignTime = date("Y-m-d");
+        $sql         = "UPDATE $table1name SET completed = '1' WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId';";
+        $conn->query($sql);
+        $sql = "INSERT INTO $tablename (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId','$campaignId', '$campaignTime','$qIdx','$qType','$qContent','$qAnswer','$options','$optionsText','$visited','$qRequired','$qKey')";
+        $conn->query($sql);
+    } else {
+        $sql = "SELECT clientId, campaignId FROM $table1name WHERE userId = '$userId' AND used = '0' AND completed = '0';";
+        $data = $conn->query($sql);
+        $data = $data->fetch_assoc();
+        $clientId = $data['clientId'];
+        $campaignId = $data['campaignId'];
+        $campaignTime = date("Y-m-d");
+        $sql         = "UPDATE $table1name SET used = '1' WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId';";
+        $conn->query($sql);
+        $sql = "INSERT INTO $tablename (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId','$campaignId', '$campaignTime','$qIdx','$qType','$qContent','$qAnswer','$options','$optionsText','$visited','$qRequired','$qKey')";
+        $conn->query($sql);
     }
-    // set clientId
-    if($qIdx == 0) {
-        $clientId = mt_rand();
-    }
-        
-    $sql = "INSERT INTO $tablename (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId','$campaignId', '$campaignTime','$qIdx','$qType','$qContent','$qAnswer','$options','$optionsText','$visited','$qRequired','$qKey')";
-    $conn->query($sql);
+    $Info['clientId'] = $clientId;
+    $Info['campaignId'] = $campaignId;
     $conn->close();
+    return $Info;
 }
 
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
 $userdata       = json_decode($_POST['userInfo']);
-
+// get the user ID
+session_start();
+$userId         = $_SESSION['userId'];
 if($userdata->data[0]->qAnswer == '0') {
     $data['MAX_cnt'] = 7;
 } elseif($userdata->data[0]->qAnswer == '1') {
@@ -108,11 +143,12 @@ if($userdata->data[0]->qAnswer == '') {
 
 if($data['MAX_cnt']  == $userdata->counter && $userdata->data[$userdata->counter - 1]->qAnswer == 1 ) {
     $data['status'] = 10; // keep asking
-    saveUserDataIntoDB($userdata->data, $userdata->qIdx);
+    saveUserDataIntoDB($userdata->data, $userdata->qIdx, 0, $userId);
 } elseif($data['MAX_cnt'] == $userdata->counter && $userdata->data[$userdata->counter - 1]->qAnswer == 0) {
     $data['status'] = 11; // End the form builder
     $data['MAX_cnt'] = 9;
-    saveUserDataIntoDB($userdata->data, $userdata->qIdx);
+    $Info = saveUserDataIntoDB($userdata->data, $userdata->qIdx, 1, $userId);
+    buildClientPage($userId, $Info['clientId'], $Info['campaignId']);
 }
 echo json_encode($data);
 

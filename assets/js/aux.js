@@ -480,6 +480,21 @@ function resetStart(input, header, headerTxt, page) {
         resetFormType(event.target);
     });
     
+    // log in button handle
+    const login = document.querySelector('.login');
+    if (login) {
+        login.addEventListener('click', function(event) {
+            window.location.assign('login.html');
+        })
+    }
+    // register button handle
+    const register = document.querySelector('.register');
+    if (register) {
+        register.addEventListener('click', function(event) {
+            window.location.assign('register.html');
+        })
+    }
+    
 }
 
 function restorePrevAnswer(serverStruct = 0, serverStructOption = 0) {
@@ -545,7 +560,6 @@ function callLoginUser(header, headerTxt, querySelIn, inputDataBlob){
             } else if(data.status == 2) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 2);
             }
-            
         }
     };
     // sending the request
@@ -631,6 +645,12 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
             else if(data.status == 11) {
                 counter = MAX_cnt - 1;
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+                let moveright = document.querySelector('.form-go-right');
+                moveright.style.opacity = 0;
+                moveright.disabled = true;
+                let moveleft = document.querySelector('.form-go-left');
+                moveright.style.opacity = 0;
+                moveright.disabled = true;
             }
         }
     };
