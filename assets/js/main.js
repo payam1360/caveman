@@ -34,9 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let input = document.querySelectorAll('.form-input');
     let header = document.querySelectorAll('.form-header');
     let headerTxt = document.querySelectorAll('.form-header-style');
-
+    let clientId = document.querySelector('.clientId');
+    let campaignId = document.querySelector('.campaignId');
+    let userId = document.querySelector('.userId');
+    let userPage = 0;
+    if(clientId && campaignId && userId) {
+        userPage = userId.innerHTML + clientId.innerHTML + campaignId.innerHTML;
+    }
     // initialize the first question and init the load page
-    resetStart(input, header, headerTxt, 'main');
+    resetStart(input, header, headerTxt, 'main', userPage);
     // generate the chart
     progChart = new Chart(
       ctx,

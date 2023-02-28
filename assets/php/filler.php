@@ -1,7 +1,5 @@
 <?php
 
-define("DBG", false);
-define("MAX_cnt", 3);
 
 
 function getPublicForm() {
@@ -228,6 +226,59 @@ function clientsSearchForm() {
     $data['MAX_cnt'] = 2;
     return $data;
 }
+
+
+
+
+function clientPageLoad($page) {
+    session_start();
+    $userId      = substr($page, 0, 6);
+    $clientId    = substr($page, 6, 5);
+    $campaignId  = substr($page, 11, 7);
+    $servername  = "127.0.0.1";
+    $loginname   = "root";
+    $password    = "@Ssia123";
+    $dbname      = "Users";
+    $tablename   = "Users";
+    $conn        = new mysqli($servername, $loginname, $password, $dbname);
+    $sql         = "SELECT qContent, qType, qIdx, options, optionsText, qRequired, qKey FROM $tablename WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId';";
+    $info = $conn->query($sql);
+    $num_rows = $info->num_rows;
+    $pulledRow = $info->fetch_assoc();
+    $qContent = array($pulledRow['qContent']);
+    
+    $qType = array($pulledRow['qType']);
+    $qIdx = array(0);
+    $options = array($pulledRow['options']);
+    $optionsText = array($pulledRow['optionsText']);
+    $qRequired = array($pulledRow['qRequired']);
+    $qKey = array($pulledRow['qKey']);
+    
+    for($kk = 1; $kk < $num_rows; $kk++) {
+        $pulledRow = $info->fetch_assoc();
+        array_push($qContent, $pulledRow['qContent']);
+        array_push($qType, $pulledRow['qType']);
+        array_push($qIdx, $kk);
+        array_push($options, $pulledRow['options']);
+        array_push($optionsText, $pulledRow['optionsText']);
+        array_push($qRequired, $pulledRow['qRequired']);
+        array_push($qKey, $pulledRow['qKey']);
+    }
+    
+    $data['qContent'] = [$qContent];
+    $data['qType'] = [$qType];
+    $data['qIdx'] = [$qIdx];
+    $data['options'] = [[$options]];
+    $data['optionsText'] = [[$optionsText]];
+    $data['qRequired'] = [$qRequired];
+    $data['qKey'] = [$qKey];
+
+    $data['MAX_cnt'] = $num_rows;
+    return $data;
+}
+
+
+
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
@@ -244,6 +295,8 @@ if($page == 'login') {
     $data      = analysisForm();
 } elseif($page == 'clients') {
     $data      = clientsSearchForm();
+} else {
+    $data      = clientPageLoad($page);
 }
 echo json_encode($data);
 

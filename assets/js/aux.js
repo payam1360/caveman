@@ -425,9 +425,9 @@ function resetFormType(querySelIn){
     }
 }
 
-function resetStart(input, header, headerTxt, page) {
+function resetStart(input, header, headerTxt, page, userPage = 0) {
 
-    questionCreate(headerTxt[1], input[1], page);
+    questionCreate(headerTxt[1], input[1], page, userPage);
     // reset the question bar
     input[2].style.width = '0%';
     input[2].setAttribute('serverStruct', 0);
@@ -708,11 +708,12 @@ function getUserInfo(userTxt, welcomeTxt){
 
 
 // this function eventually comes from user costomization and design of his app.
-function questionCreate(headerTxt, input, page){
-
+function questionCreate(headerTxt, input, page, userPage){
+    let request = [];
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            console.log(this.response);
             let data = JSON.parse(this.response);
             MAX_cnt = data.MAX_cnt;
             
@@ -733,9 +734,15 @@ function questionCreate(headerTxt, input, page){
         }
     };
     // sending the request
-    xmlhttp.open("POST", "assets/php/filler.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    let request = "request="+JSON.stringify(page);
+    if(userPage == 0){
+        xmlhttp.open("POST", "assets/php/filler.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        request = "request="+JSON.stringify(page);
+    } else {
+        xmlhttp.open("POST", "../assets/php/filler.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        request = "request="+JSON.stringify(userPage);
+    }
     xmlhttp.send(request);
 }
 

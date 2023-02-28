@@ -8,8 +8,19 @@ function buildClientPage($userId, $clientId, $campaignId){
     $dbname      = "Users";
     $tablename   = "Users";
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
-    copy("../../userPages/template.html","../../userPages/$clientId$campaignId.html");
-    
+    copy("../../userPages/template.html","../../userPages/$userId$clientId$campaignId.html");
+    $fp = fopen("../../userPages/$userId$clientId$campaignId.html", 'a+');
+    $text = "<p class='userId'>$userId</p>\n";
+    fwrite($fp, $text);
+    $text = "<p class='clientId'>$clientId</p>\n";
+    fwrite($fp, $text);
+    $text = "<p class='campaignId'>$campaignId</p>\n";
+    fwrite($fp, $text);
+    $text = "</body>\n";
+    fwrite($fp, $text);
+    $text = "</html>\n";
+    fwrite($fp, $text);
+    fclose($fp);
 }
 
 
