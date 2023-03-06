@@ -245,33 +245,33 @@ function clientPageLoad($page) {
     $info = $conn->query($sql);
     $num_rows = $info->num_rows;
     $pulledRow = $info->fetch_assoc();
-    $qContent = array($pulledRow['qContent']);
     
-    $qType = array($pulledRow['qType']);
+    $qContent = array(array($pulledRow['qContent']));
+    $qType = array(array($pulledRow['qType']));
     $qIdx = array(0);
-    $options = array($pulledRow['options']);
-    $optionsText = array($pulledRow['optionsText']);
+    $options = array(array(array($pulledRow['options'])));
+    $optionsText = array(array(array($pulledRow['optionsText'])));
     $qRequired = array($pulledRow['qRequired']);
-    $qKey = array($pulledRow['qKey']);
+    $qKey = array(array($pulledRow['qKey']));
     
     for($kk = 1; $kk < $num_rows; $kk++) {
         $pulledRow = $info->fetch_assoc();
-        array_push($qContent, $pulledRow['qContent']);
-        array_push($qType, $pulledRow['qType']);
+        array_push($qContent, array($pulledRow['qContent']));
+        array_push($qType, array($pulledRow['qType']));
         array_push($qIdx, $kk);
-        array_push($options, $pulledRow['options']);
-        array_push($optionsText, $pulledRow['optionsText']);
+        array_push($options, array(array($pulledRow['options'])));
+        array_push($optionsText, array(array($pulledRow['optionsText'])));
         array_push($qRequired, $pulledRow['qRequired']);
-        array_push($qKey, $pulledRow['qKey']);
+        array_push($qKey, array($pulledRow['qKey']));
     }
     
-    $data['qContent'] = [$qContent];
-    $data['qType'] = [$qType];
-    $data['qIdx'] = [$qIdx];
-    $data['options'] = [[$options]];
-    $data['optionsText'] = [[$optionsText]];
-    $data['qRequired'] = [$qRequired];
-    $data['qKey'] = [$qKey];
+    $data['qContent'] = $qContent;
+    $data['qType'] = $qType;
+    $data['qIdx'] = $qIdx;
+    $data['options'] = $options;
+    $data['optionsText'] = $optionsText;
+    $data['qRequired'] = $qRequired;
+    $data['qKey'] = $qKey;
 
     $data['MAX_cnt'] = $num_rows;
     return $data;
