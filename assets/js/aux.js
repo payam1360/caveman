@@ -219,7 +219,7 @@ function callsubmitUserData(page){
         }
         if(allReq) {
             
-            submitUserData(Questions, page);
+            submitUserData(Questions, page, Questions[0].userId);
         }
     }
 }
@@ -663,10 +663,11 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
 }
 
 // submitting the form
-function submitUserData(inputDataBlob, page) {
+function submitUserData(inputDataBlob, page, userPage) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            console.log(this.response);
             let data = JSON.parse(this.response);
             if(data.status == 0 && page == 'main'){
                 plotBmi(data.bmi);
@@ -683,9 +684,18 @@ function submitUserData(inputDataBlob, page) {
     };
     
     // sending the request
-    xmlhttp.open("POST", "assets/php/" + page + ".php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    var userdata = "userInfo="+JSON.stringify(inputDataBlob);
+    if(userPage == 0){
+        // sending the request
+        xmlhttp.open("POST", "assets/php/" + page + ".php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var userdata = "userInfo="+JSON.stringify(inputDataBlob);
+    } else {
+        // sending the request
+        xmlhttp.open("POST", "../assets/php/" + page + ".php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var userdata = "userInfo="+JSON.stringify(inputDataBlob);
+    }
+    
     xmlhttp.send(userdata);
 }
 
@@ -713,7 +723,6 @@ function questionCreate(headerTxt, input, page, userPage){
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.response);
             let data = JSON.parse(this.response);
             MAX_cnt = data.MAX_cnt;
             
@@ -723,7 +732,7 @@ function questionCreate(headerTxt, input, page, userPage){
                 Obj.popData();
             }
             for(let kk = 0; kk < MAX_cnt; kk++){
-                Obj = new question(kk, data.qContent[kk], '', data.qIdx[kk], data.qType[kk],
+                Obj = new question(userPage, data.qContent[kk], '', data.qIdx[kk], data.qType[kk],
                                    data.options[kk], data.optionsText[kk], false, data.qRequired[kk]);
                 Obj.pushData(Obj);
             }

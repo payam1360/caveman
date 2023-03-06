@@ -251,7 +251,7 @@ function clientPageLoad($page) {
     $qIdx = array(0);
     $options = array(array(array($pulledRow['options'])));
     $optionsText = array(array(array($pulledRow['optionsText'])));
-    $qRequired = array($pulledRow['qRequired']);
+    $qRequired = array((int)$pulledRow['qRequired']);
     $qKey = array(array($pulledRow['qKey']));
     
     for($kk = 1; $kk < $num_rows; $kk++) {
@@ -261,10 +261,17 @@ function clientPageLoad($page) {
         array_push($qIdx, $kk);
         array_push($options, array(array($pulledRow['options'])));
         array_push($optionsText, array(array($pulledRow['optionsText'])));
-        array_push($qRequired, $pulledRow['qRequired']);
+        array_push($qRequired, (int)$pulledRow['qRequired']);
         array_push($qKey, array($pulledRow['qKey']));
     }
-    
+    array_push($qContent, array(""));
+    array_push($qType, array('message'));
+    array_push($qIdx, $kk);
+    array_push($options, array(array('fa-regular fa-thumbs-up')));
+    array_push($optionsText, array(array('view your results below!')));
+    array_push($qRequired, 0);
+    array_push($qKey, array(''));
+
     $data['qContent'] = $qContent;
     $data['qType'] = $qType;
     $data['qIdx'] = $qIdx;
@@ -273,7 +280,7 @@ function clientPageLoad($page) {
     $data['qRequired'] = $qRequired;
     $data['qKey'] = $qKey;
 
-    $data['MAX_cnt'] = $num_rows;
+    $data['MAX_cnt'] = $num_rows+1;
     return $data;
 }
 
