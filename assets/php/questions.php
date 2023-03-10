@@ -25,7 +25,7 @@ function buildClientPage($userId, $clientId, $campaignId){
 
 
 
-function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId) {
+function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
        
     $servername  = "127.0.0.1";
     $loginname   = "root";
@@ -84,7 +84,7 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId) {
         $clientId = $data['clientId'];
         $campaignId = $data['campaignId'];
         $campaignTime = date("Y-m-d");
-        $sql = "INSERT INTO $tablename (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId','$campaignId', '$campaignTime','$qIdx','$qType','$qContent','$qAnswer','$options','$optionsText','$visited','$qRequired','$qKey')";
+        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId', '$ip', '$campaignId', '$campaignTime', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
         $conn->query($sql);
     } elseif($complete == 1) {
         $data = $data->fetch_assoc();
@@ -93,7 +93,7 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId) {
         $campaignTime = date("Y-m-d");
         $sql         = "UPDATE $table1name SET completed = '1' WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId';";
         $conn->query($sql);
-        $sql = "INSERT INTO $tablename (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId','$campaignId', '$campaignTime','$qIdx','$qType','$qContent','$qAnswer','$options','$optionsText','$visited','$qRequired','$qKey')";
+        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId', '$ip', '$campaignId', '$campaignTime', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
         $conn->query($sql);
     } else {
         $sql = "SELECT clientId, campaignId FROM $table1name WHERE userId = '$userId' AND used = '0' AND completed = '0';";
@@ -104,7 +104,7 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId) {
         $campaignTime = date("Y-m-d");
         $sql         = "UPDATE $table1name SET used = '1' WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId';";
         $conn->query($sql);
-        $sql = "INSERT INTO $tablename (userId, clientId, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId','$campaignId', '$campaignTime','$qIdx','$qType','$qContent','$qAnswer','$options','$optionsText','$visited','$qRequired','$qKey')";
+        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId', '$ip', '$campaignId', '$campaignTime', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
         $conn->query($sql);
     }
     $Info['clientId'] = $clientId;
@@ -113,10 +113,27 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId) {
     return $Info;
 }
 
+function getRealIpAddr()
+{
+    if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+    {
+      $ip=$_SERVER['HTTP_CLIENT_IP'];
+    }
+    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
+    {
+      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    else
+    {
+      $ip=$_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
 $userdata       = json_decode($_POST['userInfo']);
+$ip            = getRealIpAddr();
 // get the user ID
 session_start();
 $userId         = $_SESSION['userId'];
@@ -154,11 +171,11 @@ if($userdata->data[0]->qAnswer == '') {
 
 if($data['MAX_cnt']  == $userdata->counter && $userdata->data[$userdata->counter - 1]->qAnswer == 1 ) {
     $data['status'] = 10; // keep asking
-    saveUserDataIntoDB($userdata->data, $userdata->qIdx, 0, $userId);
+    saveUserDataIntoDB($userdata->data, $userdata->qIdx, 0, $userId, $ip);
 } elseif($data['MAX_cnt'] == $userdata->counter && $userdata->data[$userdata->counter - 1]->qAnswer == 0) {
     $data['status'] = 11; // End the form builder
     $data['MAX_cnt'] = 9;
-    $Info = saveUserDataIntoDB($userdata->data, $userdata->qIdx, 1, $userId);
+    $Info = saveUserDataIntoDB($userdata->data, $userdata->qIdx, 1, $userId, $ip);
     buildClientPage($userId, $Info['clientId'], $Info['campaignId']);
 }
 echo json_encode($data);
