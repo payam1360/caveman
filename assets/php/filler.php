@@ -40,6 +40,14 @@ function getPublicForm() {
                            ];
     
     $data['qRequired'] = [1, 1, 1, 1, 1, 0];
+    $data['qKey'] = [
+                        [''],
+                        ['gain muscle'],
+                        ['weight'],
+                        ['height'],
+                        ['sleep'],
+                        ['']
+                    ];
     $data['MAX_cnt'] = 6;
     return $data;
 }
@@ -70,6 +78,11 @@ function getLoginForm() {
                            ];
     
     $data['qRequired'] = [1, 1, 0];
+    $data['qKey'] = [
+                        ['email'],
+                        ['password'],
+                        ['']
+                    ];
     $data['MAX_cnt'] = 3;
     return $data;
 }
@@ -81,7 +94,8 @@ function getRegisterForm() {
                             ["3. verification code:"],
                             [""],
                             ["4. enter your password:"],
-                            ["5. re-enter your password:"], [""]
+                            ["5. re-enter your password:"],
+                            [""]
                         ];
     $data['qType'] = [
                         ["text"],
@@ -117,6 +131,16 @@ function getRegisterForm() {
                                 [["password not matching"], ["All done! please login"]]
                             ];
     $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1];
+    $data['qKey'] = [
+                        ['name'],
+                        ['email'],
+                        [''],
+                        [''],
+                        [''],
+                        ['password'],
+                        ['password'],
+                        ['']
+                    ];
     $data['MAX_cnt'] = 8;
     return $data;
 }
@@ -173,6 +197,17 @@ function QuestionBackendForm() {
                            ];
     
     $data['qRequired'] = [1, 0, 0, 1, 1, 1, 1, 1, 1];
+    $data['qKey'] = [
+                        [''],
+                        [''],
+                        [''],
+                        [''],
+                        [''],
+                        [''],
+                        [''],
+                        [''],
+                        ['']
+                    ];
     $data['MAX_cnt'] = 9;
     return $data;
 }
@@ -200,6 +235,11 @@ function analysisForm() {
                                 [["AI", "Nutritionist"]]
     ];
     $data['qRequired'] = [1, 1, 1];
+    $data['qKey'] = [
+                        [''],
+                        [''],
+                        ['']
+                    ];
     $data['MAX_cnt'] = 3;
     return $data;
 }
@@ -223,6 +263,10 @@ function clientsSearchForm() {
                                 [[""]]
                            ];
     $data['qRequired'] = [1, 1];
+    $data['qKey'] = [
+                        [''],
+                        ['']
+                    ];
     $data['MAX_cnt'] = 2;
     return $data;
 }

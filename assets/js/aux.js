@@ -15,7 +15,7 @@ let choiceTracker = [[0], [0]];
 
 // user <-> client class definition
 class question {
-    constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired){
+    constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired, qKey){
         this.qContent = qContent; // must be a text string
         this.qAnswer = qAnswer;
         this.qIdx = qIdx;
@@ -25,6 +25,7 @@ class question {
         this.optionsText = optionsText;
         this.visited = visited;
         this.userId = userId;
+        this.qKey   = qKey;
     }
     pushData (){
         Questions.push(this);
@@ -688,12 +689,14 @@ function submitUserData(inputDataBlob, page, userPage) {
         // sending the request
         xmlhttp.open("POST", "assets/php/" + page + ".php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        var userdata = "userInfo="+JSON.stringify(inputDataBlob);
+        let inputDataAndUserBlob = {'data': inputDataBlob, 'IdInfo': userPage};
+        var userdata = "userInfo="+JSON.stringify(inputDataAndUserBlob);
     } else {
         // sending the request
         xmlhttp.open("POST", "../assets/php/" + page + ".php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        var userdata = "userInfo="+JSON.stringify(inputDataBlob);
+        let inputDataAndUserBlob = {'data': inputDataBlob, 'IdInfo': userPage};
+        var userdata = "userInfo="+JSON.stringify(inputDataAndUserBlob);
     }
     
     xmlhttp.send(userdata);
@@ -733,7 +736,7 @@ function questionCreate(headerTxt, input, page, userPage){
             }
             for(let kk = 0; kk < MAX_cnt; kk++){
                 Obj = new question(userPage, data.qContent[kk], '', data.qIdx[kk], data.qType[kk],
-                                   data.options[kk], data.optionsText[kk], false, data.qRequired[kk]);
+                                   data.options[kk], data.optionsText[kk], false, data.qRequired[kk], data.qKey[kk]);
                 Obj.pushData(Obj);
             }
             // initialize header
