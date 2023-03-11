@@ -41,28 +41,24 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
     if (moveright) {
         moveright.addEventListener('click', function(event) {
             // validate the current input
+            let serverStruct = choiceTracker[0].pop();
             let valid      = false;
-            let qTypeLen   =  Questions[counter].qType.length;
             let inputStyle = document.querySelector('.form-input-style');
-            for(let kk = 0; kk < qTypeLen; kk++) {
-                if(Questions[counter].qType[kk] != 'undefined') {
-                    if(Questions[counter].qType[kk] != 'message') {
-                        valid = inputStyle.validity.valid;
-                    }
-                    let userResponse = [];
-                    if(Questions[counter].qType[kk] == 'button') {
-                        userResponse = Questions[counter].qAnswer;
-                    } else if(Questions[counter].qType[kk] != 'message') {
-                        userResponse = inputStyle.value;
-                    }
-                    
-                    // get the answer validation
-                    valid = validate_input(valid, Questions[counter].qType[kk], Questions[counter].qRequired, userResponse);
-                    if(valid == true){
-                        Questions[counter].qAnswer = userResponse;
-                    }
-                }
+            if(Questions[counter].qType[serverStruct] != 'message') {
+                valid = inputStyle.validity.valid;
             }
+            let userResponse = [];
+            if(Questions[counter].qType[serverStruct] == 'button') {
+                userResponse = Questions[counter].qAnswer;
+            } else if(Questions[counter].qType[serverStruct] != 'message') {
+                userResponse = inputStyle.value;
+            }
+            // get the answer validation
+            valid = validate_input(valid, Questions[counter].qType[serverStruct], Questions[counter].qRequired, userResponse);
+            if(valid == true){
+                Questions[counter].qAnswer = userResponse;
+            }
+            choiceTracker[0].push(serverStruct);
             if(valid == true && Questions[counter].visited == false) {
                 Questions[counter].visited = true;
                 prog++;
@@ -248,7 +244,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
         case 'text':
             newIn = document.createElement('input');
             newIn.setAttribute('class', 'form-input-style');
-            newIn.setAttribute('pattern', '[A-Za-z0-9\\s\\?;-]{1,}');
+            newIn.setAttribute('pattern', '[A-Za-z0-9 _.,!#@"\'/$\\s\\?;-]{1,}');
             newIn.setAttribute('required', userStruct.qRequired);
             newIn.setAttribute('type', userStruct.qType[serverStruct]);
             querySelIn.appendChild(newIn);
@@ -668,7 +664,6 @@ function submitUserData(inputDataBlob, page, userPage) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.response);
             let data = JSON.parse(this.response);
             if(data.status == 0 && page == 'main'){
                 plotBmi(data.bmi);
