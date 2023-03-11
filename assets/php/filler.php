@@ -214,33 +214,38 @@ function QuestionBackendForm() {
 
 function analysisForm() {
     $data['qContent'] = [
-                            ["1. How do you want food analysis be done? (Macro/Mico nutrients)"],
+                            ["1. How do you want food analysis be done?"],
                             ["2. How do you want meal planning be done?"],
-                            ["3. How do like to perform sleep analysis for your clients"]
+                            ["3. How do like to perform sleep analysis for your clients"],
+                            [""]
                         ];
     $data['qType'] = [
                             ["button"],
                             ["button"],
-                            ["button"]
+                            ["button"],
+                            ["message"]
                      ];
-    $data['qIdx'] = [0, 1, 2];
+    $data['qIdx'] = [0, 1, 2, 3];
     $data['options'] = [
                             [["fa-solid fa-brain", "fa-brands fa-nutritionix"]],
                             [["fa-solid fa-brain", "fa-brands fa-nutritionix"]],
-                            [["fa-solid fa-brain", "fa-brands fa-nutritionix"]]
+                            [["fa-solid fa-brain", "fa-brands fa-nutritionix"]],
+                            [["fa-regular fa-circle-check"]],
                        ];
     $data['optionsText'] = [
                                 [["AI", "Nutritionist"]],
                                 [["AI", "Nutritionist"]],
-                                [["AI", "Nutritionist"]]
+                                [["AI", "Nutritionist"]],
+                                [["your preferences are saved!"]]
     ];
-    $data['qRequired'] = [1, 1, 1];
+    $data['qRequired'] = [1, 1, 1, 1];
     $data['qKey'] = [
+                        [''],
                         [''],
                         [''],
                         ['']
                     ];
-    $data['MAX_cnt'] = 3;
+    $data['MAX_cnt'] = 4;
     return $data;
 }
 
