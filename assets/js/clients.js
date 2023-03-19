@@ -28,9 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const moveleft = document.querySelector('.form-go-left');
     moveLeft(moveleft, input, header, headerTxt, Questions);
     
-    const clients = document.querySelectorAll('.client-list');
-    listClients(clients, Questions);
-    
+    fetchClients();
 });
 
 

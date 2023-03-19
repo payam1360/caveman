@@ -964,20 +964,74 @@ function displayMeal(){
 }
 
 
-// function to handle listing clients
-function listClients(clients, Questions) {
-    if(clients) {
-        clients.forEach(item => item.addEventListener('click', function(event) {
-            item.style.width = '60%';
-            item.style.height = '85%';
-            item.style.bottom = '5%';
-            item.style.borderRadius = '1%'
-            item.style.backgroundColor = 'lightblue';
-            item.style.position = 'fixed';
-            item.style.zIndex = '2';
-            item.style.opacity = 0.8;
-        }))
+function fetchClients() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            user = JSON.parse(this.response);
+            let username = user.username;
+            let userid = user.userid;
+            constructClients(userid);
+        }
+    };
+    // sending the request
+    xmlhttp.open("GET", "assets/php/admin.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send();
+}
+
+function constructClients(userid){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            results = JSON.parse(this.response);
+            displayClients(results);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/results.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'userId': userid};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+}
+function displayClients(results) {
+    
+    let parentNode = document.querySelector('.client-list-parent');
+    for(let kk = 0; kk < results.clients.length; kk++) {
+        let mDiv = document.createElement('div');
+        mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
+        mDiv.addEventListener('click', function(){
+            this.style.width = '60%';
+            this.style.height = '85%';
+            this.style.bottom = '5%';
+            this.style.borderRadius = '1%'
+            this.style.backgroundColor = 'white';
+            this.style.position = 'fixed';
+            this.style.zIndex = '2';
+            this.style.opacity = 0.8;
+            displayClientsDetails(results);
+        });
+        nameP = document.createElement('p');
+        genderP = document.createElement('p');
+        goalP = document.createElement('p');
+        nameP.innerHTML = results.clients[kk];
+        nameP.style.display = 'inline-block';
+        nameP.style.color = 'mediumseagreen';
+        genderP.style.display = 'inline-block';
+        genderP.style.color = 'lightblue';
+        genderP.innerHTML = results.weights[kk];
+        goalP.style.display = 'inline-block';
+        goalP.style.color = 'grey';
+        goalP.innerHTML = results.heights[kk];
+        mDiv.appendChild(nameP);
+        mDiv.appendChild(genderP);
+        mDiv.appendChild(goalP);
+        parentNode.appendChild(mDiv);
     }
     
 }
 
+function displayClientsDetails(results) {
+    console.log(results);
+}
