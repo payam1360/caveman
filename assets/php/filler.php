@@ -212,40 +212,50 @@ function QuestionBackendForm() {
     return $data;
 }
 
-function analysisForm() {
+function addClients() {
     $data['qContent'] = [
-                            ["1. How do you want food analysis be done?"],
-                            ["2. How do you want meal planning be done?"],
-                            ["3. How do like to perform sleep analysis for your clients"],
+                            ["1. What is your client's name? (optional)"],
+                            ["2. What is your client's gender?"],
+                            ["3. What is your client's goal?"],
+                            ["4. How do you want nutrition analysis be done?"],
+                            ["5. How do you want meal planning be done?"],
                             [""]
                         ];
     $data['qType'] = [
+                            ["text"],
+                            ["button"],
                             ["button"],
                             ["button"],
                             ["button"],
                             ["message"]
                      ];
-    $data['qIdx'] = [0, 1, 2, 3];
+    $data['qIdx'] = [0, 1, 2, 3, 4, 5];
     $data['options'] = [
-                            [["fa-solid fa-brain", "fa-brands fa-nutritionix"]],
+                            [[""]],
+                            [["fa-solid fa-mars", "fa-solid fa-venus"]],
+                            [["fa-solid fa-arrow-up-right-dots", "fa-solid fa-hand-fist", "fa-solid fa-weight-scale"]],
                             [["fa-solid fa-brain", "fa-brands fa-nutritionix"]],
                             [["fa-solid fa-brain", "fa-brands fa-nutritionix"]],
                             [["fa-regular fa-circle-check"]],
                        ];
     $data['optionsText'] = [
+                                [[""]],
+                                [["Male", "Female"]],
+                                [["increase testosterone", "increase muscle mass", "lose weight"]],
                                 [["AI", "Nutritionist"]],
                                 [["AI", "Nutritionist"]],
-                                [["AI", "Nutritionist"]],
-                                [["your preferences are saved!"]]
-    ];
-    $data['qRequired'] = [1, 1, 1, 1];
+                                [["New client is created!"]]
+                           ];
+    $data['qRequired'] = [0, 1, 1, 1, 1, 1];
     $data['qKey'] = [
-                        [''],
-                        [''],
-                        [''],
+                        ['name'],
+                        ['gender'],
+                        ['goal'],
+                        ['engine'],
+                        ['engine'],
                         ['']
                     ];
-    $data['MAX_cnt'] = 4;
+    $data['MAX_cnt'] = 6;
     return $data;
 }
 
@@ -347,8 +357,8 @@ if($page == 'login') {
     $data      = getPublicForm();
 } elseif($page == 'questions') {
     $data      = QuestionBackendForm();
-} elseif($page == 'analysis') {
-    $data      = analysisForm();
+} elseif($page == 'addClients') {
+    $data      = addClients();
 } elseif($page == 'clients') {
     $data      = clientsSearchForm();
 } else {

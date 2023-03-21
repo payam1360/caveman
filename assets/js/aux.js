@@ -100,7 +100,11 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             }
             else if(page == 'questions') {
                 submitQuestionBackEndData(header, headerTxt, input, Questions);
-            } else {
+            }
+            else if(counter == MAX_cnt - 1 && page == 'addClients') {
+                transition2Right(header, headerTxt, input, Questions, 0, 0);
+                submitaddClients(header, headerTxt, input, Questions);
+            }else {
                 transition2Right(header, headerTxt, input, Questions, 0, 0);
             }
             // updating the progress
@@ -694,6 +698,22 @@ function submitUserData(inputDataBlob, page, userPage) {
         var userdata = "userInfo="+JSON.stringify(inputDataAndUserBlob);
     }
     
+    xmlhttp.send(userdata);
+}
+
+
+// add new client
+// submitting the form
+function submitaddClients(header, headerTxt, input, Questions) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/addClients.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var userdata = "userInfo="+JSON.stringify(Questions);
     xmlhttp.send(userdata);
 }
 

@@ -24,11 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         container[kk].addEventListener('click',function(e) {
             if(kk == 0){
-                window.location.assign('questions.html');
+                window.location.assign('addClients.html');
             } else if(kk == 1) {
-                window.location.assign('clients.html');
+                window.location.assign('questions.html');
             } else if(kk == 2) {
-                window.location.assign('analysis.html');
+                window.location.assign('clients.html');
             }
         });
     }

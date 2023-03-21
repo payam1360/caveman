@@ -30,7 +30,7 @@ function createClientIdandCampaign($email, $numAllocation) {
     for($kk = 0; $kk < $numAllocation; $kk++){
         $clientId    = mt_rand(10000, 99999);
         $campaignId  = substr(md5(rand()), 0, 7);
-        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, used, completed) VALUES('$userId','$clientId','$campaignId', '0', '0');";
+        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, used, completed, name, gender, goal, nutritionEng, mealEng) VALUES('$userId','$clientId','$campaignId', '0', '0', '', '', '', '', '');";
         $conn->query($sql);
     }
     $conn->close();

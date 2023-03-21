@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     getUserInfo(userTxt, welcomeTxt);
     // this function will be getting the info from the Admin Panel.
     // initialize the first question and init the load page
-    resetStart(input, header, headerTxt, 'analysis');
+    resetStart(input, header, headerTxt, 'addClients');
     // generate the progress chart
     progChart = new Chart(
       ctx,
@@ -47,10 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     
     const moveright = document.querySelector('.form-go-right');
-    moveRight(moveright, input, header, headerTxt, Questions, 'analysis');
+    moveRight(moveright, input, header, headerTxt, Questions, 'addClients');
     
     const moveleft = document.querySelector('.form-go-left');
-    moveLeft(moveleft, input, header, headerTxt, Questions);
+    moveLeft(moveleft, input, header, headerTxt, Questions, 'addClients');
     
 });
 
