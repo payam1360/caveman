@@ -7,19 +7,40 @@ function extractUserInfo($userId) {
     $loginname    = "root";
     $password     = "@Ssia123";
     $dbname       = "Users";
-    $table1name   = "Users";
+    $table1name   = "userAllocation";
+    $table2name   = "Users";
     // Create connection
     $conn         = new mysqli($servername, $loginname, $password, $dbname);
     // check if the client exists.
     $sql          = "SELECT * FROM $table1name WHERE userId = '$userId';";
     $database_out = $conn->query($sql);
-    $clients      = array();
-    $weights      = array();
-    $heights      = array();
-    $goals        = array();
-    $kk           = 0;
+    $ids         = array();
+    $names       = array();
+    $genders     = array();
+    $goals       = array();
+    $campaignids = array();
+    $kk        = 0;
     while($database_row = $database_out->fetch_assoc()) {
-        // filling out new user
+        // filling out info briefs
+        array_push($names, $database_row['name']);
+        array_push($ids, $database_row['clientId']);
+        if($database_row['gender'] == 0) {
+            array_push($genders, 'Male');
+        } elseif($database_row['gender'] == 1){
+            array_push($genders, 'Female');
+        } else {
+            array_push($genders, '');
+        }
+        if($database_row['goal'] == 0) {
+            array_push($goals, 'increase testosterone');
+        } elseif($database_row['goal'] == 1) {
+            array_push($goals, 'increase muscle mass');
+        } elseif($database_row['goal'] == 2) {
+            array_push($goals, 'lose weight');
+        }
+        array_push($campaignids, $database_row['campaignId']);
+
+        /*
         if(empty($clients)) {
             array_push($clients, $database_row['clientId']);
         } elseif($kk > 0 && $clients[$kk] != $clients[$kk - 1]){
@@ -35,13 +56,15 @@ function extractUserInfo($userId) {
         if(str_contains($database_row['qKey'], 'goal')) {
             array_push($goals, $database_row['qAnswer']);
         }
+         */
     }
     
-    $userInfo['clients'] = $clients;
-    $userInfo['weights'] = $weights;
-    $userInfo['heights'] = $heights;
-    $userInfo['goal']    = $goals;
-    
+    $userInfo['names']       = $names;
+    $userInfo['ids']         = $ids;
+    $userInfo['genders']     = $genders;
+    $userInfo['goals']       = $goals;
+    $userInfo['campaignids'] = $campaignids;
+
     return $userInfo;
 }
 

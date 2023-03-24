@@ -232,7 +232,7 @@ function addClients() {
     $data['qIdx'] = [0, 1, 2, 3, 4, 5];
     $data['options'] = [
                             [[""]],
-                            [["fa-solid fa-mars", "fa-solid fa-venus"]],
+                            [["fa-solid fa-mars", "fa-solid fa-venus", "fa-solid fa-question"]],
                             [["fa-solid fa-arrow-up-right-dots", "fa-solid fa-hand-fist", "fa-solid fa-weight-scale"]],
                             [["fa-solid fa-brain", "fa-brands fa-nutritionix"]],
                             [["fa-solid fa-brain", "fa-brands fa-nutritionix"]],
@@ -240,7 +240,7 @@ function addClients() {
                        ];
     $data['optionsText'] = [
                                 [[""]],
-                                [["Male", "Female"]],
+                                [["Male", "Female", 'I don\'t know']],
                                 [["increase testosterone", "increase muscle mass", "lose weight"]],
                                 [["AI", "Nutritionist"]],
                                 [["AI", "Nutritionist"]],

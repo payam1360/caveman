@@ -1005,7 +1005,7 @@ function constructClients(userid){
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             results = JSON.parse(this.response);
-            displayClients(results);
+            displayClients(results, userid);
         }
     };
     // sending the request
@@ -1015,12 +1015,13 @@ function constructClients(userid){
     var userdata = "userInfo="+JSON.stringify(info);
     xmlhttp.send(userdata);
 }
-function displayClients(results) {
+function displayClients(results, userid) {
     
     let parentNode = document.querySelector('.client-list-parent');
-    for(let kk = 0; kk < results.clients.length; kk++) {
+    for(let kk = 0; kk < results.names.length; kk++) {
         let mDiv = document.createElement('div');
         mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
+        mDiv.setAttribute('cidx', kk);
         mDiv.addEventListener('click', function(){
             this.style.width = '60%';
             this.style.height = '85%';
@@ -1030,28 +1031,41 @@ function displayClients(results) {
             this.style.position = 'fixed';
             this.style.zIndex = '2';
             this.style.opacity = 0.8;
-            displayClientsDetails(results);
+            displayClientsDetails(this, results, this.getAttribute('cidx'));
         });
         nameP = document.createElement('p');
+        idP = document.createElement('p');
         genderP = document.createElement('p');
         goalP = document.createElement('p');
-        nameP.innerHTML = results.clients[kk];
-        nameP.style.display = 'inline-block';
-        nameP.style.color = 'mediumseagreen';
-        genderP.style.display = 'inline-block';
-        genderP.style.color = 'lightblue';
-        genderP.innerHTML = results.weights[kk];
-        goalP.style.display = 'inline-block';
-        goalP.style.color = 'grey';
-        goalP.innerHTML = results.heights[kk];
+        campaignP = document.createElement('p');
+
+        nameP.innerHTML = results.names[kk];
+        nameP.style.fontSize = '30px';
+        idP.innerHTML = 'Client\'s ID: ' + results.ids[kk];
+        genderP.innerHTML = results.genders[kk];
+        goalP.innerHTML = 'Client\'s goal: ' + results.goals[kk];
+        let link = '/userPages/' + userid + results.ids[kk] + results.campaignids[kk] + '.html'
+        campaignP.innerHTML = 'sent this link to ' + results.names[kk] + ': <a href="' + link + '"> questionaire page</a>';
         mDiv.appendChild(nameP);
         mDiv.appendChild(genderP);
         mDiv.appendChild(goalP);
+        mDiv.appendChild(idP);
+        mDiv.appendChild(campaignP);
         parentNode.appendChild(mDiv);
     }
     
 }
 
-function displayClientsDetails(results) {
-    console.log(results);
+function displayClientsDetails(mDiv, results, cidx) {
+    
+    nameP = document.createElement('p');
+    genderP = document.createElement('p');
+    goalP = document.createElement('p');
+    nameP.innerHTML = 'Client\'s name: ' + results.clients[cidx];
+    genderP.innerHTML = 'Client\'s gender: ' + results.weights[cidx];
+    goalP.innerHTML = 'Client\'s goal: ' + results.heights[cidx];
+    mDiv.appendChild(nameP);
+    mDiv.appendChild(genderP);
+    mDiv.appendChild(goalP);
+    
 }
