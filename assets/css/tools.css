@@ -200,3 +200,17 @@
 .results-btn {
     display: none;
 }
+
+
+.pdfReport,
+.closeExpandedClient {
+    background-color: white;
+    color: dodgerblue;
+    border: 2px;
+}
+
+.pdfReport:hover {
+    background-color: dodgerblue;
+    color: white;
+}
+

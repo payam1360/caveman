@@ -921,12 +921,18 @@ function plotMacro(macro){
     );
 }
 // function to plot Micro data returned by the server for the given user
-function plotMicro(micro){
+function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     // Canvas element section
     let microElement  = document.querySelector('#Micro');
-    let microDiv = document.querySelector('.Micro');
-    let microTxt = document.querySelector('.MICRO_text');
-    let microDesc = document.querySelector('.MICRO_text_description');
+    if(microDiv == 0) {
+        let microDiv = document.querySelector('.Micro');
+    }
+    if(microTxt == 0) {
+        let microTxt = document.querySelector('.MICRO_text');
+    }
+    if(microDesc == 0) {
+        let microDesc = document.querySelector('.MICRO_text_description');
+    }
     microTxt.style.display = 'block';
     microDiv.style.display = 'block';
     microDesc.style.display = 'block';
@@ -1018,20 +1024,14 @@ function constructClients(userid){
 function displayClients(results, userid) {
     
     let parentNode = document.querySelector('.client-list-parent');
+    cleanClientDiv(parentNode);
     for(let kk = 0; kk < results.names.length; kk++) {
         let mDiv = document.createElement('div');
         mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
         mDiv.setAttribute('cidx', kk);
+        mDiv.setAttribute('userid', userid);
         mDiv.addEventListener('click', function(){
-            this.style.width = '60%';
-            this.style.height = '85%';
-            this.style.bottom = '5%';
-            this.style.borderRadius = '1%'
-            this.style.backgroundColor = 'white';
-            this.style.position = 'fixed';
-            this.style.zIndex = '2';
-            this.style.opacity = 0.8;
-            displayClientsDetails(this, results, this.getAttribute('cidx'));
+            displayClientsDetails(parentNode, results, this.getAttribute('cidx'));
         });
         nameP = document.createElement('p');
         idP = document.createElement('p');
@@ -1052,20 +1052,107 @@ function displayClients(results, userid) {
         mDiv.appendChild(idP);
         mDiv.appendChild(campaignP);
         parentNode.appendChild(mDiv);
+        
     }
-    
 }
 
-function displayClientsDetails(mDiv, results, cidx) {
+
+
+function displayClientsDetails(parentNode, results, cidx) {
     
-    nameP = document.createElement('p');
-    genderP = document.createElement('p');
-    goalP = document.createElement('p');
-    nameP.innerHTML = 'Client\'s name: ' + results.clients[cidx];
-    genderP.innerHTML = 'Client\'s gender: ' + results.weights[cidx];
-    goalP.innerHTML = 'Client\'s goal: ' + results.heights[cidx];
+    userid = parentNode.children[cidx].getAttribute('userid');
+    
+    cleanClientDiv(parentNode);
+    let mDiv = document.createElement('div');
+    mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
+    mDiv.style.width = '60%';
+    mDiv.style.height = '85%';
+    mDiv.style.bottom = '5%';
+    mDiv.style.borderRadius = '1%'
+    mDiv.style.backgroundColor = 'white';
+    mDiv.style.position = 'fixed';
+    mDiv.style.zIndex = '2';
+    mDiv.style.opacity = 0.8;
+    mDiv.style.overflow = 'scroll';
+    let closeBtn = document.createElement('button');
+    closeBtn.setAttribute('class', 'closeExpandedClient');
+    let spn = document.createElement('span');
+    spn.setAttribute('class', 'fa-solid fa-xmark');
+    spn.style.fontSize = '40px';
+    closeBtn.appendChild(spn);
+    closeBtn.addEventListener('click', function(){
+        displayClients(results, userid);
+    });
+    
+    let pdfBtn = document.createElement('button');
+    pdfBtn.setAttribute('class', 'pdfReport');
+    spn = document.createElement('span');
+    spn.setAttribute('class', 'fa-regular fa-file-pdf');
+    spn.style.fontSize = '40px';
+    pdfBtn.appendChild(spn);
+    
+    let nameP = document.createElement('p');
+    let idP = document.createElement('p');
+    let genderP = document.createElement('p');
+    let goalP = document.createElement('p');
+    let campaignP = document.createElement('p');
+
+    nameP.innerHTML = results.names[cidx];
+    nameP.style.fontSize = '40px';
+    idP.innerHTML = 'Client\'s ID: ' + results.ids[cidx];
+    genderP.innerHTML = results.genders[cidx];
+    goalP.innerHTML = 'Client\'s goal: ' + results.goals[cidx];
+    let link = '/userPages/' + userid + results.ids[cidx] + results.campaignids[cidx] + '.html'
+    campaignP.innerHTML = 'sent this link to ' + results.names[cidx] + ': <a href="' + link + '"> questionaire page</a>';
+    
+    let divider = document.createElement('div');
+    divider.style.height = '2px';
+    divider.style.width = '80%';
+    divider.style.backgroundColor = 'grey';
+    divider.style.margin = 'auto';
+    
+    // create plot
+    let microSuggestion = document.createElement('p');
+    microSuggestion.innerHTML = 'Micro-nutrients recommendation';
+    microSuggestion.style.fontSize = '30px';
+
+    
+    let micro = document.createElement('div');
+    micro.setAttribute('class', 'col-sm col-lg-5 Micro');
+    micro.style.margin = 'auto';
+    let div1 = document.createElement('div');
+    let div2 = document.createElement('div');
+    let div3 = document.createElement('div');
+    let microDiv = document.createElement('canvas');
+    let microTxt = document.createElement('p');
+    let microDesc = document.createElement('p');
+    microDiv.setAttribute('id', 'Micro');
+    microTxt.setAttribute('class', 'MICRO_text');
+    microDesc.setAttribute('class', 'MICRO_text_description');
+    div1.appendChild(microTxt);
+    div2.appendChild(microDiv);
+    div3.appendChild(microDesc);
+    micro.appendChild(div1);
+    micro.appendChild(div2);
+    micro.appendChild(div3);
+    
+    mDiv.appendChild(closeBtn);
+    mDiv.appendChild(pdfBtn);
     mDiv.appendChild(nameP);
     mDiv.appendChild(genderP);
     mDiv.appendChild(goalP);
-    
+    mDiv.appendChild(idP);
+    mDiv.appendChild(campaignP);
+    mDiv.appendChild(divider);
+    mDiv.appendChild(microSuggestion);
+    mDiv.appendChild(micro);
+    parentNode.appendChild(mDiv);
+    plotMicro([1,2,3,4,5], micro, microTxt, microDesc);
+
+}
+
+function cleanClientDiv(mDiv) {
+    while( mDiv.childElementCount > 0){
+        mDiv.removeChild(mDiv.children[0]);
+    }
 }
