@@ -775,12 +775,18 @@ function questionCreate(headerTxt, input, page, userPage){
 
 
 // function to plot BMI data returned by the server for the given user
-function plotBmi(bmi){
+function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
     // Canvas element section
     let bmiElement = document.querySelector('#Bmi');
-    let bmiDiv = document.querySelector('.Bmi');
-    let bmiTxt = document.querySelector('.BMI_text');
-    let bmiDesc = document.querySelector('.BMI_text_description');
+    if(bmiDiv == 0){
+        let bmiDiv = document.querySelector('.Bmi');
+    }
+    if(bmiTxt == 0) {
+        let bmiTxt = document.querySelector('.BMI_text');
+    }
+    if(bmiDesc == 0) {
+        let bmiDesc = document.querySelector('.BMI_text_description');
+    }
     
     bmiTxt.style.display = 'block';
     bmiDiv.style.display = 'block';
@@ -1105,24 +1111,55 @@ function displayClientsDetails(parentNode, results, cidx) {
     let link = '/userPages/' + userid + results.ids[cidx] + results.campaignids[cidx] + '.html'
     campaignP.innerHTML = 'sent this link to ' + results.names[cidx] + ': <a href="' + link + '"> questionaire page</a>';
     
-    let divider = document.createElement('div');
-    divider.style.height = '2px';
-    divider.style.width = '80%';
-    divider.style.backgroundColor = 'grey';
-    divider.style.margin = 'auto';
+    let divider1 = document.createElement('div');
+    divider1.style.height = '2px';
+    divider1.style.width = '80%';
+    divider1.style.backgroundColor = 'grey';
+    divider1.style.margin = 'auto';
     
-    // create plot
-    let microSuggestion = document.createElement('p');
-    microSuggestion.innerHTML = 'Micro-nutrients recommendation';
-    microSuggestion.style.fontSize = '30px';
+    // create plot BMI
+    let bmiSuggestion = document.createElement('p');
+    bmiSuggestion.innerHTML = 'Body mass index';
+    bmiSuggestion.style.fontSize = '30px';
 
     
-    let micro = document.createElement('div');
-    micro.setAttribute('class', 'col-sm col-lg-5 Micro');
-    micro.style.margin = 'auto';
+    let bmi = document.createElement('div');
+    bmi.setAttribute('class', 'col-sm col-lg-5 Micro');
+    bmi.style.margin = 'auto';
     let div1 = document.createElement('div');
     let div2 = document.createElement('div');
     let div3 = document.createElement('div');
+    let bmiDiv = document.createElement('canvas');
+    let bmiTxt = document.createElement('p');
+    let bmiDesc = document.createElement('p');
+    
+    bmiDiv.setAttribute('id', 'Bmi');
+    bmiTxt.setAttribute('class', 'BMI_text');
+    bmiDesc.setAttribute('class', 'BMI_text_description');
+    div1.appendChild(bmiTxt);
+    div2.appendChild(bmiDiv);
+    div3.appendChild(bmiDesc);
+    bmi.appendChild(div1);
+    bmi.appendChild(div2);
+    bmi.appendChild(div3);
+    
+    let divider2 = document.createElement('div');
+    divider2.style.height = '2px';
+    divider2.style.width = '80%';
+    divider2.style.backgroundColor = 'grey';
+    divider2.style.margin = 'auto';
+    divider2.style.marginTop = '20px';
+    
+    // create plot MICRO
+    let microSuggestion = document.createElement('p');
+    microSuggestion.innerHTML = 'Micro-nutrients recommendation';
+    microSuggestion.style.fontSize = '30px';
+    let micro = document.createElement('div');
+    micro.setAttribute('class', 'col-sm col-lg-5 Micro');
+    micro.style.margin = 'auto';
+    div1 = document.createElement('div');
+    div2 = document.createElement('div');
+    div3 = document.createElement('div');
     let microDiv = document.createElement('canvas');
     let microTxt = document.createElement('p');
     let microDesc = document.createElement('p');
@@ -1135,6 +1172,14 @@ function displayClientsDetails(parentNode, results, cidx) {
     micro.appendChild(div1);
     micro.appendChild(div2);
     micro.appendChild(div3);
+
+    let divider3 = document.createElement('div');
+    divider3.style.height = '2px';
+    divider3.style.width = '80%';
+    divider3.style.backgroundColor = 'grey';
+    divider3.style.margin = 'auto';
+    divider3.style.marginTop = '20px';
+
     
     mDiv.appendChild(closeBtn);
     mDiv.appendChild(pdfBtn);
@@ -1143,10 +1188,15 @@ function displayClientsDetails(parentNode, results, cidx) {
     mDiv.appendChild(goalP);
     mDiv.appendChild(idP);
     mDiv.appendChild(campaignP);
-    mDiv.appendChild(divider);
+    mDiv.appendChild(divider1);
+    mDiv.appendChild(bmiSuggestion);
+    mDiv.appendChild(bmi);
+    mDiv.appendChild(divider2);
     mDiv.appendChild(microSuggestion);
     mDiv.appendChild(micro);
+    mDiv.appendChild(divider3);
     parentNode.appendChild(mDiv);
+    plotBmi(10, bmi, bmiTxt, bmiDesc);
     plotMicro([1,2,3,4,5], micro, microTxt, microDesc);
 
 }
