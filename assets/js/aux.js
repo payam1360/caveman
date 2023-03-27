@@ -833,6 +833,15 @@ function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
         backgroundColor: 'limegreen',
       }]
     };
+    const bgColor = {
+        id: 'bgColor',
+        beforeDraw: (chart, options) => {
+            const {ctx, width, height} = chart;
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, width, height);
+            ctx.restore();
+        }
+    }
     const bmiConfig = {
       type: 'line',
       data: bmiData,
@@ -840,7 +849,8 @@ function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
         responsive: true,
         maintainAspectRatio: false,
         aspectRatio: 1,
-      }
+      },
+        plugins: [bgColor],
     };
     
     bmiChart = new Chart(
@@ -1096,6 +1106,9 @@ function displayClientsDetails(parentNode, results, cidx) {
     spn.setAttribute('class', 'fa-regular fa-file-pdf');
     spn.style.fontSize = '40px';
     pdfBtn.appendChild(spn);
+    pdfBtn.addEventListener('click', function(){
+        createPdf(parentNode);
+    });
     
     let nameP = document.createElement('p');
     let idP = document.createElement('p');
@@ -1196,9 +1209,23 @@ function displayClientsDetails(parentNode, results, cidx) {
     mDiv.appendChild(micro);
     mDiv.appendChild(divider3);
     parentNode.appendChild(mDiv);
-    plotBmi(10, bmi, bmiTxt, bmiDesc);
+    plotBmi(20, bmi, bmiTxt, bmiDesc);
     plotMicro([1,2,3,4,5], micro, microTxt, microDesc);
 
+}
+
+function createPdf(node) {
+    
+    //const canvasImgBmi = node.children[0].children[9].toDataURL('image/jpeg', 1.0);
+    const canvasImgBmi = node.children[0].children[9].children[1].children[0].toDataURL('image/jpeg', 1.0);
+    var pdf = new jsPDF({
+                         orientation: 'p',
+                         unit: 'mm',
+                         format: 'a5',
+                         putOnlyUsedFonts:true
+                         });
+    pdf.addImage(canvasImgBmi, 'JPEG', 15, 15, 100, 80);
+    pdf.save('sample-file.pdf');
 }
 
 function cleanClientDiv(mDiv) {
