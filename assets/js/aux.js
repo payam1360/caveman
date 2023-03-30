@@ -779,13 +779,14 @@ function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
     // Canvas element section
     let bmiElement = document.querySelector('#Bmi');
     if(bmiDiv == 0){
-        let bmiDiv = document.querySelector('.Bmi');
+        bmiDiv = document.querySelector('.Bmi');
     }
     if(bmiTxt == 0) {
-        let bmiTxt = document.querySelector('.BMI_text');
+        bmiTxt = document.querySelector('.BMI_text');
+        console.log(bmiTxt);
     }
     if(bmiDesc == 0) {
-        let bmiDesc = document.querySelector('.BMI_text_description');
+        bmiDesc = document.querySelector('.BMI_text_description');
     }
     
     bmiTxt.style.display = 'block';
@@ -941,13 +942,13 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     // Canvas element section
     let microElement  = document.querySelector('#Micro');
     if(microDiv == 0) {
-        let microDiv = document.querySelector('.Micro');
+        microDiv = document.querySelector('.Micro');
     }
     if(microTxt == 0) {
-        let microTxt = document.querySelector('.MICRO_text');
+        microTxt = document.querySelector('.MICRO_text');
     }
     if(microDesc == 0) {
-        let microDesc = document.querySelector('.MICRO_text_description');
+        microDesc = document.querySelector('.MICRO_text_description');
     }
     microTxt.style.display = 'block';
     microDiv.style.display = 'block';
@@ -971,13 +972,23 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
         ],
       }]
     };
+    const bgColor = {
+        id: 'bgColor',
+        beforeDraw: (chart, options) => {
+            const {ctx, width, height} = chart;
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, width, height);
+            ctx.restore();
+        }
+    }
     const config = {
       type: 'polarArea',
       data: microData,
       options: {
         responsive: true,
         maintainAspectRatio: false,
-      }
+      },
+        plugins: [bgColor],
     };
     microChart = new Chart(
       microElement,
@@ -1216,15 +1227,19 @@ function displayClientsDetails(parentNode, results, cidx) {
 
 function createPdf(node) {
     
-    //const canvasImgBmi = node.children[0].children[9].toDataURL('image/jpeg', 1.0);
-    const canvasImgBmi = node.children[0].children[9].children[1].children[0].toDataURL('image/jpeg', 1.0);
+    bmiIdx = 9;
+    microIdx = 12;
+    const canvasImgBmi = node.children[0].children[bmiIdx].children[1].children[0].toDataURL('image/jpeg', 1.0);
+    const canvasImgMicro = node.children[0].children[microIdx].children[1].children[0].toDataURL('image/jpeg', 1.0);
     var pdf = new jsPDF({
                          orientation: 'p',
                          unit: 'mm',
                          format: 'a5',
                          putOnlyUsedFonts:true
                          });
-    pdf.addImage(canvasImgBmi, 'JPEG', 15, 15, 100, 80);
+    pdf.addImage(canvasImgBmi, 'JPEG', 15, 15, 100, 80, 'alias1', 'SLOW');
+    pdf.addPage();
+    pdf.addImage(canvasImgMicro, 'JPEG', 15, 15, 100, 80, 'alias2', 'SLOW');
     pdf.save('sample-file.pdf');
 }
 

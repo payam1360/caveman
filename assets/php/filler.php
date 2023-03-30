@@ -128,7 +128,7 @@ function getRegisterForm() {
                                 [["incorrect code"], ["continue to password"]],
                                 [[""]],
                                 [[""]],
-                                [["password not matching"], ["All done! please login"]]
+                                [["password not matching"], ["All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"]]
                             ];
     $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1];
     $data['qKey'] = [

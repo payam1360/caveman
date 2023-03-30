@@ -11699,26 +11699,3 @@ body {
   font-size: 0.75rem;
   border-radius: 0.25rem !important;
 }
-
-.admin-dashbord {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    background-color: white;
-    border-radius: 5%;
-    height: 200px;
-    margin: 30px;
-    padding: 0px;
-    text-align: center;
-}
-
-.admin-dash-text {
-    font-size: 20px;
-    color: coral;
-    text-align: center;
-    padding-top: 20px;
-}
-.admin-dash-icon{
-    color: coral;
-    transition-property: transform;
-    transition-duration: 0.3s;
-    transition-timing-function: ease-in-out;
-}

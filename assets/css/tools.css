@@ -172,15 +172,17 @@
     border-radius: 50%;
 }
 .client-page {
-    height:150px;
+    height:60px;
     text-align: center;
-    background-color: coral;
+    background-color: dodgerblue;
+    padding-top: -20px;
 }
 .header-clients-text{
     font-size: 30px;
     color: white;
-    margin-top: 50px;
-    font-weight: bold;
+    margin-top: 5px;
+    font-weight: normal;
+    font-family: 'Lucida Casual', 'Comic Sans MS'; /*'Lucida Casual', 'Comic Sans MS'*/
 }
 
 .client-list {
@@ -214,3 +216,25 @@
     color: white;
 }
 
+.admin-dashbord {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    background-color: white;
+    border-radius: 5%;
+    height: 200px;
+    margin: 30px;
+    padding: 0px;
+    text-align: center;
+}
+
+.admin-dash-text {
+    font-size: 20px;
+    color: coral;
+    text-align: center;
+    padding-top: 20px;
+}
+.admin-dash-icon{
+    color: mediumseagreen;
+    transition-property: transform;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
