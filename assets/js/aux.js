@@ -783,7 +783,6 @@ function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
     }
     if(bmiTxt == 0) {
         bmiTxt = document.querySelector('.BMI_text');
-        console.log(bmiTxt);
     }
     if(bmiDesc == 0) {
         bmiDesc = document.querySelector('.BMI_text_description');
@@ -1050,6 +1049,8 @@ function constructClients(userid){
 }
 function displayClients(results, userid) {
     
+    let blur = document.querySelector('.blur');
+    blur.style.filter = 'blur(0px)';
     let parentNode = document.querySelector('.client-list-parent');
     cleanClientDiv(parentNode);
     for(let kk = 0; kk < results.names.length; kk++) {
@@ -1088,7 +1089,9 @@ function displayClients(results, userid) {
 function displayClientsDetails(parentNode, results, cidx) {
     
     userid = parentNode.children[cidx].getAttribute('userid');
-    
+    let blur = document.querySelector('.blur');
+    blur.style.zIndex = '1';
+    blur.style.filter = 'blur(10px)';
     cleanClientDiv(parentNode);
     let mDiv = document.createElement('div');
     mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
@@ -1100,6 +1103,7 @@ function displayClientsDetails(parentNode, results, cidx) {
     mDiv.style.position = 'fixed';
     mDiv.style.zIndex = '2';
     mDiv.style.opacity = 0.8;
+    
     mDiv.style.overflow = 'scroll';
     let closeBtn = document.createElement('button');
     closeBtn.setAttribute('class', 'closeExpandedClient');
@@ -1220,6 +1224,7 @@ function displayClientsDetails(parentNode, results, cidx) {
     mDiv.appendChild(micro);
     mDiv.appendChild(divider3);
     parentNode.appendChild(mDiv);
+    
     plotBmi(20, bmi, bmiTxt, bmiDesc);
     plotMicro([1,2,3,4,5], micro, microTxt, microDesc);
 
