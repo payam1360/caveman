@@ -15,10 +15,10 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
     // if request from client page -> entries already exists in the db: update qAnswer only
     // if request from public page -> entries do not exist for new clients: insert new entries
     // if request from questions design page -> entries do not exist: insert new entries
-    if(!is_null($db_out->fetch_assoc())) { // request from clinet page -> need to update
-        $kk = 0;
-        while($row = $db_out->fetch_assoc()){
-            $kk = $Questions[$kk]->qIdx;
+    $kk = 0;
+    if($db_out->num_rows != 0) { // request from clinet page -> need to update
+        while($row = $db_out->fetch_assoc() && $Questions[$kk]->qType[0] != 'message'){
+            
             $options = "";
             $optionsText = "";
             if($Questions[$kk]->options[0] == ""){
@@ -81,10 +81,7 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
 
 
 function calculateBmi($data){
-    //preg_match_all('!\d+\.*\d*!', $weight, $matches_weight);
-    //preg_match_all('!\d+\.*\d*!', $height, $matches_height);
-    //$Userweight = ($matches_weight[0][0] + $matches_weight[0][1]) / 2 * 0.45359237;
-    //$Userheight = ($matches_height[0][0] + $matches_height[0][1]) / 2 * 0.3048;
+    
     $Userweight = 85;
     $Userheight = 1.7;
     return($Userweight / pow($Userheight, 2));

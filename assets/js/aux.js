@@ -203,6 +203,7 @@ function transition2Left(header, headerTxt, input, Questions) {
 
 function callsubmitUserData(page){
     counter++;
+    
     if(counter == MAX_cnt) {
         let allReq = true;
         counter = 0;
@@ -219,7 +220,6 @@ function callsubmitUserData(page){
             }
         }
         if(allReq) {
-            
             submitUserData(Questions, page, Questions[0].userId);
         }
     }
@@ -634,7 +634,7 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
             } else if(data.status == 7) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 8) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
             } else if(data.status == 9) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 10) {
@@ -682,13 +682,13 @@ function submitUserData(inputDataBlob, page, userPage) {
             }
         }
     };
-    
     // sending the request
     if(userPage == 0){
         // sending the request
         xmlhttp.open("POST", "assets/php/" + page + ".php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         let inputDataAndUserBlob = {'data': inputDataBlob, 'IdInfo': userPage};
+        
         var userdata = "userInfo="+JSON.stringify(inputDataAndUserBlob);
     } else {
         // sending the request
