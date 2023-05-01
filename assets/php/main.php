@@ -81,11 +81,128 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
 
 
 function calculateBmi($data){
-    
-    $Userweight = 85;
-    $Userheight = 1.7;
-    return($Userweight / pow($Userheight, 2));
+    $kk = 0;
+    $weightDone = false;
+    $heightDone = false;
+    while(isset($data[$kk]->qIdx)){
+        if($data[$kk]->qKey[0] == 'weight'){
+            $Userweight = $data[$kk]->qAnswer;
+            if(str_contains($Userweight, '<')) {
+                $Userweight = 70; // minimum weigh
+            } elseif(str_contains($Userweight, '>')){
+                $Userweight = 300; // maximum weight
+            } else {
+                $Userweight = $Userweight;
+            }
+            $weightDone = true;
+        }
+        if($data[$kk]->qKey[0] == 'height'){
+            $Userheight = $data[$kk]->qAnswer;
+            if(str_contains($Userheight, '<')){
+                $Userheight = 4 * 12; // minimum heigh
+            } elseif(str_contains($Userheight, '>')){
+                $Userheight = 7 * 12; // maximum height
+            } else {
+                $height = explode('-', $Userheight);
+                $Userheight = intval($height[0]) * 12 + intval($height[1]);
+            }
+            $heightDone = true;
+        }
+        if($weightDone == true && $heightDone == true){
+            break;
+        }
+        $kk++;
+    }
+    $BMI = $Userweight * 703 / pow($Userheight, 2);
+    return($BMI);
 }
+
+function calculateBmr($data) {
+    $kk = 0;
+    $weightDone = false;
+    $heightDone = false;
+    $ageDone    = false;
+    $genderDone = false;
+    $stressDone = false;
+    
+    while(isset($data[$kk]->qIdx)){
+        if($data[$kk]->qKey[0] == 'weight' && $weightDone == false){
+            $Userweight = $data[$kk]->qAnswer;
+            if(str_contains($Userweight, '<')) {
+                $Userweight = 70; // minimum weigh
+            } elseif(str_contains($Userweight, '>')){
+                $Userweight = 300; // maximum weight
+            } else {
+                $Userweight = $Userweight;
+            }
+            $weightDone = true;
+        } else { // weight is required
+        }
+        if($data[$kk]->qKey[0] == 'height' && $heightDone == false){
+            $Userheight = $data[$kk]->qAnswer;
+            if(str_contains($Userheight, '<')){
+                $Userheight = 4 * 12; // minimum heigh
+            } elseif(str_contains($Userheight, '>')){
+                $Userheight = 7 * 12; // maximum height
+            } else {
+                $height = explode('-', $Userheight);
+                $Userheight = intval($height[0]) * 12 + intval($height[1]);
+            }
+            $heightDone = true;
+        } else {
+            // height is required.
+        }
+        if($data[$kk]->qKey[0] == 'age' && $ageDone == false){
+            $Userage = $data[$kk]->qAnswer;
+            if(str_contains($Userage, '<')) {
+                $Userage = 18; // minimum age
+            } elseif(str_contains($Userage, '>')){
+                $Userage = 90; // maximum age
+            } else {
+                $Userage = $Userage;
+            }
+            $ageDone = true;
+        } else {
+            // age is needed
+        }
+        if($data[$kk]->qKey[0] == 'gender' && $genderDone == false){
+            $Usergender = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
+            $genderDone = true;
+        } else {
+            $Usergender = 'Male'; // by default
+        }
+        
+        if($data[$kk]->qKey[0] == 'stress' && $stressDone == false){
+            $Userstress = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
+            $stressDone = true;
+        } else {
+            $Userstress = 'relaxed'; // by default
+        }
+        
+        if($weightDone == true && $heightDone == true && $ageDone == true && $genderDone == true && $stressDone == true){
+            break;
+        }
+        $kk++;
+    }
+    if($Userstress == 'relaxed') {
+        $stressFactor = 1.2;
+    } elseif($Userstress == 'manageable') {
+        $stressFactor = 1.65;
+    } else {
+        $stressFactor = 2.25;
+    }
+    
+    if($Usergender == 'Male') {
+        $BMR = $stressFactor * ( 66.47 + (6.24 * intval($Userweight)) + (12.7 * intval($Userheight)) - (6.75 * intval($Userage)));
+    } else {
+        $BMR = $stressFactor * ( 65.51 + (4.35 * intval($Userweight)) + (4.7 * intval($Userheight)) - (4.7 * intval($Userage)));
+    }
+    return($BMR);
+}
+
+
+
+
 function calculateIf($data){
     //preg_match_all('!\d+\.*\d*!', $weight, $matches_weight);
     //preg_match_all('!\d+\.*\d*!', $height, $matches_height);
@@ -113,9 +230,10 @@ function calculateMicro($data){
     return([5,7,8,10,2,4,12,5.2]);
 }
 
-function dataPrep($user_bmi, $user_if, $user_macro, $user_micro){
+function dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro){
     $data = array('status' => 0,
                  'bmi' => $user_bmi,
+                 'bmr' => $user_bmr,
                  'If'  => $user_if,
                  'macro' => $user_macro,
                  'micro' => $user_micro);
@@ -193,10 +311,11 @@ $data          = $userdata->data;
 $dbflag        = saveUserDataIntoDB($data, $userId, $clientId, $campaignId, $ip);
 // perform calculations
 $user_bmi      = calculateBmi($data);
+$user_bmr      = calculateBmr($data);
 $user_if       = calculateIf($data);
 $user_macro    = calculateMacro($data);
 $user_micro    = calculateMicro($data);
-$output        = dataPrep($user_bmi, $user_if, $user_macro, $user_micro);
+$output        = dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro);
 echo json_encode($output);
 
 
