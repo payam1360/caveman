@@ -200,33 +200,130 @@ function calculateBmr($data) {
     return($BMR);
 }
 
-
-
-
 function calculateIf($data){
-    //preg_match_all('!\d+\.*\d*!', $weight, $matches_weight);
-    //preg_match_all('!\d+\.*\d*!', $height, $matches_height);
-    //$Userweight = ($matches_weight[0][0] + $matches_weight[0][1]) / 2 * 0.45359237;
-    //$Userheight = ($matches_height[0][0] + $matches_height[0][1]) / 2 * 0.3048;
-    $Userweight = 85;
-    $Userheight = 1.7;
-// calculate intermittent fasting interval
-    return(16);
+    // this function is the algorithm for calculating intervals in which the user is 
+    // recommended for fasting. Fasting increase IGF or growth hormons.  
+    // calculate intermittent fasting interval
+    $kk = 0;
+    $weightDone = false;
+    $ageDone    = false;
+    $genderDone = false;
+    $goalDone   = false;
+    $ifDone     = false;
+    $IF         = [[24,0],[24,0],[24,0],[24,0],[24,0],[24,0],[24,0]];
+    while(isset($data[$kk]->qIdx)){
+        if($data[$kk]->qKey[0] == 'weight' && $weightDone == false){
+            $Userweight = $data[$kk]->qAnswer;
+            if(str_contains($Userweight, '<')) {
+                $Userweight = 70; // minimum weigh
+            } elseif(str_contains($Userweight, '>')){
+                $Userweight = 300; // maximum weight
+            } else {
+                $Userweight = $Userweight;
+            }
+            $weightDone = true;
+        } else {
+            // weight is required
+        }
+        if($data[$kk]->qKey[0] == 'age' && $ageDone == false){
+            $Userage = $data[$kk]->qAnswer;
+            if(str_contains($Userage, '<')) {
+                $Userage = 18; // minimum age
+            } elseif(str_contains($Userage, '>')){
+                $Userage = 90; // maximum age
+            } else {
+                $Userage = $Userage;
+            }
+            $ageDone = true;
+        } else {
+            // age is needed
+        }
+        if($data[$kk]->qKey[0] == 'gender' && $genderDone == false){
+            $Usergender = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
+            $genderDone = true;
+        } else {
+            $Usergender = 'Male'; // by default
+        }
+        if($data[$kk]->qKey[0] == 'goal' && $goalDone == false){
+            $Usergoal = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
+            $goalDone = true;
+        } else {
+            $Usergoal = 'Lose'; // by default
+        }
+        $kk++;
+    }
+    // IF suggestion based on user's spec
+    // -----------------------------------------------------------
+    
+    if(!$ifDone && $Userweight > 70 && $Userweight < 120) {
+        if($Usergender == 'Male'){
+            if($Usergoal == 'Lose') {
+                $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $ifDone = true;
+            } elseif($Usergoal == 'Gain') {
+                $IF = [[24,0],[24,0],[24,0],[24,0],[24,0],[16,8],[24,0]];
+                $ifDone = true;
+            }
+        } elseif($Usergender == 'Female'){
+            if($Usergoal == 'Lose') {
+                $IF = [[16,8],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $ifDone = true;
+            } elseif($Usergoal == 'Gain') {
+                $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $ifDone = true;
+            }
+        }
+    }
+    if(!$ifDone && $Userweight > 120 && $Userweight < 220) {
+        if($Usergender == 'Male'){
+            if($Usergoal == 'Lose') {
+                $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $ifDone = true;
+            } elseif($Usergoal == 'Gain') {
+                $IF = [[24,0],[24,0],[24,0],[24,0],[24,0],[16,8],[24,0]];
+                $ifDone = true;
+            }
+        } elseif($Usergender == 'Female'){
+            if($Usergoal == 'Lose') {
+                $IF = [[16,8],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $ifDone = true;
+            } elseif($Usergoal == 'Gain') {
+                $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $ifDone = true;
+            }
+        }
+    }
+    if(!$ifDone && $Userweight > 220 && $Userweight < 300) {
+        if($Usergender == 'Male'){
+            if($Usergoal == 'Lose') {
+                $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $ifDone = true;
+            } elseif($Usergoal == 'Gain') {
+                $IF = [[24,0],[24,0],[24,0],[24,0],[24,0],[16,8],[24,0]];
+                $ifDone = true;
+            }
+        } elseif($Usergender == 'Female'){
+            if($Usergoal == 'Lose') {
+                $IF = [[16,8],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $ifDone = true;
+            } elseif($Usergoal == 'Gain') {
+                $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $ifDone = true;
+            }
+        }
+    }
+
+    // -----------------------------------------------------------
+    return($IF);
 }
 function calculateMacro($data){
-    //preg_match_all('!\d+\.*\d*!', $weight, $matches_weight);
-    //preg_match_all('!\d+\.*\d*!', $height, $matches_height);
-    //$Userweight = ($matches_weight[0][0] + $matches_weight[0][1]) / 2 * 0.45359237;
-    //$Userheight = ($matches_height[0][0] + $matches_height[0][1]) / 2 * 0.3048;
-// calculate intermittent fasting interval
+    // add Macro computation code
+    
     return([20, 40, 10, 30]);
 }
 function calculateMicro($data){
-    //preg_match_all('!\d+\.*\d*!', $weight, $matches_weight);
-    //preg_match_all('!\d+\.*\d*!', $height, $matches_height);
-    //$Userweight = ($matches_weight[0][0] + $matches_weight[0][1]) / 2 * 0.45359237;
-    //$Userheight = ($matches_height[0][0] + $matches_height[0][1]) / 2 * 0.3048;
-// calculate intermittent fasting interval
+    // add Micro computation code
+
     return([5,7,8,10,2,4,12,5.2]);
 }
 
