@@ -1231,7 +1231,8 @@ function displayClientsDetails(parentNode, results, cidx) {
 }
 
 function createPdf(node) {
-    
+
+    const { jsPDF } = window.jspdf;
     bmiIdx = 9;
     microIdx = 12;
     const canvasImgBmi = node.children[0].children[bmiIdx].children[1].children[0].toDataURL('image/jpeg', 1.0);
