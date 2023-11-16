@@ -85,7 +85,7 @@ function calculateBmi($data){
     $weightDone = false;
     $heightDone = false;
     while(isset($data[$kk]->qIdx)){
-        if($data[$kk]->qKey[0] == 'weight'){
+        if($data[$kk]->qKey[0] == 'weight' && $weightDone == false){
             $Userweight = $data[$kk]->qAnswer;
             if(str_contains($Userweight, '<')) {
                 $Userweight = 70; // minimum weigh
@@ -95,8 +95,9 @@ function calculateBmi($data){
                 $Userweight = $Userweight;
             }
             $weightDone = true;
+        } else { // weight is required
         }
-        if($data[$kk]->qKey[0] == 'height'){
+        if($data[$kk]->qKey[0] == 'height' && $heightDone == false){
             $Userheight = $data[$kk]->qAnswer;
             if(str_contains($Userheight, '<')){
                 $Userheight = 4 * 12; // minimum heigh
@@ -107,6 +108,7 @@ function calculateBmi($data){
                 $Userheight = intval($height[0]) * 12 + intval($height[1]);
             }
             $heightDone = true;
+        } else {
         }
         if($weightDone == true && $heightDone == true){
             break;
@@ -255,7 +257,7 @@ function calculateIf($data){
     // IF suggestion based on user's spec
     // -----------------------------------------------------------
     
-    if(!$ifDone && $Userweight > 70 && $Userweight < 120) {
+    if(!$ifDone == false && $Userweight > 70 && $Userweight < 120) {
         if($Usergender == 'Male'){
             if($Usergoal == 'Lose') {
                 $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
@@ -274,7 +276,7 @@ function calculateIf($data){
             }
         }
     }
-    if(!$ifDone && $Userweight > 120 && $Userweight < 220) {
+    if(!$ifDone == false && $Userweight > 120 && $Userweight < 220) {
         if($Usergender == 'Male'){
             if($Usergoal == 'Lose') {
                 $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
@@ -293,7 +295,7 @@ function calculateIf($data){
             }
         }
     }
-    if(!$ifDone && $Userweight > 220 && $Userweight < 300) {
+    if(!$ifDone == false && $Userweight > 220 && $Userweight < 300) {
         if($Usergender == 'Male'){
             if($Usergoal == 'Lose') {
                 $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
@@ -329,9 +331,9 @@ function calculateMicro($data){
 
 function dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro){
     $data = array('status' => 0,
-                 'bmi' => $user_bmi,
-                 'bmr' => $user_bmr,
-                 'If'  => $user_if,
+                 'bmi'   => $user_bmi,
+                 'bmr'   => $user_bmr,
+                 'If'    => $user_if,
                  'macro' => $user_macro,
                  'micro' => $user_micro);
     return $data;
