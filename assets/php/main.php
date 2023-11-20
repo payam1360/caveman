@@ -79,81 +79,81 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
     return true;
 }
 
+function kg2lb($kg) {
+    return($kg * 0.45);
+}
+function lb2kg($lb) {
+    return($lb * 2.2);
+}
+function in2cm($in) {
+    return($in * 2.54);
+}
+function cm2in($cm) {
+    return($cm * 0.39);
+}
+function in2ft($in) {
+    return($in * 0.083);
+}
+function ft2in($ft) {
+    return($ft * 12);
+}
 
-function calculateBmi($data){
+// returns weight in lb
+function getWeight($data) {
     $kk = 0;
     $weightDone = false;
-    $heightDone = false;
     while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'weight' && $weightDone == false){
             $Userweight = $data[$kk]->qAnswer;
             if(str_contains($Userweight, '<')) {
-                $Userweight = 70; // minimum weigh
+                $Userweight = 70; // minimum weigh in lb
             } elseif(str_contains($Userweight, '>')){
-                $Userweight = 300; // maximum weight
+                $Userweight = 300; // maximum weight in lb
             } else {
-                $Userweight = $Userweight;
+                $Userweight = intval($Userweight);
             }
             $weightDone = true;
         } else { // weight is required
         }
-        if($data[$kk]->qKey[0] == 'height' && $heightDone == false){
-            $Userheight = $data[$kk]->qAnswer;
-            if(str_contains($Userheight, '<')){
-                $Userheight = 4 * 12; // minimum heigh
-            } elseif(str_contains($Userheight, '>')){
-                $Userheight = 7 * 12; // maximum height
-            } else {
-                $height = explode('-', $Userheight);
-                $Userheight = intval($height[0]) * 12 + intval($height[1]);
-            }
-            $heightDone = true;
-        } else {
-        }
-        if($weightDone == true && $heightDone == true){
+        if($weightDone == true){
             break;
         }
         $kk++;
     }
-    $BMI = $Userweight * 703 / pow($Userheight, 2);
-    return($BMI);
+    return($Userweight);
 }
 
-function calculateBmr($data) {
+// returns height in inches
+function getHeight($data) {
     $kk = 0;
-    $weightDone = false;
     $heightDone = false;
-    $ageDone    = false;
-    $genderDone = false;
-    $stressDone = false;
-    
     while(isset($data[$kk]->qIdx)){
-        if($data[$kk]->qKey[0] == 'weight' && $weightDone == false){
-            $Userweight = $data[$kk]->qAnswer;
-            if(str_contains($Userweight, '<')) {
-                $Userweight = 70; // minimum weigh
-            } elseif(str_contains($Userweight, '>')){
-                $Userweight = 300; // maximum weight
-            } else {
-                $Userweight = $Userweight;
-            }
-            $weightDone = true;
-        } else { // weight is required
-        }
         if($data[$kk]->qKey[0] == 'height' && $heightDone == false){
             $Userheight = $data[$kk]->qAnswer;
             if(str_contains($Userheight, '<')){
-                $Userheight = 4 * 12; // minimum heigh
+                $Userheight = ft2in(4); // minimum heigh in inches
             } elseif(str_contains($Userheight, '>')){
-                $Userheight = 7 * 12; // maximum height
+                $Userheight = ft2in(7); // maximum height in inches
             } else {
                 $height = explode('-', $Userheight);
-                $Userheight = intval($height[0]) * 12 + intval($height[1]);
+                $Userheight = ft2in(intval($height[0])) + intval($height[1]); // hright in inches
             }
             $heightDone = true;
         } else {
-            // height is required.
         }
+        if($heightDone == true){
+            break;
+        }
+        $kk++;
+    }
+    return($Userheight);
+}
+
+// returns age rounded by year
+function getAge($data) {
+    $ageDone    = false;
+    $kk         = 0;
+    while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'age' && $ageDone == false){
             $Userage = $data[$kk]->qAnswer;
             if(str_contains($Userage, '<')) {
@@ -161,31 +161,93 @@ function calculateBmr($data) {
             } elseif(str_contains($Userage, '>')){
                 $Userage = 90; // maximum age
             } else {
-                $Userage = $Userage;
+                $Userage = intval($Userage);
             }
             $ageDone = true;
         } else {
             // age is needed
         }
+        if($ageDone == true){
+            break;
+        }
+        $kk++;
+    }
+    return($Userage);
+}
+
+// returns user gender
+function getGender($data) {
+    $genderDone    = false;
+    $kk            = 0;
+    while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'gender' && $genderDone == false){
             $Usergender = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
             $genderDone = true;
         } else {
             $Usergender = 'Male'; // by default
         }
-        
+        if($genderDone == true){
+            break;
+        }
+        $kk++;
+    }
+    return($Usergender);
+}
+// user's stress 
+function getStress($data) {
+    $stressDone    = false;
+    $kk            = 0;
+    while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'stress' && $stressDone == false){
             $Userstress = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
             $stressDone = true;
         } else {
             $Userstress = 'relaxed'; // by default
         }
-        
-        if($weightDone == true && $heightDone == true && $ageDone == true && $genderDone == true && $stressDone == true){
+        if($stressDone == true){
             break;
         }
         $kk++;
     }
+    return($Userstress);
+}
+// user's goal
+function getGoal($data) {
+    $goalDone    = false;
+    $kk          = 0;
+    while(isset($data[$kk]->qIdx)){
+        if($data[$kk]->qKey[0] == 'goal' && $goalDone == false){
+            $Usergoal = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
+            $goalDone = true;
+        } else {
+            $Usergoal = 'Lose'; // by default
+        }
+        if($goalDone == true){
+            break;
+        }
+        $kk++;
+    }
+    return($Usergoal);
+}
+
+function calculateBmi($data){
+    $Userweight = getWeight($data);
+    $Userheight = getHeight($data);
+    $BMI = lb2kg($Userweight) / pow(in2cm($Userheight)/100, 2);
+    return($BMI);
+}
+
+
+// this function is using Harris-Benedict equation for BMR calculation
+function calculateBmr($data) {
+    
+    // convert measurements to standard
+    $Userweight = lb2kg(getWeight($data)); 
+    $Userheight = in2cm(getHeight($data));
+    $Userage    = getAge($data);
+    $Usergender = getGender($data);
+    $Userstress = getStress($data);
+        
     if($Userstress == 'relaxed') {
         $stressFactor = 1.2;
     } elseif($Userstress == 'manageable') {
@@ -193,11 +255,10 @@ function calculateBmr($data) {
     } else {
         $stressFactor = 2.25;
     }
-    
     if($Usergender == 'Male') {
-        $BMR = $stressFactor * ( 66.47 + (6.24 * intval($Userweight)) + (12.7 * intval($Userheight)) - (6.75 * intval($Userage)));
+        $BMR = $stressFactor * ( 66.47 + (13.75 * $Userweight) + (5.003 * $Userheight) - (6.75 * $Userage));
     } else {
-        $BMR = $stressFactor * ( 65.51 + (4.35 * intval($Userweight)) + (4.7 * intval($Userheight)) - (4.7 * intval($Userage)));
+        $BMR = $stressFactor * ( 655.1 + (9.56 * $Userweight) + (1.85 * $Userheight) - (4.7 * $Userage));
     }
     return($BMR);
 }
@@ -206,118 +267,80 @@ function calculateIf($data){
     // this function is the algorithm for calculating intervals in which the user is 
     // recommended for fasting. Fasting increase IGF or growth hormons.  
     // calculate intermittent fasting interval
-    $kk = 0;
-    $weightDone = false;
-    $ageDone    = false;
-    $genderDone = false;
-    $goalDone   = false;
-    $ifDone     = false;
     $IF         = [[24,0],[24,0],[24,0],[24,0],[24,0],[24,0],[24,0]];
-    while(isset($data[$kk]->qIdx)){
-        if($data[$kk]->qKey[0] == 'weight' && $weightDone == false){
-            $Userweight = $data[$kk]->qAnswer;
-            if(str_contains($Userweight, '<')) {
-                $Userweight = 70; // minimum weigh
-            } elseif(str_contains($Userweight, '>')){
-                $Userweight = 300; // maximum weight
-            } else {
-                $Userweight = $Userweight;
-            }
-            $weightDone = true;
-        } else {
-            // weight is required
-        }
-        if($data[$kk]->qKey[0] == 'age' && $ageDone == false){
-            $Userage = $data[$kk]->qAnswer;
-            if(str_contains($Userage, '<')) {
-                $Userage = 18; // minimum age
-            } elseif(str_contains($Userage, '>')){
-                $Userage = 90; // maximum age
-            } else {
-                $Userage = $Userage;
-            }
-            $ageDone = true;
-        } else {
-            // age is needed
-        }
-        if($data[$kk]->qKey[0] == 'gender' && $genderDone == false){
-            $Usergender = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
-            $genderDone = true;
-        } else {
-            $Usergender = 'Male'; // by default
-        }
-        if($data[$kk]->qKey[0] == 'goal' && $goalDone == false){
-            $Usergoal = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
-            $goalDone = true;
-        } else {
-            $Usergoal = 'Lose'; // by default
-        }
-        $kk++;
-    }
+    $Userweight = getWeight($data);
+    $Userage    = getAge($data);
+    $Usergender = getGender($data);
+    $Usergoal   = getGoal($data);
+
     // IF suggestion based on user's spec
     // -----------------------------------------------------------
     
-    if(!$ifDone == false && $Userweight > 70 && $Userweight < 120) {
+    if($Userweight >= 70 && $Userweight < 120) {
         if($Usergender == 'Male'){
             if($Usergoal == 'Lose') {
                 $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
-                $ifDone = true;
             } elseif($Usergoal == 'Gain') {
                 $IF = [[24,0],[24,0],[24,0],[24,0],[24,0],[16,8],[24,0]];
-                $ifDone = true;
             }
         } elseif($Usergender == 'Female'){
             if($Usergoal == 'Lose') {
                 $IF = [[16,8],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
-                $ifDone = true;
             } elseif($Usergoal == 'Gain') {
                 $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
-                $ifDone = true;
             }
         }
     }
-    if(!$ifDone == false && $Userweight > 120 && $Userweight < 220) {
+    elseif($Userweight >= 120 && $Userweight < 220) {
         if($Usergender == 'Male'){
             if($Usergoal == 'Lose') {
                 $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
-                $ifDone = true;
             } elseif($Usergoal == 'Gain') {
                 $IF = [[24,0],[24,0],[24,0],[24,0],[24,0],[16,8],[24,0]];
-                $ifDone = true;
             }
         } elseif($Usergender == 'Female'){
             if($Usergoal == 'Lose') {
                 $IF = [[16,8],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
-                $ifDone = true;
             } elseif($Usergoal == 'Gain') {
                 $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
-                $ifDone = true;
             }
         }
     }
-    if(!$ifDone == false && $Userweight > 220 && $Userweight < 300) {
+    elseif($Userweight >= 220 && $Userweight < 300) {
         if($Usergender == 'Male'){
             if($Usergoal == 'Lose') {
                 $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
-                $ifDone = true;
             } elseif($Usergoal == 'Gain') {
                 $IF = [[24,0],[24,0],[24,0],[24,0],[24,0],[16,8],[24,0]];
-                $ifDone = true;
             }
         } elseif($Usergender == 'Female'){
             if($Usergoal == 'Lose') {
                 $IF = [[16,8],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
-                $ifDone = true;
             } elseif($Usergoal == 'Gain') {
                 $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
-                $ifDone = true;
             }
         }
     }
-
     // -----------------------------------------------------------
     return($IF);
 }
+// function to calculate adjusted body weight
+function calculateAjBW($data) {
+    $Userweight = getWeight($data);
+    $Userheight = getHeight($data);
+    $Usergender = getGender($data);
+    // calculation
+    if($Usergender == 'Female') {
+        //$idealBodyWeight = 49 kg + 1.7 kg per every inch over 5 feet
+        $idealBodyWeight = 49 + 1.7 * ($Userheight - 60); // kg
+    } else {
+        //$idealBodyWeight = 52 kg + 1.9 kg per every inch over 5 feet
+        $idealBodyWeight = 52 + 1.9 * ($Userheight - 60); // kg
+    }
+    $adjustedBodyWeight = $idealBodyWeight + 0.4 * (lb2kg($Userweight) - $idealBodyWeight);
+    return(kg2lb($adjustedBodyWeight));
+}
+
 function calculateMacro($data){
     // add Macro computation code
     
