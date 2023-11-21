@@ -326,8 +326,8 @@ function calculateIf($data){
 }
 // function to calculate adjusted body weight
 function calculateAjBW($data) {
-    $Userweight = getWeight($data);
-    $Userheight = getHeight($data);
+    $Userweight = getWeight($data); // lb
+    $Userheight = getHeight($data); // inch
     $Usergender = getGender($data);
     // calculation
     if($Usergender == 'Female') {
@@ -343,8 +343,58 @@ function calculateAjBW($data) {
 
 function calculateMacro($data){
     // add Macro computation code
-    
-    return([20, 40, 10, 30]);
+    // this function returns Macro requirements to maintain current weight
+    // first calculate BMR
+    // based on age, gender and goal do the followings:
+    // 10-35% protein
+    // 45-65% carbs
+    // 20-35% fat
+    $Userage    = getAge($data);
+    $Usergender = getGender($data);
+    $Usergoal   = getGoal($data);
+    $BMR        = calculateBmr($data);
+    // factor in the user's age
+    if($UserAge < 20) {
+        $ageFactor = 0.95;
+    } elseif($UserAge >= 20 && $UserAge < 30) {
+        $ageFactor = 1;
+    } elseif($UserAge >= 30 && $UserAge < 40) {
+        $ageFactor = 1.05;
+    } elseif($UserAge >= 40 && $UserAge < 50) {
+        $ageFactor = 0.95;
+    } elseif($UserAge >= 50) {
+        $ageFactor = 0.9;
+    }
+    if($Usergender == 'Male'){
+        if($Usergoal == 'Lose') {
+            $p = 0.3 * $ageFactor;
+            $c = 0.6 * (1 - $ageFactor);
+            $f = 1 - $p - $c;
+            $caloriDeficit = 500;
+            $Macro =  [$p, $c, $f] * $BMR - $caloriDeficit; // [protein, carb, fat];
+        } elseif($Usergoal == 'Gain') {
+            $p = 0.3 * $ageFactor;
+            $c = 0.6 * (1 - $ageFactor);
+            $f = 1 - $p - $c;
+            $caloriSurplus = 500;
+            $Macro =  [$p, $c, $f] * $BMR + $caloriSurplus; // [protein, carb, fat];
+        }
+    } elseif($Usergender == 'Female'){
+        if($Usergoal == 'Lose') {
+            $p = 0.2 * $ageFactor;
+            $c = 0.65 * (1 - $ageFactor);
+            $f = 1 - $p - $c;
+            $caloriDeficit = 500;
+            $Macro =  [$p, $c, $f] * $BMR - $caloriDeficit; // [protein, carb, fat];
+        } elseif($Usergoal == 'Gain') {
+            $p = 0.25 * $ageFactor;
+            $c = 0.65 * (1 - $ageFactor);
+            $f = 1 - $p - $c;
+            $caloriSurplus = 500;
+            $Macro =  [$p, $c, $f] * $BMR + $caloriSurplus; // [protein, carb, fat];
+        }
+    }
+    return($Macro);
 }
 function calculateMicro($data){
     // add Micro computation code
