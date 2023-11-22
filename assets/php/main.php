@@ -398,8 +398,34 @@ function calculateMacro($data){
 }
 function calculateMicro($data){
     // add Micro computation code
-
-    return([5,7,8,10,2,4,12,5.2]);
+    // [A, B1, B2, B3, B5, B6, B7, B9, B12, C, D, E, K]
+    // [Calcium, Chromium, Copper, Fluoride, 
+    // Iodine, Iron, Magnesium, Manganese, 
+    // Molybdenum, Phosphorus, Selenium, Zinc, Potassium, Sodium, Chloride]
+    $Userage    = getAge($data);
+    $Usergender = getGender($data);
+    $vNames = ['A Retinol', 'Thiamin B1', 'Riboflavin B2', 
+                   'Niacin B3','Pantothenic Acid B5', 'B6', 'Biotin B7', 'Folate B9', 'B12',
+                   'C', 'D', 'E', 'K'];
+    $tNames = [];
+    // units vector for vitamins
+    $vUnits = ['ug RAE', 'mg', 'mg', 'mg', 'mg', 'mg', 'ug', 'ug DFE', 'ug', 'mg','IU', 'IU', 'ug'];
+    // units vector for trace minerals
+    $tUnits = [];
+    if($Usergender == 'Male') {
+        if($Userage > 70) {
+            $vValues = [900, 1.2, 1.3, 16, 5, 1.3, 30, 400, 2.4, 90, 800, 22.5, 120];
+        } else {
+            $vValues = [900, 1.2, 1.3, 16, 5, 1.3, 30, 400, 2.4, 90, 600, 22.5, 120];
+        }
+    } elseif($Usergender == 'Female') {
+        if($Userage > 70) {
+            $vValues = [700, 1.1, 1.1, 14, 5, 1.3, 30, 400, 2.4, 75, 600, 22.5, 90]; 
+        } else {
+            $vValues = [700, 1.1, 1.1, 14, 5, 1.3, 30, 400, 2.4, 75, 800, 22.5, 90];
+        }   
+    } 
+    return($Micro);
 }
 
 function dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro){
