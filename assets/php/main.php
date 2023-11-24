@@ -80,10 +80,10 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
 }
 
 function kg2lb($kg) {
-    return($kg * 0.45);
+    return($kg * 2.2);
 }
 function lb2kg($lb) {
-    return($lb * 2.2);
+    return($lb * 0.45);
 }
 function in2cm($in) {
     return($in * 2.54);
@@ -98,7 +98,7 @@ function ft2in($ft) {
     return($ft * 12);
 }
 
-// returns weight in lb
+// returns weight in lb  <-- Important
 function getWeight($data) {
     $kk = 0;
     $weightDone = false;
@@ -123,7 +123,7 @@ function getWeight($data) {
     return($Userweight);
 }
 
-// returns height in inches
+// returns height in inches  <-- Important
 function getHeight($data) {
     $kk = 0;
     $heightDone = false;
@@ -267,7 +267,7 @@ function calculateBmr($data) {
     $Userage    = getAge($data);
     $Usergender = getGender($data);
     $Userstress = getStress($data);
-        
+
     if($Userstress == 'Low') {
         $stressFactor = 1.2;
     } elseif($Userstress == 'Medium') {
@@ -299,45 +299,45 @@ function calculateIf($data){
     if($Userweight >= 70 && $Userweight < 120) {
         if($Usergender == 'Male'){
             if($Usergoal == 'Lose') {
-                $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
             } elseif($Usergoal == 'Gain') {
-                $IF = [[24,0],[24,0],[24,0],[24,0],[24,0],[16,8],[24,0]];
+                $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
             }
         } elseif($Usergender == 'Female'){
             if($Usergoal == 'Lose') {
-                $IF = [[16,8],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
             } elseif($Usergoal == 'Gain') {
-                $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
             }
         }
     }
     elseif($Userweight >= 120 && $Userweight < 220) {
         if($Usergender == 'Male'){
             if($Usergoal == 'Lose') {
-                $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
             } elseif($Usergoal == 'Gain') {
-                $IF = [[24,0],[24,0],[24,0],[24,0],[24,0],[16,8],[24,0]];
+                $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
             }
         } elseif($Usergender == 'Female'){
             if($Usergoal == 'Lose') {
-                $IF = [[16,8],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
             } elseif($Usergoal == 'Gain') {
-                $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
             }
         }
     }
     elseif($Userweight >= 220 && $Userweight < 300) {
         if($Usergender == 'Male'){
             if($Usergoal == 'Lose') {
-                $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
             } elseif($Usergoal == 'Gain') {
-                $IF = [[24,0],[24,0],[24,0],[24,0],[24,0],[16,8],[24,0]];
+                $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
             }
         } elseif($Usergender == 'Female'){
             if($Usergoal == 'Lose') {
-                $IF = [[16,8],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
             } elseif($Usergoal == 'Gain') {
-                $IF = [[24,0],[24,0],[16,8],[24,0],[24,0],[16,8],[24,0]];
+                $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
             }
         }
     }

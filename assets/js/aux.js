@@ -874,22 +874,38 @@ function plotIf(If){
     ifDesc.style.display = 'block';
 
     const ifData = {
-      labels: ['Eating interval (hrs)', 'Fasting interval (hrs)'],
-      datasets: [{
-        data: [24-If, If],
-        backgroundColor: [
-          'coral',
-          'lightblue'
-        ],
-      }]
+      labels: ['Sat','Sun','Mon','Tue','Wed','Thu','Fri'],
+      datasets: [
+        {
+            label: 'Eating interval (hrs)',
+            data: If[0],
+            backgroundColor: 'rgba(15, 157, 88, 0.5)',
+            borderColor: 'rgba(15, 157, 88, 1)',
+            borderWidth: 2,
+        },
+        {
+            label:  'Fasting interval (hrs)',
+            data: If[1],
+            backgroundColor: 'rgba(66, 133, 244, 0.5)',
+            borderColor: 'rgba(66, 133, 244, 1)',
+            borderWidth: 2,
+        }
+    ]
     };
     const config = {
-      type: 'doughnut',
+      type: 'bar',
       data: ifData,
       options: {
+        indexAxis: 'y',
         responsive: true,
-        maintainAspectRatio: false,
-        cutout: 35,
+        scales: {
+            x: {
+              stacked: true,
+            },
+            y: {
+              stacked: true
+            }
+        }
       }
     };
     ifChart = new Chart(
