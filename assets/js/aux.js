@@ -671,7 +671,7 @@ function submitUserData(inputDataBlob, page, userPage) {
             let data = JSON.parse(this.response);
             if(data.status == 0 && page == 'main'){
                 plotBmi(data.bmi);
-                plotIf(data.If);
+                plotIf(data.if);
                 plotMacro(data.macro);
                 plotMicro(data.micro);
                 displayMeal();

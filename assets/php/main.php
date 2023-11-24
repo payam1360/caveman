@@ -181,7 +181,12 @@ function getGender($data) {
     $kk            = 0;
     while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'gender' && $genderDone == false){
-            $Usergender = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
+            $UsergenderChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
+            if($UsergenderChoice == 'Male') {
+                $Usergender = 'Male';
+            } else {
+                $Usergender = 'Female';
+            }
             $genderDone = true;
         } else {
             $Usergender = 'Male'; // by default
@@ -199,10 +204,17 @@ function getStress($data) {
     $kk            = 0;
     while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'stress' && $stressDone == false){
-            $Userstress = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
+            $UserstressChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
+            if($UserstressChoice == 'high') {
+                $Userstress = 'High';
+            } elseif($UserstressChoice == 'manageable') {
+                $Userstress = 'Medium';
+            } else {
+                $Userstress = 'Low';
+            }
             $stressDone = true;
         } else {
-            $Userstress = 'relaxed'; // by default
+            $Userstress = 'Low'; // by default
         }
         if($stressDone == true){
             break;
@@ -217,7 +229,15 @@ function getGoal($data) {
     $kk          = 0;
     while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'goal' && $goalDone == false){
-            $Usergoal = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
+            $UsergoalChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
+            
+            if($UsergoalChoice == 'lose weight') {
+                $Usergoal = 'Lose';
+            } elseif($UsergoalChoice == 'gain muscles') {
+                $Usergoal = 'Gain';
+            } else {
+                $Usergoal = 'LessTired';
+            }
             $goalDone = true;
         } else {
             $Usergoal = 'Lose'; // by default
@@ -248,9 +268,9 @@ function calculateBmr($data) {
     $Usergender = getGender($data);
     $Userstress = getStress($data);
         
-    if($Userstress == 'relaxed') {
+    if($Userstress == 'Low') {
         $stressFactor = 1.2;
-    } elseif($Userstress == 'manageable') {
+    } elseif($Userstress == 'Medium') {
         $stressFactor = 1.65;
     } else {
         $stressFactor = 2.25;
@@ -353,16 +373,17 @@ function calculateMacro($data){
     $Usergender = getGender($data);
     $Usergoal   = getGoal($data);
     $BMR        = calculateBmr($data);
+
     // factor in the user's age
-    if($UserAge < 20) {
+    if($Userage < 20) {
         $ageFactor = 0.95;
-    } elseif($UserAge >= 20 && $UserAge < 30) {
+    } elseif($Userage >= 20 && $Userage < 30) {
         $ageFactor = 1;
-    } elseif($UserAge >= 30 && $UserAge < 40) {
+    } elseif($Userage >= 30 && $Userage < 40) {
         $ageFactor = 1.05;
-    } elseif($UserAge >= 40 && $UserAge < 50) {
+    } elseif($Userage >= 40 && $Userage < 50) {
         $ageFactor = 0.95;
-    } elseif($UserAge >= 50) {
+    } elseif($Userage >= 50) {
         $ageFactor = 0.9;
     }
     if($Usergender == 'Male'){
@@ -371,13 +392,22 @@ function calculateMacro($data){
             $c = 0.6 * (1 - $ageFactor);
             $f = 1 - $p - $c;
             $caloriDeficit = 500;
-            $Macro =  [$p, $c, $f] * $BMR - $caloriDeficit; // [protein, carb, fat];
+            $Macro =  [$p * $BMR - $caloriDeficit, $c * $BMR - $caloriDeficit, 
+                       $f * $BMR - $caloriDeficit]; // [protein, carb, fat];
         } elseif($Usergoal == 'Gain') {
             $p = 0.3 * $ageFactor;
             $c = 0.6 * (1 - $ageFactor);
             $f = 1 - $p - $c;
             $caloriSurplus = 500;
-            $Macro =  [$p, $c, $f] * $BMR + $caloriSurplus; // [protein, carb, fat];
+            $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
+                       $f * $BMR + $caloriSurplus]; // [protein, carb, fat];
+        } else {
+            $p = 0.3 * $ageFactor;
+            $c = 0.6 * (1 - $ageFactor);
+            $f = 1 - $p - $c;
+            $caloriSurplus = 500;
+            $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
+                       $f * $BMR + $caloriSurplus]; // [protein, carb, fat];            
         }
     } elseif($Usergender == 'Female'){
         if($Usergoal == 'Lose') {
@@ -385,46 +415,73 @@ function calculateMacro($data){
             $c = 0.65 * (1 - $ageFactor);
             $f = 1 - $p - $c;
             $caloriDeficit = 500;
-            $Macro =  [$p, $c, $f] * $BMR - $caloriDeficit; // [protein, carb, fat];
+            $Macro =  [$p * $BMR - $caloriDeficit, $c * $BMR - $caloriDeficit, 
+                       $f * $BMR - $caloriDeficit]; // [protein, carb, fat];
         } elseif($Usergoal == 'Gain') {
             $p = 0.25 * $ageFactor;
             $c = 0.65 * (1 - $ageFactor);
             $f = 1 - $p - $c;
             $caloriSurplus = 500;
-            $Macro =  [$p, $c, $f] * $BMR + $caloriSurplus; // [protein, carb, fat];
+            $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
+                       $f * $BMR + $caloriSurplus]; // [protein, carb, fat];
+        } else {
+            $p = 0.25 * $ageFactor;
+            $c = 0.65 * (1 - $ageFactor);
+            $f = 1 - $p - $c;
+            $caloriSurplus = 500;
+            $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
+                       $f * $BMR + $caloriSurplus]; // [protein, carb, fat];
         }
     }
     return($Macro);
 }
 function calculateMicro($data){
     // add Micro computation code
-    // [A, B1, B2, B3, B5, B6, B7, B9, B12, C, D, E, K]
-    // [Calcium, Chromium, Copper, Fluoride, 
-    // Iodine, Iron, Magnesium, Manganese, 
-    // Molybdenum, Phosphorus, Selenium, Zinc, Potassium, Sodium, Chloride]
+    // vitamin         = [A, B1, B2, B3, B5, B6, B7, B9, B12, C, D, E, K]
+    // trace minerals  = [Calcium, Chromium, Copper, Fluoride, 
+    //                    Iodine, Iron, Magnesium, Manganese, 
+    //                    Molybdenum, Phosphorus, Potassium, Selenium, Sodium, Zinc, Chloride]
     $Userage    = getAge($data);
     $Usergender = getGender($data);
     $vNames = ['A Retinol', 'Thiamin B1', 'Riboflavin B2', 
                    'Niacin B3','Pantothenic Acid B5', 'B6', 'Biotin B7', 'Folate B9', 'B12',
                    'C', 'D', 'E', 'K'];
-    $tNames = [];
+    $tNames = ['Calcium', 'Chromium', 'Copper', 'Fluoride', 'Iodine', 'Iron', 'Magnesium', 
+               'Manganese', 'Molybdenum', 'Phosphorus', 'Potassium', 'Selenium', 'Sodium',
+               'Zinc', 'Chloride'];
     // units vector for vitamins
     $vUnits = ['ug RAE', 'mg', 'mg', 'mg', 'mg', 'mg', 'ug', 'ug DFE', 'ug', 'mg','IU', 'IU', 'ug'];
     // units vector for trace minerals
-    $tUnits = [];
+    $tUnits = ['mg', 'ug', 'ug', 'mg', 'ug', 'mg', 'mg', 'mg', 'ug', 'mg', 'mg', 'ug', 'mg', 'mg', 'g'];
     if($Usergender == 'Male') {
         if($Userage > 70) {
             $vValues = [900, 1.2, 1.3, 16, 5, 1.3, 30, 400, 2.4, 90, 800, 22.5, 120];
+            $tValues = [1200, 30, 900, 4, 150, 8, 420, 2.3, 45, 700, 4700, 55, 1200, 11, 3.1];
+        } elseif($Userage >= 50 && $Userage <= 70) {
+            $vValues = [900, 1.2, 1.3, 16, 5, 1.3, 30, 400, 2.4, 90, 600, 22.5, 120];
+            $tValues = [1000, 30, 900, 4, 150, 8, 420, 2.3, 45, 700, 4700, 55, 1300, 11, 3.1];
         } else {
             $vValues = [900, 1.2, 1.3, 16, 5, 1.3, 30, 400, 2.4, 90, 600, 22.5, 120];
+            $tValues = [1000, 35, 900, 4, 150, 8, 400, 2.3, 45, 700, 4700, 55, 1500, 11, 3.1];
         }
     } elseif($Usergender == 'Female') {
         if($Userage > 70) {
-            $vValues = [700, 1.1, 1.1, 14, 5, 1.3, 30, 400, 2.4, 75, 600, 22.5, 90]; 
+            $vValues = [700, 1.1, 1.1, 14, 5, 1.3, 30, 400, 2.4, 75, 800, 22.5, 90]; 
+            $tValues = [1200, 20, 900, 3, 150, 8, 320, 1.8, 45, 700, 4700, 55, 1200, 8, 3.1];
+        } elseif($Userage >= 50 && $Userage <= 70) {
+            $vValues = [700, 1.1, 1.1, 14, 5, 1.3, 30, 400, 2.4, 75, 600, 22.5, 90];
+            $tValues = [1200, 20, 900, 3, 150, 8, 320, 1.8, 45, 700, 4700, 55, 1300, 8, 3.1];
         } else {
-            $vValues = [700, 1.1, 1.1, 14, 5, 1.3, 30, 400, 2.4, 75, 800, 22.5, 90];
+            $vValues = [700, 1.1, 1.1, 14, 5, 1.3, 30, 400, 2.4, 75, 600, 22.5, 90];
+            $tValues = [1000, 25, 900, 3, 150, 18, 310, 1.8, 45, 700, 4700, 55, 1500, 8, 3.1];
         }   
     } 
+    $Micro = array('vNames' => $vNames,
+                   'tNames' => $tNames,
+                   'vValues' => $vValues,
+                   'tValues' => $tValues,
+                   'vUnits' => $vUnits,
+                   'tUnits' => $tUnits);
     return($Micro);
 }
 
@@ -432,7 +489,7 @@ function dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro){
     $data = array('status' => 0,
                  'bmi'   => $user_bmi,
                  'bmr'   => $user_bmr,
-                 'If'    => $user_if,
+                 'if'    => $user_if,
                  'macro' => $user_macro,
                  'micro' => $user_micro);
     return $data;
@@ -515,8 +572,6 @@ $user_macro    = calculateMacro($data);
 $user_micro    = calculateMicro($data);
 $output        = dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro);
 echo json_encode($output);
-
-
 ?>
 
 
