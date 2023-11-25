@@ -390,47 +390,53 @@ function calculateMacro($data){
         if($Usergoal == 'Lose') {
             $p = 0.3 * $ageFactor;
             $c = 0.6 * (1 - $ageFactor);
-            $f = 1 - $p - $c;
-            $caloriDeficit = 500;
+            $f = 0.9 - $p - $c;
+            $fi= 0.1;
+            $caloriDeficit = 250;
             $Macro =  [$p * $BMR - $caloriDeficit, $c * $BMR - $caloriDeficit, 
-                       $f * $BMR - $caloriDeficit]; // [protein, carb, fat];
+                       $f * $BMR - $caloriDeficit, $fi * $BMR - $caloriDeficit]; // [protein, carb, fat];
         } elseif($Usergoal == 'Gain') {
             $p = 0.3 * $ageFactor;
             $c = 0.6 * (1 - $ageFactor);
-            $f = 1 - $p - $c;
-            $caloriSurplus = 500;
+            $f = 0.9 - $p - $c;
+            $fi= 0.1;
+            $caloriSurplus = 250;
             $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
-                       $f * $BMR + $caloriSurplus]; // [protein, carb, fat];
+                       $f * $BMR + $caloriSurplus, $fi * $BMR - $caloriSurplus]; // [protein, carb, fat];
         } else {
             $p = 0.3 * $ageFactor;
             $c = 0.6 * (1 - $ageFactor);
-            $f = 1 - $p - $c;
-            $caloriSurplus = 500;
+            $f = 0.9 - $p - $c;
+            $fi= 0.1;
+            $caloriSurplus = 250;
             $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
-                       $f * $BMR + $caloriSurplus]; // [protein, carb, fat];            
+                       $f * $BMR + $caloriSurplus, $fi * $BMR - $caloriSurplus]; // [protein, carb, fat];            
         }
     } elseif($Usergender == 'Female'){
         if($Usergoal == 'Lose') {
             $p = 0.2 * $ageFactor;
             $c = 0.65 * (1 - $ageFactor);
-            $f = 1 - $p - $c;
-            $caloriDeficit = 500;
+            $f = 0.9 - $p - $c;
+            $fi= 0.1;
+            $caloriDeficit = 250;
             $Macro =  [$p * $BMR - $caloriDeficit, $c * $BMR - $caloriDeficit, 
-                       $f * $BMR - $caloriDeficit]; // [protein, carb, fat];
+                       $f * $BMR - $caloriDeficit, $fi * $BMR - $caloriDeficit]; // [protein, carb, fat];
         } elseif($Usergoal == 'Gain') {
             $p = 0.25 * $ageFactor;
             $c = 0.65 * (1 - $ageFactor);
-            $f = 1 - $p - $c;
-            $caloriSurplus = 500;
+            $f = 0.9 - $p - $c;
+            $fi= 0.1;
+            $caloriSurplus = 250;
             $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
-                       $f * $BMR + $caloriSurplus]; // [protein, carb, fat];
+                       $f * $BMR + $caloriSurplus, $fi * $BMR - $caloriSurplus]; // [protein, carb, fat];
         } else {
             $p = 0.25 * $ageFactor;
             $c = 0.65 * (1 - $ageFactor);
-            $f = 1 - $p - $c;
-            $caloriSurplus = 500;
+            $f = 0.9 - $p - $c;
+            $fi= 0.1;
+            $caloriSurplus = 250;
             $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
-                       $f * $BMR + $caloriSurplus]; // [protein, carb, fat];
+                       $f * $BMR + $caloriSurplus, $fi * $BMR - $caloriSurplus]; // [protein, carb, fat];
         }
     }
     return($Macro);
