@@ -970,22 +970,15 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     microDesc.style.display = 'block';
     
     microDesc.innerHTML = 'This text must come from the server about Micro!';
-    
+    tColors = ['coral','lightblue','limegreen','cyan','blue','green','orange','magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod','Peru','Sienna'];
     const microData = {
-      labels: ['calcium','folate', 'iron', 'vitamin B-6', 'vitamin B-12', 'vitamin C', 'vitamin E', 'zinc'],
-      datasets: [{
-        data: micro,
-        backgroundColor: [
-          'coral',
-          'lightblue',
-          'limegreen',
-          'cyan',
-          'blue',
-          'green',
-          'orange',
-          'magenta',
-        ],
-      }]
+        datasets: [{
+            data: micro.tValues,
+            backgroundColor: tColors,
+            labels: micro.tNames,
+            units: micro.tUnits,
+            scale: micro.tScale,
+        }]
     };
     const bgColor = {
         id: 'bgColor',
@@ -1000,6 +993,17 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
       type: 'polarArea',
       data: microData,
       options: {
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.dataset.labels[context.dataIndex] + ": " + 
+                        context.dataset.data[context.dataIndex] * context.dataset.scale[context.dataIndex]+ " " + context.dataset.units[context.dataIndex];
+                        return label;
+                    }
+                }
+            }
+        },
         responsive: true,
         maintainAspectRatio: false,
       },
