@@ -674,6 +674,7 @@ function submitUserData(inputDataBlob, page, userPage) {
                 plotIf(data.if);
                 plotMacro(data.macro);
                 plotMicro(data.micro);
+                plotMicroVit(data.micro);
                 displayMeal();
             } else if(data.status == 0 && page == 'questions') {
                 window.alert('data saved');
@@ -1014,7 +1015,68 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
       config
     );
 }
-
+// function to plot Micro data returned by the server for the given user
+function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
+    // Canvas element section
+    let microElement  = document.querySelector('#Micro_vit');
+    if(microDiv == 0) {
+        microDiv = document.querySelector('.Micro_vit');
+    }
+    if(microTxt == 0) {
+        microTxt = document.querySelector('.MICRO_vit_text');
+    }
+    if(microDesc == 0) {
+        microDesc = document.querySelector('.MICRO_vit_text_description');
+    }
+    microTxt.style.display = 'block';
+    microDiv.style.display = 'block';
+    microDesc.style.display = 'block';
+    
+    microDesc.innerHTML = 'This text must come from the server about Micro!';
+    vColors = ['coral','lightblue','limegreen','cyan','blue','green','orange','magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod','Peru','Sienna'];
+    const microData = {
+        datasets: [{
+            data: micro.vValues,
+            backgroundColor: vColors,
+            labels: micro.vNames,
+            units: micro.vUnits,
+            scale: micro.vScale,
+        }]
+    };
+    const bgColor = {
+        id: 'bgColor',
+        beforeDraw: (chart, options) => {
+            const {ctx, width, height} = chart;
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, width, height);
+            ctx.restore();
+        }
+    }
+    const config = {
+      type: 'polarArea',
+      data: microData,
+      options: {
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.dataset.labels[context.dataIndex] + ": " + 
+                        context.dataset.data[context.dataIndex] * context.dataset.scale[context.dataIndex]+ " " + context.dataset.units[context.dataIndex];
+                        return label;
+                    }
+                }
+            }
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+      },
+        plugins: [bgColor],
+    };
+    microChart = new Chart(
+      microElement,
+      config
+    );
+}
 // function to display meal plan data returned by the server for the given user
 function displayMeal(){
     
