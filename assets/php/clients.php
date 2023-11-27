@@ -1,5 +1,8 @@
 <?php
 
+// this is registering users (not clients) into authentication table. 
+// 
+
 define("DBG", false);
 define("MAX_cnt", 2);
 
