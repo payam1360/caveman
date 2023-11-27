@@ -137,6 +137,7 @@ $ip            = getRealIpAddr();
 // get the user ID
 session_start();
 $userId         = $_SESSION['userId'];
+// check the question type selected by the user (nutritionist)
 if($userdata->data[0]->qAnswer == '0') {
     $data['MAX_cnt'] = 7;
 } elseif($userdata->data[0]->qAnswer == '1') {

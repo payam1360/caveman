@@ -1,6 +1,7 @@
 <?php
 
-
+// adding the client for a user. The user ID is coming from the global SESSION 
+// This is initial client addition for a given nutritionist.
 function addClient($userId, $Data) {
     
     $servername   = "127.0.0.1";
@@ -17,7 +18,20 @@ function addClient($userId, $Data) {
     // Create connection
     $conn         = new mysqli($servername, $loginname, $password, $dbname);
     // check if the client exists.
-    $sql          = "UPDATE $tablename SET name = '$name', gender = '$gender', goal = '$goal', nutritionEng = '$nutritionEng', mealEng = '$mealEng' WHERE userId = '$userId' AND used = '0' AND completed = '0' AND gender = '' LIMIT 1;";
+    $sql          = "UPDATE $tablename SET name = '$name', 
+                                           gender = '$gender', 
+                                           goal = '$goal', 
+                                           nutritionEng = '$nutritionEng', 
+                                           mealEng = '$mealEng' 
+                                           WHERE 
+                                           userId = '$userId' 
+                                           AND 
+                                           used = '0' 
+                                           AND 
+                                           completed = '0' 
+                                           AND 
+                                           gender = '' 
+                                           LIMIT 1;";
     $out = $conn->query($sql);
     $userInfo['status'] = $out;
     return $userInfo;
