@@ -473,8 +473,8 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
     input[1].addEventListener('transitionend', function(event) {
         resetFormType(event.target);
         setFormType(event.target, Questions[counter], event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'));
-            ChangeForm(event.target, '0s', '0', 1, '50%');
-            restorePrevAnswer(event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'));
+        ChangeForm(event.target, '0s', '0', 1, '50%');
+        restorePrevAnswer(event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'));
     });
     input[2].addEventListener('transitionend', function(event) {
         ChangeForm(event.target, '0.0s', '0', 0, '0%');

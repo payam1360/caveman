@@ -77,16 +77,23 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
         $optionsText = "";
     }
     // first check if there is incomplete campaigns
-    $sql = "SELECT clientId, campaignId FROM $table1name WHERE userId = '$userId' AND used = '1' AND completed = '0';";
+    $sql = "SELECT clientId, campaignId 
+                    FROM $table1name 
+                    WHERE 
+                    userId = '$userId' 
+                    AND 
+                    used = '1' 
+                    AND 
+                    completed = '0';";
     $data = $conn->query($sql);
-    if($data->num_rows == 1 && $complete == 0) {
+    if($data->num_rows == 1 && $complete == 0) { // add more user questions.
         $data = $data->fetch_assoc();
         $clientId = $data['clientId'];
         $campaignId = $data['campaignId'];
         $campaignTime = date("Y-m-d");
         $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId', '$ip', '$campaignId', '$campaignTime', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
         $conn->query($sql);
-    } elseif($complete == 1) {
+    } elseif($complete == 1) { // updating is complete ... the user has designed all questions.
         $data = $data->fetch_assoc();
         $clientId = $data['clientId'];
         $campaignId = $data['campaignId'];

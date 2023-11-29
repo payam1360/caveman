@@ -40,7 +40,25 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
             $qRequired = $Questions[$kk]->qRequired;
             $qKey = $Questions[$kk]->qKey[0];
             $campaignTime = date("Y-m-d");
-            $sql = "UPDATE $table1name SET campaignTime = '$campaignTime', qIdx = '$qIdx', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired', qKey = '$qKey' WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId' AND qIdx = '$qIdx';";
+            $sql = "UPDATE $table1name SET 
+                                            campaignTime = '$campaignTime', 
+                                            qIdx = '$qIdx', 
+                                            qType = '$qType', 
+                                            qContent = '$qContent', q
+                                            Answer = '$qAnswer', 
+                                            options = '$options', 
+                                            optionsText = '$optionsText', 
+                                            visited = '$visited', 
+                                            qRequired = '$qRequired', 
+                                            qKey = '$qKey' 
+                                            WHERE 
+                                            userId = '$userId' 
+                                            AND 
+                                            clientId = '$clientId' 
+                                            AND 
+                                            campaignId = '$campaignId' 
+                                            AND 
+                                            qIdx = '$qIdx';";
             $conn->query($sql);
             $kk++;
         }
