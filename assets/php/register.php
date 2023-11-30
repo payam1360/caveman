@@ -37,7 +37,7 @@ function createClientIdandCampaign($email, $numAllocation) {
     
 }
 
-function registerUserCredentials($password, $email) {
+function registerUserCredentials($passwordUser, $email) {
        
     $servername  = "127.0.0.1";
     $loginname   = "root";
@@ -46,7 +46,7 @@ function registerUserCredentials($password, $email) {
     $tablename   = "authentication";
     // Create connection
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
-    $hash        = password_hash($password, PASSWORD_DEFAULT);
+    $hash        = password_hash($passwordUser, PASSWORD_DEFAULT);
     $sql         = "UPDATE " . $tablename . " SET password = '" . $hash . "' WHERE email = '" . $email . "';";
     $conn->query($sql);
     $conn->close();

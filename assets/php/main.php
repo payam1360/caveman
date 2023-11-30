@@ -44,8 +44,8 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
                                             campaignTime = '$campaignTime', 
                                             qIdx = '$qIdx', 
                                             qType = '$qType', 
-                                            qContent = '$qContent', q
-                                            Answer = '$qAnswer', 
+                                            qContent = '$qContent', 
+                                            qAnswer = '$qAnswer', 
                                             options = '$options', 
                                             optionsText = '$optionsText', 
                                             visited = '$visited', 
