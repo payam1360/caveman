@@ -303,7 +303,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
                 newInbtn.style.width = width;
                 newInbtn.type = 'button';
                 newInbtn.setAttribute('class', 'form-input-style');
-                newInbtn.style.height = '140px';
+                newInbtn.style.height = '165px';
                 let newImgSpan = document.createElement('span');
                 newImgSpan.setAttribute('class', 'form-button-style');
                 newImgSpan.setAttribute('id', 'form-button');
