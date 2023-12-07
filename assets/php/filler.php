@@ -167,9 +167,8 @@ function QuestionBackendForm() {
                             ["2. is this question REQUIRED to be answered by the client?"],
                             ["3. are you done?","3. type the body of the question?"],
                             ["4. what is the PURPOSE of your question?"],
-                            ["5. are you done?", "5. enter your items description seperated by SEMICOLON (;) e.g. thumbs up; thumbs down"],
-                            ["6. are you done?", "6. enter your icons from font Awesome! e.g. fa-thumbs-up; fa-thumbs-down"],
-                            ["7. are you done?"],
+                            ["5. are you done?", "5. select your list topic!", "5. Multi-select your button options!"],
+                            ["6. are you done?"],
                             [""]
                         ];
     $data['qType'] = [
@@ -178,13 +177,12 @@ function QuestionBackendForm() {
                         ["button"],
                         ["button","text"],
                         ["list"],
-                        ["button", "text"],
-                        ["button", "text"],
+                        ["button", "multiButton", "multiButton"],
                         ["button"],
                         ["message"]
                     ];
     
-    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7];
     
     $data['options'] = [
                             [["fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope"]],
@@ -192,8 +190,15 @@ function QuestionBackendForm() {
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
                             [["name", "water", "calories", "weight", "height", "macros", "micros", "sleep", "workout", "stress", "sugar", "other"]],
-                            [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
-                            [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
+                            [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ["fa-solid fa-weight-scale", "fa-solid fa-text-height", "fa-solid fa-person-cane"],
+                             ["fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
                             [['fa-regular fa-circle-check']],
                        ];
@@ -204,15 +209,20 @@ function QuestionBackendForm() {
                                 [["YES", "NO"]],
                                 [["YES", "NO"], [""]],
                                 [[""]],
-                                [["YES", "NO"], [""]],
-                                [["YES", "NO"], [""]],
+                                [["YES", "NO"], ["weight list","height list","age list"], ["a","b","c","d","e","f","g",
+                                                                                           "a","b","c","d","a","a","a",
+                                                                                           "a","b","c","d","a","a","a",
+                                                                                           "a","b","c","d","a","a","a",
+                                                                                           "a","b","c","d","a","a","a",
+                                                                                           "a","b","c","d","a","a","a",
+                                                                                           "a","b","c","d","a","a","a",
+                                                                                           "a","b","c","d","a","a"]],
                                 [["YES", "NO"]],
                                 [["Your campaign is added to your account."]]
                            ];
     
-    $data['qRequired'] = [1, 0, 0, 1, 1, 1, 1, 1, 1];
+    $data['qRequired'] = [1, 0, 0, 1, 1, 1, 1, 1];
     $data['qKey'] = [
-                        [''],
                         [''],
                         [''],
                         [''],
@@ -222,7 +232,7 @@ function QuestionBackendForm() {
                         [''],
                         ['']
                     ];
-    $data['MAX_cnt'] = 9;
+    $data['MAX_cnt'] = 8;
     return $data;
 }
 

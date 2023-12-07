@@ -11,8 +11,8 @@ let progChart = [];
 let MAX_cnt   = 0;
 let globalQidx = 0;
 let choiceTracker = [[0], [0]];
-
-
+let multiButtonSelect = [];
+let multiTextSelect = [];
 // user <-> client class definition
 class question {
     constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired, qKey){
@@ -352,7 +352,84 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
                 i++;
             });
             querySelIn.style.borderBottom = '2px solid white';
-            break;
+        break;
+        case 'multiButton':
+            // the Line input
+            newIn = document.createElement('input');
+            newIn.setAttribute('class', 'form-input-style');
+            newIn.setAttribute('pattern', '[A-Za-z0-9 _.,!#@"\'/$\\s\\?;-]{1,}');
+            newIn.setAttribute('required', userStruct.qRequired);
+            newIn.setAttribute('type', userStruct.qType[serverStruct]);
+            newIn.setAttribute('id', 'multi-select-text');
+            newIn.style.borderBottom = '2px solid coral';
+            newIn.style.height = '240px';
+            newIn.style.marginBottom = '30px';
+            querySelIn.appendChild(newIn);
+            // the button array
+            let numCol = 5;
+            let widthiCon = Math.floor(100 / numCol);
+            widthiCon = widthiCon.toString().concat('%');
+            let iconCount = 0;
+            userStruct.options[serverStructOption].forEach(function(item){
+                let newInbtn = document.createElement('button');
+                newInbtn.style.width = widthiCon;
+                newInbtn.type = 'button';
+                newInbtn.setAttribute('class', 'form-input-style');
+                newInbtn.setAttribute('id', 'form-multiButton-id');
+                newInbtn.style.height = '60px'; // this has to be calculated
+                newInbtn.style.marginBottom = '20px'; // this has to be calculated
+                let newImgSpan = document.createElement('span');
+                newImgSpan.setAttribute('id', 'form-button');
+                newImgSpan.setAttribute('class', 'form-multiButton-style');
+                newImgSpan.setAttribute('alt', iconCount);
+                newImgSpan.style.display = 'inline-block';
+                newImgSpan.style.height = '50px'; // this has to be calculated
+                newImgSpan.style.width = widthiCon;
+                let newI = document.createElement('i');
+                newI.setAttribute('class', item);
+                newI.setAttribute('id', 'form-button');
+                newI.setAttribute('alt', iconCount);
+                newI.style.color = 'mediumseagreen';
+                newI.style.height = '40px';
+                newI.style.paddingTop = '5px';
+                let newP = document.createElement('p');
+                newP.setAttribute('class', 'multiButton-tooltip');
+                newP.innerHTML = userStruct.optionsText[serverStructOption][iconCount];
+                newImgSpan.appendChild(newI);
+                newImgSpan.appendChild(newP);
+                newImgSpan.addEventListener('mouseenter',function(e) {
+                    e.target.children[1].style.opacity = 0.5;
+                });
+                newImgSpan.addEventListener('mouseleave',function(e) {
+                    e.target.children[1].style.opacity = 0;
+                });
+                
+                newImgSpan.addEventListener('click',function(e){
+                    let alt = [];
+                    if(e.target && e.target.id == 'form-button') {
+                        alt = e.target.attributes.alt;
+                        getUsermultiButtonSelection(alt, newP.innerHTML);
+                    }
+                    else if(e.target && e.target.parentNode.id == 'form-button') {
+                        alt = e.target.parentNode.attributes.alt;
+                        getUsermultiButtonSelection(alt, newP.innerHTML);
+                    }
+                    else if(e.target && e.target.firstChild && e.target.firstChild.id == 'form-button') {
+                        alt = e.target.firstChild.attributes.alt;
+                        getUsermultiButtonSelection(alt, newP.innerHTML);
+                    }
+                });
+                newInbtn.appendChild(newImgSpan);
+                querySelIn.appendChild(newInbtn);
+                if(iconCount % numCol == 0) {
+                    let brEl = document.createElement("br");
+                    let dynamicSpace = document.getElementById("dynamicSpace");
+                    dynamicSpace.appendChild(brEl);
+                }
+                iconCount++;
+            });
+            querySelIn.style.borderBottom = '2px solid white';
+        break;        
     }
 }
 
@@ -409,6 +486,30 @@ function getUserButtonSelection(alt){
         formButtonStyle[kk].style.backgroundColor = '#ffffff';
     }
     formButtonStyle[alt.value].style.backgroundColor = 'lightgrey';
+}
+
+function getUsermultiButtonSelection(alt, selectedText){
+
+    // set the button selection
+    if(multiButtonSelect.includes(alt.value)) {
+        multiButtonSelect.splice(multiButtonSelect.indexOf(alt.value), 1);
+        multiTextSelect.splice(multiTextSelect.indexOf(selectedText), 1);
+    } else {
+        multiButtonSelect.push(alt.value);
+        multiTextSelect.push(selectedText);
+    }
+    Questions[counter].qAnswer = multiButtonSelect;
+    let formButtonStyleId = document.querySelectorAll('#form-multiButton-id');
+    for(let kk = 0; kk < formButtonStyleId.length; kk++){
+        formButtonStyleId[kk].style.backgroundColor = '#ffffff';
+    }
+    for(let kk = 0; kk < multiButtonSelect.length; kk++){
+        formButtonStyleId[multiButtonSelect[kk]].style.backgroundColor = 'lightgrey';
+    }
+    // set the text for the user to know what he has selected
+    let formMultiTextId = document.querySelector('#multi-select-text');
+    formMultiTextId.value = multiTextSelect;
+
 }
 
 // function to set styles for animation
@@ -626,13 +727,13 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
             } else if(data.status == 3) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 4) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
             } else if(data.status == 5) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 6) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 7) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 2, 2);
             } else if(data.status == 8) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
             } else if(data.status == 9) {

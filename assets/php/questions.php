@@ -161,11 +161,11 @@ $userId         = $_SESSION['userId'];
 if($userdata->data[0]->qAnswer == '0') {
     $data['MAX_cnt'] = 7;
 } elseif($userdata->data[0]->qAnswer == '1') {
-    $data['MAX_cnt'] = 6;
+    $data['MAX_cnt'] = 5;
 } elseif($userdata->data[0]->qAnswer == '2') {
-    $data['MAX_cnt'] = 8;
+    $data['MAX_cnt'] = 7;
 } elseif($userdata->data[0]->qAnswer == '3') {
-    $data['MAX_cnt'] = 4;
+    $data['MAX_cnt'] = 3;
 }
 
 if($userdata->data[0]->qAnswer == '') {
