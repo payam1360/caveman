@@ -39,6 +39,13 @@ class question {
 // function to set styles for animation
 function moveRight(moveright, input, header, headerTxt, Questions, page){
     if (moveright) {
+        // enter keypress also works for navigation
+        input[1].addEventListener('keypress', function(s) {
+            if (s.key === "Enter") {
+                s.preventDefault();
+                moveright.click();
+              }
+        });
         moveright.addEventListener('click', function(event) {
             // validate the current input
             let serverStruct = choiceTracker[0].pop();
@@ -496,7 +503,7 @@ function getUsermultiButtonSelection(alt, selectedText){
         multiTextSelect.splice(multiTextSelect.indexOf(selectedText), 1);
     } else {
         multiButtonSelect.push(alt.value);
-        multiTextSelect.push(selectedText);
+        multiTextSelect.push([selectedText, '::']);
     }
     Questions[counter].qAnswer = multiButtonSelect;
     let formButtonStyleId = document.querySelectorAll('#form-multiButton-id');
