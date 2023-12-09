@@ -1251,24 +1251,31 @@ function displayClients(results, userid) {
         mDiv.addEventListener('click', function(){
             displayClientsDetails(parentNode, results, this.getAttribute('cidx'));
         });
-        nameP = document.createElement('p');
-        idP = document.createElement('p');
-        genderP = document.createElement('p');
-        goalP = document.createElement('p');
+        nameP     = document.createElement('p');
+        idP       = document.createElement('p');
+        genderP   = document.createElement('p');
+        goalP     = document.createElement('p');
         campaignP = document.createElement('p');
+        createQP  = document.createElement('p');
 
         nameP.innerHTML = results.names[kk];
         nameP.style.fontSize = '30px';
         idP.innerHTML = 'Client\'s ID: ' + results.ids[kk];
-        genderP.innerHTML = results.genders[kk];
+        genderP.innerHTML = 'Client\'s gender: ' + results.genders[kk];
         goalP.innerHTML = 'Client\'s goal: ' + results.goals[kk];
+        createQP.innerHTML = 'Create Campaign for ' + results.names[kk] + ': <a href="questions.html"> Form build page</a>';
         let link = '/userPages/' + userid + results.ids[kk] + results.campaignids[kk] + '.html'
-        campaignP.innerHTML = 'sent this link to ' + results.names[kk] + ': <a href="' + link + '"> questionaire page</a>';
+        campaignP.innerHTML = 'Send this link to ' + results.names[kk] + ': <a href="' + link + '"> questionaire page</a>';
         mDiv.appendChild(nameP);
         mDiv.appendChild(genderP);
         mDiv.appendChild(goalP);
         mDiv.appendChild(idP);
-        mDiv.appendChild(campaignP);
+        if(nameP.innerHTML != ''){
+            mDiv.appendChild(createQP);
+        }
+        if(results.formWasCreated[kk] != 0){
+            mDiv.appendChild(campaignP);
+        }
         parentNode.appendChild(mDiv);
         
     }

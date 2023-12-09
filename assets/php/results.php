@@ -19,44 +19,30 @@ function extractUserInfo($userId) {
     $genders     = array();
     $goals       = array();
     $campaignids = array();
+    $formFlag    = array();
     $kk        = 0;
     while($database_row = $database_out->fetch_assoc()) {
         // filling out info briefs
         array_push($names, $database_row['name']);
         array_push($ids, $database_row['clientId']);
+        array_push($formFlag, $database_row['completed']);
         if($database_row['gender'] == 0) {
             array_push($genders, 'Male');
         } elseif($database_row['gender'] == 1){
             array_push($genders, 'Female');
         } else {
-            array_push($genders, '');
+            array_push($genders, 'No response');
         }
         if($database_row['goal'] == 0) {
-            array_push($goals, 'increase testosterone');
+            array_push($goals, 'Increase testosterone');
         } elseif($database_row['goal'] == 1) {
-            array_push($goals, 'increase muscle mass');
+            array_push($goals, 'Increase muscle mass');
         } elseif($database_row['goal'] == 2) {
-            array_push($goals, 'lose weight');
+            array_push($goals, 'Lose weight');
+        } else {
+            array_push($goals, 'No response');
         }
         array_push($campaignids, $database_row['campaignId']);
-
-        /*
-        if(empty($clients)) {
-            array_push($clients, $database_row['clientId']);
-        } elseif($kk > 0 && $clients[$kk] != $clients[$kk - 1]){
-            array_push($clients, $database_row['clientId']);
-        }
-        // filling out its attributes
-        if(str_contains($database_row['qKey'], 'weight')) {
-            array_push($weights, $database_row['qAnswer']);
-        }
-        if(str_contains($database_row['qKey'], 'height')) {
-            array_push($heights, $database_row['qAnswer']);
-        }
-        if(str_contains($database_row['qKey'], 'goal')) {
-            array_push($goals, $database_row['qAnswer']);
-        }
-         */
     }
     
     $userInfo['names']       = $names;
@@ -64,6 +50,7 @@ function extractUserInfo($userId) {
     $userInfo['genders']     = $genders;
     $userInfo['goals']       = $goals;
     $userInfo['campaignids'] = $campaignids;
+    $userInfo['formWasCreated'] = $formFlag;
 
     return $userInfo;
 }
