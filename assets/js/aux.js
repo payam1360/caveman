@@ -15,7 +15,7 @@ let multiButtonSelect = [];
 let multiTextSelect = [];
 // user <-> client class definition
 class question {
-    constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired, qKey){
+    constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired, qKey, clientId, campaignId){
         this.qContent = qContent; // must be a text string
         this.qAnswer = qAnswer;
         this.qIdx = qIdx;
@@ -25,6 +25,8 @@ class question {
         this.optionsText = optionsText;
         this.visited = visited;
         this.userId = userId;
+        this.clientId = clientId;
+        this.campaignId = campaignId;
         this.qKey   = qKey;
     }
     pushData (){
@@ -828,19 +830,27 @@ function submitaddClients(header, headerTxt, input, Questions) {
 
 
 function getUserInfo(userTxt, welcomeTxt){
+    // enter here from form design page. 
+    let address = window.location.href;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             user = JSON.parse(this.response);
             userTxt.innerHTML = user.username;
             welcomeTxt.innerHTML = 'What\'s up ' + user.username;
+            for(let kk = 0; kk < Questions.length; kk++) {
+                Questions[kk].clientId = user.clientId;
+                Questions[kk].campaignId = user.campaignId;
+                Questions[kk].userId = user.userid;
+            }
         }
     };
     
     // sending the request
-    xmlhttp.open("GET", "assets/php/admin.php", true);
+    xmlhttp.open("POST", "assets/php/admin.php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send();
+    request = 'address=' + address;
+    xmlhttp.send(request);
 }
 
 
@@ -1217,9 +1227,11 @@ function fetchClients() {
         }
     };
     // sending the request
-    xmlhttp.open("GET", "assets/php/admin.php", true);
+    xmlhttp.open("POST", "assets/php/admin.php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send();
+    let address = '';
+    let request = 'address=' + address;
+    xmlhttp.send(request);
 }
 
 function constructClients(userid){
@@ -1248,6 +1260,8 @@ function displayClients(results, userid) {
         mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
         mDiv.setAttribute('cidx', kk);
         mDiv.setAttribute('userid', userid);
+        mDiv.setAttribute('campaignids', results.campaignids[kk]);
+        mDiv.setAttribute('clientid', results.ids[kk]);
         mDiv.addEventListener('click', function(){
             displayClientsDetails(parentNode, results, this.getAttribute('cidx'));
         });
@@ -1263,7 +1277,8 @@ function displayClients(results, userid) {
         idP.innerHTML = 'Client\'s ID: ' + results.ids[kk];
         genderP.innerHTML = 'Client\'s gender: ' + results.genders[kk];
         goalP.innerHTML = 'Client\'s goal: ' + results.goals[kk];
-        createQP.innerHTML = 'Create Campaign for ' + results.names[kk] + ': <a href="questions.html"> Form build page</a>';
+        let userdata = '?userId=' + userid + '?clientId=' + results.ids[kk] + '?campaignId=' + results.campaignids[kk];   
+        createQP.innerHTML = 'Create Campaign for ' + results.names[kk] + ': <a href=questions.html' + userdata + '> Form build page</a>';
         let link = '/userPages/' + userid + results.ids[kk] + results.campaignids[kk] + '.html'
         campaignP.innerHTML = 'Send this link to ' + results.names[kk] + ': <a href="' + link + '"> questionaire page</a>';
         mDiv.appendChild(nameP);
