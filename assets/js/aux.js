@@ -135,7 +135,6 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
 
 function transition2Right(header, headerTxt, input, Questions, serverStruct = 0, serverStructOption = 0) {
     
-    
     headerTxt[0].innerHTML = Questions[counter].qContent[serverStruct];
     // set form 0 type
     choiceTracker[0].push(serverStruct);
@@ -734,34 +733,35 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
             } else if(data.status == 2) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 3) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 4) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
-            } else if(data.status == 5) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
-            } else if(data.status == 6) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
-            } else if(data.status == 7) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 2, 2);
-            } else if(data.status == 8) {
+            } else if(data.status == 5) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
-            } else if(data.status == 9) {
+            } else if(data.status == 6) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+            } else if(data.status == 7) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
+            } else if(data.status == 8) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 2, 2);
+            } else if(data.status == 9) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
             } else if(data.status == 10) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+            } else if(data.status == 11) {
                 counter = 0;
                 prog = 0;
                 resetStart(querySelIn, header, headerTxt, 'questions');
                 globalQidx++;
             }
-            else if(data.status == 11) {
-                counter = MAX_cnt - 1;
+            else if(data.status == 12) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
                 moveright.disabled = true;
                 let moveleft = document.querySelector('.form-go-left');
-                moveright.style.opacity = 0;
-                moveright.disabled = true;
+                moveleft.style.opacity = 0;
+                moveleft.disabled = true;
             }
         }
     };

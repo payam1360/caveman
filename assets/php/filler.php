@@ -168,7 +168,7 @@ function QuestionBackendForm() {
                             ["3. are you done?","3. type the body of the question?"],
                             ["4. what is the PURPOSE of your question?"],
                             ["5. are you done?", "5. select your list topic!", "5. Multi-select your button options!"],
-                            ["6. are you done?"],
+                            ["", "6. are you done?"],
                             [""]
                         ];
     $data['qType'] = [
@@ -178,7 +178,7 @@ function QuestionBackendForm() {
                         ["button","text"],
                         ["list"],
                         ["button", "multiButton", "multiButton"],
-                        ["button"],
+                        ["message", "button"],
                         ["message"]
                     ];
     
@@ -199,7 +199,7 @@ function QuestionBackendForm() {
                               "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
                               "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
                               "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass"]],
-                            [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
+                            [['fa-regular fa-circle-check'], ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
                             [['fa-regular fa-circle-check']],
                        ];
     
@@ -217,7 +217,7 @@ function QuestionBackendForm() {
                                                                                            "a","b","c","d","a","a","a",
                                                                                            "a","b","c","d","a","a","a",
                                                                                            "a","b","c","d","a","a"]],
-                                [["YES", "NO"]],
+                                [["Your campaign is added to your account."], ["YES", "NO"]],
                                 [["Your campaign is added to your account."]]
                            ];
     
