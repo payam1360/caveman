@@ -79,7 +79,7 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
         $options = "";
         $optionsText = "";
     }
-    $options = implode("", $options);
+    $options = implode(",", $options);
     $campaignTime = date("Y-m-d");
     // first check if there is incomplete campaigns
     $sql = "SELECT used, completed 
