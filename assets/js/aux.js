@@ -739,7 +739,7 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
             } else if(data.status == 5) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
             } else if(data.status == 6) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
             } else if(data.status == 7) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 8) {
