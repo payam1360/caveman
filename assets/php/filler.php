@@ -1,6 +1,22 @@
 <?php
 
+$supportedIcons = ["fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
+"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass"];
 
+$supportedText = ["a","b","c","d","e","f","g",
+"a","b","c","d","a","a","a",
+"a","b","c","d","a","a","a",
+"a","b","c","d","a","a","a",
+"a","b","c","d","a","a","a",
+"a","b","c","d","a","a","a",
+"a","b","c","d","a","a","a",
+"a","b","c","d","a","a"];
 
 function getPublicForm() {
     $data['qContent'] = [
@@ -161,6 +177,9 @@ function getRegisterForm() {
 
 function QuestionBackendForm() {
         
+    global $supportedIcons;
+    global $supportedText;
+
     $data['qContent'] = [
                             ["1. what is the TYPE of question you want to ask your client?"],
                             [""],
@@ -191,14 +210,7 @@ function QuestionBackendForm() {
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
                             [["name", "water", "calories", "weight", "height", "macros", "micros", "sleep", "workout", "stress", "sugar", "other"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ["fa-solid fa-weight-scale", "fa-solid fa-text-height", "fa-solid fa-person-cane"],
-                             ["fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-                              "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass"]],
+                             $supportedIcons],
                             [['fa-regular fa-circle-check'], ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
                             [['fa-regular fa-circle-check']],
                        ];
@@ -209,14 +221,7 @@ function QuestionBackendForm() {
                                 [["YES", "NO"]],
                                 [["YES", "NO"], [""]],
                                 [[""]],
-                                [["YES", "NO"], ["weight list","height list","age list"], ["a","b","c","d","e","f","g",
-                                                                                           "a","b","c","d","a","a","a",
-                                                                                           "a","b","c","d","a","a","a",
-                                                                                           "a","b","c","d","a","a","a",
-                                                                                           "a","b","c","d","a","a","a",
-                                                                                           "a","b","c","d","a","a","a",
-                                                                                           "a","b","c","d","a","a","a",
-                                                                                           "a","b","c","d","a","a"]],
+                                [["YES", "NO"], ["weight list","height list","age list"], $supportedText],
                                 [["Your campaign is added to your account."], ["YES", "NO"]],
                                 [["Your campaign is added to your account."]]
                            ];
@@ -314,6 +319,9 @@ function clientsSearchForm() {
 
 
 function clientPageLoad($page) {
+    global $supportedIcons;
+    global $supportedText;
+
     session_start();
     $userId      = substr($page, 0, 6);
     $clientId    = substr($page, 6, 5);
@@ -329,11 +337,26 @@ function clientPageLoad($page) {
     $num_rows = $info->num_rows;
     $pulledRow = $info->fetch_assoc();
     
+
     $qContent = array(array($pulledRow['qContent']));
     $qType = array(array($pulledRow['qType']));
     $qIdx = array(0);
-    $options = array(array(array($pulledRow['options'])));
-    $optionsText = array(array(array($pulledRow['optionsText'])));
+
+    // fixing options
+    $optionIdx = explode(',', $pulledRow['options']);
+    for($i = 0; $i < count($optionIdx); $i++) {
+        $options[$i] = $supportedIcons[$optionIdx[$i]];
+    }
+    $options = array(array($options));
+
+    // fixing options text
+    $optionTextIdx = explode(',', $pulledRow['optionsText']);
+    for($i = 0; $i < count($optionTextIdx); $i++) {
+        $optionsText[$i] = $supportedText[$optionTextIdx[$i]];
+    }
+    $optionsText = array(array($optionsText));
+
+    // get the rest of parameters
     $qRequired = array((int)$pulledRow['qRequired']);
     $qKey = array(array($pulledRow['qKey']));
     
@@ -342,8 +365,20 @@ function clientPageLoad($page) {
         array_push($qContent, array($pulledRow['qContent']));
         array_push($qType, array($pulledRow['qType']));
         array_push($qIdx, $kk);
-        array_push($options, array(array($pulledRow['options'])));
-        array_push($optionsText, array(array($pulledRow['optionsText'])));
+        // fixing options
+        $optionIdx = explode(',', $pulledRow['options']);
+        for($i = 0; $i < count($optionIdx); $i++) {
+            $optionsTemp[$i] = $supportedIcons[$optionIdx[$i]];
+        }
+        array_push($options, array($optionsTemp));
+
+        // fixing options text
+        $optionTextIdx = explode(',', $pulledRow['optionsText']);
+        for($i = 0; $i < count($optionTextIdx); $i++) {
+            $optionsTextTemp[$i] = $supportedText[$optionTextIdx[$i]];
+        }
+        array_push($optionsText, array($optionsTextTemp));
+
         array_push($qRequired, (int)$pulledRow['qRequired']);
         array_push($qKey, array($pulledRow['qKey']));
     }
