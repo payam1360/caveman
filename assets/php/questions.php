@@ -79,7 +79,9 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
         $options = "";
         $optionsText = "";
     }
-    $options = implode(",", $options);
+    if($options != "") {
+        $options = implode(",", $options);
+    }
     $campaignTime = date("Y-m-d");
     // first check if there is incomplete campaigns
     $sql = "SELECT used, completed 
@@ -157,7 +159,6 @@ function getRealIpAddr()
 $userdata      = json_decode($_POST['userInfo']);
 $ip            = getRealIpAddr();
 // get the user ID
-
 $userId         = $userdata->data[0]->userId;
 // check the question type selected by the user (nutritionist)
 if($userdata->data[0]->qAnswer == '0') {

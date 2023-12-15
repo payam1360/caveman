@@ -57,7 +57,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 valid = inputStyle.validity.valid;
             }
             let userResponse = [];
-            if(Questions[counter].qType[serverStruct] == 'button') {
+            if(Questions[counter].qType[serverStruct] == 'button' || Questions[counter].qType[serverStruct] == 'multiButton') {
                 userResponse = Questions[counter].qAnswer;
             } else if(Questions[counter].qType[serverStruct] != 'message') {
                 userResponse = inputStyle.value;
@@ -604,6 +604,8 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
             window.location.assign('register.html');
         })
     }
+    counter = 0;
+    prog = 0;
     
 }
 
@@ -635,7 +637,7 @@ function restorePrevAnswer(serverStruct = 0, serverStructOption = 0) {
 
 
 function validate_input(valid, type, required, value){
-    if(type == 'button') {
+    if(type == 'button' || type == 'multiButton') {
         if(required && value.length == 0) {
             return(false && valid);
         } else {
@@ -749,8 +751,8 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
             } else if(data.status == 10) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 11) {
-                counter = 0;
-                prog = 0;
+                //flush the choiceTracker
+                choiceTracker = [[0],[0]];
                 resetStart(querySelIn, header, headerTxt, 'questions');
                 globalQidx++;
             }
@@ -786,6 +788,7 @@ function submitUserData(inputDataBlob, page, userPage) {
                 plotMicro(data.micro);
                 plotMicroVit(data.micro);
                 displayMeal();
+                // this part needs to go!!
             } else if(data.status == 0 && page == 'questions') {
                 window.alert('data saved');
             } else if(data.status == 0 && page == 'analysis') {
@@ -876,6 +879,7 @@ function questionCreate(headerTxt, input, page, userPage){
             // initialize header
             headerTxt.innerHTML = Questions[counter].qContent;
             // initialize the input based on form Type
+            resetFormType(input);
             setFormType(input, Questions[counter]);
         }
     };
@@ -890,6 +894,8 @@ function questionCreate(headerTxt, input, page, userPage){
         request = "request="+JSON.stringify(userPage);
     }
     xmlhttp.send(request);
+    getUserInfo("", "");
+
 }
 
 
