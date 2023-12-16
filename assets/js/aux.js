@@ -370,7 +370,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
             newIn.setAttribute('type', userStruct.qType[serverStruct]);
             newIn.setAttribute('id', 'multi-select-text');
             newIn.style.borderBottom = '2px solid coral';
-            newIn.style.height = '240px';
+            newIn.style.height = '165px';
             newIn.style.marginBottom = '30px';
             querySelIn.appendChild(newIn);
             // the button array
@@ -498,7 +498,9 @@ function getUserButtonSelection(alt){
 
 function getUsermultiButtonSelection(alt, selectedText){
 
-    // set the button selection
+    // set the button selection and text selection
+    // button -> options icons attribute
+    // texts -> optionsText attribute
     if(multiButtonSelect.includes(alt.value)) {
         multiButtonSelect.splice(multiButtonSelect.indexOf(alt.value), 1);
         multiTextSelect.splice(multiTextSelect.indexOf(selectedText), 1);
@@ -606,7 +608,9 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
     }
     counter = 0;
     prog = 0;
-    
+    choiceTracker = [[0],[0]];
+    multiButtonSelect = [];
+    multiTextSelect = [];
 }
 
 function restorePrevAnswer(serverStruct = 0, serverStructOption = 0) {
@@ -752,7 +756,6 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 11) {
                 //flush the choiceTracker
-                choiceTracker = [[0],[0]];
                 resetStart(querySelIn, header, headerTxt, 'questions');
                 globalQidx++;
             }

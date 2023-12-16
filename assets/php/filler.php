@@ -18,7 +18,46 @@ $supportedText = ["a","b","c","d","e","f","g",
 "a","b","c","d","a","a","a",
 "a","b","c","d","a","a"];
 
+$supportedAge = [  '18','19','20','21','22','23','24','25', '26','27','28','29','30','31',
+                   '32','33','34','35','36','37','38','39','40','41','42','43','44','45', 
+                   '46','47','48','49','50','51','52','53','54','55', '56','57','58','59',
+                   '60','61','62','63','64','65','66','67','68','69','70','71','72','73',
+                   '74','75', '76','77','78','79','80','81','82','83','84','85', '86','87',
+                   '88','89','90>'];
+
+$supportedAgeDemo = ['18, 19, ...'];
+
+
+
+$supportedWeight =  [  '<80','81','82','83','84','85','86','87', '88','89','90','91','92',
+                       '93','94','95','96','97', '98','99','100','101','102','103','104',
+                       '105','106','107','108','109','110','111','112','113','114','115',
+                       '116','117','118','119','120','121','122','123','124','125','126',
+                       '127','128','129','130','131','132','133','134','135','136','137',
+                       '138','139','140','141','142','143','144','145','146','147','148',
+                       '149','150','151','152','153','154','155','156','157','158','159',
+                       '160','161','162','163','164','165','166','167','168','169','170',
+                       '171','172','173','174','175','176','177','178','179','180','181',
+                       '182','183','184','185','186','187','188','189','190','191','192',
+                       '193','194','195','196','197','198','199','200','201','202','203',
+                       '204','205','206','207','208','209','210','211','212','213','214',
+                       '215','216','217','218','219','220','221','222','223','224','225',
+                       '226','227','228','229','230','231','232','233','234','235','236',
+                       '237','238','239','240', '240>'];
+
+$supportedWeightDemo =  ['80, 81, ...'];
+
+$supportedHeight =  [   "<5", "5", "5-1", "5-2", "5-3", "5-4", "5-5", "5-6", "5-6", "5-7", 
+                        "5-8", "5-9", "5-10", "5-11", "6", "6-1", "6-2", "6-3", "6-4", "6-5", 
+                        "6-6", "6-6", "6-7", "6-8", "6-9", "6-10", "6-11", "7>"];                                      
+
+$supportedHeightDemo =  ['5, 5-1 ...'];                                      
+
 function getPublicForm() {
+    global $supportedHeight;
+    global $supportedWeight;
+    global $supportedAge;
+
     $data['qContent'] = [
                             ["1. Hey there, what is your name?"],
                             ["2. Hi #mainNameTag, what is your nutritional goal?"],
@@ -45,9 +84,9 @@ function getPublicForm() {
     $data['options'] = [
                             [[""]],
                             [["fa-solid fa-weight-scale","fa-solid fa-dumbbell","fa-solid fa-heart-pulse"]],
-                            [[  '<80','81','82','83','84','85','86','87', '88','89','90','91','92','93','94','95','96','97', '98','99','100','101','102','103','104','105','106','107','108','109','110','111','112','113','114','115','116','117','118','119','120','121','122','123','124','125','126','127','128','129','130','131','132','133','134','135','136','137','138','139','140','141','142','143','144','145','146','147','148','149','150','151','152','153','154','155','156','157','158','159','160','161','162','163','164','165','166','167','168','169','170','171','172','173','174','175','176','177','178','179','180','181','182','183','184','185','186','187','188','189','190','191','192','193','194','195','196','197','198','199','200','201','202','203','204','205','206','207','208','209','210','211','212','213','214','215','216','217','218','219','220','221','222','223','224','225','226','227','228','229','230','231','232','233','234','235','236','237','238','239','240', '240>']],
-                            [[   "<5", "5", "5-1", "5-2", "5-3", "5-4", "5-5", "5-6", "5-6", "5-7", "5-8", "5-9", "5-10", "5-11", "6", "6-1", "6-2", "6-3", "6-4", "6-5", "6-6", "6-6", "6-7", "6-8", "6-9", "6-10", "6-11", "7>"]],
-                            [[  '18','19','20','21','22','23','24','25', '26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45', '46','47','48','49','50','51','52','53','54','55', '56','57','58','59','60','61','62','63','64','65','66','67','68','69','70','71','72','73','74','75', '76','77','78','79','80','81','82','83','84','85', '86','87','88','89','90>']],
+                            [$supportedWeight],
+                            [$supportedHeight],
+                            [$supportedAge],
                             [["fa-regular fa-face-angry","fa-regular fa-face-meh","fa-regular fa-face-smile"]],
                             [["fa-regular fa-moon","fa-regular fa-face-tired"]],
                             [["fa-solid fa-mars","fa-solid fa-venus"]],
@@ -179,6 +218,9 @@ function QuestionBackendForm() {
         
     global $supportedIcons;
     global $supportedText;
+    global $supportedAgeDemo;
+    global $supportedWeightDemo;
+    global $supportedHeightDemo;
 
     $data['qContent'] = [
                             ["1. what is the TYPE of question you want to ask your client?"],
@@ -221,7 +263,7 @@ function QuestionBackendForm() {
                                 [["YES", "NO"]],
                                 [["YES", "NO"], [""]],
                                 [[""]],
-                                [["YES", "NO"], ["weight list","height list","age list"], $supportedText],
+                                [["YES", "NO"], [$supportedWeightDemo, $supportedHeightDemo, $supportedAgeDemo], $supportedText],
                                 [["Your campaign is added to your account."], ["YES", "NO"]],
                                 [["Your campaign is added to your account."]]
                            ];
@@ -341,21 +383,20 @@ function clientPageLoad($page) {
     $qContent = array(array($pulledRow['qContent']));
     $qType = array(array($pulledRow['qType']));
     $qIdx = array(0);
-
+    $options = array();
+    $optionsText = array();
     // fixing options
-    $optionIdx = explode(',', $pulledRow['options']);
-    for($i = 0; $i < count($optionIdx); $i++) {
-        $options[$i] = $supportedIcons[$optionIdx[$i]];
+    if($pulledRow['options'] != "") {
+        $options = array(array(explode(',', $pulledRow['options'])));
+    } else {
+        array_push($options,array(array("")));
     }
-    $options = array(array($options));
-
     // fixing options text
-    $optionTextIdx = explode(',', $pulledRow['optionsText']);
-    for($i = 0; $i < count($optionTextIdx); $i++) {
-        $optionsText[$i] = $supportedText[$optionTextIdx[$i]];
+    if($pulledRow['optionsText'] != "") {
+        $optionsText = array(array(explode(',', $pulledRow['optionsText'])));
+    } else {
+        array_push($optionsText,array(array("")));
     }
-    $optionsText = array(array($optionsText));
-
     // get the rest of parameters
     $qRequired = array((int)$pulledRow['qRequired']);
     $qKey = array(array($pulledRow['qKey']));
@@ -366,19 +407,17 @@ function clientPageLoad($page) {
         array_push($qType, array($pulledRow['qType']));
         array_push($qIdx, $kk);
         // fixing options
-        $optionIdx = explode(',', $pulledRow['options']);
-        for($i = 0; $i < count($optionIdx); $i++) {
-            $optionsTemp[$i] = $supportedIcons[$optionIdx[$i]];
+        if($pulledRow['options'] != "") {
+            array_push($options, array(explode(',', $pulledRow['options'])));
+        } else {
+            array_push($options,array(array("")));
         }
-        array_push($options, array($optionsTemp));
-
         // fixing options text
-        $optionTextIdx = explode(',', $pulledRow['optionsText']);
-        for($i = 0; $i < count($optionTextIdx); $i++) {
-            $optionsTextTemp[$i] = $supportedText[$optionTextIdx[$i]];
+        if($pulledRow['optionsText'] != "") {
+            array_push($optionsText, array(explode(',', $pulledRow['optionsText'])));
+        } else {
+            array_push($optionsText,array(array("")));
         }
-        array_push($optionsText, array($optionsTextTemp));
-
         array_push($qRequired, (int)$pulledRow['qRequired']);
         array_push($qKey, array($pulledRow['qKey']));
     }
