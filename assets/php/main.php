@@ -23,14 +23,10 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
             $optionsText = "";
             if($Questions[$kk]->options[0] == ""){
             } else {
-                for($kx = 0; $kx < count($Questions[$kk]->options[0]); $kx++){
-                    $options = $options . "," . $Questions[$kk]->options[0][$kx];
-                }
+                $options = implode(",", $Questions[$kk]->options[0]);
             }
             if($Questions[$kk]->qType[0] == "button"){
-                for($kx = 0; $kx < count($Questions[$kk]->optionsText[0]); $kx++){
-                    $optionsText = $optionsText . "," . $Questions[$kk]->optionsText[0][$kx];
-                }
+                $optionsText = implode(",", $Questions[$kk]->optionsText[0]);
             }
             $qIdx = $Questions[$kk]->qIdx;
             $qType = $Questions[$kk]->qType[0];
@@ -71,14 +67,10 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
         
             if($Questions[$kk]->options[0] == ""){
             } else {
-                for($kx = 0; $kx < count($Questions[$kk]->options[0]); $kx++){
-                    $options = $options . "," . $Questions[$kk]->options[0][$kx];
-                }
+                $options = implode(",", $Questions[$kk]->options[0]);
             }
             if($Questions[$kk]->qType[0] == "button"){
-                for($kx = 0; $kx < count($Questions[$kk]->optionsText[0]); $kx++){
-                    $optionsText = $optionsText . "," . $Questions[$kk]->optionsText[0][$kx];
-                }
+                $optionsText = implode(",", $Questions[$kk]->optionsText[0]);
             }
             $qIdx = $Questions[$kk]->qIdx;
             $qType = $Questions[$kk]->qType[0];
@@ -536,7 +528,7 @@ function extractUserInfo($info, $ip) {
         $sql          = "SELECT clientId, campaignId FROM $table1name WHERE ip = '$ip';";
         $database_out = $conn->query($sql);
         $database_row = $database_out->fetch_assoc();
-        if(is_null($database_row)) {
+        if(is_null($database_row)) {  // visitor not found
             $userId = '0';
             $clientId = mt_rand(10000, 99999);;
             $campaignId  = substr(md5(rand()), 0, 7);
@@ -544,7 +536,7 @@ function extractUserInfo($info, $ip) {
             $userInfo['clientId'] = $clientId;
             $userInfo['campaignId'] = $campaignId;
             
-        } else { // visitor not found
+        } else {
             $userId = '0';
             $clientId = $database_row['clientId'];
             $campaignId = $database_row['campaignId'];

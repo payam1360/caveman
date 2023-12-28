@@ -3,18 +3,23 @@
 // functions go here
 
 $userdata         = $_POST['address'];
-$userIdIdx        = strpos($userdata, 'userId');
-$clientIdIdx      = strpos($userdata, 'clientId');
-$campaignIdIdx    = strpos($userdata, 'campaignId');
+if(strpos($userdata, 'userId') == "") {
+    $userIdURL = "0";
+    $clientIdURL = "0";
+    $campaignIdURL = "0";
+} else {
+    $userIdIdx        = strpos($userdata, 'userId');
+    $clientIdIdx      = strpos($userdata, 'clientId');
+    $campaignIdIdx    = strpos($userdata, 'campaignId');
 
-$userIdLength     = 6;
-$clientIdLength   = 5;
-$campaignIdLength = 7;
+    $userIdLength     = 6;
+    $clientIdLength   = 5;
+    $campaignIdLength = 7;
 
-$userIdURL        = substr($userdata, $userIdIdx+7, $userIdLength);
-$clientIdURL      = substr($userdata, $clientIdIdx+9, $clientIdLength);
-$campaignIdURL    = substr($userdata, $campaignIdIdx+11, $campaignIdLength);
-
+    $userIdURL        = substr($userdata, $userIdIdx+7, $userIdLength);
+    $clientIdURL      = substr($userdata, $clientIdIdx+9, $clientIdLength);
+    $campaignIdURL    = substr($userdata, $campaignIdIdx+11, $campaignIdLength);
+}
 
 session_start();
 $userName = $_SESSION['userName'];

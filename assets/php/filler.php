@@ -18,7 +18,7 @@ $supportedText = ["a","b","c","d","e","f","g",
 "a","b","c","d","a","a","a",
 "a","b","c","d","a","a"];
 
-$supportedAge = [  '18','19','20','21','22','23','24','25', '26','27','28','29','30','31',
+$supportedAge = ['18','19','20','21','22','23','24','25', '26','27','28','29','30','31',
                    '32','33','34','35','36','37','38','39','40','41','42','43','44','45', 
                    '46','47','48','49','50','51','52','53','54','55', '56','57','58','59',
                    '60','61','62','63','64','65','66','67','68','69','70','71','72','73',
@@ -29,7 +29,7 @@ $supportedAgeDemo = ['18, 19, ...'];
 
 
 
-$supportedWeight =  [  '<80','81','82','83','84','85','86','87', '88','89','90','91','92',
+$supportedWeight =  ['<80','81','82','83','84','85','86','87', '88','89','90','91','92',
                        '93','94','95','96','97', '98','99','100','101','102','103','104',
                        '105','106','107','108','109','110','111','112','113','114','115',
                        '116','117','118','119','120','121','122','123','124','125','126',
@@ -47,7 +47,7 @@ $supportedWeight =  [  '<80','81','82','83','84','85','86','87', '88','89','90',
 
 $supportedWeightDemo =  ['80, 81, ...'];
 
-$supportedHeight =  [   "<5", "5", "5-1", "5-2", "5-3", "5-4", "5-5", "5-6", "5-6", "5-7", 
+$supportedHeight =  ["<5", "5", "5-1", "5-2", "5-3", "5-4", "5-5", "5-6", "5-6", "5-7", 
                         "5-8", "5-9", "5-10", "5-11", "6", "6-1", "6-2", "6-3", "6-4", "6-5", 
                         "6-6", "6-6", "6-7", "6-8", "6-9", "6-10", "6-11", "7>"];                                      
 
@@ -227,7 +227,7 @@ function QuestionBackendForm() {
                             [""],
                             ["2. is this question REQUIRED to be answered by the client?"],
                             ["3. are you done?","3. type the body of the question?"],
-                            ["4. what is the PURPOSE of your question?"],
+                            ["", "4. what is the PURPOSE of your question?"],
                             ["5. are you done?", "5. select your list topic!", "5. Multi-select your button options!"],
                             ["", "6. are you done?"],
                             [""]
@@ -237,7 +237,7 @@ function QuestionBackendForm() {
                         ["message"],
                         ["button"],
                         ["button","text"],
-                        ["list"],
+                        ["message", "list"],
                         ["button", "multiButton", "multiButton"],
                         ["message", "button"],
                         ["message"]
@@ -250,7 +250,7 @@ function QuestionBackendForm() {
                             [["fa-solid fa-gears"], ["fa-regular fa-hand-point-right"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
-                            [["name", "water", "calories", "weight", "height", "macros", "micros", "sleep", "workout", "stress", "sugar", "other"]],
+                            [['fa-regular fa-circle-check'], ["name", "water", "calories", "weight", "height", "macros", "micros", "sleep", "workout", "stress", "sugar", "other"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ["fa-solid fa-weight-scale", "fa-solid fa-text-height", "fa-solid fa-person-cane"],
                              $supportedIcons],
                             [['fa-regular fa-circle-check'], ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
@@ -262,7 +262,7 @@ function QuestionBackendForm() {
                                 [["your form is being built ... please continue!"], ["please answer the prevous question"]],
                                 [["YES", "NO"]],
                                 [["YES", "NO"], [""]],
-                                [[""]],
+                                [["Your campaign is added to your account."], [""]],
                                 [["YES", "NO"], [$supportedWeightDemo, $supportedHeightDemo, $supportedAgeDemo], $supportedText],
                                 [["Your campaign is added to your account."], ["YES", "NO"]],
                                 [["Your campaign is added to your account."]]
@@ -363,8 +363,7 @@ function clientsSearchForm() {
 function clientPageLoad($page) {
     global $supportedIcons;
     global $supportedText;
-
-    session_start();
+    
     $userId      = substr($page, 0, 6);
     $clientId    = substr($page, 6, 5);
     $campaignId  = substr($page, 11, 7);
@@ -446,7 +445,9 @@ function clientPageLoad($page) {
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
-$page        = json_decode($_POST['request']);
+$request        = json_decode($_POST['request']);
+$page           = $request->page;
+$landing        = $request->address;
 if($page == 'login') {
     $data      = getLoginForm();
 } elseif($page == 'register') {
@@ -462,6 +463,37 @@ if($page == 'login') {
 } else {
     $data      = clientPageLoad($page);
 }
+
+// -------
+if(strpos($landing, 'userId') == "") {
+    if($landing == "") {
+        $userIdURL = "0";
+        $clientIdURL = "0";
+        $campaignIdURL = "0";
+    } else { // coming from the clientPageLoad
+        $userIdURL = substr($page, 0, 6);
+        $clientIdURL = substr($page, 6, 5);
+        $campaignIdURL = substr($page, 11, 7);
+    }
+} else {
+    $userIdIdx        = strpos($landing, 'userId');
+    $clientIdIdx      = strpos($landing, 'clientId');
+    $campaignIdIdx    = strpos($landing, 'campaignId');
+
+    $userIdLength     = 6;
+    $clientIdLength   = 5;
+    $campaignIdLength = 7;
+
+    $userIdURL        = substr($landing, $userIdIdx+7, $userIdLength);
+    $clientIdURL      = substr($landing, $clientIdIdx+9, $clientIdLength);
+    $campaignIdURL    = substr($landing, $campaignIdIdx+11, $campaignIdLength);
+}
+
+$data['userid'] = $userIdURL;
+$data['clientId'] = $clientIdURL;
+$data['campaignId'] = $campaignIdURL;
+// -------
+
 echo json_encode($data);
 
 

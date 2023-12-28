@@ -228,7 +228,7 @@ function callsubmitUserData(page){
             }
         }
         if(allReq) {
-            submitUserData(Questions, page, Questions[0].userId);
+            submitUserData(Questions, page, Questions[0].userId + Questions[0].clientId + Questions[0].campaignId);
         }
     }
 }
@@ -565,7 +565,6 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
     moveleft.disabled = true;
     moveleft.style.opacity = 0;
 
-    
     header[0].addEventListener('transitionend', function(event) {
         ChangeForm(event.target, '0.0s', '0', 0, '0%');
     });
@@ -608,6 +607,8 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
     }
     counter = 0;
     prog = 0;
+    globalQidx++;
+    //flush the choiceTracker
     choiceTracker = [[0],[0]];
     multiButtonSelect = [];
     multiTextSelect = [];
@@ -734,32 +735,38 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
                 moveright.disabled = true;
-            } else if(data.status == 1) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
-            } else if(data.status == 2) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
-            } else if(data.status == 3) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
-            } else if(data.status == 4) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
-            } else if(data.status == 5) {
+            } else if(data.status == 01) { // by default
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);    
+            } else if(data.status == 03) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
-            } else if(data.status == 6) {
+            } else if(data.status == 04) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
-            } else if(data.status == 7) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
-            } else if(data.status == 8) {
+            } else if(data.status == 05) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+            } else if(data.status == 06) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+            } else if(data.status == 13) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+            } else if(data.status == 14) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+            } else if(data.status == 15) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+            } else if(data.status == 33) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+            } else if(data.status == 34) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+            } else if(data.status == 23) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+            } else if(data.status == 24) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+            } else if(data.status == 25) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 2, 2);
-            } else if(data.status == 9) {
+            } else if(data.status == 26) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
-            } else if(data.status == 10) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
-            } else if(data.status == 11) {
-                //flush the choiceTracker
+            } else if(data.status == 11) { // reset form for next question 
                 resetStart(querySelIn, header, headerTxt, 'questions');
-                globalQidx++;
             }
-            else if(data.status == 12) {
+            else if(data.status == 12) { // end the form 
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
@@ -805,7 +812,6 @@ function submitUserData(inputDataBlob, page, userPage) {
         xmlhttp.open("POST", "assets/php/" + page + ".php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         let inputDataAndUserBlob = {'data': inputDataBlob, 'IdInfo': userPage};
-        
         var userdata = "userInfo="+JSON.stringify(inputDataAndUserBlob);
     } else {
         // sending the request
@@ -863,20 +869,20 @@ function getUserInfo(userTxt, welcomeTxt){
 // this function eventually comes from user costomization and design of his app.
 function questionCreate(headerTxt, input, page, userPage){
     let request = [];
+    let address = window.location.href;
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
             MAX_cnt = data.MAX_cnt;
-            
             let Obj = new question();
             // reset the global Questions
             for(let kk = 0; kk < MAX_cnt; kk++){
                 Obj.popData();
             }
             for(let kk = 0; kk < MAX_cnt; kk++){
-                Obj = new question(userPage, data.qContent[kk], '', data.qIdx[kk], data.qType[kk],
-                                   data.options[kk], data.optionsText[kk], false, data.qRequired[kk], data.qKey[kk]);
+                Obj = new question(data.userid, data.qContent[kk], '', data.qIdx[kk], data.qType[kk],
+                                   data.options[kk], data.optionsText[kk], false, data.qRequired[kk], data.qKey[kk], data.clientId, data.campaignId);
                 Obj.pushData(Obj);
             }
             // initialize header
@@ -890,15 +896,13 @@ function questionCreate(headerTxt, input, page, userPage){
     if(userPage == 0){
         xmlhttp.open("POST", "assets/php/filler.php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        request = "request="+JSON.stringify(page);
+        request = 'request='+JSON.stringify({'page': page,'address': address});
     } else {
         xmlhttp.open("POST", "../assets/php/filler.php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        request = "request="+JSON.stringify(userPage);
+        request = 'request='+JSON.stringify({'page': userPage, 'address': address});
     }
     xmlhttp.send(request);
-    getUserInfo("", "");
-
 }
 
 
@@ -1286,9 +1290,10 @@ function displayClients(results, userid) {
         idP.innerHTML = 'Client\'s ID: ' + results.ids[kk];
         genderP.innerHTML = 'Client\'s gender: ' + results.genders[kk];
         goalP.innerHTML = 'Client\'s goal: ' + results.goals[kk];
-        let userdata = '?userId=' + userid + '?clientId=' + results.ids[kk] + '?campaignId=' + results.campaignids[kk];   
+        let userdata = '?userId=' + userid + '?clientId=' + results.ids[kk] + '?campaignId=' + results.campaignids[kk]; 
+        let userFile =  userid + results.ids[kk] + results.campaignids[kk]; 
         createQP.innerHTML = 'Create Campaign for ' + results.names[kk] + ': <a href=questions.html' + userdata + '> Form build page</a>';
-        let link = '/userPages/' + userid + results.ids[kk] + results.campaignids[kk] + '.html'
+        let link = '/userPages/' + userFile + '.html';
         campaignP.innerHTML = 'Send this link to ' + results.names[kk] + ': <a href="' + link + '"> questionaire page</a>';
         mDiv.appendChild(nameP);
         mDiv.appendChild(genderP);

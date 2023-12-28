@@ -18,14 +18,14 @@ $supportedText = ["a","b","c","d","e","f","g",
 "a","b","c","d","a","a","a",
 "a","b","c","d","a","a"];
 
-$supportedAge = [  '18','19','20','21','22','23','24','25', '26','27','28','29','30','31',
+$supportedAge = ['18','19','20','21','22','23','24','25', '26','27','28','29','30','31',
                    '32','33','34','35','36','37','38','39','40','41','42','43','44','45', 
                    '46','47','48','49','50','51','52','53','54','55', '56','57','58','59',
                    '60','61','62','63','64','65','66','67','68','69','70','71','72','73',
                    '74','75', '76','77','78','79','80','81','82','83','84','85', '86','87',
                    '88','89','90>'];
 
-$supportedWeight =  [  '<80','81','82','83','84','85','86','87', '88','89','90','91','92',
+$supportedWeight =  ['<80','81','82','83','84','85','86','87', '88','89','90','91','92',
                        '93','94','95','96','97', '98','99','100','101','102','103','104',
                        '105','106','107','108','109','110','111','112','113','114','115',
                        '116','117','118','119','120','121','122','123','124','125','126',
@@ -41,7 +41,7 @@ $supportedWeight =  [  '<80','81','82','83','84','85','86','87', '88','89','90',
                        '226','227','228','229','230','231','232','233','234','235','236',
                        '237','238','239','240', '240>'];
 
-$supportedHeight =  [   "<5", "5", "5-1", "5-2", "5-3", "5-4", "5-5", "5-6", "5-6", "5-7", 
+$supportedHeight =  ["<5", "5", "5-1", "5-2", "5-3", "5-4", "5-5", "5-6", "5-6", "5-7", 
                         "5-8", "5-9", "5-10", "5-11", "6", "6-1", "6-2", "6-3", "6-4", "6-5", 
                         "6-6", "6-6", "6-7", "6-8", "6-9", "6-10", "6-11", "7>"];     
 
@@ -53,8 +53,9 @@ function buildClientPage($userId, $clientId, $campaignId){
     $dbname      = "Users";
     $tablename   = "Users";
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
-    copy("../../template.html","../../userPages/$userId$clientId$campaignId.html");
-    $fp = fopen("../../userPages/$userId$clientId$campaignId.html", 'a+');
+    $landingPage = $userId . $clientId . $campaignId;   
+    copy("../../template.html","../../userPages/$landingPage.html");
+    $fp = fopen("../../userPages/$landingPage.html", 'a+');
     $text = "<p class='userId'>$userId</p>\n";
     fwrite($fp, $text);
     $text = "<p class='clientId'>$clientId</p>\n";
@@ -105,7 +106,7 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
     // get question content:
         $qContent = $Questions[3]->qAnswer;
     } else {
-        $qContent = 'Hey #nameRegister, what is your email address?';
+        $qContent = 'Hey #mainNameTag, what is your email address?';
     }
     // get the clientId and campaignId
     $clientId = $Questions[0]->clientId;
@@ -119,6 +120,8 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
     // get the options and options texts parsing the user text input response;
     if($qType == "button") {
         // preparing options
+        $options = array();
+        $optionsText = array();
         $optionsEntry = $Questions[5]->qAnswer;
         for($i = 0; $i < count($optionsEntry); $i++) {
             $options[$i] = $supportedIcons[$optionsEntry[$i]];
@@ -231,7 +234,9 @@ $ip            = getRealIpAddr();
 // get the user ID
 $userId         = $userdata->data[0]->userId;
 // check the question type selected by the user (nutritionist)
-if($userdata->data[0]->qAnswer == '0') {
+if($userdata->data[0]->qAnswer == '') {
+    $data['MAX_cnt'] = 0;
+} elseif($userdata->data[0]->qAnswer == '0') {
     $data['MAX_cnt'] = 7;
 } elseif($userdata->data[0]->qAnswer == '1') {
     $data['MAX_cnt'] = 6;
@@ -243,26 +248,34 @@ if($userdata->data[0]->qAnswer == '0') {
 
 if($userdata->data[0]->qAnswer == '') {
     $data['status'] = 0;
-} elseif($userdata->data[0]->qAnswer == '1' && $userdata->counter == 3) {
-    $data['status'] = 1;
-} elseif($userdata->data[0]->qAnswer == '1' && $userdata->counter == 5) {
-    $data['status'] = 2;
-} elseif($userdata->data[0]->qAnswer == '3' && $userdata->counter == 3) {
-    $data['status'] = 3;
 } elseif($userdata->data[0]->qAnswer == '0' && $userdata->counter == 3) {
-    $data['status'] = 4;
+    $data['status'] = 03; 
+} elseif($userdata->data[0]->qAnswer == '0' && $userdata->counter == 4) {
+    $data['status'] = 04;    
 } elseif($userdata->data[0]->qAnswer == '0' && $userdata->counter == 5) {
-    $data['status'] = 5;
+    $data['status'] = 05;
 } elseif($userdata->data[0]->qAnswer == '0' && $userdata->counter == 6) {
-    $data['status'] = 6;
+    $data['status'] = 06;
+} elseif($userdata->data[0]->qAnswer == '1' && $userdata->counter == 3) {
+    $data['status'] = 13; 
+} elseif($userdata->data[0]->qAnswer == '1' && $userdata->counter == 4) {
+    $data['status'] = 14; 
+} elseif($userdata->data[0]->qAnswer == '1' && $userdata->counter == 5) {
+    $data['status'] = 15;
+} elseif($userdata->data[0]->qAnswer == '3' && $userdata->counter == 3) {
+    $data['status'] = 33; 
+} elseif($userdata->data[0]->qAnswer == '3' && $userdata->counter == 4) {
+    $data['status'] = 34;  
 } elseif($userdata->data[0]->qAnswer == '2' && $userdata->counter == 3) {
-    $data['status'] = 7;
+    $data['status'] = 23; 
+} elseif($userdata->data[0]->qAnswer == '2' && $userdata->counter == 4) {
+    $data['status'] = 24;  
 } elseif($userdata->data[0]->qAnswer == '2' && $userdata->counter == 5) {
-    $data['status'] = 8;
+    $data['status'] = 25;
 } elseif($userdata->data[0]->qAnswer == '2' && $userdata->counter == 6) {
-    $data['status'] = 9;
+    $data['status'] = 26;
 } else {
-    $data['status'] = 10;
+    $data['status'] = 1;
 }
 
 if($data['MAX_cnt']  == $userdata->counter && $userdata->data[$userdata->counter-1]->qAnswer == 1 ) {
