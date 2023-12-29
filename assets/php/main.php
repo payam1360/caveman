@@ -15,10 +15,9 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
     // if request from client page -> entries already exists in the db: update qAnswer only
     // if request from public page -> entries do not exist for new clients: insert new entries
     // if request from questions design page -> entries do not exist: insert new entries
-    $kk = 0;
     if($db_out->num_rows != 0) { // request from clinet page -> need to update
+        $kk = 0;
         while($row = $db_out->fetch_assoc() && $Questions[$kk]->qType[0] != 'message'){
-            
             $options = "";
             $optionsText = "";
             if($Questions[$kk]->options[0] == ""){
@@ -61,10 +60,8 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
     } else { // this is coming from public or question page
         $kk = 0;
         while(!is_null($Questions[$kk]->qIdx) && $Questions[$kk]->qIdx >= 0 && $Questions[$kk]->qType[0] != 'message'){
-            $kk = $Questions[$kk]->qIdx;
             $options = "";
             $optionsText = "";
-        
             if($Questions[$kk]->options[0] == ""){
             } else {
                 $options = implode(",", $Questions[$kk]->options[0]);

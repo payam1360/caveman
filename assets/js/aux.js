@@ -607,7 +607,6 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
     }
     counter = 0;
     prog = 0;
-    globalQidx++;
     //flush the choiceTracker
     choiceTracker = [[0],[0]];
     multiButtonSelect = [];
@@ -765,6 +764,7 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
             } else if(data.status == 11) { // reset form for next question 
                 resetStart(querySelIn, header, headerTxt, 'questions');
+                globalQidx++;
             }
             else if(data.status == 12) { // end the form 
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
@@ -774,6 +774,7 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
                 let moveleft = document.querySelector('.form-go-left');
                 moveleft.style.opacity = 0;
                 moveleft.disabled = true;
+                globalQidx = 0; // end of the form
             }
         }
     };
