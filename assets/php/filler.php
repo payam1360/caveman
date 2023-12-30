@@ -250,7 +250,7 @@ function QuestionBackendForm() {
                             [["fa-solid fa-gears"], ["fa-regular fa-hand-point-right"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
-                            [['fa-regular fa-circle-check'], ["name", "water", "calories", "weight", "height", "macros", "micros", "sleep", "workout", "stress", "sugar", "other"]],
+                            [['fa-regular fa-circle-check'], ["name", "water", "calories", "weight", "height", "age", "gender", "goal", "macros", "micros", "sleep", "workout", "stress", "sugar", "other"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ["fa-solid fa-weight-scale", "fa-solid fa-text-height", "fa-solid fa-person-cane"],
                              $supportedIcons],
                             [['fa-regular fa-circle-check'], ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],

@@ -173,6 +173,7 @@ function getAge($data) {
             $ageDone = true;
         } else {
             // age is needed
+            $Userage = 25;
         }
         if($ageDone == true){
             break;
