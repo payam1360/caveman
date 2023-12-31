@@ -24,8 +24,8 @@ if(strpos($userdata, 'userId') == "") {
 session_start();
 $userName = $_SESSION['userName'];
 $userId = $_SESSION['userId'];
-$data['username'] = $userName;
 $data['userid'] = $userId;
+$data['username'] = $userName;
 $data['clientId'] = $clientIdURL;
 $data['campaignId'] = $campaignIdURL;
 

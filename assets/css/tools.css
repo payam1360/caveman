@@ -203,8 +203,7 @@
     font-weight: normal;
     font-family: 'Lucida Casual', 'Comic Sans MS'; /*'Lucida Casual', 'Comic Sans MS'*/
 }
-
-.client-list {
+.client-list-magnified {
     color: black;
     background-color: white;
     border-radius: 5%;
@@ -217,6 +216,26 @@
     transition: opacity 1s ease-in-out, height 0.5s ease-in-out, width 0.5s ease-in-out;
 }
 
+.client-list {
+    color: black;
+    background-color: white;
+    border-radius: 5%;
+    position: relative;
+    border: solid;
+    border-width: 5px;
+    border-color: lightblue;
+    height: 600px;
+    margin: 20px; 
+    padding: 10px;
+    opacity: 1;
+    transition: opacity 1s ease-in-out, height 0.5s ease-in-out, width 0.5s ease-in-out;
+}
+.client-list:hover {
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 5px 5px 5px 5px lightgrey;
+}
+
 .results-btn {
     display: none;
 }
@@ -227,9 +246,15 @@
     background-color: white;
     color: dodgerblue;
     border: 2px;
+    margin: 20px;
+    font-size: 50px;
 }
 
 .pdfReport:hover {
+    background-color: dodgerblue;
+    color: white;
+}
+.closeExpandedClient:hover {
     background-color: dodgerblue;
     color: white;
 }

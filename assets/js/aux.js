@@ -1237,7 +1237,7 @@ function fetchClients() {
             user = JSON.parse(this.response);
             let username = user.username;
             let userid = user.userid;
-            constructClients(userid);
+            constructClients(userid, username);
         }
     };
     // sending the request
@@ -1248,23 +1248,22 @@ function fetchClients() {
     xmlhttp.send(request);
 }
 
-function constructClients(userid){
+function constructClients(userid, username){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             results = JSON.parse(this.response);
-            displayClients(results, userid);
+            displayClients(results, userid, username);
         }
     };
     // sending the request
     xmlhttp.open("POST", "assets/php/results.php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    let info = {'userId': userid};
+    let info = {'userId': userid, 'username': username};
     var userdata = "userInfo="+JSON.stringify(info);
     xmlhttp.send(userdata);
 }
-function displayClients(results, userid) {
-    
+function displayClients(results, userid, username) {
     let blur = document.querySelector('.blur');
     blur.style.filter = 'blur(0px)';
     let parentNode = document.querySelector('.client-list-parent');
@@ -1274,6 +1273,7 @@ function displayClients(results, userid) {
         mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
         mDiv.setAttribute('cidx', kk);
         mDiv.setAttribute('userid', userid);
+        mDiv.setAttribute('username', username);
         mDiv.setAttribute('campaignids', results.campaignids[kk]);
         mDiv.setAttribute('clientid', results.ids[kk]);
         mDiv.addEventListener('click', function(){
@@ -1285,6 +1285,17 @@ function displayClients(results, userid) {
         goalP     = document.createElement('p');
         campaignP = document.createElement('p');
         createQP  = document.createElement('p');
+        avatar    = document.createElement('img');
+        if(results.genders[kk] == 'Male') {
+            avatar.setAttribute('src', './assets/img/man.png');
+        } else if (results.genders[kk] == 'Female') {
+            avatar.setAttribute('src', './assets/img/woman.png');
+        } else {
+            avatar.setAttribute('src', './assets/img/nuetral.png');
+        }
+        avatar.style.width = '60%';
+        avatar.style.display = 'block';
+        avatar.style.margin = '0 auto';
 
         nameP.innerHTML = results.names[kk];
         nameP.style.fontSize = '30px';
@@ -1296,6 +1307,7 @@ function displayClients(results, userid) {
         createQP.innerHTML = 'Create Campaign for ' + results.names[kk] + ': <a href=questions.html' + userdata + '> Form build page</a>';
         let link = '/userPages/' + userFile + '.html';
         campaignP.innerHTML = 'Send this link to ' + results.names[kk] + ': <a href="' + link + '"> questionaire page</a>';
+        mDiv.appendChild(avatar);
         mDiv.appendChild(nameP);
         mDiv.appendChild(genderP);
         mDiv.appendChild(goalP);
@@ -1321,7 +1333,7 @@ function displayClientsDetails(parentNode, results, cidx) {
     blur.style.filter = 'blur(10px)';
     cleanClientDiv(parentNode);
     let mDiv = document.createElement('div');
-    mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
+    mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list-magnified');
     mDiv.style.width = '60%';
     mDiv.style.height = '85%';
     mDiv.style.bottom = '5%';
@@ -1335,8 +1347,8 @@ function displayClientsDetails(parentNode, results, cidx) {
     let closeBtn = document.createElement('button');
     closeBtn.setAttribute('class', 'closeExpandedClient');
     let spn = document.createElement('span');
-    spn.setAttribute('class', 'fa-solid fa-xmark');
-    spn.style.fontSize = '40px';
+    spn.setAttribute('class', 'fa-regular fa-circle-xmark');
+    spn.style.fontSize = '50px';
     closeBtn.appendChild(spn);
     closeBtn.addEventListener('click', function(){
         displayClients(results, userid);
@@ -1346,7 +1358,7 @@ function displayClientsDetails(parentNode, results, cidx) {
     pdfBtn.setAttribute('class', 'pdfReport');
     spn = document.createElement('span');
     spn.setAttribute('class', 'fa-regular fa-file-pdf');
-    spn.style.fontSize = '40px';
+    spn.style.fontSize = '50px';
     pdfBtn.appendChild(spn);
     pdfBtn.addEventListener('click', function(){
         createPdf(parentNode);
@@ -1397,7 +1409,8 @@ function displayClientsDetails(parentNode, results, cidx) {
     bmi.appendChild(div1);
     bmi.appendChild(div2);
     bmi.appendChild(div3);
-    
+    // ------------------------------------
+
     let divider2 = document.createElement('div');
     divider2.style.height = '2px';
     divider2.style.width = '80%';
