@@ -1279,13 +1279,16 @@ function displayClients(results, userid, username) {
         mDiv.addEventListener('click', function(){
             displayClientsDetails(parentNode, results, this.getAttribute('cidx'));
         });
-        nameP     = document.createElement('p');
-        idP       = document.createElement('p');
-        genderP   = document.createElement('p');
-        goalP     = document.createElement('p');
-        campaignP = document.createElement('p');
-        createQP  = document.createElement('p');
-        avatar    = document.createElement('img');
+        nameP        = document.createElement('p');
+        idP          = document.createElement('p');
+        idPStyle     = document.createElement('span');
+        genderP      = document.createElement('p');
+        genderPStyle = document.createElement('span');
+        goalP        = document.createElement('p');
+        goalPStyle   = document.createElement('span');
+        campaignP    = document.createElement('p');
+        createQP     = document.createElement('p');
+        avatar       = document.createElement('img');
         if(results.genders[kk] == 'Male') {
             avatar.setAttribute('src', './assets/img/man.png');
         } else if (results.genders[kk] == 'Female') {
@@ -1296,17 +1299,28 @@ function displayClients(results, userid, username) {
         avatar.style.width = '60%';
         avatar.style.display = 'block';
         avatar.style.margin = '0 auto';
-
         nameP.innerHTML = results.names[kk];
+        nameP.style.color = '#4285F4';
         nameP.style.fontSize = '30px';
-        idP.innerHTML = 'Client\'s ID: ' + results.ids[kk];
-        genderP.innerHTML = 'Client\'s gender: ' + results.genders[kk];
-        goalP.innerHTML = 'Client\'s goal: ' + results.goals[kk];
+        idP.innerHTML = 'ID: ';
+        idPStyle.textContent = results.ids[kk];
+        idPStyle.style.color = 'brown';
+        idPStyle.style.fontSize = '24px';
+        idP.appendChild(idPStyle);
+        genderP.innerHTML = 'Gender: ';
+        genderPStyle.textContent = results.genders[kk];
+        genderPStyle.style.color = '#F4B400';
+        genderPStyle.style.fontSize = '24px';
+        genderP.appendChild(genderPStyle);
+        goalP.innerHTML = 'Goal: ';
+        goalPStyle.textContent = results.goals[kk];    
+        goalPStyle.style.fontSize = '24px';  
+        goalP.appendChild(goalPStyle);  
         let userdata = '?userId=' + userid + '?clientId=' + results.ids[kk] + '?campaignId=' + results.campaignids[kk]; 
         let userFile =  userid + results.ids[kk] + results.campaignids[kk]; 
-        createQP.innerHTML = 'Create Campaign for ' + results.names[kk] + ': <a href=questions.html' + userdata + '> Form build page</a>';
+        createQP.innerHTML = 'Create Campaign for ' + results.names[kk] + ': <a href=questions.html' + userdata + '> Form builder.</a>';
         let link = '/userPages/' + userFile + '.html';
-        campaignP.innerHTML = 'Send this link to ' + results.names[kk] + ': <a href="' + link + '"> questionaire page</a>';
+        campaignP.innerHTML = 'Link to ' + results.names[kk] + ': <a href="' + link + '"> survey page</a>';
         mDiv.appendChild(avatar);
         mDiv.appendChild(nameP);
         mDiv.appendChild(genderP);
@@ -1324,7 +1338,9 @@ function displayClients(results, userid, username) {
 }
 
 
-
+// this function needs to send a request to results.php
+// if the user's client has filled out the form, his analysis
+// will be available.
 function displayClientsDetails(parentNode, results, cidx) {
     
     userid = parentNode.children[cidx].getAttribute('userid');
