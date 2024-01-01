@@ -1259,7 +1259,7 @@ function constructClients(userid, username){
     // sending the request
     xmlhttp.open("POST", "assets/php/results.php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    let info = {'userId': userid, 'username': username};
+    let info = {'userId': userid, 'clientId': ''};
     var userdata = "userInfo="+JSON.stringify(info);
     xmlhttp.send(userdata);
 }
@@ -1277,7 +1277,7 @@ function displayClients(results, userid, username) {
         mDiv.setAttribute('campaignids', results.campaignids[kk]);
         mDiv.setAttribute('clientid', results.ids[kk]);
         mDiv.addEventListener('click', function(){
-            displayClientsDetails(parentNode, results, this.getAttribute('cidx'));
+            getClientDetails(parentNode, results, this.getAttribute('cidx'));
         });
         nameP        = document.createElement('p');
         idP          = document.createElement('p');
@@ -1341,12 +1341,36 @@ function displayClients(results, userid, username) {
 // this function needs to send a request to results.php
 // if the user's client has filled out the form, his analysis
 // will be available.
-function displayClientsDetails(parentNode, results, cidx) {
+
+function getClientDetails(parentNode, result, cidx){
+
+    userid = parentNode.children[cidx].getAttribute('userid');
+    clientid = parentNode.children[cidx].getAttribute('clientid');
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            clientData = JSON.parse(this.response);
+            displayClientsDetails(parentNode, clientData.client, result, cidx);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/results.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'userId': userid, 'clientId': clientid};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+}
+
+
+function displayClientsDetails(parentNode, clientData, results, cidx) {
     
     userid = parentNode.children[cidx].getAttribute('userid');
     let blur = document.querySelector('.blur');
     blur.style.zIndex = '1';
     blur.style.filter = 'blur(10px)';
+    blur.addEventListener('click', function(){
+        displayClients(results, userid);
+    });
     cleanClientDiv(parentNode);
     let mDiv = document.createElement('div');
     mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list-magnified');
@@ -1388,11 +1412,11 @@ function displayClientsDetails(parentNode, results, cidx) {
 
     nameP.innerHTML = results.names[cidx];
     nameP.style.fontSize = '40px';
-    idP.innerHTML = 'Client\'s ID: ' + results.ids[cidx];
+    idP.innerHTML = 'ID: ' + results.ids[cidx];
     genderP.innerHTML = results.genders[cidx];
-    goalP.innerHTML = 'Client\'s goal: ' + results.goals[cidx];
+    goalP.innerHTML = 'Goal: ' + results.goals[cidx];
     let link = '/userPages/' + userid + results.ids[cidx] + results.campaignids[cidx] + '.html'
-    campaignP.innerHTML = 'sent this link to ' + results.names[cidx] + ': <a href="' + link + '"> questionaire page</a>';
+    campaignP.innerHTML = 'Link to ' + results.names[cidx] + '\'s survey <a href="' + link + '"> page</a>';
     
     let divider1 = document.createElement('div');
     divider1.style.height = '2px';

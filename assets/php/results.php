@@ -1,6 +1,6 @@
 <?php
 
-
+require_once "functions.php";
 function extractUserInfo($userId) {
     
     $servername   = "127.0.0.1";
@@ -20,7 +20,6 @@ function extractUserInfo($userId) {
     $goals       = array();
     $campaignids = array();
     $formFlag    = array();
-    $kk        = 0;
     while($database_row = $database_out->fetch_assoc()) {
         // filling out info briefs
         array_push($names, $database_row['name']);
@@ -56,11 +55,62 @@ function extractUserInfo($userId) {
 }
 
 
+function extractClientInfo($clientId, $userId) {
+    
+    $servername   = "127.0.0.1";
+    $loginname    = "root";
+    $password     = "@Ssia123";
+    $dbname       = "Users";
+    $tablename    = "Users";
+    // Create connection
+    $conn         = new mysqli($servername, $loginname, $password, $dbname);
+    // check if the client exists.
+    $sql          = "SELECT * FROM $tablename WHERE 
+                                                    userId = '$userId' 
+                                                    AND 
+                                                    clientId = '$clientId';";
+    $database_out = $conn->query($sql);
+    $clientInfo = array();
+    $kk = 0;
+    while($database_row = $database_out->fetch_assoc()) {
+        // filling out info briefs
+        $qKey        = $database_row['qKey'];
+        $qIdx        = $database_row['qIdx']; 
+        $qAnswer     = $database_row['qAnswer'];
+        $optionsText = $database_row['optionsText'];
+        $out = '{"qKey":        ["' . $qKey    . '"],' .
+               ' "qIdx":        "' . $qIdx    . '",' .
+               ' "qAnswer":     "' . $qAnswer . '",' .
+               ' "optionsText": ["' . $optionsText . '"]}';
+
+        $clientInfo[$kk] =  json_decode($out);
+        $kk++;
+    }
+    
+    return $clientInfo;
+}
+
+
+
+
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
 $userdata      = json_decode($_POST['userInfo']);
 $userInfo      = extractUserInfo($userdata->userId);
+if($userdata->clientId != '') {
+    $clientInfo    = extractClientInfo($userdata->clientId, $userdata->userId);
+    $user_bmi      = calculateBmi($clientInfo);
+    $user_bmr      = calculateBmr($clientInfo);
+    $user_if       = calculateIf($clientInfo);
+    $user_macro    = calculateMacro($clientInfo);
+    $user_micro    = calculateMicro($clientInfo);
+    $output        = dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro);
+
+} else {
+    $output = '';
+}
+$userInfo['client'] = $output;
 echo json_encode($userInfo);
 
 
