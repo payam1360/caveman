@@ -1103,7 +1103,9 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     microDesc.style.display = 'block';
     
     microDesc.innerHTML = 'This text must come from the server about Micro!';
-    tColors = ['coral','lightblue','limegreen','cyan','blue','green','orange','magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod','Peru','Sienna'];
+    tColors = ['coral','lightblue','limegreen','cyan','blue','green','orange',
+               'magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod',
+               'Peru','Sienna'];
     const microData = {
         datasets: [{
             data: micro.tValues,
@@ -1460,7 +1462,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     
     // create plot MICRO
     let microSuggestion = document.createElement('p');
-    microSuggestion.innerHTML = 'Micro-nutrients recommendation';
+    microSuggestion.innerHTML = 'Micro-nutrients (Trace minerals) recommendation';
     microSuggestion.style.fontSize = '30px';
     let micro = document.createElement('div');
     micro.setAttribute('class', 'col-sm col-lg-5 Micro');
@@ -1481,12 +1483,99 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     micro.appendChild(div2);
     micro.appendChild(div3);
 
+
+    // Micto vitamines
+    let divider2Vit = document.createElement('div');
+    divider2Vit.style.height = '2px';
+    divider2Vit.style.width = '80%';
+    divider2Vit.style.backgroundColor = 'grey';
+    divider2Vit.style.margin = 'auto';
+    divider2Vit.style.marginTop = '20px';
+    
+    // create plot MICRO
+    let microVitSuggestion = document.createElement('p');
+    microVitSuggestion.innerHTML = 'Micro-nutrients (Vitamines) recommendation';
+    microVitSuggestion.style.fontSize = '30px';
+    let microVit = document.createElement('div');
+    microVit.setAttribute('class', 'col-sm col-lg-5 Micro_vit');
+    microVit.style.margin = 'auto';
+    div1 = document.createElement('div');
+    div2 = document.createElement('div');
+    div3 = document.createElement('div');
+    let microVitDiv = document.createElement('canvas');
+    let microVitTxt = document.createElement('p');
+    let microVitDesc = document.createElement('p');
+    microVitDiv.setAttribute('id', 'Micro_vit');
+    microVitTxt.setAttribute('class', 'MICRO_vit_text');
+    microVitDesc.setAttribute('class', 'MICRO_vit_text_description');
+    div1.appendChild(microVitTxt);
+    div2.appendChild(microVitDiv);
+    div3.appendChild(microVitDesc);
+    microVit.appendChild(div1);
+    microVit.appendChild(div2);
+    microVit.appendChild(div3);
+
+    // -----------
     let divider3 = document.createElement('div');
     divider3.style.height = '2px';
     divider3.style.width = '80%';
     divider3.style.backgroundColor = 'grey';
     divider3.style.margin = 'auto';
     divider3.style.marginTop = '20px';
+
+    // create plot MACRO
+    let macroSuggestion = document.createElement('p');
+    macroSuggestion.innerHTML = 'Macro-nutrients recommendation';
+    macroSuggestion.style.fontSize = '30px';
+    let macro = document.createElement('div');
+    macro.setAttribute('class', 'col-sm col-lg-5 Macro');
+    macro.style.margin = 'auto';
+    div1 = document.createElement('div');
+    div2 = document.createElement('div');
+    div3 = document.createElement('div');
+    let macroDiv = document.createElement('canvas');
+    let macroTxt = document.createElement('p');
+    let macroDesc = document.createElement('p');
+    macroDiv.setAttribute('id', 'Macro');
+    macroTxt.setAttribute('class', 'MACRO_text');
+    macroDesc.setAttribute('class', 'MACRO_text_description');
+    div1.appendChild(macroTxt);
+    div2.appendChild(macroDiv);
+    div3.appendChild(macroDesc);
+    macro.appendChild(div1);
+    macro.appendChild(div2);
+    macro.appendChild(div3);
+
+
+    let divider4 = document.createElement('div');
+    divider4.style.height = '2px';
+    divider4.style.width = '80%';
+    divider4.style.backgroundColor = 'grey';
+    divider4.style.margin = 'auto';
+    divider4.style.marginTop = '20px';
+
+    // create plot Intermittent Fasting plots
+    let ifSuggestion = document.createElement('p');
+    ifSuggestion.innerHTML = 'Intermittent fasting recommendation';
+    ifSuggestion.style.fontSize = '30px';
+    let If = document.createElement('div');
+    If.setAttribute('class', 'col-sm col-lg-5 IntermittentFasting');
+    If.style.margin = 'auto';
+    div1 = document.createElement('div');
+    div2 = document.createElement('div');
+    div3 = document.createElement('div');
+    let ifDiv = document.createElement('canvas');
+    let ifTxt = document.createElement('p');
+    let ifDesc = document.createElement('p');
+    ifDiv.setAttribute('id', 'IntermittentFasting');
+    ifTxt.setAttribute('class', 'IF_text');
+    ifDesc.setAttribute('class', 'IF_text_description');
+    div1.appendChild(ifTxt);
+    div2.appendChild(ifDiv);
+    div3.appendChild(ifDesc);
+    If.appendChild(div1);
+    If.appendChild(div2);
+    If.appendChild(div3);
 
     
     mDiv.appendChild(closeBtn);
@@ -1502,12 +1591,24 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     mDiv.appendChild(divider2);
     mDiv.appendChild(microSuggestion);
     mDiv.appendChild(micro);
+    mDiv.appendChild(divider2Vit);
+    mDiv.appendChild(microVitSuggestion);
+    mDiv.appendChild(microVit);
     mDiv.appendChild(divider3);
+    mDiv.appendChild(macroSuggestion);
+    mDiv.appendChild(macro);
+    mDiv.appendChild(divider4);
+    mDiv.appendChild(ifSuggestion);
+    mDiv.appendChild(If);
+
     parentNode.appendChild(mDiv);
     
-    plotBmi(20, bmi, bmiTxt, bmiDesc);
-    plotMicro([1,2,3,4,5], micro, microTxt, microDesc);
-
+    plotBmi(clientData.bmi, bmi, bmiTxt, bmiDesc);
+    plotMicro(clientData.micro, micro, microTxt, microDesc);
+    plotMicroVit(clientData.micro, microVit, microVitTxt, microVitDesc);
+    plotMacro(clientData.macro, macro, macroTxt, macroDesc);
+    plotIf(clientData.if, If, ifTxt, ifDesc);
+    
 }
 
 function createPdf(node) {
