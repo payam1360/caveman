@@ -1293,9 +1293,9 @@ function displayClients(results, userid, username) {
         campaignP    = document.createElement('p');
         createQP     = document.createElement('p');
         avatar       = document.createElement('img');
-        if(results.genders[kk] == 'Male') {
+        if(results.genders[kk] == 'male') {
             avatar.setAttribute('src', './assets/img/man.png');
-        } else if (results.genders[kk] == 'Female') {
+        } else if (results.genders[kk] == 'female') {
             avatar.setAttribute('src', './assets/img/woman.png');
         } else {
             avatar.setAttribute('src', './assets/img/nuetral.png');
