@@ -370,7 +370,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
             newIn.setAttribute('type', userStruct.qType[serverStruct]);
             newIn.setAttribute('id', 'multi-select-text');
             newIn.style.borderBottom = '2px solid coral';
-            newIn.style.height = '165px';
+            newIn.style.height = '70px';
             newIn.style.marginBottom = '30px';
             querySelIn.appendChild(newIn);
             // the button array
@@ -406,7 +406,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
                 newImgSpan.appendChild(newI);
                 newImgSpan.appendChild(newP);
                 newImgSpan.addEventListener('mouseenter',function(e) {
-                    e.target.children[1].style.opacity = 0.5;
+                    e.target.children[1].style.opacity = 0.8;
                 });
                 newImgSpan.addEventListener('mouseleave',function(e) {
                     e.target.children[1].style.opacity = 0;
@@ -430,9 +430,11 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
                 newInbtn.appendChild(newImgSpan);
                 querySelIn.appendChild(newInbtn);
                 if(iconCount % numCol == 0) {
-                    let brEl = document.createElement("br");
+                    let brEl1 = document.createElement("br");
+                    let brEl2 = document.createElement("br");
                     let dynamicSpace = document.getElementById("dynamicSpace");
-                    dynamicSpace.appendChild(brEl);
+                    dynamicSpace.appendChild(brEl1);
+                    dynamicSpace.appendChild(brEl2);
                 }
                 iconCount++;
             });

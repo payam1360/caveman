@@ -1,24 +1,27 @@
 <?php
 
-$supportedIcons = ["fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass", "fa-solid fa-calendar-days",
-"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", "fa-solid fa-heart", "fa-solid fa-magnifying-glass"];
+$supportedIcons = ["fa-solid fa-dumbbell","fa-solid fa-heart-pulse", 
+"fa-regular fa-face-angry","fa-regular fa-face-meh","fa-regular fa-face-smile", 
+"fa-regular fa-moon","fa-regular fa-face-tired", "fa-solid fa-mars","fa-solid fa-venus", 
+"fa-regular fa-circle-check", "fa-solid fa-xmark", 
+"fa-solid fa-signature", "fa-regular fa-registered", "fa-solid fa-user-tie", 
+"fa-solid fa-not-equal", 
+"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", 
+"fa-solid fa-gears", "fa-regular fa-hand-point-right", "fa-regular fa-thumbs-up",'fa-regular fa-thumbs-down',
+"fa-solid fa-weight-scale", "fa-solid fa-text-height", "fa-solid fa-person-cane", "fa-solid fa-water", "fa-solid fa-droplet",
+"fa-solid fa-droplet-slash", "fa-solid fa-arrow-up-right-dots", "fa-solid fa-brain", "fa-brands fa-nutritionix", 
+"fa-solid fa-hand-fist", "fa-solid fa-question", "fa-solid fa-person-running", "fa-solid fa-person-walking", "fa-solid fa-bowl-food",
+"fa-solid fa-martini-glass-citrus", "fa-solid fa-fish", "fa-solid fa-cubes-stacked"];
 
-$supportedText = ["a","b","c","d","e","f","g",
-"a","b","c","d","a","a","a",
-"a","b","c","d","a","a","a",
-"a","b","c","d","a","a","a",
-"a","b","c","d","a","a","a",
-"a","b","c","d","a","a","a",
-"a","b","c","d","a","a","a",
-"a","b","c","d","a","a"];
+$supportedText = ["gain muscle", "increase heart rate","always tired", "be less tired", "relaxed",
+                  "7-8 hour sleep", "get less sleep", "Male", "Female", "great", "bad", 
+                  "sign up", "register", "new user", "not equal", "list", "text", 
+                  "multiple choice", "email", "work process", "proceed", "ok", "not ok",
+                  "lose weight", "height", "age",  "drink lot of water", "drink enough water", 
+                  "drink less water", "increase testostrone", "AI", "nutritionist", "intense workout",
+                  "don't know", "Cardio", "walking", "enough calories", "alcohol", "omega 3", "sugar"];
 
-$supportedAge = ['18','19','20','21','22','23','24','25', '26','27','28','29','30','31',
+$supportedAge = [  '18','19','20','21','22','23','24','25', '26','27','28','29','30','31',
                    '32','33','34','35','36','37','38','39','40','41','42','43','44','45', 
                    '46','47','48','49','50','51','52','53','54','55', '56','57','58','59',
                    '60','61','62','63','64','65','66','67','68','69','70','71','72','73',
@@ -29,7 +32,7 @@ $supportedAgeDemo = ['18, 19, ...'];
 
 
 
-$supportedWeight =  ['<80','81','82','83','84','85','86','87', '88','89','90','91','92',
+$supportedWeight =  [  '<80','81','82','83','84','85','86','87', '88','89','90','91','92',
                        '93','94','95','96','97', '98','99','100','101','102','103','104',
                        '105','106','107','108','109','110','111','112','113','114','115',
                        '116','117','118','119','120','121','122','123','124','125','126',
@@ -47,7 +50,7 @@ $supportedWeight =  ['<80','81','82','83','84','85','86','87', '88','89','90','9
 
 $supportedWeightDemo =  ['80, 81, ...'];
 
-$supportedHeight =  ["<5", "5", "5-1", "5-2", "5-3", "5-4", "5-5", "5-6", "5-6", "5-7", 
+$supportedHeight =  [   "<5", "5", "5-1", "5-2", "5-3", "5-4", "5-5", "5-6", "5-6", "5-7", 
                         "5-8", "5-9", "5-10", "5-11", "6", "6-1", "6-2", "6-3", "6-4", "6-5", 
                         "6-6", "6-6", "6-7", "6-8", "6-9", "6-10", "6-11", "7>"];                                      
 

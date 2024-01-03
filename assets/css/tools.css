@@ -109,9 +109,9 @@
 }
 
 .multiButton-tooltip {
-    position: relative;
+    position: absolute;
     opacity: 0;
-    top: -100px;
+    top: 0px;
     z-index: 1;
     background: white;
     padding: 10px;
