@@ -26,18 +26,18 @@ function extractUserInfo($userId) {
         array_push($ids, $database_row['clientId']);
         array_push($formFlag, $database_row['completed']);
         if($database_row['gender'] == 0) {
-            array_push($genders, 'Male');
+            array_push($genders, 'male');
         } elseif($database_row['gender'] == 1){
-            array_push($genders, 'Female');
+            array_push($genders, 'female');
         } else {
             array_push($genders, 'No response');
         }
         if($database_row['goal'] == 0) {
-            array_push($goals, 'Increase testosterone');
+            array_push($goals, 'increase testosterone');
         } elseif($database_row['goal'] == 1) {
-            array_push($goals, 'Increase muscle mass');
+            array_push($goals, 'gain muscle');
         } elseif($database_row['goal'] == 2) {
-            array_push($goals, 'Lose weight');
+            array_push($goals, 'lose weight');
         } else {
             array_push($goals, 'No response');
         }

@@ -13,13 +13,14 @@ $supportedIcons = ["fa-solid fa-dumbbell","fa-solid fa-heart-pulse",
                     "fa-solid fa-person-running", "fa-solid fa-person-walking", "fa-solid fa-bowl-food",
                     "fa-solid fa-martini-glass-citrus", "fa-solid fa-fish", "fa-solid fa-cubes-stacked"];
 
-$supportedText = [  "gain muscle", "increase heart rate","always tired", "be less tired", "relaxed",
-                    "7-8 hour sleep", "get less sleep", "Male", "Female", "great", "bad", 
+$supportedText = [  "gain muscle", "increase heart rate","high stress", "medium stress", "low stress",
+                    "well rested", "get less sleep", "male", "female", "great", "bad", 
                     "sign up", "register", "new user", "not equal", "list", "text", 
                     "multiple choice", "email", "work process", "proceed", "ok", "not ok",
                     "lose weight", "height", "age",  "drink lot of water", "drink enough water", 
-                    "drink less water", "increase testostrone", "AI", "nutritionist", "intense workout",
-                    "don't know", "Cardio", "walking", "enough calories", "alcohol", "omega 3", "sugar"];
+                    "drink less water", "increase testosterone", "ai", "nutritionist", "intense workout",
+                    "do not know", "cardio", "walking", "enough calories", "alcohol", "omega 3", "sugar"];
+
 
 $supportedAge = [  '18','19','20','21','22','23','24','25', '26','27','28','29','30','31',
                    '32','33','34','35','36','37','38','39','40','41','42','43','44','45', 

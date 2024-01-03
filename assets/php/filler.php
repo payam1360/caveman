@@ -4,8 +4,7 @@ $supportedIcons = ["fa-solid fa-dumbbell","fa-solid fa-heart-pulse",
 "fa-regular fa-face-angry","fa-regular fa-face-meh","fa-regular fa-face-smile", 
 "fa-regular fa-moon","fa-regular fa-face-tired", "fa-solid fa-mars","fa-solid fa-venus", 
 "fa-regular fa-circle-check", "fa-solid fa-xmark", 
-"fa-solid fa-signature", "fa-regular fa-registered", "fa-solid fa-user-tie", 
-"fa-solid fa-not-equal", 
+"fa-solid fa-signature", "fa-regular fa-registered", "fa-solid fa-user-tie", "fa-solid fa-not-equal", 
 "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", 
 "fa-solid fa-gears", "fa-regular fa-hand-point-right", "fa-regular fa-thumbs-up",'fa-regular fa-thumbs-down',
 "fa-solid fa-weight-scale", "fa-solid fa-text-height", "fa-solid fa-person-cane", "fa-solid fa-water", "fa-solid fa-droplet",
@@ -13,13 +12,13 @@ $supportedIcons = ["fa-solid fa-dumbbell","fa-solid fa-heart-pulse",
 "fa-solid fa-hand-fist", "fa-solid fa-question", "fa-solid fa-person-running", "fa-solid fa-person-walking", "fa-solid fa-bowl-food",
 "fa-solid fa-martini-glass-citrus", "fa-solid fa-fish", "fa-solid fa-cubes-stacked"];
 
-$supportedText = ["gain muscle", "increase heart rate","always tired", "be less tired", "relaxed",
-                  "7-8 hour sleep", "get less sleep", "Male", "Female", "great", "bad", 
+$supportedText = ["gain muscle", "increase heart rate","high stress", "medium stress", "low stress",
+                  "well rested", "get less sleep", "male", "female", "great", "bad", 
                   "sign up", "register", "new user", "not equal", "list", "text", 
                   "multiple choice", "email", "work process", "proceed", "ok", "not ok",
                   "lose weight", "height", "age",  "drink lot of water", "drink enough water", 
-                  "drink less water", "increase testostrone", "AI", "nutritionist", "intense workout",
-                  "don't know", "Cardio", "walking", "enough calories", "alcohol", "omega 3", "sugar"];
+                  "drink less water", "increase testosterone", "ai", "nutritionist", "intense workout",
+                  "do not know", "cardio", "walking", "enough calories", "alcohol", "omega 3", "sugar"];
 
 $supportedAge = [  '18','19','20','21','22','23','24','25', '26','27','28','29','30','31',
                    '32','33','34','35','36','37','38','39','40','41','42','43','44','45', 
@@ -102,9 +101,9 @@ function getPublicForm() {
                                 [[""]],
                                 [[""]],
                                 [[""]],
-                                [["high","manageable","relaxed"]],
-                                [["7-8 hours a day","always tired"]],
-                                [["Male","Female"]],
+                                [["high stress","medium stress","low stress"]],
+                                [["well rested","get less sleep"]],
+                                [["male","female"]],
                                 [["All Done!"]]
                            ];
     
@@ -314,10 +313,10 @@ function addClients() {
                        ];
     $data['optionsText'] = [
                                 [[""]],
-                                [["Male", "Female", 'I don\'t know']],
-                                [["increase testosterone", "increase muscle mass", "lose weight", 'I am not sure']],
-                                [["AI", "Nutritionist"]],
-                                [["AI", "Nutritionist"]],
+                                [["male", "female", 'do not know']],
+                                [["increase testosterone", "gain muscle", "lose weight", "do not know"]],
+                                [["ai", "nutritionist"]],
+                                [["ai", "nutritionist"]],
                                 [["New client is created!"]]
                            ];
     $data['qRequired'] = [0, 1, 1, 1, 1, 1];
