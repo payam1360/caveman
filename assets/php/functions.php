@@ -249,7 +249,7 @@ function calculateIf($data){
     // this function is the algorithm for calculating intervals in which the user is 
     // recommended for fasting. Fasting increase IGF or growth hormons.  
     // calculate intermittent fasting interval
-    $IF         = [[24,0],[24,0],[24,0],[24,0],[24,0],[24,0],[24,0]];
+    $IF         = [[24,24,24,24,24,24,24],[0,0,0,0,0,0,0]];
     $Userweight = getWeight($data);
     $Userage    = getAge($data);
     $Usergender = getGender($data);

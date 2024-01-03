@@ -406,7 +406,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
                 newImgSpan.appendChild(newI);
                 newImgSpan.appendChild(newP);
                 newImgSpan.addEventListener('mouseenter',function(e) {
-                    e.target.children[1].style.opacity = 0.8;
+                    e.target.children[1].style.opacity = 0.7;
                 });
                 newImgSpan.addEventListener('mouseleave',function(e) {
                     e.target.children[1].style.opacity = 0;
