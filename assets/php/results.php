@@ -78,10 +78,21 @@ function extractClientInfo($clientId, $userId) {
         $qIdx        = $database_row['qIdx']; 
         $qAnswer     = $database_row['qAnswer'];
         $optionsText = $database_row['optionsText'];
+        $optionText_array = explode(",", $optionsText);
+        $temp        = "[";
+        for($optionCnt = 0; $optionCnt < count($optionText_array); $optionCnt++){
+            if($optionCnt != count($optionText_array) - 1) {
+                $temp = $temp . "\"" . $optionText_array[$optionCnt] . "\",";
+            } else {
+                $temp = $temp . "\"" . $optionText_array[$optionCnt] . "\"";
+            }
+        }
+        $temp = $temp . "]";
+        
         $out = '{"qKey":        ["' . $qKey    . '"],' .
-               ' "qIdx":        "' . $qIdx    . '",' .
-               ' "qAnswer":     "' . $qAnswer . '",' .
-               ' "optionsText": ["' . $optionsText . '"]}';
+               ' "qIdx":        "'  . $qIdx    . '",' .
+               ' "qAnswer":     "'  . $qAnswer . '",' .
+               ' "optionsText": [' . $temp    . ']}';
 
         $clientInfo[$kk] =  json_decode($out);
         $kk++;

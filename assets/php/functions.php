@@ -134,10 +134,10 @@ function getGender($data) {
     while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'gender' && $genderDone == false){
             $UsergenderChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
-            if($UsergenderChoice == 'Male') {
-                $Usergender = 'Male';
+            if($UsergenderChoice == 'male') {
+                $Usergender = 'male';
             } else {
-                $Usergender = 'Female';
+                $Usergender = 'female';
             }
             $genderDone = true;
         } else {
@@ -159,11 +159,11 @@ function getStress($data) {
         if($data[$kk]->qKey[0] == 'stress' && $stressDone == false){
             $UserstressChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
             if($UserstressChoice == 'high') {
-                $Userstress = 'High';
+                $Userstress = 'high';
             } elseif($UserstressChoice == 'manageable') {
-                $Userstress = 'Medium';
+                $Userstress = 'medium';
             } else {
-                $Userstress = 'Low';
+                $Userstress = 'low';
             }
             $stressDone = true;
         } else {
@@ -186,11 +186,11 @@ function getGoal($data) {
             $UsergoalChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
             
             if($UsergoalChoice == 'lose weight') {
-                $Usergoal = 'Lose';
+                $Usergoal = 'lose';
             } elseif($UsergoalChoice == 'gain muscles') {
-                $Usergoal = 'Gain';
+                $Usergoal = 'gain';
             } else {
-                $Usergoal = 'LessTired';
+                $Usergoal = 'increase testosterone';
             }
             $goalDone = true;
         } else {
@@ -362,8 +362,8 @@ function calculateMacro($data){
         } elseif($Userage >= 50) {
             $ageFactor = 0.9;
         }
-        if($Usergender == 'Male'){
-            if($Usergoal == 'Lose') {
+        if($Usergender == 'male'){
+            if($Usergoal == 'lose') {
                 $p = 0.3 * $ageFactor;
                 $c = 0.6 * (1 - $ageFactor);
                 $f = 0.9 - $p - $c;
@@ -371,7 +371,7 @@ function calculateMacro($data){
                 $caloriDeficit = 250;
                 $Macro =  [$p * $BMR - $caloriDeficit, $c * $BMR - $caloriDeficit, 
                            $f * $BMR - $caloriDeficit, $fi * $BMR - $caloriDeficit]; // [protein, carb, fat];
-            } elseif($Usergoal == 'Gain') {
+            } elseif($Usergoal == 'gain') {
                 $p = 0.3 * $ageFactor;
                 $c = 0.6 * (1 - $ageFactor);
                 $f = 0.9 - $p - $c;
@@ -388,8 +388,8 @@ function calculateMacro($data){
                 $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
                            $f * $BMR + $caloriSurplus, $fi * $BMR - $caloriSurplus]; // [protein, carb, fat];            
             }
-        } elseif($Usergender == 'Female'){
-            if($Usergoal == 'Lose') {
+        } elseif($Usergender == 'female'){
+            if($Usergoal == 'lose') {
                 $p = 0.2 * $ageFactor;
                 $c = 0.65 * (1 - $ageFactor);
                 $f = 0.9 - $p - $c;
@@ -397,7 +397,7 @@ function calculateMacro($data){
                 $caloriDeficit = 250;
                 $Macro =  [$p * $BMR - $caloriDeficit, $c * $BMR - $caloriDeficit, 
                            $f * $BMR - $caloriDeficit, $fi * $BMR - $caloriDeficit]; // [protein, carb, fat];
-            } elseif($Usergoal == 'Gain') {
+            } elseif($Usergoal == 'gain') {
                 $p = 0.25 * $ageFactor;
                 $c = 0.65 * (1 - $ageFactor);
                 $f = 0.9 - $p - $c;
@@ -446,7 +446,7 @@ function calculateMicro($data){
     $vScale = [100, 1, 1, 2, 1, 1, 10, 100, 1, 10, 100, 10, 20];
     $tScale = [1, 100, 100, 1, 100, 1, 100, 1, 10, 100, 1, 10, 1, 1, 1];
     if($valid) {
-        if($Usergender == 'Male') {
+        if($Usergender == 'male') {
             if($Userage > 70) {
                 $vValues = [9, 1.2, 1.3, 8, 5, 1.3, 3, 4, 2.4, 9, 8, 2.25, 6];
                 $tValues = [1.2, 3, 9, 4, 1.5, 8, 4.2, 2.3, 4.5, 7, 4.7, 5.5, 1.2, 11, 3.1];
@@ -457,7 +457,7 @@ function calculateMicro($data){
                 $vValues = [9, 1.2, 1.3, 8, 5, 1.3, 3, 4, 2.4, 9, 6, 2.25, 6];
                 $tValues = [1, 3.5, 9, 4, 1.5, 8, 4, 2.3, 4.5, 7, 4.7, 5.5, 1.5, 11, 3.1];
             }
-        } elseif($Usergender == 'Female') {
+        } elseif($Usergender == 'female') {
             if($Userage > 70) {
                 $vValues = [7, 1.1, 1.1, 7, 5, 1.3, 3, 4, 2.4, 7.5, 8, 2.25, 4.5]; 
                 $tValues = [1.2, 2, 9, 3, 1.5, 8, 3.2, 1.8, 4.5, 7, 4.7, 5.5, 1.2, 8, 3.1];
