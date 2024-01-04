@@ -1378,16 +1378,6 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     cleanClientDiv(parentNode);
     let mDiv = document.createElement('div');
     mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list-magnified');
-    mDiv.style.width = '60%';
-    mDiv.style.height = '85%';
-    mDiv.style.bottom = '5%';
-    mDiv.style.borderRadius = '1%'
-    mDiv.style.backgroundColor = 'white';
-    mDiv.style.position = 'fixed';
-    mDiv.style.zIndex = '2';
-    mDiv.style.opacity = 0.8;
-    
-    mDiv.style.overflow = 'scroll';
     let closeBtn = document.createElement('button');
     closeBtn.setAttribute('class', 'closeExpandedClient');
     let spn = document.createElement('span');
