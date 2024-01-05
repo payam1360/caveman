@@ -208,7 +208,8 @@ function calculateBmi($data){
     $Userweight = getWeight($data);
     $Userheight = getHeight($data);
     if($Userweight != [] && $Userheight != []) {
-        $BMI = lb2kg($Userweight) / pow(in2cm($Userheight)/100, 2);
+        $BMI['val']  = lb2kg($Userweight) / pow(in2cm($Userheight)/100, 2);
+        $BMI['desc'] = "This text is actually coming from the server!!";
     } else {
         $BMI = [];
     }

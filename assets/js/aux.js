@@ -927,7 +927,7 @@ function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
     bmiDiv.style.display = 'block';
     bmiDesc.style.display = 'block';
     
-    bmiDesc.innerHTML = 'This text must come from the server about BMI!';
+    bmiDesc.innerHTML = bmi['desc'];
     // Config section
     let meanBmi = 25;
     let varBmi = 3.1;
@@ -946,7 +946,7 @@ function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
     for(let x = startX; x<=endX; x+=step) {
       bell.push(pdf(x));
       xAxis.push(Math.round(x * 100) / 100);
-        if(x < bmi && x > bmi - step){
+        if(x < bmi['val'] && x > bmi['val'] - step){
             pointBackgroundColor.push('limegreen');
             pointRadius.push(6);
         } else {
@@ -1395,7 +1395,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     spn.style.fontSize = '50px';
     pdfBtn.appendChild(spn);
     pdfBtn.addEventListener('click', function(){
-        createPdf(parentNode);
+        createPdf(parentNode, clientData);
     });
     
     let nameP = document.createElement('p');
@@ -1425,7 +1425,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
 
     
     let bmi = document.createElement('div');
-    bmi.setAttribute('class', 'col-sm col-lg-5 Micro');
+    bmi.setAttribute('class', 'col-sm col-lg-5 Bmi');
     bmi.style.margin = 'auto';
     let div1 = document.createElement('div');
     let div2 = document.createElement('div');
@@ -1603,22 +1603,78 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     
 }
 
-function createPdf(node) {
+function createPdf(node, data) {
 
     const { jsPDF } = window.jspdf;
-    bmiIdx = 9;
+    nameIdx  = 2;
+    goalIdx  = 4;
+    idIdx    = 5;
+    bmiIdx   = 9;
     microIdx = 12;
+    
     const canvasImgBmi = node.children[0].children[bmiIdx].children[1].children[0].toDataURL('image/jpeg', 1.0);
     const canvasImgMicro = node.children[0].children[microIdx].children[1].children[0].toDataURL('image/jpeg', 1.0);
     var pdf = new jsPDF({
                          orientation: 'p',
-                         unit: 'mm',
-                         format: 'a5',
+                         unit: 'px',
+                         format: 'letter',
                          putOnlyUsedFonts:true
                          });
-    pdf.addImage(canvasImgBmi, 'JPEG', 15, 15, 100, 80, 'alias1', 'SLOW');
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000');
+    pdf.text('Hey there, ', 50, 50); 
+
+    pdf.setFontSize(20);
+    pdf.setTextColor('#4285F4');
+    pdf.text(node.children[0].children[nameIdx].innerHTML, 85, 50); 
+
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000'); 
+    pdf.text('Your goal: ', 50, 70);  
+
+    pdf.setFontSize(20);
+    pdf.setTextColor('#F4B400');
+    pdf.text(node.children[0].children[goalIdx].innerHTML.substr(6), 85, 70); 
+
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000'); 
+    pdf.text('Your ID: ', 50, 90);  
+
+    pdf.setFontSize(20);
+    pdf.setTextColor('#964B00');
+    pdf.text(node.children[0].children[idIdx].innerHTML.substr(4), 85, 90); 
+
+    pdf.line(50, 100, 400, 100, 'S');
+
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000');
+    pdf.text('Your body mass index: ', 50, 120); 
+
+    pdf.setFontSize(20);
+    pdf.setTextColor('#2E8B57');
+    pdf.text(String(Math.floor(data.bmi['val']*100)/100), 130, 120); 
+
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000');
+    pdf.text('Your basal metabolic rate (BMR) kcal / day: ', 50, 140); 
+
+    pdf.setFontSize(20);
+    pdf.setTextColor('#FFA500');
+    pdf.text(String(Math.floor(data.bmr*100)/100), 200, 140); 
+
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000');
+    pdf.text(['This number gives an estimate of how much calories you need per day at your current activity / stress levels', 
+    'to reach your fitness goals.'], 50, 160); 
+
+    pdf.addImage(canvasImgBmi, 'PNG', 80, 180, 300, 220, 'alias1', 'SLOW');
+
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000');
+    pdf.text(data.bmi['desc'] , 50, 420); 
+
     pdf.addPage();
-    pdf.addImage(canvasImgMicro, 'JPEG', 15, 15, 100, 80, 'alias2', 'SLOW');
+    pdf.addImage(canvasImgMicro, 'JPEG', 80, 50, 300, 220, 'alias2', 'SLOW');
     pdf.save('sample-file.pdf');
 }
 
