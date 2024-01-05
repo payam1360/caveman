@@ -1672,7 +1672,7 @@ function createPdf(node, data) {
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
     pdf.text(data.bmi['desc'] , 50, 420); 
-
+                         // just testing github
     pdf.addPage();
     pdf.addImage(canvasImgMicro, 'JPEG', 80, 50, 300, 220, 'alias2', 'SLOW');
     pdf.save('sample-file.pdf');
