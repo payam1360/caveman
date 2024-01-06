@@ -134,7 +134,7 @@ function getGender($data) {
     while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'gender' && $genderDone == false){
             $UsergenderChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
-            if($UsergenderChoice == 'male') {
+            if(str_contains($UsergenderChoice, 'male')) {
                 $Usergender = 'male';
             } else {
                 $Usergender = 'female';
@@ -158,9 +158,9 @@ function getStress($data) {
     while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'stress' && $stressDone == false){
             $UserstressChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
-            if($UserstressChoice == 'high') {
+            if(str_contains($UserstressChoice, 'high')) {
                 $Userstress = 'high';
-            } elseif($UserstressChoice == 'manageable') {
+            } elseif(str_contains($UserstressChoice, 'manageable')) {
                 $Userstress = 'medium';
             } else {
                 $Userstress = 'low';
@@ -180,14 +180,14 @@ function getStress($data) {
 function getGoal($data) {
     $goalDone    = false;
     $kk          = 0;
-    $Usergoal = [];
+    $Usergoal    = [];
     while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'goal' && $goalDone == false){
             $UsergoalChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
             
-            if($UsergoalChoice == 'lose weight') {
+            if(str_contains($UsergoalChoice, 'lose')) {
                 $Usergoal = 'lose';
-            } elseif($UsergoalChoice == 'gain muscles') {
+            } elseif(str_contains($UsergoalChoice, 'gain')) {
                 $Usergoal = 'gain';
             } else {
                 $Usergoal = 'increase testosterone';
@@ -211,7 +211,8 @@ function calculateBmi($data){
         $BMI['val']  = lb2kg($Userweight) / pow(in2cm($Userheight)/100, 2);
         $BMI['desc'] = "This text is actually coming from the server!!";
     } else {
-        $BMI = [];
+        $BMI['val']  = [];
+        $BMI['desc'] = [];
     }
     return($BMI);
 }
@@ -228,20 +229,25 @@ function calculateBmr($data) {
 
     if($Userweight != [] && $Userheight != [] && $Userage != [] 
             && $Usergender != [] && $Userstress != []) {
-        if($Userstress == 'Low') {
+        if(str_contains($Userstress, 'low')) {
             $stressFactor = 1.2;
-        } elseif($Userstress == 'Medium') {
+        } elseif(str_contains($Userstress, 'medium')) {
             $stressFactor = 1.65;
         } else {
             $stressFactor = 2.25;
         }
-        if($Usergender == 'Male') {
-            $BMR = $stressFactor * ( 66.47 + (13.75 * $Userweight) + (5.003 * $Userheight) - (6.75 * $Userage));
+        if(str_contains($Usergender, 'male')) {
+            $BMR['val'] = $stressFactor * ( 66.47 + (13.75 * $Userweight) + (5.003 * $Userheight) - (6.75 * $Userage));
+            $BMR['desc'] = ['This number gives an estimate of how much calories you need per day at your current activity / stress levels', 
+            'to reach your fitness goals.'];
         } else {
-            $BMR = $stressFactor * ( 655.1 + (9.56 * $Userweight) + (1.85 * $Userheight) - (4.7 * $Userage));
+            $BMR['val'] = $stressFactor * ( 655.1 + (9.56 * $Userweight) + (1.85 * $Userheight) - (4.7 * $Userage));
+            $BMR['desc'] = ['This number gives an estimate of how much calories you need per day at your current activity / stress levels', 
+            'to reach your fitness goals.'];
         }
     } else {
-        $BMR = [];
+        $BMR['val'] = [];
+        $BMR['desc'] = [];
     }
     return($BMR);
 }
@@ -250,7 +256,8 @@ function calculateIf($data){
     // this function is the algorithm for calculating intervals in which the user is 
     // recommended for fasting. Fasting increase IGF or growth hormons.  
     // calculate intermittent fasting interval
-    $IF         = [[24,24,24,24,24,24,24],[0,0,0,0,0,0,0]];
+    $IF['val']  = [[24,24,24,24,24,24,24],[0,0,0,0,0,0,0]];
+    $IF['desc'] = [''];
     $Userweight = getWeight($data);
     $Userage    = getAge($data);
     $Usergender = getGender($data);
@@ -266,52 +273,65 @@ function calculateIf($data){
     }
     if($valid) {
         if($Userweight >= 70 && $Userweight < 120) {
-            if($Usergender == 'Male'){
-                if($Usergoal == 'Lose') {
-                    $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                } elseif($Usergoal == 'Gain') {
-                    $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+            if(str_contains($Usergender, 'male')){
+                if(str_contains($Usergoal, 'lose')) {
+                    $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+                    $IF['desc'] = [''];
+                } elseif(str_contains($Usergoal, 'gain')) {
+                    $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+                    $IF['desc'] = [''];
                 }
-            } elseif($Usergender == 'Female'){
-                if($Usergoal == 'Lose') {
-                    $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                } elseif($Usergoal == 'Gain') {
-                    $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+            } elseif(str_contains($Usergender, 'female')){
+                if(str_contains($Usergoal, 'lose')) {
+                    $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+                    $IF['desc'] = [''];
+                } elseif(str_contains($Usergoal, 'gain')) {
+                    $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+                    $IF['desc'] = [''];
                 }
             }
         }
         elseif($Userweight >= 120 && $Userweight < 220) {
-            if($Usergender == 'Male'){
-                if($Usergoal == 'Lose') {
-                    $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                } elseif($Usergoal == 'Gain') {
-                    $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+            if(str_contains($Usergender, 'male')){
+                if(str_contains($Usergoal, 'lose')) {
+                    $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+                    $IF['desc'] = [''];
+                } elseif(str_contains($Usergoal, 'gain')) {
+                    $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+                    $IF['desc'] = [''];
                 }
-            } elseif($Usergender == 'Female'){
-                if($Usergoal == 'Lose') {
-                    $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                } elseif($Usergoal == 'Gain') {
-                    $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+            } elseif(str_contains($Usergender, 'female')){
+                if(str_contains($Usergoal, 'lose')) {
+                    $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+                    $IF['desc'] = [''];
+                } elseif(str_contains($Usergoal, 'gain')) {
+                    $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+                    $IF['desc'] = [''];
                 }
             }
         }
         elseif($Userweight >= 220 && $Userweight < 300) {
-            if($Usergender == 'Male'){
-                if($Usergoal == 'Lose') {
-                    $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                } elseif($Usergoal == 'Gain') {
-                    $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+            if(str_contains($Usergender, 'male')){
+                if(str_contains($Usergoal, 'lose')) {
+                    $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+                    $IF['desc'] = [''];
+                } elseif(str_contains($Usergoal, 'gain')) {
+                    $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+                    $IF['desc'] = [''];
                 }
-            } elseif($Usergender == 'Female'){
-                if($Usergoal == 'Lose') {
-                    $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                } elseif($Usergoal == 'Gain') {
-                    $IF = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+            } elseif(str_contains($Usergender, 'female')){
+                if(str_contains($Usergoal, 'lose')) {
+                    $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+                    $IF['desc'] = [''];
+                } elseif(str_contains($Usergoal, 'gain')) {
+                    $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
+                    $IF['desc'] = [''];
                 }
             }
         }
     } else {
-        $IF = [];
+        $IF['val']  = [];
+        $IF['desc'] = [];
     }
         // -----------------------------------------------------------
     return($IF);
@@ -323,7 +343,7 @@ function calculateAjBW($data) {
     $Usergender = getGender($data);
     if($Userweight != [] && $Userheight != []  && $Usergender != [] ) {
         // calculation
-        if($Usergender == 'Female') {
+        if(str_contains($Usergender, 'female')) {
             //$idealBodyWeight = 49 kg + 1.7 kg per every inch over 5 feet
             $idealBodyWeight = 49 + 1.7 * ($Userheight - 60); // kg
         } else {
@@ -350,7 +370,7 @@ function calculateMacro($data){
     $Usergoal   = getGoal($data);
     $BMR        = calculateBmr($data);
 
-    if($BMR != []) {
+    if($BMR['val'] != []) {
         // factor in the user's age
         if($Userage < 20) {
             $ageFactor = 0.95;
@@ -363,61 +383,68 @@ function calculateMacro($data){
         } elseif($Userage >= 50) {
             $ageFactor = 0.9;
         }
-        if($Usergender == 'male'){
-            if($Usergoal == 'lose') {
+        if(str_contains($Usergender, 'male')){
+            if(str_contains($Usergoal, 'lose')) {
                 $p = 0.3 * $ageFactor;
                 $c = 0.6 * (1 - $ageFactor);
                 $f = 0.9 - $p - $c;
                 $fi= 0.1;
                 $caloriDeficit = 250;
-                $Macro =  [$p * $BMR - $caloriDeficit, $c * $BMR - $caloriDeficit, 
-                           $f * $BMR - $caloriDeficit, $fi * $BMR - $caloriDeficit]; // [protein, carb, fat];
-            } elseif($Usergoal == 'gain') {
+                $Macro['val'] =  [$p * $BMR['val'] - $caloriDeficit, $c * $BMR['val'] - $caloriDeficit, 
+                                  $f * $BMR['val'] - $caloriDeficit, $fi * $BMR['val'] - $caloriDeficit]; // [protein, carb, fat];
+                $Macro['desc']  = [];                
+            } elseif(str_contains($Usergoal, 'gain')) {
                 $p = 0.3 * $ageFactor;
                 $c = 0.6 * (1 - $ageFactor);
                 $f = 0.9 - $p - $c;
                 $fi= 0.1;
                 $caloriSurplus = 250;
-                $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
-                           $f * $BMR + $caloriSurplus, $fi * $BMR - $caloriSurplus]; // [protein, carb, fat];
+                $Macro['val'] =  [$p * $BMR['val'] + $caloriSurplus, $c * $BMR['val'] + $caloriSurplus, 
+                                  $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat];
+                $Macro['desc']  = [];                  
             } else {
                 $p = 0.3 * $ageFactor;
                 $c = 0.6 * (1 - $ageFactor);
                 $f = 0.9 - $p - $c;
                 $fi= 0.1;
                 $caloriSurplus = 250;
-                $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
-                           $f * $BMR + $caloriSurplus, $fi * $BMR - $caloriSurplus]; // [protein, carb, fat];            
+                $Macro['val'] =  [$p * $BMR['val'] + $caloriSurplus, $c * $BMR['val'] + $caloriSurplus, 
+                                  $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat]; 
+                $Macro['desc']  = [];           
             }
-        } elseif($Usergender == 'female'){
-            if($Usergoal == 'lose') {
+        } elseif(str_contains($Usergender, 'female')){
+            if(str_contains($Usergoal, 'lose')) {
                 $p = 0.2 * $ageFactor;
                 $c = 0.65 * (1 - $ageFactor);
                 $f = 0.9 - $p - $c;
                 $fi= 0.1;
                 $caloriDeficit = 250;
-                $Macro =  [$p * $BMR - $caloriDeficit, $c * $BMR - $caloriDeficit, 
-                           $f * $BMR - $caloriDeficit, $fi * $BMR - $caloriDeficit]; // [protein, carb, fat];
-            } elseif($Usergoal == 'gain') {
+                $Macro['val'] =  [$p * $BMR['val'] - $caloriDeficit, $c * $BMR['val'] - $caloriDeficit, 
+                                  $f * $BMR['val'] - $caloriDeficit, $fi * $BMR['val'] - $caloriDeficit]; // [protein, carb, fat];
+                $Macro['desc']  = [];
+            } elseif(str_contains($Usergoal, 'gain')) {
                 $p = 0.25 * $ageFactor;
                 $c = 0.65 * (1 - $ageFactor);
                 $f = 0.9 - $p - $c;
                 $fi= 0.1;
                 $caloriSurplus = 250;
-                $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
-                           $f * $BMR + $caloriSurplus, $fi * $BMR - $caloriSurplus]; // [protein, carb, fat];
+                $Macro['val'] =  [$p * $BMR['val'] + $caloriSurplus, $c * $BMR['val'] + $caloriSurplus, 
+                                  $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat];
+                $Macro['desc']  = [];
             } else {
                 $p = 0.25 * $ageFactor;
                 $c = 0.65 * (1 - $ageFactor);
                 $f = 0.9 - $p - $c;
                 $fi= 0.1;
                 $caloriSurplus = 250;
-                $Macro =  [$p * $BMR + $caloriSurplus, $c * $BMR + $caloriSurplus, 
-                           $f * $BMR + $caloriSurplus, $fi * $BMR - $caloriSurplus]; // [protein, carb, fat];
+                $Macro['val'] =  [$p * $BMR['val'] + $caloriSurplus, $c * $BMR['val'] + $caloriSurplus, 
+                                  $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat];
+                $Macro['desc']  = [];
             }
         }
     } else {
-        $Macro = [];
+        $Macro['val'] = [];
+        $Macro['desc']  = [];
     } 
     return($Macro);
 }
@@ -447,7 +474,7 @@ function calculateMicro($data){
     $vScale = [100, 1, 1, 2, 1, 1, 10, 100, 1, 10, 100, 10, 20];
     $tScale = [1, 100, 100, 1, 100, 1, 100, 1, 10, 100, 1, 10, 1, 1, 1];
     if($valid) {
-        if($Usergender == 'male') {
+        if(str_contains($Usergender, 'male')) {
             if($Userage > 70) {
                 $vValues = [9, 1.2, 1.3, 8, 5, 1.3, 3, 4, 2.4, 9, 8, 2.25, 6];
                 $tValues = [1.2, 3, 9, 4, 1.5, 8, 4.2, 2.3, 4.5, 7, 4.7, 5.5, 1.2, 11, 3.1];
@@ -458,7 +485,7 @@ function calculateMicro($data){
                 $vValues = [9, 1.2, 1.3, 8, 5, 1.3, 3, 4, 2.4, 9, 6, 2.25, 6];
                 $tValues = [1, 3.5, 9, 4, 1.5, 8, 4, 2.3, 4.5, 7, 4.7, 5.5, 1.5, 11, 3.1];
             }
-        } elseif($Usergender == 'female') {
+        } elseif(str_contains($Usergender, 'female')) {
             if($Userage > 70) {
                 $vValues = [7, 1.1, 1.1, 7, 5, 1.3, 3, 4, 2.4, 7.5, 8, 2.25, 4.5]; 
                 $tValues = [1.2, 2, 9, 3, 1.5, 8, 3.2, 1.8, 4.5, 7, 4.7, 5.5, 1.2, 8, 3.1];
@@ -475,7 +502,7 @@ function calculateMicro($data){
         $tValues = [];
     }   
  
-    $Micro = array('vNames' => $vNames,
+    $Micro['val'] = array('vNames' => $vNames,
                    'tNames' => $tNames,
                    'vValues' => $vValues,
                    'tValues' => $tValues,
@@ -483,6 +510,9 @@ function calculateMicro($data){
                    'tUnits' => $tUnits, 
                    'vScale' => $vScale,
                    'tScale' => $tScale);
+    $Micro['descVit'] = [];    
+    $Micro['descTrace'] = [];    
+               
     return($Micro);
 }
 

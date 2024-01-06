@@ -995,17 +995,22 @@ function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
 }
 
 // function to plot IF data returned by the server for the given user
-function plotIf(If){
+function plotIf(If, ifTxt = 0, ifDiv = 0, ifDesc = 0){
     // Canvas element section
+    if(ifDiv == 0){
+        ifDiv = document.querySelector('.IntermittentFasting');
+    }
+    if(ifTxt == 0) {
+        ifTxt = document.querySelector('.IF_text');
+    }
+    if(ifDesc == 0) {
+        ifDesc = document.querySelector('.IF_text_description');
+    }
     let ifElement  = document.querySelector('#IntermittentFasting');
-    let ifDiv = document.querySelector('.IntermittentFasting');
-    let ifTxt = document.querySelector('.IF_text');
-    let ifDesc = document.querySelector('.IF_text_description');
     
-    
-    ifDesc.innerHTML = 'This text must come from the server about IF!';
-    ifTxt.style.display = 'block';
-    ifDiv.style.display = 'block';
+    ifDesc.innerHTML     = If['desc'];
+    ifTxt.style.display  = 'block';
+    ifDiv.style.display  = 'block';
     ifDesc.style.display = 'block';
 
     const ifData = {
@@ -1013,14 +1018,14 @@ function plotIf(If){
       datasets: [
         {
             label: 'Eating interval (hrs)',
-            data: If[0],
+            data: If['val'][0],
             backgroundColor: 'rgba(15, 157, 88, 0.5)',
             borderColor: 'rgba(15, 157, 88, 1)',
             borderWidth: 2,
         },
         {
             label:  'Fasting interval (hrs)',
-            data: If[1],
+            data: If['val'][1],
             backgroundColor: 'rgba(66, 133, 244, 0.5)',
             borderColor: 'rgba(66, 133, 244, 1)',
             borderWidth: 2,
@@ -1050,22 +1055,29 @@ function plotIf(If){
 }
 
 // function to plot Macro data returned by the server for the given user
-function plotMacro(macro){
+function plotMacro(macro, macroTxt = 0, macroDiv = 0, macroDesc = 0){
     // Canvas element section
     let macroElement  = document.querySelector('#Macro');
-    let macroDiv = document.querySelector('.Macro');
-    let macroTxt = document.querySelector('.MACRO_text');
-    let macroDesc = document.querySelector('.MACRO_text_description');
+    if(macroDiv == 0){
+        macroDiv = document.querySelector('.Macro');
+    }
+    if(macroTxt == 0) {
+        macroTxt = document.querySelector('.MACRO_text');
+    }
+    if(macroDesc == 0) {
+        macroDesc = document.querySelector('.MACRO_text_description');
+    }
+    
     macroTxt.style.display = 'block';
     macroDiv.style.display = 'block';
     macroDesc.style.display = 'block';
 
-    macroDesc.innerHTML = 'This text must come from the server about Macro!';
+    macroDesc.innerHTML = macro['desc'];
     
     const macroData = {
       labels: ['fat','carbs', 'protein', 'fiber'],
       datasets: [{
-        data: macro,
+        data: macro['val'],
         backgroundColor: [
           'coral',
           'lightblue',
@@ -1104,17 +1116,17 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     microDiv.style.display = 'block';
     microDesc.style.display = 'block';
     
-    microDesc.innerHTML = 'This text must come from the server about Micro!';
+    microDesc.innerHTML = micro['descTrace'];
     tColors = ['coral','lightblue','limegreen','cyan','blue','green','orange',
                'magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod',
                'Peru','Sienna'];
     const microData = {
         datasets: [{
-            data: micro.tValues,
+            data: micro['val'].tValues,
             backgroundColor: tColors,
-            labels: micro.tNames,
-            units: micro.tUnits,
-            scale: micro.tScale,
+            labels: micro['val'].tNames,
+            units: micro['val'].tUnits,
+            scale: micro['val'].tScale,
         }]
     };
     const bgColor = {
@@ -1168,15 +1180,15 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     microDiv.style.display = 'block';
     microDesc.style.display = 'block';
     
-    microDesc.innerHTML = 'This text must come from the server about Micro!';
+    microDesc.innerHTML = micro['descVit'];
     vColors = ['coral','lightblue','limegreen','cyan','blue','green','orange','magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod','Peru','Sienna'];
     const microData = {
         datasets: [{
-            data: micro.vValues,
+            data: micro['val'].vValues,
             backgroundColor: vColors,
-            labels: micro.vNames,
-            units: micro.vUnits,
-            scale: micro.vScale,
+            labels: micro['val'].vNames,
+            units: micro['val'].vUnits,
+            scale: micro['val'].vScale,
         }]
     };
     const bgColor = {
@@ -1660,12 +1672,11 @@ function createPdf(node, data) {
 
     pdf.setFontSize(20);
     pdf.setTextColor('#FFA500');
-    pdf.text(String(Math.floor(data.bmr*100)/100), 200, 140); 
+    pdf.text(String(Math.floor(data.bmr['val']*100)/100), 200, 140); 
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(['This number gives an estimate of how much calories you need per day at your current activity / stress levels', 
-    'to reach your fitness goals.'], 50, 160); 
+    pdf.text(data.bmr['desc'], 50, 160); 
 
     pdf.addImage(canvasImgBmi, 'PNG', 80, 180, 300, 220, 'alias1', 'SLOW');
 
@@ -1673,8 +1684,14 @@ function createPdf(node, data) {
     pdf.setTextColor('#000000');
     pdf.text(data.bmi['desc'] , 50, 420); 
     
+    // page reset
     pdf.addPage();
     pdf.addImage(canvasImgMicro, 'JPEG', 80, 50, 300, 220, 'alias2', 'SLOW');
+
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000');
+    pdf.text(data.micro['descTrace'] , 50, 420);
+
     pdf.save('sample-file.pdf');
 }
 
