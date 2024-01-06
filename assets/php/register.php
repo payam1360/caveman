@@ -55,17 +55,21 @@ function registerUserCredentials($passwordUser, $email) {
 
 function sendEmail($emailAddr) {
     $mail = new PHPMailer(true);
+
+    // app password: azqb ochq lfot btnc
+
+
     // Server settings
-    $mail->SMTPDebug = 3;                       //Enable verbose debug output
+    $mail->SMTPDebug = 0;                       //Enable verbose debug output
     $mail->isSMTP();                            // Set mailer to use SMTP
-    $mail->Host = 'smtp.hostinger.com';                  // Specify main and backup SMTP servers
+    $mail->Host = 'smtp.gmail.com';             // Specify main and backup SMTP servers
     $mail->SMTPAuth = true;                     // Enable SMTP authentication
-    $mail->Username = 'payam@nutrition4guys.com';     // SMTP username
-    $mail->Password = '@Brcm123';               // SMTP password
+    $mail->Username = 'rabiei.p@gmail.com'; // SMTP username
+    $mail->Password = 'azqb ochq lfot btnc';    // SMTP password
     $mail->SMTPSecure = 'ssl';                  // Enable TLS encryption, `ssl` also accepted
     $mail->Port = 465;                          // TCP port to connect to
     // Sender info
-    $mail->setFrom('payam@nutrition4guys.com', 'Payam Rabiei');
+    $mail->setFrom('rabiei.p@gmail.com', 'Payam Rabiei');
     // Add a recipient
     $mail->addAddress($emailAddr);
     // Set email format to HTML
@@ -73,18 +77,15 @@ function sendEmail($emailAddr) {
     // Mail subject
     $mail->Subject = 'Verify your email';
     $verification_code = mt_rand(10000, 99999);
-    $verification_code = '00000';
     // Mail body content
     $bodyContent  = 'your verification code is: <b>' . $verification_code . '</b>';
     $bodyContent .= '<p>This email is sent from Nutrition4guys </p>';
     $mail->Body   = $bodyContent;
     // Send email
-    
-    //if(!$mail->send()) {
-    //    echo 'Message could not be sent. Mailer Error: '.$mail->ErrorInfo;
-    //} else {
-    //    echo 'Message has been sent.';
-    //}
+    if(!$mail->send()) {
+        echo 'Message could not be sent. Mailer Error: '.$mail->ErrorInfo;
+    } else {
+    }
     return $verification_code;
 }
 
@@ -120,8 +121,6 @@ function checkEmailExists($email) {
     $dbname      = "Users";
     $tablename   = "authentication";
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
-    $sql         = "DELETE FROM $tablename WHERE email = '$email' AND password = '';";
-    $conn->query($sql);
     $sql         = "SELECT EXISTS (SELECT userId FROM $tablename WHERE email = '$email');";
     $ex          = $conn->query($sql);
     if($ex->fetch_column(0) == 0){
@@ -147,7 +146,7 @@ if($userdata[EMAIL]->qAnswer != '' && $userdata[VERC]->qAnswer == '') { // if em
         saveVerificationAndEmail($verification_code, $userdata[EMAIL]->qAnswer, $userdata[NAME]->qAnswer);
         $data['status'] = 5; // new user
     } else {
-        $data['status'] = 2; // user already exists
+        $data['status'] = 2; // user already exists but verification not done yet
     }
 } elseif($userdata[VERC]->qAnswer != '') { // if verification code is provided check the code
     $verification_code = readVerification($userdata[EMAIL]->qAnswer);

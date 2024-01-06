@@ -701,10 +701,6 @@ function callRegister(header, headerTxt, querySelIn, inputDataBlob) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
             } else if(data.status == 2) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
-                let moveright = document.querySelector('.form-go-right');
-                moveright.style.opacity = 0;
-                moveright.disabled = true;
-                headerTxt[1].innerHTML = '';
             } else if(data.status == 3) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
                 let moveright = document.querySelector('.form-go-right');
