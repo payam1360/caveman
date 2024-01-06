@@ -91,6 +91,11 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                     });
                 }
             }
+            if(page == 'register' && counter == 2) {
+                let spinner   = document.querySelector('.spinner-js');
+                spinner.style.opacity = 1;
+            }
+
             if(counter == 1) {
                 let moveleft = document.querySelector('.form-go-left');
                 if(moveleft.disabled == true) {
@@ -563,7 +568,8 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
     resetFormType(input[2]);
     resetFormType(input[1]);
     resetFormType(input[0]);
-    let moveleft = document.querySelector('.form-go-left');
+    let moveleft = document.querySelector('.form-go-left');   
+    let spinner = document.querySelector('.spinner-js');
     moveleft.disabled = true;
     moveleft.style.opacity = 0;
 
@@ -587,6 +593,9 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
         setFormType(event.target, Questions[counter], event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'));
         ChangeForm(event.target, '0s', '0', 1, '50%');
         restorePrevAnswer(event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'));
+        if(spinner.style.opacity != 0){
+            spinner.style.opacity = 0;
+        }
     });
     input[2].addEventListener('transitionend', function(event) {
         ChangeForm(event.target, '0.0s', '0', 0, '0%');
