@@ -105,25 +105,30 @@ function extractUserInfo($info, $ip) {
             $userId = '0';
             $clientId = mt_rand(10000, 99999);;
             $campaignId  = substr(md5(rand()), 0, 7);
-            $userInfo['userId'] = $userId;
-            $userInfo['clientId'] = $clientId;
-            $userInfo['campaignId'] = $campaignId;
-            
+            $userInfo['userId']       = $userId;
+            $userInfo['clientId']     = $clientId;
+            $userInfo['campaignId']   = $campaignId;
+            $userInfo['mealEng']      = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
+            $userInfo['nutritionEng'] = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
         } else {
             $userId = '0';
             $clientId = $database_row['clientId'];
             $campaignId = $database_row['campaignId'];
-            $userInfo['userId'] = $userId;
-            $userInfo['clientId'] = $clientId;
-            $userInfo['campaignId'] = $campaignId;
+            $userInfo['userId']       = $userId;
+            $userInfo['clientId']     = $clientId;
+            $userInfo['campaignId']   = $campaignId;
+            $userInfo['mealEng']      = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
+            $userInfo['nutritionEng'] = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
         }
     } else {
         $userId     = substr($info, 0, 6);
         $clientId   = substr($info, 6, 5);
         $campaignId = substr($info, 11, 7);
-        $userInfo['userId'] = $userId;
-        $userInfo['clientId'] = $clientId;
-        $userInfo['campaignId'] = $campaignId;
+        $userInfo['userId']       = $userId;
+        $userInfo['clientId']     = $clientId;
+        $userInfo['campaignId']   = $campaignId;
+        $userInfo['mealEng']      = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
+        $userInfo['nutritionEng'] = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
     }
     return $userInfo;
 }
@@ -152,11 +157,13 @@ function getRealIpAddr()
 $userdata      = json_decode($_POST['userInfo']);
 $ip            = getRealIpAddr();
 $userInfo      = extractUserInfo($userdata->IdInfo, $ip);
-$userId        = $userInfo['userId'];
-$clientId      = $userInfo['clientId'];
-$campaignId    = $userInfo['campaignId'];
 $data          = $userdata->data;
-$dbflag        = saveUserDataIntoDB($data, $userId, $clientId, $campaignId, $ip);
+$data['userId']       = $userInfo['userId'];
+$data['clientId']     = $userInfo['clientId'];
+$data['campaignId']   = $userInfo['campaignId'];
+$data['mealEng']      = $userInfo['mealEng'];
+$data['nutritionEng'] = $userInfo['nutritionEng'];
+$dbflag        = saveUserDataIntoDB($data, $data['userId'], $data['clientId'], $data['campaignId'], $ip);
 // perform calculations
 $user_bmi      = calculateBmi($data);
 $user_bmr      = calculateBmr($data);

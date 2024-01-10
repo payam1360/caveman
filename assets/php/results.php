@@ -20,11 +20,16 @@ function extractUserInfo($userId) {
     $goals       = array();
     $campaignids = array();
     $formFlag    = array();
+    $mealEng     = array();
+    $nutritionEng= array();
+
     while($database_row = $database_out->fetch_assoc()) {
         // filling out info briefs
         array_push($names, $database_row['name']);
         array_push($ids, $database_row['clientId']);
         array_push($formFlag, $database_row['completed']);
+        array_push($mealEng, $database_row['mealEng']);
+        array_push($nutritionEng, $database_row['nutritionEng']);
         if($database_row['gender'] == 0) {
             array_push($genders, 'male');
         } elseif($database_row['gender'] == 1){
@@ -44,18 +49,20 @@ function extractUserInfo($userId) {
         array_push($campaignids, $database_row['campaignId']);
     }
     
-    $userInfo['names']       = $names;
-    $userInfo['ids']         = $ids;
-    $userInfo['genders']     = $genders;
-    $userInfo['goals']       = $goals;
-    $userInfo['campaignids'] = $campaignids;
+    $userInfo['names']          = $names;
+    $userInfo['ids']            = $ids;
+    $userInfo['genders']        = $genders;
+    $userInfo['goals']          = $goals;
+    $userInfo['campaignids']    = $campaignids;
     $userInfo['formWasCreated'] = $formFlag;
+    $userInfo['mealEng']        = $mealEng;
+    $userInfo['nutritionEng']   = $nutritionEng;
 
     return $userInfo;
 }
 
 
-function extractClientInfo($clientId, $userId) {
+function extractClientInfo($clientId, $userId, $nutritionEng, $mealEng) {
     
     $servername   = "127.0.0.1";
     $loginname    = "root";
@@ -89,10 +96,14 @@ function extractClientInfo($clientId, $userId) {
         }
         $temp = $temp . "]";
         
-        $out = '{"qKey":        ["' . $qKey    . '"],' .
-               ' "qIdx":        "'  . $qIdx    . '",' .
-               ' "qAnswer":     "'  . $qAnswer . '",' .
-               ' "optionsText": [' . $temp    . ']}';
+        $out = '{"qKey":         ["' . $qKey          . '"],'.
+               ' "qIdx":         "'  . $qIdx          . '",' .
+               ' "userId":       "'  . $userId        . '",' .
+               ' "clientId":     "'  . $clientId      . '",' .
+               ' "mealEng":      "'  . $mealEng       . '",' .
+               ' "nutritionEng": "'  . $nutritionEng  . '",' .
+               ' "qAnswer":      "'  . $qAnswer       . '",' .
+               ' "optionsText":  ['  . $temp          . ']}';
 
         $clientInfo[$kk] =  json_decode($out);
         $kk++;
@@ -110,7 +121,7 @@ function extractClientInfo($clientId, $userId) {
 $userdata      = json_decode($_POST['userInfo']);
 $userInfo      = extractUserInfo($userdata->userId);
 if($userdata->clientId != '') {
-    $clientInfo    = extractClientInfo($userdata->clientId, $userdata->userId);
+    $clientInfo    = extractClientInfo($userdata->clientId, $userdata->userId, $userInfo['nutritionEng'], $userInfo['meanEng']);
     $user_bmi      = calculateBmi($clientInfo);
     $user_bmr      = calculateBmr($clientInfo);
     $user_if       = calculateIf($clientInfo);

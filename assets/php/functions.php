@@ -276,18 +276,18 @@ function calculateIf($data){
             if(str_contains($Usergender, 'male')){
                 if(str_contains($Usergoal, 'lose')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = [''];
+                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 } elseif(str_contains($Usergoal, 'gain')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = [''];
+                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 }
             } elseif(str_contains($Usergender, 'female')){
                 if(str_contains($Usergoal, 'lose')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = [''];
+                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 } elseif(str_contains($Usergoal, 'gain')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = [''];
+                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 }
             }
         }
@@ -295,18 +295,18 @@ function calculateIf($data){
             if(str_contains($Usergender, 'male')){
                 if(str_contains($Usergoal, 'lose')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = [''];
+                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 } elseif(str_contains($Usergoal, 'gain')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = [''];
+                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 }
             } elseif(str_contains($Usergender, 'female')){
                 if(str_contains($Usergoal, 'lose')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = [''];
+                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 } elseif(str_contains($Usergoal, 'gain')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = [''];
+                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 }
             }
         }
@@ -314,18 +314,18 @@ function calculateIf($data){
             if(str_contains($Usergender, 'male')){
                 if(str_contains($Usergoal, 'lose')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = [''];
+                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 } elseif(str_contains($Usergoal, 'gain')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = [''];
+                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 }
             } elseif(str_contains($Usergender, 'female')){
                 if(str_contains($Usergoal, 'lose')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = [''];
+                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 } elseif(str_contains($Usergoal, 'gain')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = [''];
+                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 }
             }
         }
@@ -392,7 +392,7 @@ function calculateMacro($data){
                 $caloriDeficit = 250;
                 $Macro['val'] =  [$p * $BMR['val'] - $caloriDeficit, $c * $BMR['val'] - $caloriDeficit, 
                                   $f * $BMR['val'] - $caloriDeficit, $fi * $BMR['val'] - $caloriDeficit]; // [protein, carb, fat];
-                $Macro['desc']  = [];                
+                $Macro['desc']  = ["This text is actually coming from the server!!"];                
             } elseif(str_contains($Usergoal, 'gain')) {
                 $p = 0.3 * $ageFactor;
                 $c = 0.6 * (1 - $ageFactor);
@@ -401,7 +401,7 @@ function calculateMacro($data){
                 $caloriSurplus = 250;
                 $Macro['val'] =  [$p * $BMR['val'] + $caloriSurplus, $c * $BMR['val'] + $caloriSurplus, 
                                   $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat];
-                $Macro['desc']  = [];                  
+                $Macro['desc']  = ["This text is actually coming from the server!!"];                  
             } else {
                 $p = 0.3 * $ageFactor;
                 $c = 0.6 * (1 - $ageFactor);
@@ -410,7 +410,7 @@ function calculateMacro($data){
                 $caloriSurplus = 250;
                 $Macro['val'] =  [$p * $BMR['val'] + $caloriSurplus, $c * $BMR['val'] + $caloriSurplus, 
                                   $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat]; 
-                $Macro['desc']  = [];           
+                $Macro['desc']  = ["This text is actually coming from the server!!"];           
             }
         } elseif(str_contains($Usergender, 'female')){
             if(str_contains($Usergoal, 'lose')) {
@@ -421,7 +421,7 @@ function calculateMacro($data){
                 $caloriDeficit = 250;
                 $Macro['val'] =  [$p * $BMR['val'] - $caloriDeficit, $c * $BMR['val'] - $caloriDeficit, 
                                   $f * $BMR['val'] - $caloriDeficit, $fi * $BMR['val'] - $caloriDeficit]; // [protein, carb, fat];
-                $Macro['desc']  = [];
+                $Macro['desc']  = ["This text is actually coming from the server!!"];
             } elseif(str_contains($Usergoal, 'gain')) {
                 $p = 0.25 * $ageFactor;
                 $c = 0.65 * (1 - $ageFactor);
@@ -430,7 +430,7 @@ function calculateMacro($data){
                 $caloriSurplus = 250;
                 $Macro['val'] =  [$p * $BMR['val'] + $caloriSurplus, $c * $BMR['val'] + $caloriSurplus, 
                                   $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat];
-                $Macro['desc']  = [];
+                $Macro['desc']  = ["This text is actually coming from the server!!"];
             } else {
                 $p = 0.25 * $ageFactor;
                 $c = 0.65 * (1 - $ageFactor);
@@ -439,7 +439,7 @@ function calculateMacro($data){
                 $caloriSurplus = 250;
                 $Macro['val'] =  [$p * $BMR['val'] + $caloriSurplus, $c * $BMR['val'] + $caloriSurplus, 
                                   $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat];
-                $Macro['desc']  = [];
+                $Macro['desc']  = ["This text is actually coming from the server!!"];
             }
         }
     } else {
@@ -510,8 +510,8 @@ function calculateMicro($data){
                    'tUnits' => $tUnits, 
                    'vScale' => $vScale,
                    'tScale' => $tScale);
-    $Micro['descVit'] = [];    
-    $Micro['descTrace'] = [];    
+    $Micro['descVit'] = ["This text is actually coming from the server!!"];    
+    $Micro['descTrace'] = ["This text is actually coming from the server!!"];    
                
     return($Micro);
 }
@@ -524,6 +524,20 @@ function dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro){
                  'macro' => $user_macro,
                  'micro' => $user_micro);
     return $data;
+}
+
+function dbCon($userId, $clientId) {
+    $servername   = "127.0.0.1";
+    $loginname    = "root";
+    $password     = "@Ssia123";
+    $dbname       = "Users";
+    $tablename    = "userAllocation";
+    // Create connection
+    $conn         = new mysqli($servername, $loginname, $password, $dbname);
+    // check if the client exists.
+    $sql          = "SELECT * FROM $tablename WHERE userId = '$userId' AND clientId = '$clientId';";
+    $database_out = $conn->query($sql);
+    return($database_out);
 }
 
 
