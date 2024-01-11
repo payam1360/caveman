@@ -78,15 +78,19 @@ function getHeight($data) {
     while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'height' && $heightDone == false){
             $Userheight = $data[$kk]->qAnswer;
-            if(str_contains($Userheight, '<')){
-                $Userheight = ft2in(4); // minimum heigh in inches
-            } elseif(str_contains($Userheight, '>')){
-                $Userheight = ft2in(7); // maximum height in inches
+            if(!empty($Userheight)){
+                if(str_contains($Userheight, '<')){
+                    $Userheight = ft2in(4); // minimum heigh in inches
+                } elseif(str_contains($Userheight, '>')){
+                    $Userheight = ft2in(7); // maximum height in inches
+                } else {
+                    $height = explode('-', $Userheight);
+                    $Userheight = ft2in(intval($height[0])) + intval($height[1]); // hright in inches
+                }
+                $heightDone = true;
             } else {
-                $height = explode('-', $Userheight);
-                $Userheight = ft2in(intval($height[0])) + intval($height[1]); // hright in inches
+                $Userheight = [];
             }
-            $heightDone = true;
         } else {
             $Userheight = [];
         }
@@ -132,12 +136,14 @@ function getGender($data) {
     $kk            = 0;
     $Usergender = [];
     while(isset($data[$kk]->qIdx)){
-        if($data[$kk]->qKey[0] == 'gender' && $genderDone == false){
+        if($data[$kk]->qKey[0] == 'gender' && $genderDone == false && !empty($data[$kk]->qAnswer)){
             $UsergenderChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
-            if(str_contains($UsergenderChoice, 'male')) {
+            if(str_contains($UsergenderChoice, 'female')) {
+                $Usergender = 'female';
+            } elseif(str_contains($UsergenderChoice, 'male')) {
                 $Usergender = 'male';
             } else {
-                $Usergender = 'female';
+                $Usergender = []; // by default
             }
             $genderDone = true;
         } else {
@@ -156,11 +162,11 @@ function getStress($data) {
     $kk            = 0;
     $Userstress = [];
     while(isset($data[$kk]->qIdx)){
-        if($data[$kk]->qKey[0] == 'stress' && $stressDone == false){
+        if($data[$kk]->qKey[0] == 'stress' && $stressDone == false && isset($data[$kk]->qAnswer)){
             $UserstressChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
             if(str_contains($UserstressChoice, 'high')) {
                 $Userstress = 'high';
-            } elseif(str_contains($UserstressChoice, 'manageable')) {
+            } elseif(str_contains($UserstressChoice, 'medium')) {
                 $Userstress = 'medium';
             } else {
                 $Userstress = 'low';
@@ -182,7 +188,7 @@ function getGoal($data) {
     $kk          = 0;
     $Usergoal    = [];
     while(isset($data[$kk]->qIdx)){
-        if($data[$kk]->qKey[0] == 'goal' && $goalDone == false){
+        if($data[$kk]->qKey[0] == 'goal' && $goalDone == false && !empty($data[$kk]->qAnswer)){
             $UsergoalChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
             
             if(str_contains($UsergoalChoice, 'lose')) {
@@ -212,10 +218,10 @@ function calculateBmi($data){
     $Usergoal   = getGoal($data);
     if($Userweight != [] && $Userheight != []) {
         $BMI['val']  = lb2kg($Userweight) / pow(in2cm($Userheight)/100, 2);
-        if($data['nutritionEng'] == 0) { // AI request has priority  
+        if($data[0]->nutritionEng == "0") { // AI request has priority 
             $BMI['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
-        } elseif($data['nutritionEng'] == 1) { // check dB, if exists, use it <- nutritionist, otherwise use software
-            $BMI['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data['userId'], $data['clientId'], 'bmi');
+        } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
+            $BMI['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'bmi');
         }
         
     } else {
@@ -244,12 +250,12 @@ function calculateBmr($data) {
         } else {
             $stressFactor = 2.25;
         }
-        if(str_contains($Usergender, 'male')) {
-            $BMR['val'] = $stressFactor * ( 66.47 + (13.75 * $Userweight) + (5.003 * $Userheight) - (6.75 * $Userage));
+        if(str_contains($Usergender, 'female')) {
+            $BMR['val'] = $stressFactor * ( 655.1 + (9.56 * $Userweight) + (1.85 * $Userheight) - (4.7 * $Userage));
             $BMR['desc'] = ['This number gives an estimate of how much calories you need per day at your current activity / stress levels', 
             'to reach your fitness goals.'];
         } else {
-            $BMR['val'] = $stressFactor * ( 655.1 + (9.56 * $Userweight) + (1.85 * $Userheight) - (4.7 * $Userage));
+            $BMR['val'] = $stressFactor * ( 66.47 + (13.75 * $Userweight) + (5.003 * $Userheight) - (6.75 * $Userage));
             $BMR['desc'] = ['This number gives an estimate of how much calories you need per day at your current activity / stress levels', 
             'to reach your fitness goals.'];
         }
@@ -571,7 +577,6 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
     $LowOldFemaleLose  = $Bmi < 25 && $Usergender == 'female' && $Userage >= 35 && $Usergoal == 'lose';
     $LowOldFemaleGain  = $Bmi < 25 && $Usergender == 'female' && $Userage >= 35 && $Usergoal == 'gain';
 
-    
     if($contextFlag == 'bmi') {
         if(!empty($dbOutRow['descBmi'])) { // use the entry by the user
             $desc = [$dbOutRow['descBmi']];
@@ -629,6 +634,7 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
             }
         }
     }
+    return($desc); 
 }
 
 function requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal) {

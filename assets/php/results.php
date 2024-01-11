@@ -62,7 +62,7 @@ function extractUserInfo($userId) {
 }
 
 
-function extractClientInfo($clientId, $userId, $nutritionEng, $mealEng) {
+function extractClientInfo($clientId, $userId, $nutritionEng, $mealEng, $clientIdVec) {
     
     $servername   = "127.0.0.1";
     $loginname    = "root";
@@ -79,6 +79,11 @@ function extractClientInfo($clientId, $userId, $nutritionEng, $mealEng) {
     $database_out = $conn->query($sql);
     $clientInfo = array();
     $kk = 0;
+    // find index
+    $idx = array_search($clientId, $clientIdVec);
+    $mealEng = $mealEng[$idx];
+    $nutritionEng = $nutritionEng[$idx];
+    
     while($database_row = $database_out->fetch_assoc()) {
         // filling out info briefs
         $qKey        = $database_row['qKey'];
@@ -121,7 +126,7 @@ function extractClientInfo($clientId, $userId, $nutritionEng, $mealEng) {
 $userdata      = json_decode($_POST['userInfo']);
 $userInfo      = extractUserInfo($userdata->userId);
 if($userdata->clientId != '') {
-    $clientInfo    = extractClientInfo($userdata->clientId, $userdata->userId, $userInfo['nutritionEng'], $userInfo['meanEng']);
+    $clientInfo    = extractClientInfo($userdata->clientId, $userdata->userId, $userInfo['nutritionEng'], $userInfo['mealEng'], $userInfo['ids']);
     $user_bmi      = calculateBmi($clientInfo);
     $user_bmr      = calculateBmr($clientInfo);
     $user_if       = calculateIf($clientInfo);
