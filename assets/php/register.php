@@ -1,11 +1,11 @@
 <?php
 
-
-define("NAME", 0);
-define("EMAIL", 1);
-define("VERC", 3);
-define("PASS", 5);
-define("PASSC", 6);
+define("PLAN", 0);
+define("NAME", 1);
+define("EMAIL", 2);
+define("VERC", 4);
+define("PASS", 6);
+define("PASSC", 7);
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -30,7 +30,7 @@ function createClientIdandCampaign($email, $numAllocation) {
     for($kk = 0; $kk < $numAllocation; $kk++){
         $clientId    = mt_rand(10000, 99999);
         $campaignId  = substr(md5(rand()), 0, 7);
-        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, used, completed, name, gender, goal, nutritionEng, mealEng) VALUES('$userId','$clientId','$campaignId', '0', '0', '', '', '', '', '');";
+        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, used, completed, name, gender, goal, nutritionEng, mealEng, descBmi, descBmr, descIf, descMacro, descMicroTrace, descMicroVit) VALUES('$userId','$clientId','$campaignId', '0', '0', '', '', '', '', '', '', '', '', '', '', '');";
         $conn->query($sql);
     }
     $conn->close();
@@ -160,7 +160,14 @@ if($userdata[EMAIL]->qAnswer != '' && $userdata[VERC]->qAnswer == '') { // if em
 if($verified == 1) {
     if($userdata[PASS]->qAnswer == $userdata[PASSC]->qAnswer && $userdata[PASS]->qAnswer != '') {
         registerUserCredentials($userdata[PASS]->qAnswer, $userdata[EMAIL]->qAnswer);
-        createClientIdandCampaign($userdata[EMAIL]->qAnswer, 10);
+        if($userdata[PLAN]->qAnswer == "0") {
+            $numClients = 10;
+        } elseif($userdata[PLAN]->qAnswer == "1") {
+            $numClients = 20;
+        } elseif($userdata[PLAN]->qAnswer == "2") {
+            $numClients = 50;
+        }
+        createClientIdandCampaign($userdata[EMAIL]->qAnswer, $numClients);
         $data['status'] = 0; // password good ... user is registered
     } elseif($userdata[PASS]->qAnswer != $userdata[PASSC]->qAnswer && $userdata[PASS]->qAnswer != '') {
         $data['status'] = 4; // password not matching 

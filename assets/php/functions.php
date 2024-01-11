@@ -207,9 +207,17 @@ function getGoal($data) {
 function calculateBmi($data){
     $Userweight = getWeight($data);
     $Userheight = getHeight($data);
+    $Userage    = getAge($data);
+    $Usergender = getGender($data);
+    $Usergoal   = getGoal($data);
     if($Userweight != [] && $Userheight != []) {
         $BMI['val']  = lb2kg($Userweight) / pow(in2cm($Userheight)/100, 2);
-        $BMI['desc'] = "This text is actually coming from the server!!";
+        if($data['nutritionEng'] == 0) { // AI request has priority  
+            $BMI['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
+        } elseif($data['nutritionEng'] == 1) { // check dB, if exists, use it <- nutritionist, otherwise use software
+            $BMI['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data['userId'], $data['clientId'], 'bmi');
+        }
+        
     } else {
         $BMI['val']  = [];
         $BMI['desc'] = [];
@@ -541,4 +549,90 @@ function dbCon($userId, $clientId) {
 }
 
 
+function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $contextFlag){
+    $dbOut    = dbCon($userId, $clientId);
+    $dbOutRow = $dbOut->fetch_assoc();
+    // bunch of mutually exclusive flags
+    $HighYoungMaleLose   = $Bmi > 25 && $Usergender == 'male'   && $Userage < 35 && $Usergoal == 'lose';
+    $HighYoungMaleGain   = $Bmi > 25 && $Usergender == 'male'   && $Userage < 35 && $Usergoal == 'gain';
+    $HighYoungFemaleLose = $Bmi > 25 && $Usergender == 'female' && $Userage < 35 && $Usergoal == 'lose';
+    $HighYoungFemaleGain = $Bmi > 25 && $Usergender == 'female' && $Userage < 35 && $Usergoal == 'gain';
+    $LowYoungMaleLose    = $Bmi < 25 && $Usergender == 'male'   && $Userage < 35 && $Usergoal == 'lose';
+    $LowYoungMaleGain    = $Bmi < 25 && $Usergender == 'male'   && $Userage < 35 && $Usergoal == 'gain';
+    $LowYoungFemaleLose  = $Bmi < 25 && $Usergender == 'female' && $Userage < 35 && $Usergoal == 'lose';
+    $LowYoungFemaleGain  = $Bmi < 25 && $Usergender == 'female' && $Userage < 35 && $Usergoal == 'gain';
+
+    $HighOldMaleLose   = $Bmi > 25 && $Usergender == 'male'   && $Userage >= 35 && $Usergoal == 'lose';
+    $HighOldMaleGain   = $Bmi > 25 && $Usergender == 'male'   && $Userage >= 35 && $Usergoal == 'gain';
+    $HighOldFemaleLose = $Bmi > 25 && $Usergender == 'female' && $Userage >= 35 && $Usergoal == 'lose';
+    $HighOldFemaleGain = $Bmi > 25 && $Usergender == 'female' && $Userage >= 35 && $Usergoal == 'gain';
+    $LowOldMaleLose    = $Bmi < 25 && $Usergender == 'male'   && $Userage >= 35 && $Usergoal == 'lose';
+    $LowOldMaleGain    = $Bmi < 25 && $Usergender == 'male'   && $Userage >= 35 && $Usergoal == 'gain';
+    $LowOldFemaleLose  = $Bmi < 25 && $Usergender == 'female' && $Userage >= 35 && $Usergoal == 'lose';
+    $LowOldFemaleGain  = $Bmi < 25 && $Usergender == 'female' && $Userage >= 35 && $Usergoal == 'gain';
+
+    
+    if($contextFlag == 'bmi') {
+        if(!empty($dbOutRow['descBmi'])) { // use the entry by the user
+            $desc = [$dbOutRow['descBmi']];
+        } else { // use this software intelligence. (pre-set text not GPT ai)
+            if($HighYoungMaleLose) {
+                $desc = ['As a young male whose objective is to lose weight, you need to combine routine workout and healthy diet regiment to bring down your BMI.'];
+            }
+            if($HighYoungMaleGain) {
+                $desc = ['As a young male whose objective is to gain weight, you need strict training programs for gaining more muscle mass.'];
+            }
+            if($HighYoungFemaleLose) {
+                $desc = ['As a young female whose objective is to lose weight, you need strict training programs as well as low carb diet to reach your goals in a reasonable amount of time.'];
+            }
+            if($HighYoungFemaleGain) {
+                $desc = ['As a young female with high BMI, your objective should be to have a balanced low carb diet combined with great training program in order to achieve your goal to increase your BMI further. The assumption here is that you are a professional athlete.'];
+            }
+            // -------
+            if($LowYoungMaleLose) {
+                $desc = ['As a young male with low BMI, your objective should not be lose further weight. Instead, try to increase muscle mass by proper nutrition and high intensity interval training.'];
+            }
+            if($LowYoungMaleGain) {
+                $desc = ['As a young male with low BMI, to increase muscle mass you need to have proper nutrition with slight calorie surplus and high intensity interval training to reach your goals.'];
+            }
+            if($LowYoungFemaleLose) {
+                $desc = ['As a young female with low BMI, it is not recommended to further lower your body mass index value. Instead you can stay steay by having a balanced diet and frequent exercise.'];
+            }
+            if($LowYoungFemaleGain) {
+                $desc = ['As a young female with low BMI, it is recommended to have a slight calorie surplus diet and frequent exercises to reach your goals of gaining more muscle mass.'];
+            }
+
+            if($HighOldMaleLose) {
+                $desc = ['As a male whose objective is to lose weight, you need to combine routine workout and healthy diet regiment to bring down your BMI.'];
+            }
+            if($HighOldMaleGain) {
+                $desc = ['As a male whose objective is to gain weight, you need strict training programs for gaining more muscle mass.'];
+            }
+            if($HighOldFemaleLose) {
+                $desc = ['As a female whose objective is to lose weight, you need strict training programs as well as low carb diet to reach your goals in a reasonable amount of time.'];
+            }
+            if($HighOldFemaleGain) {
+                $desc = ['As a female with high BMI, your objective should be to have a balanced low carb diet combined with great training program in order to achieve your goal to increase your BMI further. The assumption here is that you are a professional athlete.'];
+            }
+            // -------
+            if($LowOldMaleLose) {
+                $desc = ['As a male with low BMI, your objective should not be lose further weight. Instead, try to increase muscle mass by proper nutrition and high intensity interval training.'];
+            }
+            if($LowOldMaleGain) {
+                $desc = ['As a male with low BMI, to increase muscle mass you need to have proper nutrition with slight calorie surplus and high intensity interval training to reach your goals.'];
+            }
+            if($LowOldFemaleLose) {
+                $desc = ['As a female with low BMI, it is not recommended to further lower your body mass index value. Instead you can stay steay by having a balanced diet and frequent exercise.'];
+            }
+            if($LowOldFemaleGain) {
+                $desc = ['As a female with low BMI, it is recommended to have a slight calorie surplus diet and frequent exercises to reach your goals of gaining more muscle mass.'];
+            }
+        }
+    }
+}
+
+function requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal) {
+    $desc = ["this text must come from GPT"];
+    return($desc);
+}
 ?>

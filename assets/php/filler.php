@@ -159,6 +159,7 @@ function getLoginForm() {
 }
 function getRegisterForm() {
     $data['qContent'] = [
+                            ["1. Which plan are you interested?"],
                             ["1. enter your name:"],
                             ["2. Hi #nameRegister, what is your email?"],
                             ["please on the next screen, enter the verification code we just emailed you:"],
@@ -169,6 +170,7 @@ function getRegisterForm() {
                             [""]
                         ];
     $data['qType'] = [
+                        ["button"],
                         ["text"],
                         ["email"],
                         ["message"],
@@ -179,9 +181,10 @@ function getRegisterForm() {
                         ["message"]
                     ];
     
-    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7];
+    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     
     $data['options'] = [
+                            [["fa-solid fa-0","fa-solid fa-mug-saucer","fa-solid fa-sack-dollar"]],
                             [[""]],
                             [[""]],
                             [["fa-regular fa-registered"], ["fa-solid fa-user-tie"]],
@@ -192,6 +195,7 @@ function getRegisterForm() {
                             [["fa-solid fa-not-equal"],["fa-regular fa-circle-check"]]]
     ;
     $data['optionsText'] = [
+                                [["free","delux","premium"]],
                                 [[""]],
                                 [[""]],
                                 [["user already registered"], ["new user"]],
@@ -201,8 +205,9 @@ function getRegisterForm() {
                                 [[""]],
                                 [["password not matching"], ["All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"]]
                             ];
-    $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1];
+    $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1, 1];
     $data['qKey'] = [
+                        ['plan'],
                         ['name'],
                         ['email'],
                         [''],
@@ -212,7 +217,7 @@ function getRegisterForm() {
                         ['password'],
                         ['']
                     ];
-    $data['MAX_cnt'] = 8;
+    $data['MAX_cnt'] = 9;
     return $data;
 }
 

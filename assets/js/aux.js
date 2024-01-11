@@ -91,7 +91,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                     });
                 }
             }
-            if(page == 'register' && counter == 2) {
+            if(page == 'register' && counter == 3) {
                 let spinner   = document.querySelector('.spinner-js');
                 spinner.style.opacity = 1;
             }
@@ -593,7 +593,7 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
         setFormType(event.target, Questions[counter], event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'));
         ChangeForm(event.target, '0s', '0', 1, '50%');
         restorePrevAnswer(event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'));
-        if(spinner.style.opacity != 0){
+        if(spinner != null && spinner.style.opacity != 0){
             spinner.style.opacity = 0;
         }
     });
