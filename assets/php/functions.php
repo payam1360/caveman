@@ -78,7 +78,7 @@ function getHeight($data) {
     while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'height' && $heightDone == false){
             $Userheight = $data[$kk]->qAnswer;
-            if(!empty($Userheight)){
+            if(isset($Userheight)){
                 if(str_contains($Userheight, '<')){
                     $Userheight = ft2in(4); // minimum heigh in inches
                 } elseif(str_contains($Userheight, '>')){
@@ -136,7 +136,7 @@ function getGender($data) {
     $kk            = 0;
     $Usergender = [];
     while(isset($data[$kk]->qIdx)){
-        if($data[$kk]->qKey[0] == 'gender' && $genderDone == false && !empty($data[$kk]->qAnswer)){
+        if($data[$kk]->qKey[0] == 'gender' && $genderDone == false && isset($data[$kk]->qAnswer)){
             $UsergenderChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
             if(str_contains($UsergenderChoice, 'female')) {
                 $Usergender = 'female';
@@ -188,9 +188,8 @@ function getGoal($data) {
     $kk          = 0;
     $Usergoal    = [];
     while(isset($data[$kk]->qIdx)){
-        if($data[$kk]->qKey[0] == 'goal' && $goalDone == false && !empty($data[$kk]->qAnswer)){
+        if($data[$kk]->qKey[0] == 'goal' && $goalDone == false && isset($data[$kk]->qAnswer)){
             $UsergoalChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
-            
             if(str_contains($UsergoalChoice, 'lose')) {
                 $Usergoal = 'lose';
             } elseif(str_contains($UsergoalChoice, 'gain')) {
@@ -223,7 +222,6 @@ function calculateBmi($data){
         } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
             $BMI['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'bmi');
         }
-        
     } else {
         $BMI['val']  = [];
         $BMI['desc'] = [];
@@ -240,6 +238,8 @@ function calculateBmr($data) {
     $Userage    = getAge($data);
     $Usergender = getGender($data);
     $Userstress = getStress($data);
+    $Usergoal   = getGoal($data);
+    $BMI        = calculateBmi($data);
 
     if($Userweight != [] && $Userheight != [] && $Userage != [] 
             && $Usergender != [] && $Userstress != []) {
@@ -252,13 +252,15 @@ function calculateBmr($data) {
         }
         if(str_contains($Usergender, 'female')) {
             $BMR['val'] = $stressFactor * ( 655.1 + (9.56 * $Userweight) + (1.85 * $Userheight) - (4.7 * $Userage));
-            $BMR['desc'] = ['This number gives an estimate of how much calories you need per day at your current activity / stress levels', 
-            'to reach your fitness goals.'];
         } else {
             $BMR['val'] = $stressFactor * ( 66.47 + (13.75 * $Userweight) + (5.003 * $Userheight) - (6.75 * $Userage));
-            $BMR['desc'] = ['This number gives an estimate of how much calories you need per day at your current activity / stress levels', 
-            'to reach your fitness goals.'];
         }
+        if($data[0]->nutritionEng == "0") { // AI request has priority 
+            $BMR['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
+        } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
+            $BMR['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'bmr');
+        }
+
     } else {
         $BMR['val'] = [];
         $BMR['desc'] = [];
@@ -276,6 +278,7 @@ function calculateIf($data){
     $Userage    = getAge($data);
     $Usergender = getGender($data);
     $Usergoal   = getGoal($data);
+    $BMI        = calculateBmi($data);
 
     // IF suggestion based on user's spec
     // -----------------------------------------------------------
@@ -287,61 +290,54 @@ function calculateIf($data){
     }
     if($valid) {
         if($Userweight >= 70 && $Userweight < 120) {
-            if(str_contains($Usergender, 'male')){
+            if(str_contains($Usergender, 'female')){
                 if(str_contains($Usergoal, 'lose')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 } elseif(str_contains($Usergoal, 'gain')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 }
-            } elseif(str_contains($Usergender, 'female')){
+            } elseif($Usergender === 'male'){
                 if(str_contains($Usergoal, 'lose')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 } elseif(str_contains($Usergoal, 'gain')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 }
             }
         }
         elseif($Userweight >= 120 && $Userweight < 220) {
-            if(str_contains($Usergender, 'male')){
+            if(str_contains($Usergender, 'female')){
                 if(str_contains($Usergoal, 'lose')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 } elseif(str_contains($Usergoal, 'gain')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 }
-            } elseif(str_contains($Usergender, 'female')){
+            } elseif($Usergender === 'male'){
                 if(str_contains($Usergoal, 'lose')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 } elseif(str_contains($Usergoal, 'gain')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 }
             }
         }
         elseif($Userweight >= 220 && $Userweight < 300) {
-            if(str_contains($Usergender, 'male')){
+            if(str_contains($Usergender, 'female')){
                 if(str_contains($Usergoal, 'lose')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 } elseif(str_contains($Usergoal, 'gain')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 }
-            } elseif(str_contains($Usergender, 'female')){
+            } elseif($Usergender === 'male'){
                 if(str_contains($Usergoal, 'lose')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 } elseif(str_contains($Usergoal, 'gain')) {
                     $IF['val'] = [[24,24,24,24,16,24,8],[0,0,0,0,8,0,16]];
-                    $IF['desc'] = ["This text is actually coming from the server!!"];
                 }
             }
+        }
+        if($data[0]->nutritionEng == "0") { // AI request has priority 
+            $IF['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
+        } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
+            $IF['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'if');
         }
     } else {
         $IF['val']  = [];
@@ -382,6 +378,7 @@ function calculateMacro($data){
     $Userage    = getAge($data);
     $Usergender = getGender($data);
     $Usergoal   = getGoal($data);
+    $BMI        = calculateBmi($data);
     $BMR        = calculateBmr($data);
 
     if($BMR['val'] != []) {
@@ -397,7 +394,7 @@ function calculateMacro($data){
         } elseif($Userage >= 50) {
             $ageFactor = 0.9;
         }
-        if(str_contains($Usergender, 'male')){
+        if(str_contains($Usergender, 'female')){
             if(str_contains($Usergoal, 'lose')) {
                 $p = 0.3 * $ageFactor;
                 $c = 0.6 * (1 - $ageFactor);
@@ -405,8 +402,7 @@ function calculateMacro($data){
                 $fi= 0.1;
                 $caloriDeficit = 250;
                 $Macro['val'] =  [$p * $BMR['val'] - $caloriDeficit, $c * $BMR['val'] - $caloriDeficit, 
-                                  $f * $BMR['val'] - $caloriDeficit, $fi * $BMR['val'] - $caloriDeficit]; // [protein, carb, fat];
-                $Macro['desc']  = ["This text is actually coming from the server!!"];                
+                                  $f * $BMR['val'] - $caloriDeficit, $fi * $BMR['val'] - $caloriDeficit]; // [protein, carb, fat];               
             } elseif(str_contains($Usergoal, 'gain')) {
                 $p = 0.3 * $ageFactor;
                 $c = 0.6 * (1 - $ageFactor);
@@ -414,8 +410,7 @@ function calculateMacro($data){
                 $fi= 0.1;
                 $caloriSurplus = 250;
                 $Macro['val'] =  [$p * $BMR['val'] + $caloriSurplus, $c * $BMR['val'] + $caloriSurplus, 
-                                  $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat];
-                $Macro['desc']  = ["This text is actually coming from the server!!"];                  
+                                  $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat];                 
             } else {
                 $p = 0.3 * $ageFactor;
                 $c = 0.6 * (1 - $ageFactor);
@@ -423,10 +418,9 @@ function calculateMacro($data){
                 $fi= 0.1;
                 $caloriSurplus = 250;
                 $Macro['val'] =  [$p * $BMR['val'] + $caloriSurplus, $c * $BMR['val'] + $caloriSurplus, 
-                                  $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat]; 
-                $Macro['desc']  = ["This text is actually coming from the server!!"];           
+                                  $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat];            
             }
-        } elseif(str_contains($Usergender, 'female')){
+        } elseif($Usergender === 'male'){
             if(str_contains($Usergoal, 'lose')) {
                 $p = 0.2 * $ageFactor;
                 $c = 0.65 * (1 - $ageFactor);
@@ -435,7 +429,6 @@ function calculateMacro($data){
                 $caloriDeficit = 250;
                 $Macro['val'] =  [$p * $BMR['val'] - $caloriDeficit, $c * $BMR['val'] - $caloriDeficit, 
                                   $f * $BMR['val'] - $caloriDeficit, $fi * $BMR['val'] - $caloriDeficit]; // [protein, carb, fat];
-                $Macro['desc']  = ["This text is actually coming from the server!!"];
             } elseif(str_contains($Usergoal, 'gain')) {
                 $p = 0.25 * $ageFactor;
                 $c = 0.65 * (1 - $ageFactor);
@@ -444,7 +437,6 @@ function calculateMacro($data){
                 $caloriSurplus = 250;
                 $Macro['val'] =  [$p * $BMR['val'] + $caloriSurplus, $c * $BMR['val'] + $caloriSurplus, 
                                   $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat];
-                $Macro['desc']  = ["This text is actually coming from the server!!"];
             } else {
                 $p = 0.25 * $ageFactor;
                 $c = 0.65 * (1 - $ageFactor);
@@ -453,8 +445,12 @@ function calculateMacro($data){
                 $caloriSurplus = 250;
                 $Macro['val'] =  [$p * $BMR['val'] + $caloriSurplus, $c * $BMR['val'] + $caloriSurplus, 
                                   $f * $BMR['val'] + $caloriSurplus, $fi * $BMR['val'] - $caloriSurplus]; // [protein, carb, fat];
-                $Macro['desc']  = ["This text is actually coming from the server!!"];
             }
+        } 
+        if($data[0]->nutritionEng == "0") { // AI request has priority 
+            $Macro['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
+        } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
+            $Macro['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'macro');
         }
     } else {
         $Macro['val'] = [];
@@ -470,6 +466,8 @@ function calculateMicro($data){
     //                    Molybdenum, Phosphorus, Potassium, Selenium, Sodium, Zinc, Chloride]
     $Userage    = getAge($data);
     $Usergender = getGender($data);
+    $Usergoal   = getGoal($data);
+    $BMI        = calculateBmi($data);
     if($Userage != [] && $Usergender != []) {
         $valid = true;
     } else {
@@ -488,18 +486,7 @@ function calculateMicro($data){
     $vScale = [100, 1, 1, 2, 1, 1, 10, 100, 1, 10, 100, 10, 20];
     $tScale = [1, 100, 100, 1, 100, 1, 100, 1, 10, 100, 1, 10, 1, 1, 1];
     if($valid) {
-        if(str_contains($Usergender, 'male')) {
-            if($Userage > 70) {
-                $vValues = [9, 1.2, 1.3, 8, 5, 1.3, 3, 4, 2.4, 9, 8, 2.25, 6];
-                $tValues = [1.2, 3, 9, 4, 1.5, 8, 4.2, 2.3, 4.5, 7, 4.7, 5.5, 1.2, 11, 3.1];
-            } elseif($Userage >= 50 && $Userage <= 70) {
-                $vValues = [9, 1.2, 1.3, 8, 5, 1.3, 3, 4, 2.4, 9, 6, 2.25, 6];
-                $tValues = [1, 3, 9, 4, 1.5, 8, 4.2, 2.3, 4.5, 7, 4.7, 5.5, 1.3, 11, 3.1];
-            } else {
-                $vValues = [9, 1.2, 1.3, 8, 5, 1.3, 3, 4, 2.4, 9, 6, 2.25, 6];
-                $tValues = [1, 3.5, 9, 4, 1.5, 8, 4, 2.3, 4.5, 7, 4.7, 5.5, 1.5, 11, 3.1];
-            }
-        } elseif(str_contains($Usergender, 'female')) {
+        if(str_contains($Usergender, 'female')) {
             if($Userage > 70) {
                 $vValues = [7, 1.1, 1.1, 7, 5, 1.3, 3, 4, 2.4, 7.5, 8, 2.25, 4.5]; 
                 $tValues = [1.2, 2, 9, 3, 1.5, 8, 3.2, 1.8, 4.5, 7, 4.7, 5.5, 1.2, 8, 3.1];
@@ -509,6 +496,17 @@ function calculateMicro($data){
             } else {
                 $vValues = [7, 1.1, 1.1, 7, 5, 1.3, 3, 4, 2.4, 7.5, 6, 2.25, 4.5];
                 $tValues = [1, 2.5, 9, 3, 1.5, 18, 3.1, 1.8, 4.5, 7, 4.7, 5.5, 1.5, 8, 3.1];
+            }       
+        } elseif($Usergender === 'male') {
+            if($Userage > 70) {
+                $vValues = [9, 1.2, 1.3, 8, 5, 1.3, 3, 4, 2.4, 9, 8, 2.25, 6];
+                $tValues = [1.2, 3, 9, 4, 1.5, 8, 4.2, 2.3, 4.5, 7, 4.7, 5.5, 1.2, 11, 3.1];
+            } elseif($Userage >= 50 && $Userage <= 70) {
+                $vValues = [9, 1.2, 1.3, 8, 5, 1.3, 3, 4, 2.4, 9, 6, 2.25, 6];
+                $tValues = [1, 3, 9, 4, 1.5, 8, 4.2, 2.3, 4.5, 7, 4.7, 5.5, 1.3, 11, 3.1];
+            } else {
+                $vValues = [9, 1.2, 1.3, 8, 5, 1.3, 3, 4, 2.4, 9, 6, 2.25, 6];
+                $tValues = [1, 3.5, 9, 4, 1.5, 8, 4, 2.3, 4.5, 7, 4.7, 5.5, 1.5, 11, 3.1];
             }
         } 
     } else {
@@ -524,8 +522,13 @@ function calculateMicro($data){
                    'tUnits' => $tUnits, 
                    'vScale' => $vScale,
                    'tScale' => $tScale);
-    $Micro['descVit'] = ["This text is actually coming from the server!!"];    
-    $Micro['descTrace'] = ["This text is actually coming from the server!!"];    
+    if($data[0]->nutritionEng == "0") { // AI request has priority 
+        $Micro['descVit']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
+        $Micro['descTrace'] = $Micro['descVit'];
+    } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
+        $Micro['descVit']   = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'microvit');
+        $Micro['descTrace'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'microtrace');
+    }
                
     return($Micro);
 }
@@ -631,6 +634,233 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
             }
             if($LowOldFemaleGain) {
                 $desc = ['As a female with low BMI, it is recommended to have a slight calorie surplus diet and frequent exercises to reach your goals of gaining more muscle mass.'];
+            }
+        }
+    } elseif($contextFlag == "bmr") {
+        if(!empty($dbOutRow['descBmr'])) { // use the entry by the user
+            $desc = [$dbOutRow['descBmr']];
+        } else { 
+            $desc = ['This number gives an estimate of how much calories you need per day at your current activity / stress levels', 
+            'to reach your fitness goals.'];
+        }
+    } elseif($contextFlag == "if") {
+        if(!empty($dbOutRow['descIf'])) { // use the entry by the user
+            $desc = [$dbOutRow['descIf']];
+        } else { 
+            if($HighYoungMaleLose) {
+                $desc = ['As a young male whose objective is to lose weight, it is recommended to keep the eating window per day to a minimum.'];
+            }
+            if($HighYoungMaleGain) {
+                $desc = ['As a young male whose objective is to gain weight, given your BMI is high, you can consider fasting few days per week to keep your insulin resistance to a minimum.'];
+            }
+            if($HighYoungFemaleLose) {
+                $desc = ['As a young female whose objective is to lose weight, it is recomended to keep your eating window to a minimum. This will help you with insulin resistance.'];
+            }
+            if($HighYoungFemaleGain) {
+                $desc = ['As a young female with high BMI, you could benefit from intermitent fasting to maximize your insulin sensitivity.'];
+            }
+            // -------
+            if($LowYoungMaleLose) {
+                $desc = ['As a young male with low BMI, normal eating windows are recommended.'];
+            }
+            if($LowYoungMaleGain) {
+                $desc = ['As a young male with low BMI, to increase muscle mass, you can fast few times a week to maximize your gains by increasing your insulin sensitivity.'];
+            }
+            if($LowYoungFemaleLose) {
+                $desc = ['As a young female with low BMI, you should increase your calorie intake but incorporate intermttent fasting will increase your insulin sensitivity and therefore maximize your nutrition intake.'];
+            }
+            if($LowYoungFemaleGain) {
+                $desc = ['As a young female with low BMI looking to gain more muscle, routine intermittent fasting is benefitial for you as recommended in the chart above.'];
+            }
+            if($HighOldMaleLose) {
+                $desc = ['As a male whose objective is to lose weight, it is recommended to keep the eating window per day to a minimum.'];
+            }
+            if($HighOldMaleGain) {
+                $desc = ['As a male whose objective is to gain weight, given your BMI is high, you can consider fasting few days per week to keep your insulin resistance to a minimum.'];
+            }
+            if($HighOldFemaleLose) {
+                $desc = ['As a female whose objective is to lose weight, it is recomended to keep your eating window to a minimum. This will help you with insulin resistance.'];
+            }
+            if($HighOldFemaleGain) {
+                $desc = ['As a female with high BMI, you could benefit from intermitent fasting to maximize your insulin sensitivity.'];
+            }
+            // -------
+            if($LowOldMaleLose) {
+                $desc = ['As a male with low BMI, normal eating windows are recommended.'];
+            }
+            if($LowOldMaleGain) {
+                $desc = ['As a male with low BMI, to increase muscle mass, you can fast few times a week to maximize your gains by increasing your insulin sensitivity.'];
+            }
+            if($LowOldFemaleLose) {
+                $desc = ['As a female with low BMI, you should increase your calorie intake but incorporate intermttent fasting will increase your insulin sensitivity and therefore maximize your nutrition intake.'];
+            }
+            if($LowOldFemaleGain) {
+                $desc = ['As a female with low BMI, looking to gain more muscle, routine intermittent fasting is benefitial for you as recommended in the chart above.'];
+            }
+        }
+    } elseif($contextFlag == "macro") {
+        if(!empty($dbOutRow['descMacro'])) { // use the entry by the user
+            $desc = [$dbOutRow['descMacro']];
+        } else { 
+            if($HighYoungMaleLose) {
+                $desc = ['Recomended macro for a male with high BMI trying to lose weight, is to keep protein and fat intake high. Carbs should be in the form of leafy greens to keep insulin spike in check.'];
+            }
+            if($HighYoungMaleGain) {
+                $desc = ['As a young male trying to gain more muscle who is already on the higher end of BMI scale, it is recommended to keep carbs intake at the minimum.'];
+            }
+            if($HighYoungFemaleLose) {
+                $desc = ['Avoid starchy carbs like rice. Stick with leafy greens and increase your fat and protein intake instead.'];
+            }
+            if($HighYoungFemaleGain) {
+                $desc = ['You are already on the higher side of BMI. It is assumed you are an athlete and therefore, high protein intake is recommended. This also depends on your workout routine and stress levels.'];
+            }
+            // -------
+            if($LowYoungMaleLose) {
+                $desc = ['As a young male who is on the lower side of BMI, trying to lose more weight is not a great option for your overall health. You should take enough protein and more carbs in the form of vegetables.'];
+            }
+            if($LowYoungMaleGain) {
+                $desc = ['Increase your fat and protein intake. Avoid starchy carbs and replace with good carbs from leafy greens.'];
+            }
+            if($LowYoungFemaleLose) {
+                $desc = ['It is not recommended to lose more weight since your BMI, as a young woman, is already on the lower side. Increase your carbs in the form of vegetables.'];
+            }
+            if($LowYoungFemaleGain) {
+                $desc = ['Increase your calorie intake by increasing your protein and carbs in the form of leafy greens.'];
+            }
+            if($HighOldMaleLose) {
+                $desc = ['Recomended macro for a male with high BMI trying to lose weight, is to keep protein and fat intake high. Carbs should be in the form of leafy greens to keep insulin spike in check.'];
+            }
+            if($HighOldMaleGain) {
+                $desc = ['As an adult male trying to gain more muscle who is already on the higher end of BMI scale, it is recommended to keep carbs intake at the minimum.'];
+            }
+            if($HighOldFemaleLose) {
+                $desc = ['Avoid starchy carbs like rice. Stick with leafy greens and increase your fat and protein intake instead.'];
+            }
+            if($HighOldFemaleGain) {
+                $desc = ['You are already on the higher side of BMI. It is assumed you are an athlete and therefore, high protein intake is recommended. This also depends on your workout routine and stress levels.'];
+            }
+            // -------
+            if($LowOldMaleLose) {
+                $desc = ['As an adult male who is on the lower side of BMI, trying to lose more weight is not a great option for your overall health. You should take enough protein and more carbs in the form of vegetables.'];
+            }
+            if($LowOldMaleGain) {
+                $desc = ['Increase your fat and protein intake. Avoid starchy carbs and replace with good carbs from leafy greens.'];
+            }
+            if($LowOldFemaleLose) {
+                $desc = ['It is not recommended to lose more weight since your BMI, as an adult woman, is already on the lower side. Increase your carbs in the form of vegetables.'];
+            }
+            if($LowOldFemaleGain) {
+                $desc = ['Increase your calorie intake by increasing your protein and carbs in the form of leafy greens.'];
+            }
+        }
+    } elseif($contextFlag == "microvit") {
+        if(!empty($dbOutRow['descMicroVit'])) { // use the entry by the user
+            $desc = [$dbOutRow['descMacroVit']];
+        } else { 
+            if($HighYoungMaleLose) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($HighYoungMaleGain) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($HighYoungFemaleLose) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($HighYoungFemaleGain) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            // -------
+            if($LowYoungMaleLose) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($LowYoungMaleGain) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($LowYoungFemaleLose) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($LowYoungFemaleGain) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($HighOldMaleLose) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($HighOldMaleGain) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($HighOldFemaleLose) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($HighOldFemaleGain) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            // -------
+            if($LowOldMaleLose) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($LowOldMaleGain) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($LowOldFemaleLose) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+            if($LowOldFemaleGain) {
+                $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
+            }
+        }
+    } elseif($contextFlag == "microtrace") {
+        if(!empty($dbOutRow['descMicroTrace'])) { // use the entry by the user
+            $desc = [$dbOutRow['descMacroTrace']];
+        } else { 
+            if($HighYoungMaleLose) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($HighYoungMaleGain) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($HighYoungFemaleLose) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($HighYoungFemaleGain) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            // -------
+            if($LowYoungMaleLose) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($LowYoungMaleGain) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($LowYoungFemaleLose) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($LowYoungFemaleGain) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($HighOldMaleLose) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($HighOldMaleGain) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($HighOldFemaleLose) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($HighOldFemaleGain) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            // -------
+            if($LowOldMaleLose) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($LowOldMaleGain) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($LowOldFemaleLose) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
+            }
+            if($LowOldFemaleGain) {
+                $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
             }
         }
     }

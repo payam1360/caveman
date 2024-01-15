@@ -856,12 +856,16 @@ function getUserInfo(userTxt, welcomeTxt){
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             user = JSON.parse(this.response);
-            userTxt.innerHTML = user.username;
-            welcomeTxt.innerHTML = 'What\'s up ' + user.username;
-            for(let kk = 0; kk < Questions.length; kk++) {
-                Questions[kk].clientId = user.clientId;
-                Questions[kk].campaignId = user.campaignId;
-                Questions[kk].userId = user.userid;
+            if(user.status == 1) {
+                window.location.assign('login.html');
+            } else {
+                userTxt.innerHTML = user.username;
+                welcomeTxt.innerHTML = 'What\'s up ' + user.username;
+                for(let kk = 0; kk < Questions.length; kk++) {
+                    Questions[kk].clientId = user.clientId;
+                    Questions[kk].campaignId = user.campaignId;
+                    Questions[kk].userId = user.userid;
+                }
             }
         }
     };
