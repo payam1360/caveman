@@ -278,6 +278,8 @@ function calculateIf($data){
     $Userage    = getAge($data);
     $Usergender = getGender($data);
     $Usergoal   = getGoal($data);
+    $Userheight = getHeight($data);
+    $Userweight = getWeight($data);
     $BMI        = calculateBmi($data);
 
     // IF suggestion based on user's spec
@@ -378,6 +380,8 @@ function calculateMacro($data){
     $Userage    = getAge($data);
     $Usergender = getGender($data);
     $Usergoal   = getGoal($data);
+    $Userheight = getHeight($data);
+    $Userweight = getWeight($data);    
     $BMI        = calculateBmi($data);
     $BMR        = calculateBmr($data);
 
@@ -467,6 +471,8 @@ function calculateMicro($data){
     $Userage    = getAge($data);
     $Usergender = getGender($data);
     $Usergoal   = getGoal($data);
+    $Userheight = getHeight($data);
+    $Userweight = getWeight($data);
     $BMI        = calculateBmi($data);
     if($Userage != [] && $Usergender != []) {
         $valid = true;

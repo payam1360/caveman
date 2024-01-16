@@ -89,38 +89,19 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
 }
 
 function extractUserInfo($info, $ip) {
-    if(strlen($info) == 1) {
-        $servername   = "127.0.0.1";
-        $loginname    = "root";
-        $password     = "@Ssia123";
-        $dbname       = "Users";
-        $table1name   = "Users";
-        // Create connection
-        $conn         = new mysqli($servername, $loginname, $password, $dbname);
-        // check if the client exists.
-        $sql          = "SELECT clientId, campaignId FROM $table1name WHERE ip = '$ip';";
-        $database_out = $conn->query($sql);
-        $database_row = $database_out->fetch_assoc();
-        if(is_null($database_row)) {  // visitor not found
-            $userId = '0';
-            $clientId = mt_rand(10000, 99999);;
-            $campaignId  = substr(md5(rand()), 0, 7);
-            $userInfo['userId']       = $userId;
-            $userInfo['clientId']     = $clientId;
-            $userInfo['campaignId']   = $campaignId;
-            $userInfo['mealEng']      = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
-            $userInfo['nutritionEng'] = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
-        } else {
-            $userId = '0';
-            $clientId = $database_row['clientId'];
-            $campaignId = $database_row['campaignId'];
-            $userInfo['userId']       = $userId;
-            $userInfo['clientId']     = $clientId;
-            $userInfo['campaignId']   = $campaignId;
-            $userInfo['mealEng']      = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
-            $userInfo['nutritionEng'] = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
-        }
+    if($info == 'main') {
+
+        $userId      = '0';
+        $clientId    = '0';
+        $campaignId  = '0';
+        $userInfo['userId']       = $userId;
+        $userInfo['clientId']     = $clientId;
+        $userInfo['campaignId']   = $campaignId;
+        $userInfo['mealEng']      = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
+        $userInfo['nutritionEng'] = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
+        
     } else {
+        
         $userId     = substr($info, 0, 6);
         $clientId   = substr($info, 6, 5);
         $campaignId = substr($info, 11, 7);
@@ -158,11 +139,11 @@ $userdata      = json_decode($_POST['userInfo']);
 $ip            = getRealIpAddr();
 $userInfo      = extractUserInfo($userdata->IdInfo, $ip);
 $data          = $userdata->data;
-$data['userId']       = $userInfo['userId'];
-$data['clientId']     = $userInfo['clientId'];
-$data['campaignId']   = $userInfo['campaignId'];
-$data['mealEng']      = $userInfo['mealEng'];
-$data['nutritionEng'] = $userInfo['nutritionEng'];
+$data['userId']        = $userInfo['userId'];
+$data['clientId']      = $userInfo['clientId'];
+$data['campaignId']    = $userInfo['campaignId'];
+$data[0]->mealEng      = $userInfo['mealEng'];
+$data[0]->nutritionEng = $userInfo['nutritionEng'];
 $dbflag        = saveUserDataIntoDB($data, $data['userId'], $data['clientId'], $data['campaignId'], $ip);
 // perform calculations
 $user_bmi      = calculateBmi($data);
