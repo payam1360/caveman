@@ -9,6 +9,7 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
     $password    = "@Ssia123";
     $dbname      = "Users";
     $table1name  = "Users";
+    $table2name  = "userAllocation";
     // Create connection
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
     // check if the client exists.
@@ -36,6 +37,14 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
             $visited = $Questions[$kk]->visited;
             $qRequired = $Questions[$kk]->qRequired;
             $qKey = $Questions[$kk]->qKey[0];
+            if($qKey == 'gender') {
+                $gender = $qAnswer;
+            } elseif($qKey == 'goal') {
+                $goal = $qAnswer;
+            } else {
+                $gender = [];
+                $goal = [];
+            }
             $campaignTime = date("Y-m-d");
             $sql = "UPDATE $table1name SET 
                                             campaignTime = '$campaignTime', 
@@ -58,6 +67,20 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
                                             qIdx = '$qIdx';";
             $conn->query($sql);
             $kk++;
+        }
+        // Also, update userAllocation table for gender and goal based on new clients response.
+        // not the initial Add client info added by the user
+        if($gender != [] && $goal != []) {
+            $sql = "UPDATE $table2name SET 
+                                            gender = '$gender', 
+                                            goal   = '$goal'
+                                            WHERE 
+                                            userId = '$userId' 
+                                            AND 
+                                            clientId = '$clientId' 
+                                            AND 
+                                            campaignId = '$campaignId';";
+            $db_out      = $conn->query($sql);
         }
     } else { // this is coming from public or question page
         $kk = 0;
@@ -101,7 +124,7 @@ function extractUserInfo($info, $ip) {
         $userInfo['nutritionEng'] = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
         
     } else {
-        
+
         $userId     = substr($info, 0, 6);
         $clientId   = substr($info, 6, 5);
         $campaignId = substr($info, 11, 7);

@@ -807,10 +807,6 @@ function submitUserData(inputDataBlob, page, userPage) {
                 plotMicroVit(data.micro);
                 displayMeal();
                 // this part needs to go!!
-            } else if(data.status == 0 && page == 'questions') {
-                window.alert('data saved');
-            } else if(data.status == 0 && page == 'analysis') {
-                window.alert('data saved');
             }
         }
     };
