@@ -30,21 +30,45 @@ function extractUserInfo($userId) {
         array_push($formFlag, $database_row['completed']);
         array_push($mealEng, $database_row['mealEng']);
         array_push($nutritionEng, $database_row['nutritionEng']);
-        if($database_row['gender'] == 0) {
-            array_push($genders, 'male');
-        } elseif($database_row['gender'] == 1){
-            array_push($genders, 'female');
-        } else {
-            array_push($genders, 'No response');
+        // --------------- update gender and goal based on possible client's reply
+        $tempClientId = $database_row['clientId'];
+        $sqlupdate       = "SELECT qKey, qAnswer, optionsText FROM $table2name WHERE userId = '$userId' AND clientId = '$tempClientId';";
+        $dOut          = $conn->query($sqlupdate);
+        while($dOut_row = $dOut->fetch_assoc()) {
+            if($dOut_row['qKey'] == 'gender'){
+                $genderUpdateIndex = $dOut_row['qAnswer'];
+                $genderText = $dOut_row['optionsText'];
+                $genderText = explode(",", $genderText);
+                $updatedGender = $genderText[$genderUpdateIndex];
+            } elseif($dOut_row['qKey'] == 'goal') {
+                $goalUpdateIndex = $dOut_row['qAnswer'];
+                $goalText = $dOut_row['optionsText'];
+                $goalText = explode(",", $goalText);
+                $updatedGoal = $goalText[$goalUpdateIndex];
+            }
         }
-        if($database_row['goal'] == 0) {
-            array_push($goals, 'increase testosterone');
-        } elseif($database_row['goal'] == 1) {
-            array_push($goals, 'gain muscle');
-        } elseif($database_row['goal'] == 2) {
-            array_push($goals, 'lose weight');
+        if(isset($updatedGender) && isset($updatedGoal)) {
+            array_push($genders, $updatedGender);
+            array_push($goals, $updatedGoal);
+            unset($updatedGender);
+            unset($updatedGoal);
         } else {
-            array_push($goals, 'No response');
+            if($database_row['gender'] == 0) {
+                array_push($genders, 'male');
+            } elseif($database_row['gender'] == 1){
+                array_push($genders, 'female');
+            } else {
+                array_push($genders, 'No response');
+            }
+            if($database_row['goal'] == 0) {
+                array_push($goals, 'increase testosterone');
+            } elseif($database_row['goal'] == 1) {
+                array_push($goals, 'gain muscle');
+            } elseif($database_row['goal'] == 2) {
+                array_push($goals, 'lose weight');
+            } else {
+                array_push($goals, 'No response');
+            }
         }
         array_push($campaignids, $database_row['campaignId']);
     }
@@ -123,8 +147,8 @@ function extractClientInfo($clientId, $userId, $nutritionEng, $mealEng, $clientI
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
-$userdata      = json_decode($_POST['userInfo']);
-$userInfo      = extractUserInfo($userdata->userId);
+$userdata          = json_decode($_POST['userInfo']);
+$userInfo          = extractUserInfo($userdata->userId);
 if($userdata->clientId != '') {
     $clientInfo    = extractClientInfo($userdata->clientId, $userdata->userId, $userInfo['nutritionEng'], $userInfo['mealEng'], $userInfo['ids']);
     $user_bmi      = calculateBmi($clientInfo);

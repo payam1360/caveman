@@ -2,7 +2,9 @@
 
 // functions go here
 session_start();
-if(isset($_SESSION['userName']) && isset($_SESSION['userId'])) {
+$userName   = $_SESSION['userName'];
+$userId     = $_SESSION['userId'];
+if(isset($userName) && isset($userId)) {
     $userName   = $_SESSION['userName'];
     $userId     = $_SESSION['userId'];
     $data['status'] = 0;

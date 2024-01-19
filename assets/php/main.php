@@ -15,6 +15,8 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
     // check if the client exists.
     $sql         = "SELECT * FROM $table1name WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId';";
     $db_out      = $conn->query($sql);
+    $gender      = [];
+    $goal        = [];
     // if request from client page -> entries already exists in the db: update qAnswer only
     // if request from public page -> entries do not exist for new clients: insert new entries
     // if request from questions design page -> entries do not exist: insert new entries
@@ -41,10 +43,7 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
                 $gender = $qAnswer;
             } elseif($qKey == 'goal') {
                 $goal = $qAnswer;
-            } else {
-                $gender = [];
-                $goal = [];
-            }
+            } 
             $campaignTime = date("Y-m-d");
             $sql = "UPDATE $table1name SET 
                                             campaignTime = '$campaignTime', 
@@ -70,7 +69,7 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
         }
         // Also, update userAllocation table for gender and goal based on new clients response.
         // not the initial Add client info added by the user
-        if($gender != [] && $goal != []) {
+        if($gender != [] || $goal != []) {
             $sql = "UPDATE $table2name SET 
                                             gender = '$gender', 
                                             goal   = '$goal'
