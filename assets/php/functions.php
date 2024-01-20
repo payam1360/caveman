@@ -567,6 +567,7 @@ function dbCon($userId, $clientId) {
 function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $contextFlag){
     $dbOut    = dbCon($userId, $clientId);
     $dbOutRow = $dbOut->fetch_assoc();
+    $desc = [];
     // bunch of mutually exclusive flags
     $HighYoungMaleLose   = $Bmi > 25 && $Usergender == 'male'   && $Userage < 35 && $Usergoal == 'lose';
     $HighYoungMaleGain   = $Bmi > 25 && $Usergender == 'male'   && $Userage < 35 && $Usergoal == 'gain';
@@ -867,9 +868,9 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
             }
             if($LowOldFemaleGain) {
                 $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
-            }
-        }
-    }
+            } 
+        } 
+    } 
     return($desc); 
 }
 

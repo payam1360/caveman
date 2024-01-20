@@ -1310,10 +1310,10 @@ function displayClients(results, userid, username) {
         campaignP    = document.createElement('p');
         createQP     = document.createElement('p');
         avatar       = document.createElement('img');
-        if(results.genders[kk] == 'male') {
-            avatar.setAttribute('src', './assets/img/man.png');
-        } else if (results.genders[kk] == 'female') {
+        if(results.genders[kk] == 'female') {
             avatar.setAttribute('src', './assets/img/woman.png');
+        } else if (results.genders[kk] == 'male') {
+            avatar.setAttribute('src', './assets/img/man.png');
         } else {
             avatar.setAttribute('src', './assets/img/nuetral.png');
         }
@@ -1414,18 +1414,64 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     pdfBtn.addEventListener('click', function(){
         createPdf(parentNode, clientData);
     });
+
+    let emailBtn = document.createElement('button');
+    emailBtn.setAttribute('class', 'emailReport');
+    spn = document.createElement('span');
+    spn.setAttribute('class', 'fa-regular fa-paper-plane');
+    spn.style.fontSize = '50px';
+    emailBtn.appendChild(spn);
+    emailBtn.addEventListener('click', function(){
+        // send email from the server side ... prefer send a copy to nutritionist as well
+        sendEmail(parentNode, clientData);
+    });
     
     let nameP = document.createElement('p');
+    let namePstyle = document.createElement('span');
     let idP = document.createElement('p');
+    let idPstyle = document.createElement('span');
     let genderP = document.createElement('p');
+    let genderPstyle = document.createElement('span');
     let goalP = document.createElement('p');
+    let goalPstyle = document.createElement('span');
     let campaignP = document.createElement('p');
 
-    nameP.innerHTML = results.names[cidx];
-    nameP.style.fontSize = '40px';
-    idP.innerHTML = 'ID: ' + results.ids[cidx];
-    genderP.innerHTML = results.genders[cidx];
-    goalP.innerHTML = 'Goal: ' + results.goals[cidx];
+
+    
+    nameP.innerHTML = "Client's name: ";
+    nameP.style.marginTop = '100px';
+    namesTemp = results.names[cidx].charAt(0).toUpperCase() + results.names[cidx].slice(1);
+    namePstyle.innerHTML = namesTemp;
+    namePstyle.style.fontSize = '40px';
+    namePstyle.style.color = 'brown';
+    namePstyle.setAttribute('id', 'mDivpName');
+    nameP.appendChild(namePstyle);
+
+    idP.innerHTML = "Client's ID: ";
+    idPstyle.innerHTML = results.ids[cidx];
+    idPstyle.style.fontSize = '40px';
+    idPstyle.style.color = 'green';
+    idPstyle.setAttribute('id', 'mDivpId');
+    idP.appendChild(idPstyle);    
+
+    genderP.innerHTML = "Client's gender: ";
+    genderTemp = results.genders[cidx].charAt(0).toUpperCase() + results.genders[cidx].slice(1);
+    genderPstyle.innerHTML = genderTemp;
+    genderPstyle.style.fontSize = '40px';
+    genderPstyle.style.color = '#F4B400';
+    genderPstyle.setAttribute('id', 'mDivpGender');
+    genderP.appendChild(genderPstyle);  
+
+
+    goalP.innerHTML = "Client's goal: ";
+    goalsTemp = results.goals[cidx].charAt(0).toUpperCase() + results.goals[cidx].slice(1);
+    goalPstyle.innerHTML = goalsTemp;
+    goalPstyle.style.fontSize = '40px';
+    goalPstyle.style.color = '#DB4437';
+    goalPstyle.setAttribute('id', 'mDivpGoal');
+    goalP.appendChild(goalPstyle); 
+
+
     let link = '/userPages/' + userid + results.ids[cidx] + results.campaignids[cidx] + '.html'
     campaignP.innerHTML = 'Link to ' + results.names[cidx] + '\'s survey <a href="' + link + '"> page</a>';
     
@@ -1435,10 +1481,27 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     divider1.style.backgroundColor = 'grey';
     divider1.style.margin = 'auto';
     
+    // create BMR data info
+    let bmrSuggestion = document.createElement('p');
+    let bmrValue = document.createElement('span');
+    bmrSuggestion.innerHTML = 'Basal Metabolic Rate (BMR):';
+    bmrSuggestion.style.fontSize = '30px';
+    bmrValue.innerHTML = Math.floor(clientData.bmr['val']*100)/100;
+    bmrValue.style.fontSize = '40px';
+    bmrValue.style.color = '#4285F4';
+    bmrSuggestion.setAttribute('id', 'mDivBmrSugg');
+    bmrSuggestion.appendChild(bmrValue);
+
     // create plot BMI
     let bmiSuggestion = document.createElement('p');
-    bmiSuggestion.innerHTML = 'Body mass index';
+    let bmiValue = document.createElement('span');
+    bmiSuggestion.innerHTML = 'Body mass index: ';
     bmiSuggestion.style.fontSize = '30px';
+    bmiValue.innerHTML = Math.floor(clientData.bmi['val']*100)/100;
+    bmiValue.style.fontSize = '40px';
+    bmiValue.style.color = '#0F9D58';
+    bmiSuggestion.setAttribute('id', 'mDivBmiSugg');
+    bmiSuggestion.appendChild(bmiValue);
 
     
     let bmi = document.createElement('div');
@@ -1472,6 +1535,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     // create plot MICRO
     let microSuggestion = document.createElement('p');
     microSuggestion.innerHTML = 'Micro-nutrients (Trace minerals) recommendation';
+    microSuggestion.setAttribute('id', 'mDivMicroSugg');
     microSuggestion.style.fontSize = '30px';
     let micro = document.createElement('div');
     micro.setAttribute('class', 'col-sm col-lg-5 Micro');
@@ -1505,6 +1569,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     let microVitSuggestion = document.createElement('p');
     microVitSuggestion.innerHTML = 'Micro-nutrients (Vitamines) recommendation';
     microVitSuggestion.style.fontSize = '30px';
+    microVitSuggestion.setAttribute('id', 'mDivMicroVitSugg');
     let microVit = document.createElement('div');
     microVit.setAttribute('class', 'col-sm col-lg-5 Micro_vit');
     microVit.style.margin = 'auto';
@@ -1536,6 +1601,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     let macroSuggestion = document.createElement('p');
     macroSuggestion.innerHTML = 'Macro-nutrients recommendation';
     macroSuggestion.style.fontSize = '30px';
+    macroSuggestion.setAttribute('id', 'mDivMacroSugg');
     let macro = document.createElement('div');
     macro.setAttribute('class', 'col-sm col-lg-5 Macro');
     macro.style.margin = 'auto';
@@ -1567,6 +1633,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     let ifSuggestion = document.createElement('p');
     ifSuggestion.innerHTML = 'Intermittent fasting recommendation';
     ifSuggestion.style.fontSize = '30px';
+    ifSuggestion.setAttribute('id', 'mDivIfSugg');
     let If = document.createElement('div');
     If.setAttribute('class', 'col-sm col-lg-5 IntermittentFasting');
     If.style.margin = 'auto';
@@ -1586,15 +1653,17 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     If.appendChild(div2);
     If.appendChild(div3);
 
-    
+
     mDiv.appendChild(closeBtn);
     mDiv.appendChild(pdfBtn);
+    mDiv.appendChild(emailBtn);
     mDiv.appendChild(nameP);
     mDiv.appendChild(genderP);
     mDiv.appendChild(goalP);
     mDiv.appendChild(idP);
     mDiv.appendChild(campaignP);
     mDiv.appendChild(divider1);
+    mDiv.appendChild(bmrSuggestion);
     mDiv.appendChild(bmiSuggestion);
     mDiv.appendChild(bmi);
     mDiv.appendChild(divider2);
@@ -1623,14 +1692,17 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
 function createPdf(node, data) {
 
     const { jsPDF } = window.jspdf;
-    nameIdx  = 2;
-    goalIdx  = 4;
-    idIdx    = 5;
-    bmiIdx   = 9;
-    microIdx = 12;
     
-    const canvasImgBmi = node.children[0].children[bmiIdx].children[1].children[0].toDataURL('image/jpeg', 1.0);
-    const canvasImgMicro = node.children[0].children[microIdx].children[1].children[0].toDataURL('image/jpeg', 1.0);
+    const canvasImgBmi        = document.getElementById('Bmi').toDataURL('image/jpeg', 1.0);
+    const canvasImgMicroTrace = document.getElementById('Micro').toDataURL('image/jpeg', 1.0);
+    const canvasImgMicroVit   = document.getElementById('Micro_vit').toDataURL('image/jpeg', 1.0);
+    const canvasImgMacro      = document.getElementById('Macro').toDataURL('image/jpeg', 1.0);
+    const canvasImgIf         = document.getElementById('IntermittentFasting').toDataURL('image/jpeg', 1.0);
+    const nameP               = document.getElementById('mDivpName');
+    const goalP               = document.getElementById('mDivpGoal');
+    const idP                 = document.getElementById('mDivpId');
+
+
     var pdf = new jsPDF({
                          orientation: 'p',
                          unit: 'px',
@@ -1643,7 +1715,7 @@ function createPdf(node, data) {
 
     pdf.setFontSize(20);
     pdf.setTextColor('#4285F4');
-    pdf.text(node.children[0].children[nameIdx].innerHTML, 85, 50); 
+    pdf.text(nameP.innerHTML, 85, 50); 
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000'); 
@@ -1651,7 +1723,7 @@ function createPdf(node, data) {
 
     pdf.setFontSize(20);
     pdf.setTextColor('#F4B400');
-    pdf.text(node.children[0].children[goalIdx].innerHTML.substr(6), 85, 70); 
+    pdf.text(goalP.innerHTML, 85, 70); 
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000'); 
@@ -1659,7 +1731,7 @@ function createPdf(node, data) {
 
     pdf.setFontSize(20);
     pdf.setTextColor('#964B00');
-    pdf.text(node.children[0].children[idIdx].innerHTML.substr(4), 85, 90); 
+    pdf.text(idP.innerHTML, 85, 90); 
 
     pdf.line(50, 100, 400, 100, 'S');
 
@@ -1687,17 +1759,19 @@ function createPdf(node, data) {
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.bmi['desc'] , 50, 420); 
+    pdf.text(data.bmi['desc'] , 50, 420, {maxWidth:370}); 
     
     // page reset
     pdf.addPage();
-    pdf.addImage(canvasImgMicro, 'JPEG', 80, 50, 300, 220, 'alias2', 'SLOW');
+    pdf.addImage(canvasImgMicroTrace, 'JPEG', 80, 50, 300, 220, 'alias2', 'SLOW');
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
     pdf.text(data.micro['descTrace'] , 50, 420);
 
-    pdf.save('sample-file.pdf');
+    let idNumber = idP.innerHTML;
+    const currentDate = new Date().toDateString();
+    pdf.save('progress report ' + currentDate + ' clientId ' + idNumber + '.pdf');
 }
 
 function cleanClientDiv(mDiv) {

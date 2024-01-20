@@ -246,23 +246,26 @@
     display: none;
 }
 
-
+.emailReport,
 .pdfReport,
 .closeExpandedClient {
     background-color: white;
     color: dodgerblue;
-    border: 2px;
-    margin: 20px;
-    font-size: 50px;
+    border-color: dodgerblue;
+    border-width: 1px;
+    border-radius: 5px;
+    margin: 10px;
+    font-size: 20px;
 }
 
 .pdfReport:hover {
-    background-color: dodgerblue;
-    color: white;
+    box-shadow: 2px 2px lightgrey;
+}
+.emailReport:hover {
+    box-shadow: 2px 2px lightgrey;
 }
 .closeExpandedClient:hover {
-    background-color: dodgerblue;
-    color: white;
+    box-shadow: 2px 2px lightgrey;
 }
 
 .admin-dashbord {
