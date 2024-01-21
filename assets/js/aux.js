@@ -988,6 +988,7 @@ function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        devicePixelRatio: 2,
         aspectRatio: 1,
       },
         plugins: [bgColor],
@@ -1024,16 +1025,16 @@ function plotIf(If, ifTxt = 0, ifDiv = 0, ifDesc = 0){
         {
             label: 'Eating interval (hrs)',
             data: If['val'][0],
-            backgroundColor: 'rgba(15, 157, 88, 0.5)',
-            borderColor: 'rgba(15, 157, 88, 1)',
-            borderWidth: 2,
+            backgroundColor: 'dodgerblue',
+            borderColor: 'grey',
+            borderWidth: 1,
         },
         {
             label:  'Fasting interval (hrs)',
             data: If['val'][1],
-            backgroundColor: 'rgba(66, 133, 244, 0.5)',
-            borderColor: 'rgba(66, 133, 244, 1)',
-            borderWidth: 2,
+            backgroundColor: 'mediumseagreen',
+            borderColor: 'grey',
+            borderWidth: 1,
         }
     ]
     };
@@ -1043,6 +1044,7 @@ function plotIf(If, ifTxt = 0, ifDiv = 0, ifDesc = 0){
       options: {
         indexAxis: 'y',
         responsive: true,
+        devicePixelRatio: 2,
         scales: {
             x: {
               stacked: true,
@@ -1096,6 +1098,7 @@ function plotMacro(macro, macroTxt = 0, macroDiv = 0, macroDesc = 0){
       data: macroData,
       options: {
         responsive: true,
+        devicePixelRatio: 2,
         maintainAspectRatio: false,
       }
     };
@@ -1159,6 +1162,7 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
             }
         },
         responsive: true,
+        devicePixelRatio: 2,
         maintainAspectRatio: false,
       },
         plugins: [bgColor],
@@ -1221,6 +1225,7 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
             }
         },
         responsive: true,
+        devicePixelRatio: 2,
         maintainAspectRatio: false,
       },
         plugins: [bgColor],
@@ -1693,11 +1698,11 @@ function createPdf(node, data) {
 
     const { jsPDF } = window.jspdf;
     
-    const canvasImgBmi        = document.getElementById('Bmi').toDataURL('image/jpeg', 1.0);
-    const canvasImgMicroTrace = document.getElementById('Micro').toDataURL('image/jpeg', 1.0);
-    const canvasImgMicroVit   = document.getElementById('Micro_vit').toDataURL('image/jpeg', 1.0);
-    const canvasImgMacro      = document.getElementById('Macro').toDataURL('image/jpeg', 1.0);
-    const canvasImgIf         = document.getElementById('IntermittentFasting').toDataURL('image/jpeg', 1.0);
+    const canvasImgBmi        = document.getElementById('Bmi').toDataURL('image/png', 1.0);
+    const canvasImgMicroTrace = document.getElementById('Micro').toDataURL('image/png', 1.0);
+    const canvasImgMicroVit   = document.getElementById('Micro_vit').toDataURL('image/png', 1.0);
+    const canvasImgMacro      = document.getElementById('Macro').toDataURL('image/png', 1.0);
+    const canvasImgIf         = document.getElementById('IntermittentFasting').toDataURL('image/png', 1.0);
     const nameP               = document.getElementById('mDivpName');
     const goalP               = document.getElementById('mDivpGoal');
     const idP                 = document.getElementById('mDivpId');
@@ -1755,7 +1760,7 @@ function createPdf(node, data) {
     pdf.setTextColor('#000000');
     pdf.text(data.bmr['desc'], 50, 160); 
 
-    pdf.addImage(canvasImgBmi, 'PNG', 80, 180, 300, 220, 'alias1', 'SLOW');
+    pdf.addImage(canvasImgBmi, 'JPEG', 80, 180, 300, 220, 'alias1', 'NONE');
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
@@ -1763,11 +1768,36 @@ function createPdf(node, data) {
     
     // page reset
     pdf.addPage();
-    pdf.addImage(canvasImgMicroTrace, 'JPEG', 80, 50, 300, 220, 'alias2', 'SLOW');
+    pdf.addImage(canvasImgMicroTrace, 'JPEG', 80, 50, 300, 220, 'alias2', 'NONE');
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.micro['descTrace'] , 50, 420);
+    pdf.text(data.micro['descTrace'] , 50, 420, {maxWidth:370});
+
+    // page reset
+    pdf.addPage();
+    pdf.addImage(canvasImgMicroVit, 'JPEG', 80, 50, 300, 220, 'alias3', 'NONE');
+
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000');
+    pdf.text(data.micro['descVit'] , 50, 420, {maxWidth:370});
+
+    // page reset
+    pdf.addPage();
+    pdf.addImage(canvasImgMacro, 'JPEG', 80, 50, 300, 220, 'alias4', 'NONE');
+    
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000');
+    pdf.text(data.macro['desc'] , 50, 420, {maxWidth:370});
+
+    // page reset
+    pdf.addPage();
+    pdf.addImage(canvasImgIf, 'JPEG', 80, 50, 300, 150, 'alias5', 'NONE');
+        
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000');
+    pdf.text(data.if['desc'] , 50, 420, {maxWidth:370});
+    
 
     let idNumber = idP.innerHTML;
     const currentDate = new Date().toDateString();
