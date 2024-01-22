@@ -1391,6 +1391,8 @@ function getClientDetails(parentNode, result, cidx){
 function displayClientsDetails(parentNode, clientData, results, cidx) {
     
     userid = parentNode.children[cidx].getAttribute('userid');
+    clientid = parentNode.children[cidx].getAttribute('clientid');
+    
     let blur = document.querySelector('.blur');
     blur.style.zIndex = '1';
     blur.style.filter = 'blur(10px)';
@@ -1428,7 +1430,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     emailBtn.appendChild(spn);
     emailBtn.addEventListener('click', function(){
         // send email from the server side ... prefer send a copy to nutritionist as well
-        sendEmail(parentNode, clientData);
+        sendEmail(parentNode, clientData, userid, clientid);
     });
     
     let nameP = document.createElement('p');
@@ -1808,4 +1810,23 @@ function cleanClientDiv(mDiv) {
     while( mDiv.childElementCount > 0){
         mDiv.removeChild(mDiv.children[0]);
     }
+}
+
+function sendEmail(parentNode, clientData, userid, clientid) {
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            data = JSON.parse(this.response);
+            if(data['status'] == 0) {
+                window.alert('email sent to the client!');
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/contact.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'parentNode': parentNode, 'clientData': clientData, 'userId': userid, 'clientId': clientid};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
 }
