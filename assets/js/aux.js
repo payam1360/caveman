@@ -931,6 +931,7 @@ function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
     bmiTxt.style.display = 'block';
     bmiDiv.style.display = 'block';
     bmiDesc.style.display = 'block';
+    bmiDesc.style.margin = '20px';
     
     bmiDesc.innerHTML = bmi['desc'];
     // Config section
@@ -1531,6 +1532,20 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     bmi.appendChild(div2);
     bmi.appendChild(div3);
     // ------------------------------------
+    // edit button for BMI description. User can add his comments here.
+    // content of clientData.bmi['desc'] must be modified.
+    let bmiBtnDiv = document.createElement('div');
+    bmiBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+    bmiBtnDiv.style.margin = '20px';
+    let bmiBtn = document.createElement('button');
+    bmiBtn.setAttribute('class', 'btn btn-outline-primary');
+    bmiBtn.innerHTML = 'Edit';
+    bmiBtn.addEventListener('click', function(){
+        addUsersuggestionContent(clientData.bmi, bmiDesc, bmiBtn);
+    });    
+    bmiBtnDiv.appendChild(bmiBtn);
+    // ------------------------------------
+
 
     let divider2 = document.createElement('div');
     divider2.style.height = '2px';
@@ -1673,6 +1688,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     mDiv.appendChild(bmrSuggestion);
     mDiv.appendChild(bmiSuggestion);
     mDiv.appendChild(bmi);
+    mDiv.appendChild(bmiBtnDiv);
     mDiv.appendChild(divider2);
     mDiv.appendChild(microSuggestion);
     mDiv.appendChild(micro);
@@ -1829,4 +1845,33 @@ function sendEmail(parentNode, clientData, userid, clientid) {
     let info = {'parentNode': parentNode, 'clientData': clientData, 'userId': userid, 'clientId': clientid};
     var userdata = "userInfo="+JSON.stringify(info);
     xmlhttp.send(userdata);
+}
+
+
+function addUsersuggestionContent(data, desc, Btn) {
+    
+    if(Btn.innerHTML == 'Edit'){
+        let userIn = document.createElement('textarea');
+        let savedText = desc.parentNode.children[0];
+        savedText.style.position = 'absolute';
+        savedText.style.opacity = 0;
+        userIn.innerHTML = desc.innerHTML;
+        userIn.setAttribute('rows', '10');
+        userIn.setAttribute('cols', '35');
+        userIn.style.margin = '20px';
+        userIn.style.overflow = 'scroll';
+        userIn.style.scrollBehavior = 'smooth';
+        userIn.style.position = 'relative';
+        desc.parentNode.appendChild(userIn);
+        Btn.innerHTML = 'Save';
+    } else {
+        let savedText = desc.parentNode.children[0];
+        savedText.style.opacity = 1;
+        savedText.style.position = 'relative';
+        savedText.innerHTML = desc.parentNode.children[1].value;
+        desc.parentNode.removeChild(desc.parentNode.children[1]);
+        data['desc'] = savedText.innerHTML;
+        desc.innerHTML = savedText.innerHTML;
+        Btn.innerHTML = 'Edit';
+    }
 }
