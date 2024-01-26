@@ -1542,6 +1542,9 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     bmiBtn.innerHTML = 'Edit';
     bmiBtn.addEventListener('click', function(){
         addUsersuggestionContent(clientData.bmi, bmiDesc, bmiBtn);
+        if(bmiBtn.innerHTML == 'Edit') {
+            saveUserCommentstoDb(clientData.bmi['desc'], userid, clientid, 'bmi');
+        }
     });    
     bmiBtnDiv.appendChild(bmiBtn);
     // ------------------------------------
@@ -1874,4 +1877,16 @@ function addUsersuggestionContent(data, desc, Btn) {
         desc.innerHTML = savedText.innerHTML;
         Btn.innerHTML = 'Edit';
     }
+}
+
+function saveUserCommentstoDb(clientText, userid, clientid, topic) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/saveUserComments.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'topic': topic, 'clientText': clientText, 'userId': userid, 'clientId': clientid};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
 }
