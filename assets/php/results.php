@@ -9,9 +9,14 @@ function extractUserInfo($userId) {
     $dbname       = "Users";
     $table1name   = "userAllocation";
     $table2name   = "Users";
+    $table3name   = "authentication";
     // Create connection
     $conn         = new mysqli($servername, $loginname, $password, $dbname);
     // check if the client exists.
+    $sql          = "SELECT accountType FROM $table3name WHERE userId = '$userId';";
+    $r  = $conn->query($sql);
+    $accountType  = $r->fetch_assoc();
+    $accountType  = array($accountType['accountType']);
     $sql          = "SELECT * FROM $table1name WHERE userId = '$userId';";
     $database_out = $conn->query($sql);
     $ids         = array();
@@ -81,6 +86,7 @@ function extractUserInfo($userId) {
     $userInfo['formWasCreated'] = $formFlag;
     $userInfo['mealEng']        = $mealEng;
     $userInfo['nutritionEng']   = $nutritionEng;
+    $userInfo['accountType']    = $accountType;
 
     return $userInfo;
 }
@@ -150,7 +156,11 @@ function extractClientInfo($clientId, $userId, $nutritionEng, $mealEng, $clientI
 $userdata          = json_decode($_POST['userInfo']);
 $userInfo          = extractUserInfo($userdata->userId);
 if($userdata->clientId != '') {
-    $clientInfo    = extractClientInfo($userdata->clientId, $userdata->userId, $userInfo['nutritionEng'], $userInfo['mealEng'], $userInfo['ids']);
+    $clientInfo    = extractClientInfo($userdata->clientId, $userdata->userId, 
+                                        $userInfo['nutritionEng'], 
+                                        $userInfo['mealEng'], 
+                                        $userInfo['ids']);
+                                        
     $user_bmi      = calculateBmi($clientInfo);
     $user_bmr      = calculateBmr($clientInfo);
     $user_if       = calculateIf($clientInfo);

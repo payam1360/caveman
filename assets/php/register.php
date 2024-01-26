@@ -15,7 +15,7 @@ require '../../vendor/phpmailer/phpmailer/src/SMTP.php';
 require '../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require '../../vendor/phpmailer/phpmailer/src/Exception.php';
 
-function createClientIdandCampaign($email, $numAllocation) {
+function createClientIdandCampaign($email, $numAllocation, $accountType) {
     
     $servername  = "127.0.0.1";
     $loginname   = "root";
@@ -27,6 +27,8 @@ function createClientIdandCampaign($email, $numAllocation) {
     $sql         = "SELECT userId FROM $table2name WHERE email = '$email';";
     $data        = $conn->query($sql);
     $userId      = $data->fetch_column(0);
+    $sql         = "UPDATE " . $table2name . " SET accountType = '" . $accountType . "' WHERE email = '" . $email . "';";
+    $conn->query($sql);
     for($kk = 0; $kk < $numAllocation; $kk++){
         $clientId    = mt_rand(10000, 99999);
         $campaignId  = substr(md5(rand()), 0, 7);
@@ -97,7 +99,7 @@ function saveVerificationAndEmail($verification_code, $email, $name) {
     $tablename   = "authentication";
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
     $userId      = mt_rand(100000, 999999);
-    $sql         = "INSERT INTO " . $tablename . " (userId, name, email, password, verification) VALUES('" . $userId . "','" . $name . "','" .  $email . "','" . "','" . $verification_code . "');";
+    $sql         = "INSERT INTO " . $tablename . " (userId, name, email, password, verification, accountType) VALUES('" . $userId . "','" . $name . "','" .  $email . "','" . "','" . $verification_code . "','');";
     $conn->query($sql);
     $conn->close();
 }
@@ -162,12 +164,15 @@ if($verified == 1) {
         registerUserCredentials($userdata[PASS]->qAnswer, $userdata[EMAIL]->qAnswer);
         if($userdata[PLAN]->qAnswer == "0") {
             $numClients = 10;
+            $accountType = 'free';
         } elseif($userdata[PLAN]->qAnswer == "1") {
             $numClients = 20;
+            $accountType = 'delux';
         } elseif($userdata[PLAN]->qAnswer == "2") {
             $numClients = 50;
+            $accountType = 'premium';
         }
-        createClientIdandCampaign($userdata[EMAIL]->qAnswer, $numClients);
+        createClientIdandCampaign($userdata[EMAIL]->qAnswer, $numClients, $accountType);
         $data['status'] = 0; // password good ... user is registered
     } elseif($userdata[PASS]->qAnswer != $userdata[PASSC]->qAnswer && $userdata[PASS]->qAnswer != '') {
         $data['status'] = 4; // password not matching 

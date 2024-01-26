@@ -1295,7 +1295,8 @@ function displayClients(results, userid, username) {
     blur.style.filter = 'blur(0px)';
     let parentNode = document.querySelector('.client-list-parent');
     cleanClientDiv(parentNode);
-    for(let kk = 0; kk < results.names.length; kk++) {
+    numClients = results.names.length;
+    for(let kk = 0; kk < numClients; kk++) {
         let mDiv = document.createElement('div');
         mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
         mDiv.setAttribute('cidx', kk);
@@ -1393,7 +1394,12 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     
     userid = parentNode.children[cidx].getAttribute('userid');
     clientid = parentNode.children[cidx].getAttribute('clientid');
-    
+    let accountType = results.accountType[0];
+    if(accountType == 'free') {
+        accessDenied = true;
+    } else {
+        accessDenied = false;
+    }
     let blur = document.querySelector('.blur');
     blur.style.zIndex = '1';
     blur.style.filter = 'blur(10px)';
@@ -1742,9 +1748,12 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     });    
     ifBtnDiv.appendChild(ifBtn);
 
+
     mDiv.appendChild(closeBtn);
-    mDiv.appendChild(pdfBtn);
-    mDiv.appendChild(emailBtn);
+    if(!accessDenied){
+        mDiv.appendChild(pdfBtn);
+        mDiv.appendChild(emailBtn);
+    }
     mDiv.appendChild(nameP);
     mDiv.appendChild(genderP);
     mDiv.appendChild(goalP);
@@ -1754,24 +1763,33 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     mDiv.appendChild(bmrSuggestion);
     mDiv.appendChild(bmiSuggestion);
     mDiv.appendChild(bmi);
-    mDiv.appendChild(bmiBtnDiv);
+    if(!accessDenied){
+        mDiv.appendChild(bmiBtnDiv);
+    }
     mDiv.appendChild(divider2);
     mDiv.appendChild(microSuggestion);
     mDiv.appendChild(micro);
-    mDiv.appendChild(microBtnDiv);
+    if(!accessDenied){
+        mDiv.appendChild(microBtnDiv);
+    }
     mDiv.appendChild(divider2Vit);
     mDiv.appendChild(microVitSuggestion);
     mDiv.appendChild(microVit);
-    mDiv.appendChild(microVitBtnDiv);
+    if(!accessDenied){
+        mDiv.appendChild(microVitBtnDiv);
+    }
     mDiv.appendChild(divider3);
     mDiv.appendChild(macroSuggestion);
     mDiv.appendChild(macro);
-    mDiv.appendChild(macroBtnDiv);
+    if(!accessDenied){
+        mDiv.appendChild(macroBtnDiv);
+    }
     mDiv.appendChild(divider4);
     mDiv.appendChild(ifSuggestion);
     mDiv.appendChild(If);
-    mDiv.appendChild(ifBtnDiv);
-
+    if(!accessDenied){
+        mDiv.appendChild(ifBtnDiv);
+    }
 
     parentNode.appendChild(mDiv);
     

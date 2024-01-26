@@ -527,15 +527,20 @@ function calculateMicro($data){
                    'vUnits' => $vUnits,
                    'tUnits' => $tUnits, 
                    'vScale' => $vScale,
-                   'tScale' => $tScale);
-    if($data[0]->nutritionEng == "0") { // AI request has priority 
-        $Micro['descVit']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
-        $Micro['descTrace'] = $Micro['descVit'];
-    } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-        $Micro['descVit']   = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'microvit');
-        $Micro['descTrace'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'microtrace');
-    }
-               
+                   'tScale' => $tScale);  
+    if($valid)  {                                      
+        if($data[0]->nutritionEng == "0") { // AI request has priority 
+            $Micro['descVit']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
+            $Micro['descTrace'] = $Micro['descVit'];
+        } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
+            $Micro['descVit']   = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'microvit');
+            $Micro['descTrace'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'microtrace');
+        }
+    } else {
+        $Micro['descVit']    = [];
+        $Micro['descTrace']  = [];
+    } 
+
     return($Micro);
 }
 
