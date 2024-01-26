@@ -762,7 +762,7 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
         }
     } elseif($contextFlag == "microvit") {
         if(!empty($dbOutRow['descMicroVit'])) { // use the entry by the user
-            $desc = [$dbOutRow['descMacroVit']];
+            $desc = [$dbOutRow['descMicroVit']];
         } else { 
             if($HighYoungMaleLose) {
                 $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
@@ -817,7 +817,7 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
         }
     } elseif($contextFlag == "microtrace") {
         if(!empty($dbOutRow['descMicroTrace'])) { // use the entry by the user
-            $desc = [$dbOutRow['descMacroTrace']];
+            $desc = [$dbOutRow['descMicroTrace']];
         } else { 
             if($HighYoungMaleLose) {
                 $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];

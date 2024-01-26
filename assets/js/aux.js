@@ -1541,7 +1541,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     bmiBtn.setAttribute('class', 'btn btn-outline-primary');
     bmiBtn.innerHTML = 'Edit';
     bmiBtn.addEventListener('click', function(){
-        addUsersuggestionContent(clientData.bmi, bmiDesc, bmiBtn);
+        addUsersuggestionContent(clientData.bmi, bmiDesc, bmiBtn, 'desc');
         if(bmiBtn.innerHTML == 'Edit') {
             saveUserCommentstoDb(clientData.bmi['desc'], userid, clientid, 'bmi');
         }
@@ -1581,6 +1581,22 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     micro.appendChild(div2);
     micro.appendChild(div3);
 
+    // ------------------------------------
+    // edit button for mico description. User can add his comments here.
+    // content of clientData.bmi['desc'] must be modified.
+    let microBtnDiv = document.createElement('div');
+    microBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+    microBtnDiv.style.margin = '20px';
+    let microBtn = document.createElement('button');
+    microBtn.setAttribute('class', 'btn btn-outline-primary');
+    microBtn.innerHTML = 'Edit';
+    microBtn.addEventListener('click', function(){
+        addUsersuggestionContent(clientData.micro, microDesc, microBtn, 'descTrace');
+        if(microBtn.innerHTML == 'Edit') {
+            saveUserCommentstoDb(clientData.micro['descTrace'], userid, clientid, 'micro');
+        }
+    });    
+    microBtnDiv.appendChild(microBtn);
 
     // Micto vitamines
     let divider2Vit = document.createElement('div');
@@ -1613,6 +1629,22 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     microVit.appendChild(div1);
     microVit.appendChild(div2);
     microVit.appendChild(div3);
+    // ------------------------------------
+    // edit button for mico description. User can add his comments here.
+    // content of clientData.bmi['desc'] must be modified.
+    let microVitBtnDiv = document.createElement('div');
+    microVitBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+    microVitBtnDiv.style.margin = '20px';
+    let microVitBtn = document.createElement('button');
+    microVitBtn.setAttribute('class', 'btn btn-outline-primary');
+    microVitBtn.innerHTML = 'Edit';
+    microVitBtn.addEventListener('click', function(){
+        addUsersuggestionContent(clientData.micro, microVitDesc, microVitBtn, 'descVit');
+        if(microVitBtn.innerHTML == 'Edit') {
+            saveUserCommentstoDb(clientData.micro['descVit'], userid, clientid, 'microVit');
+        }
+    });    
+    microVitBtnDiv.appendChild(microVitBtn);
 
     // -----------
     let divider3 = document.createElement('div');
@@ -1645,6 +1677,22 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     macro.appendChild(div1);
     macro.appendChild(div2);
     macro.appendChild(div3);
+    // ------------------------------------
+    // edit button for macro description. User can add his comments here.
+    // content of clientData.bmi['desc'] must be modified.
+    let macroBtnDiv = document.createElement('div');
+    macroBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+    macroBtnDiv.style.margin = '20px';
+    let macroBtn = document.createElement('button');
+    macroBtn.setAttribute('class', 'btn btn-outline-primary');
+    macroBtn.innerHTML = 'Edit';
+    macroBtn.addEventListener('click', function(){
+        addUsersuggestionContent(clientData.macro, macroDesc, macroBtn, 'desc');
+        if(macroBtn.innerHTML == 'Edit') {
+            saveUserCommentstoDb(clientData.macro['desc'], userid, clientid, 'macro');
+        }
+    });    
+    macroBtnDiv.appendChild(macroBtn);
 
 
     let divider4 = document.createElement('div');
@@ -1677,7 +1725,22 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     If.appendChild(div1);
     If.appendChild(div2);
     If.appendChild(div3);
-
+    // ------------------------------------
+    // edit button for Intermittent fasting description. User can add his comments here.
+    // content of clientData.bmi['desc'] must be modified.
+    let ifBtnDiv = document.createElement('div');
+    ifBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+    ifBtnDiv.style.margin = '20px';
+    let ifBtn = document.createElement('button');
+    ifBtn.setAttribute('class', 'btn btn-outline-primary');
+    ifBtn.innerHTML = 'Edit';
+    ifBtn.addEventListener('click', function(){
+        addUsersuggestionContent(clientData.if, ifDesc, ifBtn, 'desc');
+        if(ifBtn.innerHTML == 'Edit') {
+            saveUserCommentstoDb(clientData.if['desc'], userid, clientid, 'if');
+        }
+    });    
+    ifBtnDiv.appendChild(ifBtn);
 
     mDiv.appendChild(closeBtn);
     mDiv.appendChild(pdfBtn);
@@ -1695,15 +1758,20 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     mDiv.appendChild(divider2);
     mDiv.appendChild(microSuggestion);
     mDiv.appendChild(micro);
+    mDiv.appendChild(microBtnDiv);
     mDiv.appendChild(divider2Vit);
     mDiv.appendChild(microVitSuggestion);
     mDiv.appendChild(microVit);
+    mDiv.appendChild(microVitBtnDiv);
     mDiv.appendChild(divider3);
     mDiv.appendChild(macroSuggestion);
     mDiv.appendChild(macro);
+    mDiv.appendChild(macroBtnDiv);
     mDiv.appendChild(divider4);
     mDiv.appendChild(ifSuggestion);
     mDiv.appendChild(If);
+    mDiv.appendChild(ifBtnDiv);
+
 
     parentNode.appendChild(mDiv);
     
@@ -1851,7 +1919,7 @@ function sendEmail(parentNode, clientData, userid, clientid) {
 }
 
 
-function addUsersuggestionContent(data, desc, Btn) {
+function addUsersuggestionContent(data, desc, Btn, descField) {
     
     if(Btn.innerHTML == 'Edit'){
         let userIn = document.createElement('textarea');
@@ -1873,7 +1941,7 @@ function addUsersuggestionContent(data, desc, Btn) {
         savedText.style.position = 'relative';
         savedText.innerHTML = desc.parentNode.children[1].value;
         desc.parentNode.removeChild(desc.parentNode.children[1]);
-        data['desc'] = savedText.innerHTML;
+        data[descField] = savedText.innerHTML;
         desc.innerHTML = savedText.innerHTML;
         Btn.innerHTML = 'Edit';
     }

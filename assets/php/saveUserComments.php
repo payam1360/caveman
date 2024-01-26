@@ -14,6 +14,12 @@ function saveUserComment($clientId, $userId, $comment, $category) {
         $field = 'descBmi';
     } elseif($category == 'macro') {
         $field = 'descMacro';
+    } elseif($category == 'micro') {
+        $field = 'descMicroTrace';
+    } elseif($category == 'microVit') {
+        $field = 'descMicroVit';
+    } elseif($category == 'if') {
+        $field = 'descIf';
     }
     $sql = "UPDATE $tablename SET 
                                             $field = '$comment'  
