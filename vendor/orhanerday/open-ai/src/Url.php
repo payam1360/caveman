@@ -84,6 +84,24 @@ class Url
      * @param
      * @return string
      */
+    public static function transcriptionsUrl(): string
+    {
+        return self::OPEN_AI_URL . "/audio/transcriptions";
+    }
+
+    /**
+     * @param
+     * @return string
+     */
+    public static function translationsUrl(): string
+    {
+        return self::OPEN_AI_URL . "/audio/translations";
+    }
+
+    /**
+     * @param
+     * @return string
+     */
     public static function filesUrl(): string
     {
         return self::OPEN_AI_URL . "/files";
@@ -95,7 +113,7 @@ class Url
      */
     public static function fineTuneUrl(): string
     {
-        return self::OPEN_AI_URL . "/fine-tunes";
+        return self::OPEN_AI_URL . "/fine_tuning/jobs";
     }
 
     /**
@@ -132,5 +150,41 @@ class Url
     public static function embeddings(): string
     {
         return self::OPEN_AI_URL . "/embeddings";
+    }
+
+    /**
+     * @param
+     * @return string
+     */
+    public static function chatUrl(): string
+    {
+        return self::OPEN_AI_URL . "/chat/completions";
+    }
+
+    /**
+     * @param
+     * @return string
+     */
+    public static function assistantsUrl(): string
+    {
+        return self::OPEN_AI_URL . "/assistants";
+    }
+
+    /**
+     * @param
+     * @return string
+     */
+    public static function threadsUrl(): string
+    {
+        return self::OPEN_AI_URL . "/threads";
+    }
+
+    /**
+     * @param
+     * @return string
+     */
+    public static function ttsUrl(): string
+    {
+        return self::OPEN_AI_URL . "/audio/speech";
     }
 }
