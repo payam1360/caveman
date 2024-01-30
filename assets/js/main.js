@@ -41,11 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if(clientId && campaignId && userId) {
         userPage = userId.innerHTML + clientId.innerHTML + campaignId.innerHTML;
     }
-    //
-    let pay = document.querySelector('.payCredit');
-    pay.addEventListener('click', function(){
-        chargeUser();
-    });
     // initialize the first question and init the load page
     resetStart(input, header, headerTxt, 'main', userPage);
     // generate the chart

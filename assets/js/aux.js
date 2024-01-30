@@ -614,6 +614,7 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
     if (register) {
         register.addEventListener('click', function(event) {
             window.location.assign('register.html');
+            let stripe = Stripe('pk_test_51Odb1JGvkwgMtml81N0ajd4C9xKKHD9DhnMhcfyBegjRS8eatgXQdBj1o2fnlpwCcEHOZrJJ7Sd7D0UJqXipzRmQ00CPr9wDNl');
         })
     }
     counter = 0;
