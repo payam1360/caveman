@@ -6,6 +6,7 @@ define("EMAIL", 2);
 define("VERC", 4);
 define("PASS", 6);
 define("PASSC", 7);
+define("STRP", 8);
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -134,12 +135,12 @@ function checkEmailExists($email) {
     return $ex;
     
 }
+
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
 $userdata  = json_decode($_POST['userInfo']);
 $data['status']    = -1;
-$data['verification'] = '';
 $verified = false;
 if($userdata[EMAIL]->qAnswer != '' && $userdata[VERC]->qAnswer == '') { // if email is provided send verification code
     $ex = checkEmailExists($userdata[EMAIL]->qAnswer);
@@ -159,24 +160,28 @@ if($userdata[EMAIL]->qAnswer != '' && $userdata[VERC]->qAnswer == '') { // if em
         $data['status']    = 3; // wrong verification code .. email not verified
     }
 }
-if($verified == 1) {
+if($verified == 1 && $userdata[STRP]->qAnswer == '') {
     if($userdata[PASS]->qAnswer == $userdata[PASSC]->qAnswer && $userdata[PASS]->qAnswer != '') {
         registerUserCredentials($userdata[PASS]->qAnswer, $userdata[EMAIL]->qAnswer);
         if($userdata[PLAN]->qAnswer == "0") {
             $numClients = 10;
             $accountType = 'free';
+            $data['status'] = 6;
         } elseif($userdata[PLAN]->qAnswer == "1") {
             $numClients = 20;
             $accountType = 'delux';
+            $data['status'] = 7;
         } elseif($userdata[PLAN]->qAnswer == "2") {
             $numClients = 50;
             $accountType = 'premium';
-        }
+            $data['status'] = 7;
+        } 
         createClientIdandCampaign($userdata[EMAIL]->qAnswer, $numClients, $accountType);
-        $data['status'] = 0; // password good ... user is registered
     } elseif($userdata[PASS]->qAnswer != $userdata[PASSC]->qAnswer && $userdata[PASS]->qAnswer != '') {
         $data['status'] = 4; // password not matching 
-    }
+    } 
+} elseif($userdata[STRP]->qAnswer == 'done') {
+    $data['status'] = -1; // last stage after stripe payment
 }
 echo json_encode($data);
 ?>

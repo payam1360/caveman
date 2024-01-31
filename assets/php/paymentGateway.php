@@ -1,5 +1,5 @@
-<?php
 
+<?php
 
 require '../../vendor/autoload.php';
 
@@ -7,36 +7,29 @@ require '../../vendor/autoload.php';
 function processPayment($data) {
 
     $stripe = new Stripe\StripeClient('sk_test_51Odb1JGvkwgMtml80Bc0CdBOesMqZzMeulH9j8QO03HnfrLniWn96gEYLK9QdLbmmXQ1voYVKBib06UaTdqxgzfP00P41SGnWu');
-    $stripe->customers->create([
-        'description' => 'example customer',
-        'email' => 'email@example.com',
+    $customer = $stripe->customers->create([
+        'description' => $data->name,
+        'email' => $data->email,
         'payment_method' => 'pm_card_visa',
     ]);
     $paymentIntent = $stripe->paymentIntents->create([
         'amount' => 50,
         'currency' => 'usd',
         'automatic_payment_methods' => ['enabled' => true],
+        'customer' => $customer->id,
     ]);
-    $stripe->paymentIntents->confirm(
+    $confirm = $stripe->paymentIntents->confirm(
         $paymentIntent->id,
         [
-          'payment_method' => 'pm_card_visa',
-          'return_url' => 'https://www.example.com',
+            'payment_method' => 'pm_card_visa',
+            'return_url' => 'https://www.example.com',
         ]
     );
-    $stripe->charges->create([
-        'amount' => 50,
-        'currency' => 'usd',
-        'source' => 'tok_visa',
-    ]);
-    
+    return $confirm;
 }
 
 
-/// -------------------------
-/// main routin starts here.
-/// -------------------------
-$userData    = json_decode($_POST['userInfo']);
-$status      = processPayment($userData);
-echo json_encode($status);
+$userdata  = json_decode($_POST['userInfo']);
+$data      = processPayment($userdata);
+echo json_encode($data);
 ?>

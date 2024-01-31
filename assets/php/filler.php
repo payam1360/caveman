@@ -167,6 +167,7 @@ function getRegisterForm() {
                             [""],
                             ["4. enter your password:"],
                             ["5. re-enter your password:"],
+                            ["", "Payment, powered by Stripe"],
                             [""]
                         ];
     $data['qType'] = [
@@ -178,10 +179,11 @@ function getRegisterForm() {
                         ["message"],
                         ["password"],
                         ["password"],
+                        ["message", "stripe"],
                         ["message"]
                     ];
     
-    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     
     $data['options'] = [
                             [["fa-solid fa-0","fa-solid fa-mug-saucer","fa-solid fa-sack-dollar"]],
@@ -192,8 +194,9 @@ function getRegisterForm() {
                             [["fa-solid fa-xmark"], ["fa-regular fa-circle-check"]],
                             [[""]],
                             [[""]],
-                            [["fa-solid fa-not-equal"],["fa-regular fa-circle-check"]]]
-    ;
+                            [["fa-solid fa-not-equal", "fa-regular fa-circle-check"],[""]],
+                            [["fa-regular fa-circle-check"]]
+                        ];
     $data['optionsText'] = [
                                 [["free","delux","premium"]],
                                 [[""]],
@@ -203,9 +206,10 @@ function getRegisterForm() {
                                 [["incorrect code"], ["continue to password"]],
                                 [[""]],
                                 [[""]],
-                                [["password not matching"], ["All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"]]
+                                [["password not matching", "All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"],[""]],
+                                [["All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"]]
                             ];
-    $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1, 1];
+    $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     $data['qKey'] = [
                         ['plan'],
                         ['name'],
@@ -215,9 +219,10 @@ function getRegisterForm() {
                         [''],
                         ['password'],
                         ['password'],
+                        ['', 'stripe'],
                         ['']
                     ];
-    $data['MAX_cnt'] = 9;
+    $data['MAX_cnt'] = 10;
     return $data;
 }
 

@@ -13,6 +13,8 @@ let globalQidx = 0;
 let choiceTracker = [[0], [0]];
 let multiButtonSelect = [];
 let multiTextSelect = [];
+let stripe = Stripe('pk_test_51Odb1JGvkwgMtml81N0ajd4C9xKKHD9DhnMhcfyBegjRS8eatgXQdBj1o2fnlpwCcEHOZrJJ7Sd7D0UJqXipzRmQ00CPr9wDNl');
+let stripeElements;
 // user <-> client class definition
 class question {
     constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired, qKey, clientId, campaignId){
@@ -53,13 +55,13 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             let serverStruct = choiceTracker[0].pop();
             let valid      = false;
             let inputStyle = document.querySelector('.form-input-style');
-            if(Questions[counter].qType[serverStruct] != 'message') {
+            if(Questions[counter].qType[serverStruct] != 'message' && Questions[counter].qType[serverStruct] != 'stripe') {
                 valid = inputStyle.validity.valid;
             }
             let userResponse = [];
             if(Questions[counter].qType[serverStruct] == 'button' || Questions[counter].qType[serverStruct] == 'multiButton') {
                 userResponse = Questions[counter].qAnswer;
-            } else if(Questions[counter].qType[serverStruct] != 'message') {
+            } else if(Questions[counter].qType[serverStruct] != 'message' && Questions[counter].qType[serverStruct] != 'stripe') {
                 userResponse = inputStyle.value;
             }
             // get the answer validation
@@ -110,6 +112,9 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 callLoginUser(header, headerTxt, input, Questions);
             }
             else if(page == 'register') {
+                if(Questions[counter-1].qKey[1] == 'stripe') {
+                    Questions[counter-1].qAnswer = 'done';
+                }
                 callRegister(header, headerTxt, input, Questions);
             }
             else if(page == 'questions') {
@@ -444,7 +449,49 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
                 iconCount++;
             });
             querySelIn.style.borderBottom = '2px solid white';
-        break;        
+        break; 
+        // implement stripe elements
+        case 'stripe':
+            const appearance = {
+                theme: 'flat',
+                variables: {
+                    colorPrimary: '#0570de',
+                    colorBackground: '#ffffff',
+                    colorText: 'mediumseagreen',
+                    colorDanger: '#df1b41',
+                    fontFamily: 'Lucida Casual, Comic Sans MS',
+                    fontSize: '20px',
+                    spacingUnit: '0px',
+                    borderRadius: '10px',
+                    // See all possible variables below
+                },
+                rules: {
+                    '.Input': {
+                      border: '1px solid coral',
+                    },
+                    '.Label': {
+                        opacity: 0,
+                    }
+                }
+            };
+            stripeElements = stripe.elements({
+                mode: 'payment',
+                currency: 'usd',
+                amount: 50, // cents
+                appearance: appearance,
+            });
+            
+            let paymentElement = stripeElements.create('payment', {
+                paymentMethodOrder: ['card'],
+            });
+            let stripeCard = document.createElement('div');
+            stripeCard.setAttribute('id', 'stripeId');
+            querySelIn.appendChild(stripeCard);
+            paymentElement.mount('#stripeId');
+            querySelIn.style.borderBottom = '0px solid coral';
+            
+        break;
+
     }
 }
 
@@ -614,7 +661,7 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
     if (register) {
         register.addEventListener('click', function(event) {
             window.location.assign('register.html');
-            let stripe = Stripe('pk_test_51Odb1JGvkwgMtml81N0ajd4C9xKKHD9DhnMhcfyBegjRS8eatgXQdBj1o2fnlpwCcEHOZrJJ7Sd7D0UJqXipzRmQ00CPr9wDNl');
+            stripe = Stripe('pk_test_51Odb1JGvkwgMtml81N0ajd4C9xKKHD9DhnMhcfyBegjRS8eatgXQdBj1o2fnlpwCcEHOZrJJ7Sd7D0UJqXipzRmQ00CPr9wDNl');
         })
     }
     counter = 0;
@@ -720,7 +767,12 @@ function callRegister(header, headerTxt, querySelIn, inputDataBlob) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 5) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
-            }
+            } else if(data.status == 6) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
+            } else if(data.status == 7) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
+                confirmStripePayment();
+            } 
         }
     };
     // sending the request
@@ -729,6 +781,22 @@ function callRegister(header, headerTxt, querySelIn, inputDataBlob) {
     var userdata = "userInfo="+JSON.stringify(inputDataBlob);
     xmlhttp.send(userdata);
 }
+
+function confirmStripePayment(){
+    let data = {'name': 'payam',
+                'email': 'rabiei.p@gmail.com'};
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/paymentGateway.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var userdata = "userInfo="+JSON.stringify(data);
+    xmlhttp.send(userdata);
+}
+
 
 // submitting the form
 function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob) {
@@ -1982,7 +2050,6 @@ function chargeUser() {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.response);
             data = JSON.parse(this.response);
         }
     };
