@@ -194,7 +194,7 @@ function getRegisterForm() {
                             [["fa-solid fa-xmark"], ["fa-regular fa-circle-check"]],
                             [[""]],
                             [[""]],
-                            [["fa-solid fa-not-equal", "fa-regular fa-circle-check"],[""]],
+                            [["fa-solid fa-not-equal"], ["fa-regular fa-circle-check"],[""]],
                             [["fa-regular fa-circle-check"]]
                         ];
     $data['optionsText'] = [
@@ -206,7 +206,7 @@ function getRegisterForm() {
                                 [["incorrect code"], ["continue to password"]],
                                 [[""]],
                                 [[""]],
-                                [["password not matching", "All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"],[""]],
+                                [["password not matching"], ["All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"],[""]],
                                 [["All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"]]
                             ];
     $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];

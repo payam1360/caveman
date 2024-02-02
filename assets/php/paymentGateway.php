@@ -28,8 +28,23 @@ function processPayment($data) {
     return $confirm;
 }
 
+function updatePayVerification($email, $confirm_status) {
+    $servername  = "127.0.0.1";
+    $loginname   = "root";
+    $password    = "@Ssia123";
+    $dbname      = "Users";
+    $tablename   = "authentication";
+    $conn        = new mysqli($servername, $loginname, $password, $dbname);
+    if($confirm_status == 'succeeded') {
+        $sql     = "UPDATE $tablename SET payVer = 1 WHERE email = '$email';";
+    } else {
+        $sql     = "UPDATE $tablename SET payVer = 0 WHERE email = '$email';";
+    }
+    $conn->query($sql);
+}
 
 $userdata  = json_decode($_POST['userInfo']);
 $data      = processPayment($userdata);
-echo json_encode($data);
+updatePayVerification($userdata->email, $data->status);
+
 ?>

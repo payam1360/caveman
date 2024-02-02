@@ -112,10 +112,12 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 callLoginUser(header, headerTxt, input, Questions);
             }
             else if(page == 'register') {
-                if(Questions[counter-1].qKey[1] == 'stripe') {
-                    Questions[counter-1].qAnswer = 'done';
+                if(counter == MAX_cnt - 1 && MAX_cnt == 10) { // confirm payment here
+                    confirmStripePayment();
+                    transition2Right(header, headerTxt, input, Questions, 0, 0);
+                } else {
+                    callRegister(header, headerTxt, input, Questions);
                 }
-                callRegister(header, headerTxt, input, Questions);
             }
             else if(page == 'questions') {
                 submitQuestionBackEndData(header, headerTxt, input, Questions);
@@ -750,10 +752,9 @@ function callRegister(header, headerTxt, querySelIn, inputDataBlob) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
-            if(data.status == -1) {
+            MAX_cnt = data.MAX_cnt;
+            if(data.status == 0) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
-            } else if(data.status == 0) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
             } else if(data.status == 1) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
             } else if(data.status == 2) {
@@ -771,8 +772,11 @@ function callRegister(header, headerTxt, querySelIn, inputDataBlob) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
             } else if(data.status == 7) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
-                confirmStripePayment();
-            } 
+            } else if(data.status == 8) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+            } else if(data.status == 9) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
+            }
         }
     };
     // sending the request
