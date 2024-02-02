@@ -535,8 +535,7 @@ function resetDynamicQcontent(page) {
     } else if(page == 'main' && counter == 0) {
         let dyno = Questions[counter + 1].qContent[0].replace(Questions[counter].qAnswer, '#mainNameTag');
         Questions[counter + 1].qContent[0] = dyno;
-    } else if (page == 'register' && counter == 0) {
-        
+    } else if (page == 'register' && counter == 1) {
         let dyno = Questions[counter + 1].qContent[0].replace(Questions[counter].qAnswer, '#nameRegister');
         Questions[counter + 1].qContent[0] = dyno;
     }
