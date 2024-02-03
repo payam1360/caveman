@@ -43,13 +43,6 @@ class question {
 // function to set styles for animation
 function moveRight(moveright, input, header, headerTxt, Questions, page){
     if (moveright) {
-        // enter keypress also works for navigation
-        input[1].addEventListener('keypress', function(s) {
-            if (s.key === "Enter") {
-                s.preventDefault();
-                moveright.click();
-              }
-        });
         moveright.addEventListener('click', function(event) {
             // validate the current input
             let serverStruct = choiceTracker[0].pop();
@@ -616,7 +609,8 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
     resetFormType(input[2]);
     resetFormType(input[1]);
     resetFormType(input[0]);
-    let moveleft = document.querySelector('.form-go-left');   
+    let moveleft = document.querySelector('.form-go-left');  
+    let moveright = document.querySelector('.form-go-right'); 
     let spinner = document.querySelector('.spinner-js');
     moveleft.disabled = true;
     moveleft.style.opacity = 0;
@@ -645,6 +639,13 @@ function resetStart(input, header, headerTxt, page, userPage = 0) {
             spinner.style.opacity = 0;
         }
     });
+    // enter keypress also works for navigation
+    input[1].addEventListener('keypress', function(s) {
+        if (s.key == "Enter") {
+           s.preventDefault();
+        }
+    });
+
     input[2].addEventListener('transitionend', function(event) {
         ChangeForm(event.target, '0.0s', '0', 0, '0%');
         resetFormType(event.target);
