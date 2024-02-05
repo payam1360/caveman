@@ -16,7 +16,7 @@ require '../../vendor/phpmailer/phpmailer/src/SMTP.php';
 require '../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require '../../vendor/phpmailer/phpmailer/src/Exception.php';
 
-function createClientIdandCampaign($email, $numAllocation, $accountType) {
+function createClientIdandCampaign($email, $numAllocation, $numCampaign, $accountType) {
     
     $servername  = "127.0.0.1";
     $loginname   = "root";
@@ -30,10 +30,14 @@ function createClientIdandCampaign($email, $numAllocation, $accountType) {
     $userId      = $data->fetch_column(0);
     $sql         = "UPDATE " . $table2name . " SET accountType = '" . $accountType . "' WHERE email = '" . $email . "';";
     $conn->query($sql);
-    for($kk = 0; $kk < $numAllocation; $kk++){
+    for($kk = 0; $kk < $numAllocation; $kk++) {
         $clientId    = mt_rand(10000, 99999);
-        $campaignId  = substr(md5(rand()), 0, 7);
-        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, used, completed, name, gender, goal, nutritionEng, mealEng, descBmi, descBmr, descIf, descMacro, descMicroTrace, descMicroVit) VALUES('$userId','$clientId','$campaignId', '0', '0', '', '', '', '', '', '', '', '', '', '', '');";
+        if($kk < $numCampaign) {
+            $campaignId  = substr(md5(rand()), 0, 7);
+        } else {
+            $campaignId = '';
+        }
+        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, campaignIdSource, used, completed, name, gender, goal, nutritionEng, mealEng, descBmi, descBmr, descIf, descMacro, descMicroTrace, descMicroVit) VALUES('$userId','$clientId','', '$campaignId', '0', '0', '', '', '', '', '', '', '', '', '', '', '');";
         $conn->query($sql);
     }
     $conn->close();
@@ -216,18 +220,21 @@ if($verified_dB['email'] == 0) {
         updatePassVerification($userdata[EMAIL]->qAnswer);
         if($userdata[PLAN]->qAnswer == "0") {
             $numClients = 10;
+            $numCampaign = 1;
             $accountType = 'free';
             $data['status'] = 6;
         } elseif($userdata[PLAN]->qAnswer == "1") {
             $numClients = 20;
+            $numCampaign = 2;
             $accountType = 'delux';
             $data['status'] = 7;
         } elseif($userdata[PLAN]->qAnswer == "2") {
             $numClients = 50;
+            $numCampaign = 5;
             $accountType = 'premium';
             $data['status'] = 7;
         } 
-        createClientIdandCampaign($userdata[EMAIL]->qAnswer, $numClients, $accountType);
+        createClientIdandCampaign($userdata[EMAIL]->qAnswer, $numClients, $numCampaign, $accountType);
     } elseif($userdata[PASS]->qAnswer != $userdata[PASSC]->qAnswer && $userdata[PASS]->qAnswer != '' && $userdata[PASSC]->qAnswer != '') {
         $data['status'] = 4; // password not matching 
     } else {
