@@ -242,6 +242,26 @@
     box-shadow: 5px 5px 5px 5px lightgrey;
 }
 
+.campaign-list {
+    color: black;
+    background-color: white;
+    border-radius: 1%;
+    position: relative;
+    border: solid;
+    border-width: 3px;
+    border-color: lightblue;
+    height: 200px;
+    margin: 20px; 
+    padding: 10px;
+    opacity: 1;
+    transition: opacity 1s ease-in-out, height 0.5s ease-in-out, width 0.5s ease-in-out;
+}
+.campaign-list:hover {
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 5px 5px 5px 5px lightgrey;
+}
+
 .results-btn {
     display: none;
 }

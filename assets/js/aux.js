@@ -1348,6 +1348,71 @@ function fetchClients() {
     xmlhttp.send(request);
 }
 
+function fetchCampaigns() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            user = JSON.parse(this.response);
+            let username = user.username;
+            let userid = user.userid;
+            let campaignIdSource = user.campaignIdSource;
+            constructCampaigns(userid, username, campaignIdSource);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/admin.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let address = '';
+    let request = 'address=' + address;
+    xmlhttp.send(request);
+}
+
+function constructCampaigns(userid, username, campaignIdSource){
+    let parentNode = document.querySelector('.campaign-list-parent');
+    cleanCampaignDiv(parentNode);
+    kk = 0;
+    while(campaignIdSource[kk] != '') {
+        let mDiv = document.createElement('div');
+        mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 campaign-list');
+        mDiv.setAttribute('cidx', kk);
+        mDiv.setAttribute('userid', userid);
+        mDiv.setAttribute('username', username);
+        mDiv.setAttribute('campaignids', campaignIdSource[kk]);
+        mDiv.addEventListener('click', function(){
+            window.location.assign('questions.html');
+        });
+        nameP        = document.createElement('p');
+        nameP.innerHTML = 'Campaign name: ';
+        nameP.style.marginTop = '-50px';
+        idP          = document.createElement('p');
+        idP.innerHTML = 'ID: ';
+        idPStyle     = document.createElement('span');
+        idPStyle.textContent = campaignIdSource[kk];
+        idPStyle.style.color = 'brown';
+        idPStyle.style.fontSize = '24px';
+        idP.appendChild(idPStyle);
+        CtimeP          = document.createElement('p');
+        CtimeP.innerHTML = 'Campaign created: ';
+        CtPStyle     = document.createElement('span');
+        CtPStyle.textContent = '';
+        CtPStyle.style.color = 'seagreen';
+        CtPStyle.style.fontSize = '24px';
+        CtimeP.appendChild(CtPStyle);
+        avatar       = document.createElement('img');
+        m = kk+1;
+        avatar.setAttribute('src', './assets/img/ask' + m.toString() + '.png');
+        avatar.style.width = '20%';
+        avatar.style.display = 'block';
+        avatar.style.marginLeft = 'auto';
+        mDiv.appendChild(avatar);
+        mDiv.appendChild(nameP);
+        mDiv.appendChild(idP);
+        mDiv.appendChild(CtimeP);
+        parentNode.appendChild(mDiv);
+        kk++;
+    }
+}
+
 function constructClients(userid, username){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
@@ -1985,6 +2050,12 @@ function createPdf(node, data) {
 }
 
 function cleanClientDiv(mDiv) {
+    while( mDiv.childElementCount > 0){
+        mDiv.removeChild(mDiv.children[0]);
+    }
+}
+
+function cleanCampaignDiv(mDiv) {
     while( mDiv.childElementCount > 0){
         mDiv.removeChild(mDiv.children[0]);
     }

@@ -1,5 +1,22 @@
 <?php
 
+
+function getCampaignIdSource($userId){
+    $servername  = "127.0.0.1";
+    $loginname   = "root";
+    $password    = "@Ssia123";
+    $dbname      = "Users";
+    $tablename  = "userAllocation";
+    $conn        = new mysqli($servername, $loginname, $password, $dbname);
+    $sql         = "SELECT campaignIdSource FROM $tablename WHERE userId = '$userId';";
+    $data        = $conn->query($sql);
+    $campaignIdSource = array();
+    while($campaign = $data->fetch_assoc()){
+        array_push($campaignIdSource, $campaign['campaignIdSource']);
+    }
+    return($campaignIdSource);
+}
+
 // functions go here
 session_start();
 $userName   = $_SESSION['userName'];
@@ -37,7 +54,7 @@ $data['userid'] = $userId;
 $data['username'] = $userName;
 $data['clientId'] = $clientIdURL;
 $data['campaignId'] = $campaignIdURL;
-
+$data['campaignIdSource'] = getCampaignIdSource($userId);
 echo json_encode($data);
 
 

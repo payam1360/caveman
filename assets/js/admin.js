@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(kk == 0){
                 window.location.assign('addClients.html');
             } else if(kk == 1) {
-                window.location.assign('questions.html');
+                window.location.assign('adminQ.html');
             } else if(kk == 2) {
                 window.location.assign('clients.html');
             }
