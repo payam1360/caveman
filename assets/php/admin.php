@@ -8,13 +8,21 @@ function getCampaignIdSource($userId){
     $dbname      = "Users";
     $tablename  = "userAllocation";
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
-    $sql         = "SELECT campaignIdSource FROM $tablename WHERE userId = '$userId';";
+    $sql         = "SELECT campaignIdSource, campaignTimeStamp, completed FROM $tablename WHERE userId = '$userId';";
     $data        = $conn->query($sql);
     $campaignIdSource = array();
+    $campaignTimeStamp = array();
+    $completed = array();
+    
     while($campaign = $data->fetch_assoc()){
         array_push($campaignIdSource, $campaign['campaignIdSource']);
+        array_push($campaignTimeStamp, $campaign['campaignTimeStamp']);
+        array_push($completed, $campaign['completed']);
     }
-    return($campaignIdSource);
+    $data->campaignIdSource = $campaignIdSource;
+    $data->campaignTimeStamp = $campaignTimeStamp;
+    $data->completed = $completed;
+    return($data);
 }
 
 // functions go here
@@ -37,16 +45,22 @@ if(strpos($userdata, 'userId') == "") {
     $clientIdURL = "0";
     $campaignIdURL = "0";
 } else {
+
     $userIdIdx        = strpos($userdata, 'userId');
-    $clientIdIdx      = strpos($userdata, 'clientId');
-    $campaignIdIdx    = strpos($userdata, 'campaignId');
-
     $userIdLength     = 6;
-    $clientIdLength   = 5;
-    $campaignIdLength = 7;
-
     $userIdURL        = substr($userdata, $userIdIdx+7, $userIdLength);
-    $clientIdURL      = substr($userdata, $clientIdIdx+9, $clientIdLength);
+
+
+    $clientIdIdx      = strpos($userdata, 'clientId');
+    if($clientIdIdx != '') {
+        $clientIdLength   = 5;
+        $clientIdURL      = substr($userdata, $clientIdIdx+9, $clientIdLength);
+    } else {
+        $clientIdURL = '0';
+    }
+
+    $campaignIdIdx    = strpos($userdata, 'campaignId');
+    $campaignIdLength = 7;
     $campaignIdURL    = substr($userdata, $campaignIdIdx+11, $campaignIdLength);
 }
 
@@ -54,7 +68,7 @@ $data['userid'] = $userId;
 $data['username'] = $userName;
 $data['clientId'] = $clientIdURL;
 $data['campaignId'] = $campaignIdURL;
-$data['campaignIdSource'] = getCampaignIdSource($userId);
+$data['campaignSourceInfo'] = getCampaignIdSource($userId);
 echo json_encode($data);
 
 

@@ -49,22 +49,23 @@ $supportedHeight =  [   "<5", "5", "5-1", "5-2", "5-3", "5-4", "5-5", "5-6", "5-
                         "5-8", "5-9", "5-10", "5-11", "6", "6-1", "6-2", "6-3", "6-4", "6-5", 
                         "6-6", "6-6", "6-7", "6-8", "6-9", "6-10", "6-11", "7>"];     
 
-
-function buildClientPage($userId, $clientId, $campaignId){
+// this is to make campaign raw page only.
+// the landing page to clients will be a copy/paste of this page with clientId attached.
+function buildCampaignPage($userId, $campaignId){
     $servername  = "127.0.0.1";
     $loginname   = "root";
     $password    = "@Ssia123";
     $dbname      = "Users";
     $tablename   = "Users";
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
-    $landingPage = $userId . $clientId . $campaignId;   
+    $landingPage = $userId . $campaignId;   
     copy("../../template.html","../../userPages/$landingPage.html");
     $fp = fopen("../../userPages/$landingPage.html", 'a+');
-    $text = "<p class='userId'>$userId</p>\n";
+    $text = "<p class='userId' style='display: none'>$userId</p>\n"; 
     fwrite($fp, $text);
-    $text = "<p class='clientId'>$clientId</p>\n";
+    $text = "<p class='campaignId' style='display: none'>$campaignId</p>\n";
     fwrite($fp, $text);
-    $text = "<p class='campaignId'>$campaignId</p>\n";
+    $text = "<p class='clientId' style='display: none'></p>\n";
     fwrite($fp, $text);
     $text = "</body>\n";
     fwrite($fp, $text);
@@ -112,9 +113,8 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
     } else {
         $qContent = 'Hey #mainNameTag, what is your email address?';
     }
-    // get the clientId and campaignId
-    $clientId = $Questions[0]->clientId;
-    $campaignId = $Questions[0]->campaignId;
+    // get the campaignId
+    $campaignIdSource  = $Questions[0]->campaignId;
     // Keyword of the question
     $qKey = $Questions[4]->qAnswer;
     // visited field
@@ -158,58 +158,54 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
         $options = "";
         $optionsText = "";
     }
-
-    $campaignTime = date("Y-m-d");
     // first check if there is incomplete campaigns
     $sql = "SELECT used, completed 
                     FROM $table1name 
                     WHERE 
                     userId = '$userId' 
                     AND 
-                    clientId = '$clientId' 
-                    AND 
-                    campaignId = '$campaignId';";
+                    campaignIdSource = '$campaignIdSource';";
     $data = $conn->query($sql);
     $data = $data->fetch_assoc();
     if($data['used'] == 0 && $data['completed'] == 0 && $complete == 0) { // start
-        $sql = "UPDATE $table1name SET used = '1' WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId';";
+        $campaignTimeStamp = date('Y-m-d H:i:s');
+        $sql = "UPDATE $table1name SET used = '1', campaignTimeStamp = '$campaignTimeStamp' WHERE userId = '$userId' AND campaignIdSource = '$campaignIdSource';";
         $conn->query($sql);
-        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId', '$ip', '$campaignId', '$campaignTime', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
+        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','0', '$ip', '$campaignIdSource', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
         $conn->query($sql);
 
     } elseif($data['used'] == 1 && $data['completed'] == 0 && $complete == 0) { // keep adding 
-        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId', '$ip', '$campaignId', '$campaignTime', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
+        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','0', '$ip', '$campaignIdSource', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
         $conn->query($sql);
 
     } elseif($data['used'] == 1 && $data['completed'] == 0 && $complete == 1) { // last question to conclude the campaign
-        $sql = "UPDATE $table1name SET used = '0', completed = '1' WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId';";
+        $sql = "UPDATE $table1name SET used = '0', completed = '1' WHERE userId = '$userId' AND campaignIdSource = '$campaignIdSource';";
         $conn->query($sql);
-        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId', '$ip', '$campaignId', '$campaignTime', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
+        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','0', '$ip', '$campaignIdSource', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
         $conn->query($sql);
 
     } elseif($data['used'] == 0 && $data['completed'] == 1 && $complete == 1) { // redesign the campaign for the given client, last entry
-        $sql = "UPDATE $table1name SET used = '0', completed = '1' WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId';";
+        $sql = "UPDATE $table1name SET used = '0', completed = '1' WHERE userId = '$userId' AND campaignIdSource = '$campaignIdSource';";
         $conn->query($sql);
-        $sql = "UPDATE $tablename SET userId = '$userId', clientId = '$clientId', ip = '$ip', campaignId = '$campaignId', campaignTime = '$campaignTime', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired', qKey = '$qKey' WHERE qIdx = '$qIdx';";
+        $sql = "UPDATE $tablename SET userId = '$userId', clientId = '0', ip = '$ip', campaignIdSource = '$campaignIdSource', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired', qKey = '$qKey' WHERE qIdx = '$qIdx';";
         $conn->query($sql);
 
     } elseif($data['used'] == 0 && $data['completed'] == 1 && $complete == 0) { // redesign the campaign for the given client
-        $sql = "UPDATE $table1name SET used = '0', completed = '1' WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId';";
+        $sql = "UPDATE $table1name SET used = '0', completed = '1' WHERE userId = '$userId' AND campaignIdSource = '$campaignIdSource';";
         $conn->query($sql);
-        $sql = "UPDATE $tablename SET userId = '$userId', clientId = '$clientId', ip = '$ip', campaignId = '$campaignId', campaignTime = '$campaignTime', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired', qKey = '$qKey' WHERE qIdx = '$qIdx';";
+        $sql = "UPDATE $tablename SET userId = '$userId', clientId = '0', ip = '$ip', campaignIdSource = '$campaignIdSource', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired', qKey = '$qKey' WHERE qIdx = '$qIdx';";
         $conn->query($sql);
 
     } elseif($data['used'] == 0 && $data['completed'] == 0 && $complete == 1) { // the use only designed 1 question for his client
-        $sql = "UPDATE $table1name SET used = '0', completed = '1' WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId';";
+        $sql = "UPDATE $table1name SET used = '0', completed = '1' WHERE userId = '$userId' AND campaignIdSource = '$campaignIdSource';";
         $conn->query($sql);
-        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId', '$ip', '$campaignId', '$campaignTime', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
+        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','0', '$ip', '$campaignIdSource', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
         $conn->query($sql);
 
     } else {
         // undefined ... we should not be here technically.
     }
-    $Info['clientId']   = $clientId;
-    $Info['campaignId'] = $campaignId;
+    $Info['campaignIdSource'] = $campaignIdSource;
     $conn->close();
     return $Info;
 }
@@ -288,7 +284,7 @@ if($data['MAX_cnt']  == $userdata->counter && $userdata->data[$userdata->counter
 } elseif($data['MAX_cnt'] == $userdata->counter && $userdata->data[$userdata->counter-1]->qAnswer == 0) {
     $data['status'] = 12; // End the form builder
     $Info = saveUserDataIntoDB($userdata->data, $userdata->qIdx, 1, $userId, $ip);
-    buildClientPage($userId, $Info['clientId'], $Info['campaignId']);
+    buildCampaignPage($userId, $Info['campaignIdSource']);
 }
 echo json_encode($data);
 

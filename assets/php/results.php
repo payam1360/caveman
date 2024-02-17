@@ -19,14 +19,16 @@ function extractUserInfo($userId) {
     $accountType  = array($accountType['accountType']);
     $sql          = "SELECT * FROM $table1name WHERE userId = '$userId';";
     $database_out = $conn->query($sql);
-    $ids         = array();
-    $names       = array();
-    $genders     = array();
-    $goals       = array();
-    $campaignids = array();
-    $formFlag    = array();
-    $mealEng     = array();
-    $nutritionEng= array();
+    $ids          = array();
+    $names        = array();
+    $genders      = array();
+    $goals        = array();
+    $campaignids  = array();
+    $campaigntime = array();
+    $formFlag     = array();
+    $mealEng      = array();
+    $nutritionEng = array();
+    $campaignidAssigned = array();
 
     while($database_row = $database_out->fetch_assoc()) {
         // filling out info briefs
@@ -75,7 +77,10 @@ function extractUserInfo($userId) {
                 array_push($goals, 'No response');
             }
         }
-        array_push($campaignids, $database_row['campaignId']);
+        array_push($campaignids, $database_row['campaignIdSource']);
+        array_push($campaigntime, $database_row['campaignTimeStamp']);
+        array_push($campaignidAssigned, $database_row['campaignId']);
+        
     }
     
     $userInfo['names']          = $names;
@@ -83,6 +88,8 @@ function extractUserInfo($userId) {
     $userInfo['genders']        = $genders;
     $userInfo['goals']          = $goals;
     $userInfo['campaignids']    = $campaignids;
+    $userInfo['campaigntime']   = $campaigntime; 
+    $userInfo['campaignidAssigned'] = $campaignidAssigned;        
     $userInfo['formWasCreated'] = $formFlag;
     $userInfo['mealEng']        = $mealEng;
     $userInfo['nutritionEng']   = $nutritionEng;

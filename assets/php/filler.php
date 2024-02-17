@@ -377,8 +377,15 @@ function clientPageLoad($page) {
     global $supportedText;
     
     $userId      = substr($page, 0, 6);
-    $clientId    = substr($page, 6, 5);
-    $campaignId  = substr($page, 11, 7);
+    if(strlen($page) > 6 + 7){
+        $clientId    = substr($page, 6, 5);
+        $campaignId  = substr($page, 11, 7);
+    } else {
+        $clientId = '0';
+        $campaignId  = substr($page, 6, 7);
+    }
+
+
     $servername  = "127.0.0.1";
     $loginname   = "root";
     $password    = "@Ssia123";
@@ -483,21 +490,27 @@ if(strpos($landing, 'userId') == "") {
         $clientIdURL = "0";
         $campaignIdURL = "0";
     } else { // coming from the clientPageLoad
+        
         $userIdURL = substr($page, 0, 6);
-        $clientIdURL = substr($page, 6, 5);
+        $clientIdURL = "0";
         $campaignIdURL = substr($page, 11, 7);
     }
 } else {
     $userIdIdx        = strpos($landing, 'userId');
-    $clientIdIdx      = strpos($landing, 'clientId');
-    $campaignIdIdx    = strpos($landing, 'campaignId');
-
     $userIdLength     = 6;
-    $clientIdLength   = 5;
-    $campaignIdLength = 7;
-
     $userIdURL        = substr($landing, $userIdIdx+7, $userIdLength);
-    $clientIdURL      = substr($landing, $clientIdIdx+9, $clientIdLength);
+
+
+    $clientIdIdx      = strpos($landing, 'clientId');
+    if($clientIdIdx != '') {
+        $clientIdLength   = 5;
+        $clientIdURL      = substr($landing, $clientIdIdx+9, $clientIdLength);
+    } else {
+        $clientIdURL = '0';
+    }
+
+    $campaignIdIdx    = strpos($landing, 'campaignId');
+    $campaignIdLength = 7;
     $campaignIdURL    = substr($landing, $campaignIdIdx+11, $campaignIdLength);
 }
 

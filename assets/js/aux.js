@@ -585,8 +585,19 @@ function resetFormType(querySelIn){
     }
 }
 
-function resetStart(input, header, headerTxt, page, userPage = 0) {
+function resetStart(input, header, headerTxt, page) {
 
+    let clientId = document.querySelector('.clientId');
+    let campaignId = document.querySelector('.campaignId');
+    let userId = document.querySelector('.userId');
+
+    if(clientId != null && campaignId != null && userId != null) {
+        userPage = userId.innerHTML + clientId.innerHTML + campaignId.innerHTML;
+    } else if(clientId == null && campaignId && userId){
+        userPage = userId.innerHTML + campaignId.innerHTML;
+    } else {
+        userPage = 0;
+    }
     questionCreate(headerTxt[1], input[1], page, userPage);
     // reset the question bar
     input[2].style.width = '0%';
@@ -1355,8 +1366,8 @@ function fetchCampaigns() {
             user = JSON.parse(this.response);
             let username = user.username;
             let userid = user.userid;
-            let campaignIdSource = user.campaignIdSource;
-            constructCampaigns(userid, username, campaignIdSource);
+            let campaignSourceInfo = user.campaignSourceInfo;
+            constructCampaigns(userid, username, campaignSourceInfo);
         }
     };
     // sending the request
@@ -1367,19 +1378,20 @@ function fetchCampaigns() {
     xmlhttp.send(request);
 }
 
-function constructCampaigns(userid, username, campaignIdSource){
+function constructCampaigns(userid, username, campaignSourceInfo){
     let parentNode = document.querySelector('.campaign-list-parent');
     cleanCampaignDiv(parentNode);
     kk = 0;
-    while(campaignIdSource[kk] != '') {
+    while(campaignSourceInfo.campaignIdSource[kk] != '') {
         let mDiv = document.createElement('div');
         mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 campaign-list');
         mDiv.setAttribute('cidx', kk);
         mDiv.setAttribute('userid', userid);
         mDiv.setAttribute('username', username);
-        mDiv.setAttribute('campaignids', campaignIdSource[kk]);
+        mDiv.setAttribute('campaignids', campaignSourceInfo.campaignIdSource[kk]);
+        mDiv.setAttribute('campaignTimeStamp', campaignSourceInfo.campaignTimeStamp[kk]);
         mDiv.addEventListener('click', function(){
-            window.location.assign('questions.html');
+            campaignDetail(campaignSourceInfo, mDiv.getAttribute('userid'), mDiv.getAttribute('cidx'));
         });
         nameP        = document.createElement('p');
         nameP.innerHTML = 'Campaign name: ';
@@ -1387,16 +1399,20 @@ function constructCampaigns(userid, username, campaignIdSource){
         idP          = document.createElement('p');
         idP.innerHTML = 'ID: ';
         idPStyle     = document.createElement('span');
-        idPStyle.textContent = campaignIdSource[kk];
+        idPStyle.textContent = campaignSourceInfo.campaignIdSource[kk];
         idPStyle.style.color = 'brown';
         idPStyle.style.fontSize = '24px';
         idP.appendChild(idPStyle);
         CtimeP          = document.createElement('p');
         CtimeP.innerHTML = 'Campaign created: ';
         CtPStyle     = document.createElement('span');
-        CtPStyle.textContent = '';
+        if(campaignSourceInfo.campaignTimeStamp[kk] == null) {
+            CtPStyle.textContent = 'Not created';
+        } else {
+            CtPStyle.textContent = campaignSourceInfo.campaignTimeStamp[kk];
+        }
         CtPStyle.style.color = 'seagreen';
-        CtPStyle.style.fontSize = '24px';
+        CtPStyle.style.fontSize = '20px';
         CtimeP.appendChild(CtPStyle);
         avatar       = document.createElement('img');
         m = kk+1;
@@ -1413,6 +1429,19 @@ function constructCampaigns(userid, username, campaignIdSource){
     }
 }
 
+function campaignDetail(campaignSourceInfo, userid, cidx){
+    
+    if(campaignSourceInfo.campaignTimeStamp[cidx] == null) { // campaign page does not exist. create one
+        userdata = '?userId=' + userid + '?campaignId=' + campaignSourceInfo.campaignIdSource[cidx]; 
+        window.location.assign('questions.html' + userdata);
+    } else if(campaignSourceInfo.completed[cidx]) { // the user wants to look at the campaign or edit
+        userFile =  userid + campaignSourceInfo.campaignIdSource[cidx]; 
+        link = '/userPages/' + userFile + '.html';
+        window.location.assign(link);
+    } 
+}
+
+
 function constructClients(userid, username){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
@@ -1428,13 +1457,16 @@ function constructClients(userid, username){
     var userdata = "userInfo="+JSON.stringify(info);
     xmlhttp.send(userdata);
 }
+
 function displayClients(results, userid, username) {
     let blur = document.querySelector('.blur');
     blur.style.filter = 'blur(0px)';
     let parentNode = document.querySelector('.client-list-parent');
     cleanClientDiv(parentNode);
     numClients = results.names.length;
+    
     for(let kk = 0; kk < numClients; kk++) {
+        CampaignIdSelected = results.campaignidAssigned[kk];
         let mDiv = document.createElement('div');
         mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
         mDiv.setAttribute('cidx', kk);
@@ -1442,10 +1474,11 @@ function displayClients(results, userid, username) {
         mDiv.setAttribute('username', username);
         mDiv.setAttribute('campaignids', results.campaignids[kk]);
         mDiv.setAttribute('clientid', results.ids[kk]);
-        mDiv.addEventListener('click', function(){
+        mDiv.addEventListener('click', function (e){
             getClientDetails(parentNode, results, this.getAttribute('cidx'));
         });
         nameP        = document.createElement('p');
+        nameP.setAttribute('class', 'updateName');
         idP          = document.createElement('p');
         idPStyle     = document.createElement('span');
         genderP      = document.createElement('p');
@@ -1453,7 +1486,10 @@ function displayClients(results, userid, username) {
         goalP        = document.createElement('p');
         goalPStyle   = document.createElement('span');
         campaignP    = document.createElement('p');
+        campaignP.setAttribute('class', 'updatePlink');
         createQP     = document.createElement('p');
+        createQPStyle= document.createElement('span');
+        createQPStyle.setAttribute('class', 'updateCampaign');
         avatar       = document.createElement('img');
         if(results.genders[kk] == 'female') {
             avatar.setAttribute('src', './assets/img/woman.png');
@@ -1481,19 +1517,54 @@ function displayClients(results, userid, username) {
         goalP.innerHTML = 'Goal: ';
         goalPStyle.textContent = results.goals[kk];    
         goalPStyle.style.fontSize = '24px';  
-        goalP.appendChild(goalPStyle);  
-        let userdata = '?userId=' + userid + '?clientId=' + results.ids[kk] + '?campaignId=' + results.campaignids[kk]; 
-        let userFile =  userid + results.ids[kk] + results.campaignids[kk]; 
-        createQP.innerHTML = 'Create Campaign for ' + results.names[kk] + ': <a href=questions.html' + userdata + '> Form builder.</a>';
-        let link = '/userPages/' + userFile + '.html';
+        goalP.appendChild(goalPStyle); 
+        // create a list input for campaigns
+        campaignList = document.createElement('select');
+        campaignList.setAttribute('id', 'campaignList');
+        campaignOption = document.createElement('option');
+        campaignOption.innerHTML = 'select campaign';
+        campaignList.appendChild(campaignOption);
+        
+        campaignList.addEventListener('change', function(e){
+            CampaignIdSelected = e.target.value;
+            getnameP = document.querySelectorAll('.updateName');
+            if(getnameP.innerHTML != ''){
+                getQPStyle = document.querySelectorAll('.updateCampaign');
+                getQPStyle[mDiv.getAttribute('cidx')].textContent = CampaignIdSelected;
+            }
+            userFile =  userid + results.ids[mDiv.getAttribute('cidx')] + CampaignIdSelected; 
+            link = '/userPages/' + userFile + '.html';
+            if(results.formWasCreated[mDiv.getAttribute('cidx')] != 0) {
+                getcampaignP = document.querySelectorAll('.updatePlink');
+                getcampaignP[mDiv.getAttribute('cidx')].innerHTML = 'Link to ' + results.names[mDiv.getAttribute('cidx')] + ': <a href="' + link + '"> Campaign page</a>';
+            }
+            updatedBonNewCampaignAssignment(CampaignIdSelected, mDiv.getAttribute('clientid'),  mDiv.getAttribute('userid'));
+        })
+        // list
+        i = 0;
+        while(results.campaignids[i] != ''){
+            campaignOption = document.createElement('option');
+            campaignOption.innerHTML = results.campaignids[i];
+            campaignList.appendChild(campaignOption);
+            i++;
+        }
+        userFile =  userid + results.ids[kk] + CampaignIdSelected; 
+        createQP.innerHTML = 'Campaign for ' + results.names[kk] + ': ';
+        createQPStyle.style.fontSize = '24px';
+        createQPStyle.style.color = 'seagreen';
+        createQPStyle.textContent = CampaignIdSelected;
+        createQP.appendChild(createQPStyle);
+        link = '/userPages/' + userFile + '.html';
         campaignP.innerHTML = 'Link to ' + results.names[kk] + ': <a href="' + link + '"> survey page</a>';
         mDiv.appendChild(avatar);
         mDiv.appendChild(nameP);
         mDiv.appendChild(genderP);
         mDiv.appendChild(goalP);
         mDiv.appendChild(idP);
+        
         if(nameP.innerHTML != ''){
             mDiv.appendChild(createQP);
+            mDiv.appendChild(campaignList);
         }
         if(results.formWasCreated[kk] != 0){
             mDiv.appendChild(campaignP);
@@ -1502,29 +1573,41 @@ function displayClients(results, userid, username) {
         
     }
 }
+function updatedBonNewCampaignAssignment(CampaignIdSelected, clientId, userId) {
 
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/saveUserComments.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'userId': userId, 'clientId': clientId, 'topic': 'campaign', 'clientText': CampaignIdSelected};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+}
 
 // this function needs to send a request to results.php
 // if the user's client has filled out the form, his analysis
 // will be available.
 
 function getClientDetails(parentNode, result, cidx){
-
-    userid = parentNode.children[cidx].getAttribute('userid');
-    clientid = parentNode.children[cidx].getAttribute('clientid');
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            clientData = JSON.parse(this.response);
-            displayClientsDetails(parentNode, clientData.client, result, cidx);
-        }
-    };
-    // sending the request
-    xmlhttp.open("POST", "assets/php/results.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    let info = {'userId': userid, 'clientId': clientid};
-    var userdata = "userInfo="+JSON.stringify(info);
-    xmlhttp.send(userdata);
+        userid = parentNode.children[cidx].getAttribute('userid');
+        clientid = parentNode.children[cidx].getAttribute('clientid');
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                clientData = JSON.parse(this.response);
+                    displayClientsDetails(parentNode, clientData.client, result, cidx);
+            }
+        };
+        // sending the request
+        xmlhttp.open("POST", "assets/php/results.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        let info = {'userId': userid, 'clientId': clientid};
+        var userdata = "userInfo="+JSON.stringify(info);
+        xmlhttp.send(userdata);
 }
 
 

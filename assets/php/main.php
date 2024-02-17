@@ -44,9 +44,7 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
             } elseif($qKey == 'goal') {
                 $goal = $qAnswer;
             } 
-            $campaignTime = date("Y-m-d");
-            $sql = "UPDATE $table1name SET 
-                                            campaignTime = '$campaignTime', 
+            $sql = "UPDATE $table1name SET  
                                             qIdx = '$qIdx', 
                                             qType = '$qType', 
                                             qContent = '$qContent', 
@@ -99,9 +97,8 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
             $qAnswer = $Questions[$kk]->qAnswer;
             $visited = $Questions[$kk]->visited;
             $qRequired = $Questions[$kk]->qRequired;
-            $campaignTime = date("Y-m-d");
             $qKey = $Questions[$kk]->qKey[0];
-            $sql = "INSERT INTO $table1name (userId, clientId, ip, campaignId, campaignTime, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId', '$clientId', '$ip', '$campaignId', '$campaignTime', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey');";
+            $sql = "INSERT INTO $table1name (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId', '$clientId', '$ip', '$campaignId', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey');";
             $conn->query($sql);
             $kk++;
         }
@@ -125,8 +122,13 @@ function extractUserInfo($info, $ip) {
     } else {
 
         $userId     = substr($info, 0, 6);
-        $clientId   = substr($info, 6, 5);
-        $campaignId = substr($info, 11, 7);
+        if(strlen($userdata) > 6 + 7) {
+            $clientId   = substr($info, 6, 5);
+            $campaignId = substr($info, 11, 7);
+        } else {
+            $clientId = '0';
+            $campaignId = substr($info, 6, 7);
+        }
         $userInfo['userId']       = $userId;
         $userInfo['clientId']     = $clientId;
         $userInfo['campaignId']   = $campaignId;
