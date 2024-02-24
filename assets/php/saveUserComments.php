@@ -57,7 +57,9 @@ function createCampaignPageForClient($userId, $clientId, $campaignId){
         $tablename    = "Users";
         // Create connection
         $conn         = new mysqli($servername, $loginname, $password, $dbname);
-        $sql          = "SELECT * FROM $tablename WHERE userId = '$userId' AND clientId = '0' AND campaignId = '$campaignId' AND qAnswer = '';";
+        $sql          = "SELECT * FROM $tablename WHERE userId = '$userId' AND clientId = '0'         AND campaignId = '$campaignId' AND qAnswer = '';";
+        $existSql     = "SELECT * FROM $tablename WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId' AND qAnswer = '';";
+        $ex           = $conn->query($existSql)->fetch_assoc();
         $database_out = $conn->query($sql);
         while($database_row = $database_out->fetch_assoc()) {
             $qKey        = $database_row['qKey'];
@@ -69,8 +71,10 @@ function createCampaignPageForClient($userId, $clientId, $campaignId){
             $optionsText = $database_row['optionsText'];
             $visited     = $database_row['visited'];
             $qRequired   = $database_row['qRequired'];
-            $insetSql    = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId', '', '$campaignId', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey');";
-            $conn->query($insetSql);
+            if($ex == null) {
+                $insertSql    = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','$clientId', '', '$campaignId', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey');";
+                $conn->query($insertSql);
+            }
         }
 
     }

@@ -122,7 +122,7 @@ function extractUserInfo($info, $ip) {
     } else {
 
         $userId     = substr($info, 0, 6);
-        if(strlen($userdata) > 6 + 7) {
+        if(strlen($info) > 6 + 7) {
             $clientId   = substr($info, 6, 5);
             $campaignId = substr($info, 11, 7);
         } else {

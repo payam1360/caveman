@@ -140,12 +140,12 @@ function getLoginForm() {
     $data['options'] = [
                             [[""]],
                             [[""]],
-                            [["fa-regular fa-circle-check"], ["fa-solid fa-xmark"], ["fa-solid fa-signature"]]
+                            [["fa-regular fa-circle-check", "fa-solid fa-xmark", "fa-solid fa-signature"]]
                        ];
     $data['optionsText'] = [
                                 [[""]],
                                 [[""]],
-                                [["logging in ..."], ["wrong password"], ["user not found, please register!"]]
+                                [["logging in ...", "wrong password", "user not found, please register!"]]
                            ];
     
     $data['qRequired'] = [1, 1, 0];
@@ -189,24 +189,24 @@ function getRegisterForm() {
                             [["fa-solid fa-0","fa-solid fa-mug-saucer","fa-solid fa-sack-dollar"]],
                             [[""]],
                             [[""]],
-                            [["fa-regular fa-registered"], ["fa-solid fa-user-tie"]],
+                            [["fa-regular fa-registered", "fa-solid fa-user-tie"]],
                             [[""]],
-                            [["fa-solid fa-xmark"], ["fa-regular fa-circle-check"]],
+                            [["fa-solid fa-xmark", "fa-regular fa-circle-check"]],
                             [[""]],
                             [[""]],
-                            [["fa-solid fa-not-equal"], ["fa-regular fa-circle-check"],[""]],
+                            [["fa-solid fa-not-equal", "fa-regular fa-circle-check"],[""]],
                             [["fa-regular fa-circle-check"]]
                         ];
     $data['optionsText'] = [
                                 [["free","delux","premium"]],
                                 [[""]],
                                 [[""]],
-                                [["user already registered"], ["new user"]],
+                                [["user already registered", "new user"]],
                                 [[""]],
-                                [["incorrect code"], ["continue to password"]],
+                                [["incorrect code", "continue to password"]],
                                 [[""]],
                                 [[""]],
-                                [["password not matching"], ["All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"],[""]],
+                                [["password not matching", "All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"],[""]],
                                 [["All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"]]
                             ];
     $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
@@ -235,8 +235,9 @@ function QuestionBackendForm() {
     global $supportedHeightDemo;
 
     $data['qContent'] = [
-                            ["1. what is the TYPE of question you want to ask your client?"],
-                            [""],
+                            ["Your form is created with default questions necessary to be answered by your clients include height, weight, age etc. Do you want to add customised questions to this campaign form?"],
+                            ["", "1. what is the TYPE of question you want to ask your client?"],
+                            ["", ""],
                             ["2. is this question REQUIRED to be answered by the client?"],
                             ["3. are you done?","3. type the body of the question?"],
                             ["", "4. what is the PURPOSE of your question?"],
@@ -246,7 +247,8 @@ function QuestionBackendForm() {
                         ];
     $data['qType'] = [
                         ["button"],
-                        ["message"],
+                        ["message", "button"],
+                        ["message", "message"],
                         ["button"],
                         ["button","text"],
                         ["message", "list"],
@@ -255,11 +257,12 @@ function QuestionBackendForm() {
                         ["message"]
                     ];
     
-    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7];
+    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     
     $data['options'] = [
-                            [["fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope"]],
-                            [["fa-solid fa-gears"], ["fa-regular fa-hand-point-right"]],
+                            [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
+                            [['fa-regular fa-circle-check'], ["fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope"]],
+                            [['fa-regular fa-circle-check'], ["fa-solid fa-gears", "fa-regular fa-hand-point-right"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
                             [['fa-regular fa-circle-check'], ["name", "water", "calories", "weight", "height", "age", "gender", "goal", "macros", "micros", "sleep", "workout", "stress", "sugar", "other"]],
@@ -270,8 +273,9 @@ function QuestionBackendForm() {
                        ];
     
     $data['optionsText'] = [
-                                [["list options", "write text", "multiple choice", "email"]],
-                                [["your form is being built ... please continue!"], ["please answer the prevous question"]],
+                                [["YES", "NO"]],
+                                [["Your campaign is added to your account."], ["list options", "write text", "multiple choice", "email"]],
+                                [["Your campaign is added to your account."], ["your form is being built ... please continue!", "please answer the prevous question"]],
                                 [["YES", "NO"]],
                                 [["YES", "NO"], [""]],
                                 [["Your campaign is added to your account."], [""]],
@@ -280,8 +284,9 @@ function QuestionBackendForm() {
                                 [["Your campaign is added to your account."]]
                            ];
     
-    $data['qRequired'] = [1, 0, 0, 1, 1, 1, 1, 1];
+    $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1, 1];
     $data['qKey'] = [
+                        [''],
                         [''],
                         [''],
                         [''],
@@ -291,7 +296,7 @@ function QuestionBackendForm() {
                         [''],
                         ['']
                     ];
-    $data['MAX_cnt'] = 8;
+    $data['MAX_cnt'] = 9;
     return $data;
 }
 

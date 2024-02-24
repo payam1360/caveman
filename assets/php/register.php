@@ -240,9 +240,9 @@ if($verified_dB['email'] == 0) {
     } else {
         $data['status'] = 0; 
     }
-} elseif($verified_dB['email'] == 1 && $verified_dB['pass'] == 1 && ($verified_dB['payment'] == 1 || $data['MAX_cnt'] == 9))  { // payment not required or payment successful
+} elseif($verified_dB['email'] == 1 && $verified_dB['pass'] == 1 && ($verified_dB['pay'] == 1 || $data['MAX_cnt'] == 9))  { // payment not required or payment successful
     $data['status'] = 8; 
-} elseif($verified_dB['email'] == 1 && $verified_dB['pass'] == 1 && $verified_dB['payment'] == 0) { // payment not successful
+} elseif($verified_dB['email'] == 1 && $verified_dB['pass'] == 1 && $verified_dB['pay'] == 0) { // payment not successful
     $data['status'] = 9; 
 } else {
     $data['status'] = 0; 

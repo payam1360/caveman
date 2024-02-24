@@ -246,10 +246,10 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
         case 'message':
             mDiv = document.createElement('p');
             mDiv.setAttribute('class', 'message-style');
-            mDiv.innerHTML =  userStruct.optionsText[serverStructOption][serverStruct];
+            mDiv.innerHTML =  userStruct.optionsText[serverStruct][serverStructOption];
             iconDiv = document.createElement('div');
             iDiv = document.createElement('i');
-            iDiv.setAttribute('class', 'message-icon ' + userStruct.options[serverStructOption][serverStruct]);
+            iDiv.setAttribute('class', 'message-icon ' + userStruct.options[serverStruct][serverStructOption]);
             iDiv.style.display = 'inline-block';
             iDiv.style.color = 'mediumseagreen';
             iDiv.style.height = '80px';
@@ -298,7 +298,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
             Option.innerHTML = '--Select options--';
             // add the list
             newInList.appendChild(Option);
-            userStruct.options[serverStructOption].forEach(function(item){
+            userStruct.options[serverStruct].forEach(function(item){
                 let Option = document.createElement('option');
                 Option.value = item;
                 Option.innerHTML = item;
@@ -308,10 +308,10 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
             querySelIn.style.borderBottom = '2px solid coral';
             break;
         case 'button':
-            let width = Math.floor(100/userStruct.options[serverStructOption].length);
+            let width = Math.floor(100/userStruct.options[serverStruct].length);
             width = width.toString().concat('%');
             let i = 0;
-            userStruct.options[serverStructOption].forEach(function(item){
+            userStruct.options[serverStruct].forEach(function(item){
                 let newInbtn = document.createElement('button');
                 newInbtn.style.width = width;
                 newInbtn.type = 'button';
@@ -333,7 +333,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
                 newI.style.paddingTop = '40px';
                 let newP = document.createElement('p');
                 newP.setAttribute('class', 'form-button-back-text');
-                newP.innerHTML = userStruct.optionsText[serverStructOption][i];
+                newP.innerHTML = userStruct.optionsText[serverStruct][i];
                 newP.style.opacity = 0;
                 newImgSpan.appendChild(newI);
                 newImgSpan.appendChild(newP);
@@ -383,7 +383,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
             let widthiCon = Math.floor(100 / numCol);
             widthiCon = widthiCon.toString().concat('%');
             let iconCount = 0;
-            userStruct.options[serverStructOption].forEach(function(item){
+            userStruct.options[serverStruct].forEach(function(item){
                 let newInbtn = document.createElement('button');
                 newInbtn.style.width = widthiCon;
                 newInbtn.type = 'button';
@@ -407,7 +407,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
                 newI.style.paddingTop = '5px';
                 let newP = document.createElement('p');
                 newP.setAttribute('class', 'multiButton-tooltip');
-                newP.innerHTML = userStruct.optionsText[serverStructOption][iconCount];
+                newP.innerHTML = userStruct.optionsText[serverStruct][iconCount];
                 newImgSpan.appendChild(newI);
                 newImgSpan.appendChild(newP);
                 newImgSpan.addEventListener('mouseenter',function(e) {
@@ -821,7 +821,7 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
             let data = JSON.parse(this.response);
             MAX_cnt = data.MAX_cnt;
             if(data.status == 0) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
                 moveright.disabled = true;
@@ -1473,6 +1473,7 @@ function displayClients(results, userid, username) {
         mDiv.setAttribute('userid', userid);
         mDiv.setAttribute('username', username);
         mDiv.setAttribute('campaignids', results.campaignids[kk]);
+        mDiv.setAttribute('campaigntime', results.campaigntime[kk]);       
         mDiv.setAttribute('clientid', results.ids[kk]);
         mDiv.addEventListener('click', function (e){
             getClientDetails(parentNode, results, this.getAttribute('cidx'));
@@ -1526,11 +1527,16 @@ function displayClients(results, userid, username) {
         campaignList.appendChild(campaignOption);
         
         campaignList.addEventListener('change', function(e){
-            CampaignIdSelected = e.target.value;
+            CampaignTimeSelected = e.target.value;
+            for(kk = 0; kk < e.target.childElementCount; kk++) {
+                if(e.target.children[kk].innerHTML = CampaignTimeSelected) {
+                    CampaignIdSelected = e.target.children[kk].getAttribute('campaignid');
+                }
+            }
             getnameP = document.querySelectorAll('.updateName');
             if(getnameP.innerHTML != ''){
                 getQPStyle = document.querySelectorAll('.updateCampaign');
-                getQPStyle[mDiv.getAttribute('cidx')].textContent = CampaignIdSelected;
+                getQPStyle[mDiv.getAttribute('cidx')].textContent = CampaignTimeSelected;
             }
             userFile =  userid + results.ids[mDiv.getAttribute('cidx')] + CampaignIdSelected; 
             link = '/userPages/' + userFile + '.html';
@@ -1542,9 +1548,10 @@ function displayClients(results, userid, username) {
         })
         // list
         i = 0;
-        while(results.campaignids[i] != ''){
+        while(results.campaigntime[i] != null){
             campaignOption = document.createElement('option');
-            campaignOption.innerHTML = results.campaignids[i];
+            campaignOption.innerHTML = results.campaigntime[i];
+            campaignOption.setAttribute('campaignid', results.campaignids[i])
             campaignList.appendChild(campaignOption);
             i++;
         }
@@ -1552,7 +1559,7 @@ function displayClients(results, userid, username) {
         createQP.innerHTML = 'Campaign for ' + results.names[kk] + ': ';
         createQPStyle.style.fontSize = '24px';
         createQPStyle.style.color = 'seagreen';
-        createQPStyle.textContent = CampaignIdSelected;
+        createQPStyle.textContent = results.campaigntime[kk];
         createQP.appendChild(createQPStyle);
         link = '/userPages/' + userFile + '.html';
         campaignP.innerHTML = 'Link to ' + results.names[kk] + ': <a href="' + link + '"> survey page</a>';

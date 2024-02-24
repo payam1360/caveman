@@ -46,12 +46,16 @@ function extractUserInfo($userId) {
                 $genderUpdateIndex = $dOut_row['qAnswer'];
                 $genderText = $dOut_row['optionsText'];
                 $genderText = explode(",", $genderText);
-                $updatedGender = $genderText[$genderUpdateIndex];
+                if($genderUpdateIndex != ''){
+                    $updatedGender = $genderText[$genderUpdateIndex];
+                }
             } elseif($dOut_row['qKey'] == 'goal') {
                 $goalUpdateIndex = $dOut_row['qAnswer'];
                 $goalText = $dOut_row['optionsText'];
                 $goalText = explode(",", $goalText);
-                $updatedGoal = $goalText[$goalUpdateIndex];
+                if($goalUpdateIndex != ''){
+                    $updatedGoal = $goalText[$goalUpdateIndex];
+                }
             }
         }
         if(isset($updatedGender) && isset($updatedGoal)) {
@@ -80,7 +84,6 @@ function extractUserInfo($userId) {
         array_push($campaignids, $database_row['campaignIdSource']);
         array_push($campaigntime, $database_row['campaignTimeStamp']);
         array_push($campaignidAssigned, $database_row['campaignId']);
-        
     }
     
     $userInfo['names']          = $names;

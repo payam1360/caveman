@@ -74,6 +74,98 @@ function buildCampaignPage($userId, $campaignId){
     fclose($fp);
 }
 
+function createDefaultForm($userId, $campaignId){
+
+    $numDefaultQ = 8;
+    global $supportedAge;
+    global $supportedHeight;
+    global $supportedWeight;
+
+
+    $servername  = "127.0.0.1";
+    $loginname   = "root";
+    $password    = "@Ssia123";
+    $dbname      = "Users";
+    $tablename   = "Users";
+    $conn        = new mysqli($servername, $loginname, $password, $dbname);
+    for($kk = 0; $kk < $numDefaultQ; $kk++) {
+        switch($kk){
+            case 0:
+                $qType = 'text';
+                $qContent = '1. Hey there, what is your name?';
+                $options = "";
+                $optionsText = "";
+                $qKey = 'name';
+            break;
+            case 1:
+                $qType = 'button';
+                $qContent = '2. Hi #mainNameTag, what is your nutritional goal?';
+                $options = "fa-solid fa-weight-scale,fa-solid fa-dumbbell,fa-solid fa-heart-pulse";
+                $optionsText = "lose weight,gain muscles,be less tired";
+                $qKey = 'goal';
+            break;
+            case 2:
+                $qType = 'list';
+                $qContent = '3. How much do you weigh? (lb)';
+                $options = implode(",", $supportedWeight);
+                $optionsText = "";
+                $qKey = 'weight';
+            break;
+            case 3:
+                $qType = 'list';
+                $qContent = '4. How tall are you? (ft-in)';
+                $options = implode(",", $supportedHeight);
+                $optionsText = "";
+                $qKey = 'height';
+            break;
+            case 4:
+                $qType = 'button';
+                $qContent = '5. What is your age?';
+                $options = implode(",", $supportedAge);
+                $optionsText = "";
+                $qKey = 'age';
+            break;
+            case 5:
+                $qType = 'button';
+                $qContent = '6. How is your stress level?';
+                $options = "fa-regular fa-face-angry,fa-regular fa-face-meh,fa-regular fa-face-smile";
+                $optionsText = "high stress,medium stress,low stress";
+                $qKey = 'stress';
+            break;
+            case 6:
+                $qType = 'button';
+                $qContent = '7. How is your sleep?';
+                $options = "fa-regular fa-moon,fa-regular fa-face-tired";
+                $optionsText = "well rested,get less sleep";
+                $qKey = 'sleep';
+            break;
+            case 7:
+                $qType = 'button';
+                $qContent = '8. And finally, you identify as:';
+                $options = "fa-solid fa-mars,fa-solid fa-venus";
+                $optionsText = "male,female";
+                $qKey = 'gender';
+            break;
+        }
+        $sql         = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','0', '', '$campaignId', '$kk', '$qType', '$qContent', '', '$options', '$optionsText', '0', '1', '$qKey')";
+        $conn->query($sql);
+    }
+
+}
+
+
+function setCampaignStartComplete($campaignIdSource, $userId) {
+    $servername  = "127.0.0.1";
+    $loginname   = "root";
+    $password    = "@Ssia123";
+    $dbname      = "Users";
+    $table1name  = "userAllocation";
+    $conn        = new mysqli($servername, $loginname, $password, $dbname);
+    $campaignTimeStamp = date('Y-m-d H:i:s');
+    $sql = "UPDATE $table1name SET completed = '1', campaignTimeStamp = '$campaignTimeStamp' WHERE userId = '$userId' AND campaignIdSource = '$campaignIdSource';";
+    $conn->query($sql);
+    buildCampaignPage($userId, $campaignIdSource);
+}
 
 
 function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
@@ -231,54 +323,72 @@ function getRealIpAddr()
 /// -------------------------
 $userdata      = json_decode($_POST['userInfo']);
 $ip            = getRealIpAddr();
-// get the user ID
+// get the user ID and campaignId and create default form
 $userId         = $userdata->data[0]->userId;
-// check the question type selected by the user (nutritionist)
-if($userdata->data[0]->qAnswer == '') {
-    $data['MAX_cnt'] = 0;
-} elseif($userdata->data[0]->qAnswer == '0') {
-    $data['MAX_cnt'] = 7;
+$campaignId     = $userdata->data[0]->campaignId;
+if($userdata->counter == 1) {
+    createDefaultForm($userId, $campaignId);
+}
+if($userdata->data[0]->qAnswer == '0') {
+    // will be depending on the later choice
 } elseif($userdata->data[0]->qAnswer == '1') {
-    $data['MAX_cnt'] = 6;
-} elseif($userdata->data[0]->qAnswer == '2') {
+    $data['MAX_cnt'] = 3;
+}
+
+// check the question type selected by the user (nutritionist)
+if($userdata->data[1]->qAnswer == '' && $userdata->data[0]->qAnswer == '0') {
+    $data['MAX_cnt'] = 7; // we still don't know the user's choice in type of Q being added
+} elseif($userdata->data[1]->qAnswer == '0') {
     $data['MAX_cnt'] = 7;
-} elseif($userdata->data[0]->qAnswer == '3') {
+} elseif($userdata->data[1]->qAnswer == '1') {
+    $data['MAX_cnt'] = 6;
+} elseif($userdata->data[1]->qAnswer == '2') {
+    $data['MAX_cnt'] = 7;
+} elseif($userdata->data[1]->qAnswer == '3') {
     $data['MAX_cnt'] = 4;
 }
 
-if($userdata->data[0]->qAnswer == '') {
+
+if($userdata->data[0]->qAnswer == '0') {
+
+if($userdata->data[1]->qAnswer == '') {
     $data['status'] = 0;
-} elseif($userdata->data[0]->qAnswer == '0' && $userdata->counter == 3) {
+} elseif($userdata->data[1]->qAnswer == '0' && $userdata->counter == 3) {
     $data['status'] = 03; 
-} elseif($userdata->data[0]->qAnswer == '0' && $userdata->counter == 4) {
+} elseif($userdata->data[1]->qAnswer == '0' && $userdata->counter == 4) {
     $data['status'] = 04;    
-} elseif($userdata->data[0]->qAnswer == '0' && $userdata->counter == 5) {
+} elseif($userdata->data[1]->qAnswer == '0' && $userdata->counter == 5) {
     $data['status'] = 05;
-} elseif($userdata->data[0]->qAnswer == '0' && $userdata->counter == 6) {
+} elseif($userdata->data[1]->qAnswer == '0' && $userdata->counter == 6) {
     $data['status'] = 06;
-} elseif($userdata->data[0]->qAnswer == '1' && $userdata->counter == 3) {
+} elseif($userdata->data[1]->qAnswer == '1' && $userdata->counter == 3) {
     $data['status'] = 13; 
-} elseif($userdata->data[0]->qAnswer == '1' && $userdata->counter == 4) {
+} elseif($userdata->data[1]->qAnswer == '1' && $userdata->counter == 4) {
     $data['status'] = 14; 
-} elseif($userdata->data[0]->qAnswer == '1' && $userdata->counter == 5) {
+} elseif($userdata->data[1]->qAnswer == '1' && $userdata->counter == 5) {
     $data['status'] = 15;
-} elseif($userdata->data[0]->qAnswer == '3' && $userdata->counter == 3) {
+} elseif($userdata->data[1]->qAnswer == '3' && $userdata->counter == 3) {
     $data['status'] = 33; 
-} elseif($userdata->data[0]->qAnswer == '3' && $userdata->counter == 4) {
+} elseif($userdata->data[1]->qAnswer == '3' && $userdata->counter == 4) {
     $data['status'] = 34;  
-} elseif($userdata->data[0]->qAnswer == '2' && $userdata->counter == 3) {
+} elseif($userdata->data[1]->qAnswer == '2' && $userdata->counter == 3) {
     $data['status'] = 23; 
-} elseif($userdata->data[0]->qAnswer == '2' && $userdata->counter == 4) {
+} elseif($userdata->data[1]->qAnswer == '2' && $userdata->counter == 4) {
     $data['status'] = 24;  
-} elseif($userdata->data[0]->qAnswer == '2' && $userdata->counter == 5) {
+} elseif($userdata->data[1]->qAnswer == '2' && $userdata->counter == 5) {
     $data['status'] = 25;
-} elseif($userdata->data[0]->qAnswer == '2' && $userdata->counter == 6) {
+} elseif($userdata->data[1]->qAnswer == '2' && $userdata->counter == 6) {
     $data['status'] = 26;
 } else {
     $data['status'] = 1;
 }
+} else {
+    $data['status'] = 0;
+}
 
-if($data['MAX_cnt']  == $userdata->counter && $userdata->data[$userdata->counter-1]->qAnswer == 1 ) {
+if($userdata->data[0]->qAnswer == '1'){
+    setCampaignStartComplete($campaignId, $userId);
+} elseif($data['MAX_cnt']  == $userdata->counter && $userdata->data[$userdata->counter-1]->qAnswer == 1 ) {
     $data['status'] = 11; // keep asking
     saveUserDataIntoDB($userdata->data, $userdata->qIdx, 0, $userId, $ip);
 } elseif($data['MAX_cnt'] == $userdata->counter && $userdata->data[$userdata->counter-1]->qAnswer == 0) {
