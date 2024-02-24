@@ -78,7 +78,7 @@ function getHeight($data) {
     while(isset($data[$kk]->qIdx)){
         if($data[$kk]->qKey[0] == 'height' && $heightDone == false){
             $Userheight = $data[$kk]->qAnswer;
-            if(isset($Userheight)){
+            if(isset($Userheight) && $Userheight != ''){
                 if(str_contains($Userheight, '<')){
                     $Userheight = ft2in(4); // minimum heigh in inches
                 } elseif(str_contains($Userheight, '>')){
@@ -136,7 +136,7 @@ function getGender($data) {
     $kk            = 0;
     $Usergender = [];
     while(isset($data[$kk]->qIdx)){
-        if($data[$kk]->qKey[0] == 'gender' && $genderDone == false && isset($data[$kk]->qAnswer)){
+        if($data[$kk]->qKey[0] == 'gender' && $genderDone == false && isset($data[$kk]->qAnswer) && $data[$kk]->qAnswer != ''){
             $UsergenderChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
             if(str_contains($UsergenderChoice, 'female')) {
                 $Usergender = 'female';
@@ -162,7 +162,7 @@ function getStress($data) {
     $kk            = 0;
     $Userstress = [];
     while(isset($data[$kk]->qIdx)){
-        if($data[$kk]->qKey[0] == 'stress' && $stressDone == false && isset($data[$kk]->qAnswer)){
+        if($data[$kk]->qKey[0] == 'stress' && $stressDone == false && isset($data[$kk]->qAnswer) && $data[$kk]->qAnswer != ''){
             $UserstressChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
             if(str_contains($UserstressChoice, 'high')) {
                 $Userstress = 'high';
@@ -188,7 +188,7 @@ function getGoal($data) {
     $kk          = 0;
     $Usergoal    = [];
     while(isset($data[$kk]->qIdx)){
-        if($data[$kk]->qKey[0] == 'goal' && $goalDone == false && isset($data[$kk]->qAnswer)){
+        if($data[$kk]->qKey[0] == 'goal' && $goalDone == false && isset($data[$kk]->qAnswer) && $data[$kk]->qAnswer != ''){
             $UsergoalChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
             if(str_contains($UsergoalChoice, 'lose')) {
                 $Usergoal = 'lose';

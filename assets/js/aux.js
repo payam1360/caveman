@@ -1464,16 +1464,26 @@ function displayClients(results, userid, username) {
     let parentNode = document.querySelector('.client-list-parent');
     cleanClientDiv(parentNode);
     numClients = results.names.length;
-    
     for(let kk = 0; kk < numClients; kk++) {
         CampaignIdSelected = results.campaignidAssigned[kk];
+        CampaignTimeSelected = '';
+        kx = 0;
+        while(results.campaigntime[kx] != null){
+            if(CampaignIdSelected != '' && CampaignIdSelected == results.campaignids[kx]) {
+                CampaignTimeSelected = results.campaigntime[kx];
+                break;
+            } else {
+                CampaignTimeSelected = '';
+            }
+        kx++;
+        }
         let mDiv = document.createElement('div');
         mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
         mDiv.setAttribute('cidx', kk);
         mDiv.setAttribute('userid', userid);
         mDiv.setAttribute('username', username);
-        mDiv.setAttribute('campaignids', results.campaignids[kk]);
-        mDiv.setAttribute('campaigntime', results.campaigntime[kk]);       
+        mDiv.setAttribute('campaignids', CampaignIdSelected);
+        mDiv.setAttribute('campaigntime', CampaignTimeSelected);       
         mDiv.setAttribute('clientid', results.ids[kk]);
         mDiv.addEventListener('click', function (e){
             getClientDetails(parentNode, results, this.getAttribute('cidx'));
@@ -1488,6 +1498,7 @@ function displayClients(results, userid, username) {
         goalPStyle   = document.createElement('span');
         campaignP    = document.createElement('p');
         campaignP.setAttribute('class', 'updatePlink');
+        campaignP.style.opacity = 0;
         createQP     = document.createElement('p');
         createQPStyle= document.createElement('span');
         createQPStyle.setAttribute('class', 'updateCampaign');
@@ -1528,9 +1539,9 @@ function displayClients(results, userid, username) {
         
         campaignList.addEventListener('change', function(e){
             CampaignTimeSelected = e.target.value;
-            for(kk = 0; kk < e.target.childElementCount; kk++) {
-                if(e.target.children[kk].innerHTML = CampaignTimeSelected) {
-                    CampaignIdSelected = e.target.children[kk].getAttribute('campaignid');
+            for(ky = 0; ky < e.target.childElementCount; ky++) {
+                if(e.target.children[ky].innerHTML == CampaignTimeSelected) {
+                    CampaignIdSelected = e.target.children[ky].getAttribute('campaignid');
                 }
             }
             getnameP = document.querySelectorAll('.updateName');
@@ -1540,9 +1551,10 @@ function displayClients(results, userid, username) {
             }
             userFile =  userid + results.ids[mDiv.getAttribute('cidx')] + CampaignIdSelected; 
             link = '/userPages/' + userFile + '.html';
-            if(results.formWasCreated[mDiv.getAttribute('cidx')] != 0) {
+            if(results.campaignidAssigned[mDiv.getAttribute('cidx')] != '') {
                 getcampaignP = document.querySelectorAll('.updatePlink');
                 getcampaignP[mDiv.getAttribute('cidx')].innerHTML = 'Link to ' + results.names[mDiv.getAttribute('cidx')] + ': <a href="' + link + '"> Campaign page</a>';
+                getcampaignP.style.opacity = 1;
             }
             updatedBonNewCampaignAssignment(CampaignIdSelected, mDiv.getAttribute('clientid'),  mDiv.getAttribute('userid'));
         })
@@ -1559,22 +1571,23 @@ function displayClients(results, userid, username) {
         createQP.innerHTML = 'Campaign for ' + results.names[kk] + ': ';
         createQPStyle.style.fontSize = '24px';
         createQPStyle.style.color = 'seagreen';
-        createQPStyle.textContent = results.campaigntime[kk];
+        createQPStyle.textContent = CampaignTimeSelected;
         createQP.appendChild(createQPStyle);
         link = '/userPages/' + userFile + '.html';
-        campaignP.innerHTML = 'Link to ' + results.names[kk] + ': <a href="' + link + '"> survey page</a>';
+        campaignP.innerHTML = 'Link to ' + results.names[kk] + ': <a href="' + link + '"> Campaign page</a>';
         mDiv.appendChild(avatar);
         mDiv.appendChild(nameP);
         mDiv.appendChild(genderP);
         mDiv.appendChild(goalP);
         mDiv.appendChild(idP);
-        
+        mDiv.appendChild(campaignP);
+
         if(nameP.innerHTML != ''){
             mDiv.appendChild(createQP);
             mDiv.appendChild(campaignList);
         }
-        if(results.formWasCreated[kk] != 0){
-            mDiv.appendChild(campaignP);
+        if(results.campaignidAssigned[kk] != ''){
+            campaignP.style.opacity = 1;
         }
         parentNode.appendChild(mDiv);
         
