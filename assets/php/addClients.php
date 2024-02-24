@@ -26,10 +26,6 @@ function addClient($userId, $Data) {
                                            WHERE 
                                            userId = '$userId' 
                                            AND 
-                                           used = '0' 
-                                           AND 
-                                           completed = '0' 
-                                           AND 
                                            gender = '' 
                                            LIMIT 1;";
     $out = $conn->query($sql);
