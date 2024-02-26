@@ -119,7 +119,7 @@ function createDefaultForm($userId, $campaignId){
                 $qKey = 'height';
             break;
             case 4:
-                $qType = 'button';
+                $qType = 'list';
                 $qContent = '5. What is your age?';
                 $options = implode(",", $supportedAge);
                 $optionsText = "";

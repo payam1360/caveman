@@ -495,10 +495,14 @@ if(strpos($landing, 'userId') == "") {
         $clientIdURL = "0";
         $campaignIdURL = "0";
     } else { // coming from the clientPageLoad
-        
-        $userIdURL = substr($page, 0, 6);
-        $clientIdURL = "0";
-        $campaignIdURL = substr($page, 11, 7);
+        $userIdURL     = substr($page, 0, 6);
+        if(strlen($page) > 6 + 7) {
+            $clientIdURL   = substr($page, 6, 5);
+            $campaignIdURL = substr($page, 11, 7);
+        } else {
+            $clientIdURL = '0';
+            $campaignIdURL = substr($page, 6, 7);
+        }        
     }
 } else {
     $userIdIdx        = strpos($landing, 'userId');
