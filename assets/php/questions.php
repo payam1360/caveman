@@ -147,7 +147,7 @@ function createDefaultForm($userId, $campaignId){
                 $qKey = 'gender';
             break;
         }
-        $sql         = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','0', '', '$campaignId', '$kk', '$qType', '$qContent', '', '$options', '$optionsText', '0', '1', '$qKey')";
+        $sql         = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','', '', '$campaignId', '$kk', '$qType', '$qContent', '', '$options', '$optionsText', '0', '1', '$qKey')";
         $conn->query($sql);
     }
 
@@ -190,35 +190,35 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
     // question answer is empty
     $qAnswer = "";
     // get question type
-    if($Questions[0]->qAnswer == 0) {
+    if($Questions[1]->qAnswer == 0) {
         $qType = "list";
-    } else if($Questions[0]->qAnswer == 1) {
+    } else if($Questions[1]->qAnswer == 1) {
         $qType = "text";
-    } else if($Questions[0]->qAnswer == 2) {
+    } else if($Questions[1]->qAnswer == 2) {
         $qType = "button";
-    } else if($Questions[0]->qAnswer == 3) {
+    } else if($Questions[1]->qAnswer == 3) {
         $qType = "email";
     }
     if($qType != 'email') {
     // get question content:
-        $qContent = $Questions[3]->qAnswer;
+        $qContent = $Questions[4]->qAnswer;
     } else {
         $qContent = 'Hey #mainNameTag, what is your email address?';
     }
     // get the campaignId
     $campaignIdSource  = $Questions[0]->campaignId;
     // Keyword of the question
-    $qKey = $Questions[4]->qAnswer;
+    $qKey = $Questions[5]->qAnswer;
     // visited field
     $visited = 0;
     // required field
-    $qRequired = $Questions[2]->qAnswer;
+    $qRequired = $Questions[3]->qAnswer;
     // get the options and options texts parsing the user text input response;
     if($qType == "button") {
         // preparing options
         $options = array();
         $optionsText = array();
-        $optionsEntry = $Questions[5]->qAnswer;
+        $optionsEntry = $Questions[6]->qAnswer;
         for($i = 0; $i < count($optionsEntry); $i++) {
             $options[$i] = $supportedIcons[$optionsEntry[$i]];
             $optionsText[$i] = $supportedText[$optionsEntry[$i]];
@@ -227,7 +227,7 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
         $optionsText = implode(",", $optionsText);
         
     } else if($qType == "list") {
-        $optionsEntry = $Questions[5]->qAnswer;
+        $optionsEntry = $Questions[6]->qAnswer;
         $optionsText = "";
         switch($optionsEntry[0]) {
             case 0:
@@ -263,35 +263,36 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
         $campaignTimeStamp = date('Y-m-d H:i:s');
         $sql = "UPDATE $table1name SET used = '1', campaignTimeStamp = '$campaignTimeStamp' WHERE userId = '$userId' AND campaignIdSource = '$campaignIdSource';";
         $conn->query($sql);
-        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','0', '$ip', '$campaignIdSource', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
+        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','', '$ip', '$campaignIdSource', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
         $conn->query($sql);
 
     } elseif($data['used'] == 1 && $data['completed'] == 0 && $complete == 0) { // keep adding 
-        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','0', '$ip', '$campaignIdSource', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
+        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','', '$ip', '$campaignIdSource', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
         $conn->query($sql);
 
     } elseif($data['used'] == 1 && $data['completed'] == 0 && $complete == 1) { // last question to conclude the campaign
         $sql = "UPDATE $table1name SET used = '0', completed = '1' WHERE userId = '$userId' AND campaignIdSource = '$campaignIdSource';";
         $conn->query($sql);
-        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','0', '$ip', '$campaignIdSource', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
+        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','', '$ip', '$campaignIdSource', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
         $conn->query($sql);
 
     } elseif($data['used'] == 0 && $data['completed'] == 1 && $complete == 1) { // redesign the campaign for the given client, last entry
         $sql = "UPDATE $table1name SET used = '0', completed = '1' WHERE userId = '$userId' AND campaignIdSource = '$campaignIdSource';";
         $conn->query($sql);
-        $sql = "UPDATE $tablename SET userId = '$userId', clientId = '0', ip = '$ip', campaignIdSource = '$campaignIdSource', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired', qKey = '$qKey' WHERE qIdx = '$qIdx';";
+        $sql = "UPDATE $tablename SET userId = '$userId', clientId = '', ip = '$ip', campaignIdSource = '$campaignIdSource', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired', qKey = '$qKey' WHERE qIdx = '$qIdx';";
         $conn->query($sql);
 
     } elseif($data['used'] == 0 && $data['completed'] == 1 && $complete == 0) { // redesign the campaign for the given client
         $sql = "UPDATE $table1name SET used = '0', completed = '1' WHERE userId = '$userId' AND campaignIdSource = '$campaignIdSource';";
         $conn->query($sql);
-        $sql = "UPDATE $tablename SET userId = '$userId', clientId = '0', ip = '$ip', campaignIdSource = '$campaignIdSource', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired', qKey = '$qKey' WHERE qIdx = '$qIdx';";
+        $sql = "UPDATE $tablename SET userId = '$userId', clientId = '', ip = '$ip', campaignIdSource = '$campaignIdSource', qType = '$qType', qContent = '$qContent', qAnswer = '$qAnswer', options = '$options', optionsText = '$optionsText', visited = '$visited', qRequired = '$qRequired', qKey = '$qKey' WHERE qIdx = '$qIdx';";
         $conn->query($sql);
 
-    } elseif($data['used'] == 0 && $data['completed'] == 0 && $complete == 1) { // the use only designed 1 question for his client
-        $sql = "UPDATE $table1name SET used = '0', completed = '1' WHERE userId = '$userId' AND campaignIdSource = '$campaignIdSource';";
+    } elseif($data['used'] == 0 && $data['completed'] == 0 && $complete == 1) { // the user only designed 1 question for his client
+        $campaignTimeStamp = date('Y-m-d H:i:s');
+        $sql = "UPDATE $table1name SET used = '0', campaignTimeStamp = '$campaignTimeStamp', completed = '1' WHERE userId = '$userId' AND campaignIdSource = '$campaignIdSource';";
         $conn->query($sql);
-        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','0', '$ip', '$campaignIdSource', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
+        $sql = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','', '$ip', '$campaignIdSource', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey')";
         $conn->query($sql);
 
     } else {
@@ -337,51 +338,52 @@ if($userdata->data[0]->qAnswer == '0') {
 
 // check the question type selected by the user (nutritionist)
 if($userdata->data[1]->qAnswer == '' && $userdata->data[0]->qAnswer == '0') {
-    $data['MAX_cnt'] = 7; // we still don't know the user's choice in type of Q being added
+    $data['MAX_cnt'] = 8; // we still don't know the user's choice in type of Q being added
 } elseif($userdata->data[1]->qAnswer == '0') {
-    $data['MAX_cnt'] = 7;
+    $data['MAX_cnt'] = 8;
 } elseif($userdata->data[1]->qAnswer == '1') {
-    $data['MAX_cnt'] = 6;
-} elseif($userdata->data[1]->qAnswer == '2') {
     $data['MAX_cnt'] = 7;
+} elseif($userdata->data[1]->qAnswer == '2') {
+    $data['MAX_cnt'] = 8;
 } elseif($userdata->data[1]->qAnswer == '3') {
-    $data['MAX_cnt'] = 4;
+    $data['MAX_cnt'] = 5;
 }
 
+if($userdata->data[0]->qAnswer == '0' || $userdata->data[0]->qAnswer == '') {
 
-if($userdata->data[0]->qAnswer == '0') {
-
-if($userdata->data[1]->qAnswer == '') {
-    $data['status'] = 0;
-} elseif($userdata->data[1]->qAnswer == '0' && $userdata->counter == 3) {
-    $data['status'] = 03; 
-} elseif($userdata->data[1]->qAnswer == '0' && $userdata->counter == 4) {
-    $data['status'] = 04;    
-} elseif($userdata->data[1]->qAnswer == '0' && $userdata->counter == 5) {
-    $data['status'] = 05;
-} elseif($userdata->data[1]->qAnswer == '0' && $userdata->counter == 6) {
-    $data['status'] = 06;
-} elseif($userdata->data[1]->qAnswer == '1' && $userdata->counter == 3) {
-    $data['status'] = 13; 
-} elseif($userdata->data[1]->qAnswer == '1' && $userdata->counter == 4) {
-    $data['status'] = 14; 
-} elseif($userdata->data[1]->qAnswer == '1' && $userdata->counter == 5) {
-    $data['status'] = 15;
-} elseif($userdata->data[1]->qAnswer == '3' && $userdata->counter == 3) {
-    $data['status'] = 33; 
-} elseif($userdata->data[1]->qAnswer == '3' && $userdata->counter == 4) {
-    $data['status'] = 34;  
-} elseif($userdata->data[1]->qAnswer == '2' && $userdata->counter == 3) {
-    $data['status'] = 23; 
-} elseif($userdata->data[1]->qAnswer == '2' && $userdata->counter == 4) {
-    $data['status'] = 24;  
-} elseif($userdata->data[1]->qAnswer == '2' && $userdata->counter == 5) {
-    $data['status'] = 25;
-} elseif($userdata->data[1]->qAnswer == '2' && $userdata->counter == 6) {
-    $data['status'] = 26;
-} else {
-    $data['status'] = 1;
-}
+    if($userdata->data[1]->qAnswer == '') {
+        $data['status'] = 01;
+    } elseif($userdata->counter == 3) {
+        $data['status'] = 03; 
+    } elseif($userdata->data[1]->qAnswer == '0' && $userdata->counter == 4) {
+        $data['status'] = 04; 
+    } elseif($userdata->data[1]->qAnswer == '0' && $userdata->counter == 5) {
+        $data['status'] = 05;    
+    } elseif($userdata->data[1]->qAnswer == '0' && $userdata->counter == 6) {
+        $data['status'] = 06;
+    } elseif($userdata->data[1]->qAnswer == '0' && $userdata->counter == 7) {
+        $data['status'] = 07;
+    } elseif($userdata->data[1]->qAnswer == '1' && $userdata->counter == 4) {
+        $data['status'] = 14; 
+    } elseif($userdata->data[1]->qAnswer == '1' && $userdata->counter == 5) {
+        $data['status'] = 15; 
+    } elseif($userdata->data[1]->qAnswer == '1' && $userdata->counter == 6) {
+        $data['status'] = 16;
+    } elseif($userdata->data[1]->qAnswer == '3' && $userdata->counter == 4) {
+        $data['status'] = 34; 
+    } elseif($userdata->data[1]->qAnswer == '3' && $userdata->counter == 5) {
+        $data['status'] = 35;  
+    } elseif($userdata->data[1]->qAnswer == '2' && $userdata->counter == 4) {
+        $data['status'] = 24; 
+    } elseif($userdata->data[1]->qAnswer == '2' && $userdata->counter == 5) {
+        $data['status'] = 25;  
+    } elseif($userdata->data[1]->qAnswer == '2' && $userdata->counter == 6) {
+        $data['status'] = 26;
+    } elseif($userdata->data[1]->qAnswer == '2' && $userdata->counter == 7) {
+        $data['status'] = 27;
+    } else {
+        $data['status'] = 100;
+    }
 } else {
     $data['status'] = 0;
 }

@@ -57,7 +57,7 @@ function createCampaignPageForClient($userId, $clientId, $campaignId){
         $tablename    = "Users";
         // Create connection
         $conn         = new mysqli($servername, $loginname, $password, $dbname);
-        $sql          = "SELECT * FROM $tablename WHERE userId = '$userId' AND clientId = '0'         AND campaignId = '$campaignId' AND qAnswer = '';";
+        $sql          = "SELECT * FROM $tablename WHERE userId = '$userId' AND clientId = ''         AND campaignId = '$campaignId' AND qAnswer = '';";
         $existSql     = "SELECT * FROM $tablename WHERE userId = '$userId' AND clientId = '$clientId' AND campaignId = '$campaignId' AND qAnswer = '';";
         $ex           = $conn->query($existSql)->fetch_assoc();
         $database_out = $conn->query($sql);

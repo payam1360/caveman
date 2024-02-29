@@ -585,7 +585,7 @@ function resetFormType(querySelIn){
     }
 }
 
-function resetStart(input, header, headerTxt, page) {
+function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
 
     let clientId = document.querySelector('.clientId');
     let campaignId = document.querySelector('.campaignId');
@@ -598,7 +598,7 @@ function resetStart(input, header, headerTxt, page) {
     } else {
         userPage = 0;
     }
-    questionCreate(headerTxt[1], input[1], page, userPage);
+
     // reset the question bar
     input[2].style.width = '0%';
     input[2].setAttribute('serverStruct', 0);
@@ -616,12 +616,28 @@ function resetStart(input, header, headerTxt, page) {
     header[0].style.width = '0%';
     header[0].setAttribute('serverStruct', 0);
 
+    if(questionPageResetFlag){
+        counter = 1;
+        input[2].setAttribute('serverStruct', 1);
+        input[2].setAttribute('serverStructOption', 0);
+        input[1].setAttribute('serverStruct', 1);
+        input[1].setAttribute('serverStructOption', 0);
+        input[0].setAttribute('serverStruct', 1);
+        input[0].setAttribute('serverStructOption', 0);
+        
+        header[2].setAttribute('serverStruct', 1);
+        header[1].setAttribute('serverStruct', 1);
+        header[0].setAttribute('serverStruct', 1);
+    }else {
+        counter = 0;
+    }
+    questionCreate(headerTxt[1], header[1], input[1], page, userPage);
+
     // initialize the input based on form Type
     resetFormType(input[2]);
     resetFormType(input[1]);
     resetFormType(input[0]);
     let moveleft = document.querySelector('.form-go-left');  
-    let moveright = document.querySelector('.form-go-right'); 
     let spinner = document.querySelector('.spinner-js');
     moveleft.disabled = true;
     moveleft.style.opacity = 0;
@@ -677,7 +693,7 @@ function resetStart(input, header, headerTxt, page) {
             stripe = Stripe('pk_test_51Odb1JGvkwgMtml81N0ajd4C9xKKHD9DhnMhcfyBegjRS8eatgXQdBj1o2fnlpwCcEHOZrJJ7Sd7D0UJqXipzRmQ00CPr9wDNl');
         })
     }
-    counter = 0;
+
     prog = 0;
     //flush the choiceTracker
     choiceTracker = [[0],[0]];
@@ -825,36 +841,41 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
                 moveright.disabled = true;
-            } else if(data.status == 01) { // by default
+            } else if(data.status == 01) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0); 
+                globalQidx = 8;   
+            } else if(data.status == 100) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);       
+            } else if(data.status == 03) { 
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);    
-            } else if(data.status == 03) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
             } else if(data.status == 04) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 05) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 06) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
-            } else if(data.status == 13) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
+            } else if(data.status == 07) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 14) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 15) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
-            } else if(data.status == 33) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+            } else if(data.status == 16) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 34) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
-            } else if(data.status == 23) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+            } else if(data.status == 35) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
             } else if(data.status == 24) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
             } else if(data.status == 25) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 2, 2);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
             } else if(data.status == 26) {
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 2, 2);
+            } else if(data.status == 27) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
             } else if(data.status == 11) { // reset form for next question 
-                resetStart(querySelIn, header, headerTxt, 'questions');
+                resetStart(querySelIn, header, headerTxt, 'questions', 1);
                 globalQidx++;
             }
             else if(data.status == 12) { // end the form 
@@ -959,7 +980,7 @@ function getUserInfo(userTxt, welcomeTxt){
 
 
 // this function eventually comes from user costomization and design of his app.
-function questionCreate(headerTxt, input, page, userPage){
+function questionCreate(headerTxt, header, input, page, userPage){
     let request = [];
     let address = window.location.href;
     let xmlhttp = new XMLHttpRequest();
@@ -978,10 +999,10 @@ function questionCreate(headerTxt, input, page, userPage){
                 Obj.pushData(Obj);
             }
             // initialize header
-            headerTxt.innerHTML = Questions[counter].qContent;
+            headerTxt.innerHTML = Questions[counter].qContent[header.getAttribute('serverStruct')];
             // initialize the input based on form Type
             resetFormType(input);
-            setFormType(input, Questions[counter]);
+            setFormType(input, Questions[counter], input.getAttribute('serverStruct'), input.getAttribute('serverStructOption'));
         }
     };
     // sending the request

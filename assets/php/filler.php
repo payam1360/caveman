@@ -386,7 +386,7 @@ function clientPageLoad($page) {
         $clientId    = substr($page, 6, 5);
         $campaignId  = substr($page, 11, 7);
     } else {
-        $clientId = '0';
+        $clientId = '';
         $campaignId  = substr($page, 6, 7);
     }
 
@@ -492,7 +492,7 @@ if($page == 'login') {
 if(strpos($landing, 'userId') == "") {
     if($landing == "") {
         $userIdURL = "0";
-        $clientIdURL = "0";
+        $clientIdURL = "";
         $campaignIdURL = "0";
     } else { // coming from the clientPageLoad
         $userIdURL     = substr($page, 0, 6);
@@ -500,7 +500,7 @@ if(strpos($landing, 'userId') == "") {
             $clientIdURL   = substr($page, 6, 5);
             $campaignIdURL = substr($page, 11, 7);
         } else {
-            $clientIdURL = '0';
+            $clientIdURL = '';
             $campaignIdURL = substr($page, 6, 7);
         }        
     }
@@ -515,7 +515,7 @@ if(strpos($landing, 'userId') == "") {
         $clientIdLength   = 5;
         $clientIdURL      = substr($landing, $clientIdIdx+9, $clientIdLength);
     } else {
-        $clientIdURL = '0';
+        $clientIdURL = '';
     }
 
     $campaignIdIdx    = strpos($landing, 'campaignId');

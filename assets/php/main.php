@@ -111,7 +111,7 @@ function extractUserInfo($info, $ip) {
     if($info == 'main') {
 
         $userId      = '0';
-        $clientId    = '0';
+        $clientId    = '';
         $campaignId  = '0';
         $userInfo['userId']       = $userId;
         $userInfo['clientId']     = $clientId;
@@ -126,7 +126,7 @@ function extractUserInfo($info, $ip) {
             $clientId   = substr($info, 6, 5);
             $campaignId = substr($info, 11, 7);
         } else {
-            $clientId = '0';
+            $clientId = '';
             $campaignId = substr($info, 6, 7);
         }
         $userInfo['userId']       = $userId;
