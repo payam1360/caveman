@@ -841,20 +841,20 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
                 moveright.disabled = true;
-            } else if(data.status == 01) {
+            } else if(data.status == 1) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0); 
                 globalQidx = 8;   
             } else if(data.status == 100) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);       
-            } else if(data.status == 03) { 
+            } else if(data.status == 3) { 
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);    
-            } else if(data.status == 04) {
+            } else if(data.status == 4) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
-            } else if(data.status == 05) {
+            } else if(data.status == 5) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
-            } else if(data.status == 06) {
+            } else if(data.status == 6) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
-            } else if(data.status == 07) {
+            } else if(data.status == 7) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
             } else if(data.status == 14) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
