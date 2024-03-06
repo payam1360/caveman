@@ -34,8 +34,8 @@ function saveUserComment($clientId, $userId, $comment, $category) {
     
 }
 
-function createCampaignPageForClient($userId, $clientId, $campaignId){
-    if($clientId != '') {
+function createCampaignPageForClient($userId, $clientId, $campaignId, $category){
+    if($clientId != '' && $category == 'campaign') {
         $s = $userId . $campaignId;
         $t = $userId . $clientId . $campaignId;
         copy("../../userPages/$s.html", "../../userPages/$t.html");
@@ -89,7 +89,7 @@ $category = isset($userdata->topic) ? $userdata->topic : '';
 $comment  = isset($userdata->clientText) ? $userdata->clientText : ''; 
 $userId   = isset($userdata->userId) ? $userdata->userId : '';
 $clientId = isset($userdata->clientId) ? $userdata->clientId : '';
-createCampaignPageForClient($userId, $clientId, $comment);
+createCampaignPageForClient($userId, $clientId, $comment, $category);
 $status   = saveUserComment($clientId, $userId, $comment, $category);
 
 echo json_encode($status);
