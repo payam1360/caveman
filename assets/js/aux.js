@@ -1574,8 +1574,8 @@ function displayClients(results, userid, username) {
             link = '/userPages/' + userFile + '.html';
             if(results.campaignidAssigned[mDiv.getAttribute('cidx')] != '') {
                 getcampaignP = document.querySelectorAll('.updatePlink');
-                getcampaignP[mDiv.getAttribute('cidx')].innerHTML = 'Link to ' + results.names[mDiv.getAttribute('cidx')] + ': <a href="' + link + '"> Campaign page</a>';
-                getcampaignP.style.opacity = 1;
+                getcampaignP[mDiv.getAttribute('cidx')].innerHTML = 'Link to ' + results.names[mDiv.getAttribute('cidx')] + ' <a href="' + link + '"> Campaign page</a>';
+                getcampaignP[mDiv.getAttribute('cidx')].style.opacity = 1;
             }
             updatedBonNewCampaignAssignment(CampaignIdSelected, mDiv.getAttribute('clientid'),  mDiv.getAttribute('userid'));
         })
@@ -1748,7 +1748,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     goalP.appendChild(goalPstyle); 
 
 
-    let link = '/userPages/' + userid + results.ids[cidx] + results.campaignids[cidx] + '.html'
+    let link = '/userPages/' + userid + results.ids[cidx] + results.campaignidAssigned[cidx] + '.html'
     campaignP.innerHTML = 'Link to ' + results.names[cidx] + '\'s survey <a href="' + link + '"> page</a>';
     
     let divider1 = document.createElement('div');
