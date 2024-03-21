@@ -182,6 +182,33 @@ function getStress($data) {
     }
     return($Userstress);
 }
+// user's stress 
+function getSleep($data) {
+    $sleepDone    = false;
+    $kk            = 0;
+    $Usersleep = [];
+    while(isset($data[$kk]->qIdx)){
+        if($data[$kk]->qKey[0] == 'sleep' && $sleepDone == false && isset($data[$kk]->qAnswer) && $data[$kk]->qAnswer != ''){
+            $UsersleepChoice = $data[$kk]->optionsText[0][$data[$kk]->qAnswer];
+            if(str_contains($UsersleepChoice, 'rested')) {
+                $Usersleep = 'rested';
+            } elseif(str_contains($UsersleepChoice, 'tired')) {
+                $Usersleep = 'tired';
+            } else {
+                $Usersleep = 'rested';
+            }
+            $sleepDone = true;
+        } else {
+            $Usersleep = []; // by default
+        }
+        if($sleepDone == true){
+            break;
+        }
+        $kk++;
+    }
+    return($Usersleep);
+}
+
 // user's goal
 function getGoal($data) {
     $goalDone    = false;

@@ -910,7 +910,7 @@ function submitUserData(inputDataBlob, page, userPage) {
                 plotMacro(data.macro);
                 plotMicro(data.micro);
                 plotMicroVit(data.micro);
-                displayMeal();
+                displayMeal(inputDataBlob);
                 // this part needs to go!!
             }
         }
@@ -1342,21 +1342,56 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     );
 }
 // function to display meal plan data returned by the server for the given user
-function displayMeal(){
+function displayMeal(inputDataBlob){
+    // sending data first
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            handleAi();
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/aiRx.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var request = "userInfo="+JSON.stringify(inputDataBlob);
+    xmlhttp.send(request);
+
+}
+
+function handleAi() {
     
-    let eventSource = new EventSource("/assets/php/ai.php");
+    // creating the server side update event source
+
+    let eventSource = new EventSource("assets/php/ai.php");
     let meal_txt = document.querySelector('.meal_text');
     let meal = document.querySelector('.meal_plan');
     meal.style.display = 'block';
-    meal_txt.innerHTML = '<br> The following information is created by the openAI chatGPT:<br><br>';
+    meal_txt.innerHTML = '<br> The following information is created by zephyr-7b-beta language model:<br><br>';
     eventSource.onmessage = function (e) {
-        if(e.data == "[DONE]")
+        aiText = e.data;
+        if(aiText.includes("DONE"))
         {
             meal_txt.innerHTML += "<br><br>Thank you!";
             eventSource.close();
         }
         else {
-            meal_txt.innerHTML += JSON.parse(e.data).choices[0].text;
+            // styling the text as it comes through
+            aiText = aiText.replace(/NewLine/g, '<br>');
+            if(aiText.includes('AI:') || aiText.includes('Trainer:') || aiText.includes('Q:')) {
+                s = document.createElement('span');
+                s.innerHTML = aiText;
+                s.style.fontSize = "16px";
+                s.style.color = 'seagreen';
+                meal_txt.appendChild(s);
+            } else if(parseFloat(aiText) && aiText.includes('.')) {
+                s = document.createElement('span');
+                s.innerHTML = '<br>&nbsp;' + aiText + ' ';
+                s.style.fontSize = "16px";
+                s.style.color = 'brown';
+                meal_txt.appendChild(s);
+            } else {
+                meal_txt.innerHTML += aiText + ' ';
+            }
         }
     };
 }
