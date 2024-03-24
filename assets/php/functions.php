@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 function kg2lb($kg) {
     if($kg == []) {
         return([]);
@@ -242,12 +244,15 @@ function calculateBmi($data){
     $Userage    = getAge($data);
     $Usergender = getGender($data);
     $Usergoal   = getGoal($data);
+    $Userstress = getStress($data);
+    $Usersleep  = getSleep($data);
+
     if($Userweight != [] && $Userheight != []) {
         $BMI['val']  = lb2kg($Userweight) / pow(in2cm($Userheight)/100, 2);
         if($data[0]->nutritionEng == "0") { // AI request has priority 
-            $BMI['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
+            $BMI['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Bmi'); //["This text should be generated using AI request!"];
         } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-            $BMI['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'bmi');
+            $BMI['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'Bmi');
         }
     } else {
         $BMI['val']  = [];
@@ -265,6 +270,7 @@ function calculateBmr($data) {
     $Userage    = getAge($data);
     $Usergender = getGender($data);
     $Userstress = getStress($data);
+    $Usersleep  = getSleep($data);
     $Usergoal   = getGoal($data);
     $BMI        = calculateBmi($data);
 
@@ -283,9 +289,9 @@ function calculateBmr($data) {
             $BMR['val'] = $stressFactor * ( 66.47 + (13.75 * $Userweight) + (5.003 * $Userheight) - (6.75 * $Userage));
         }
         if($data[0]->nutritionEng == "0") { // AI request has priority 
-            $BMR['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
+            $BMR['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Bmr'); //["This text should be generated using AI request!"];
         } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-            $BMR['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'bmr');
+            $BMR['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'Bmr');
         }
 
     } else {
@@ -301,12 +307,13 @@ function calculateIf($data){
     // calculate intermittent fasting interval
     $IF['val']  = [[24,24,24,24,24,24,24],[0,0,0,0,0,0,0]];
     $IF['desc'] = [''];
-    $Userweight = getWeight($data);
     $Userage    = getAge($data);
     $Usergender = getGender($data);
     $Usergoal   = getGoal($data);
     $Userheight = getHeight($data);
     $Userweight = getWeight($data);
+    $Userstress = getStress($data);
+    $Usersleep  = getSleep($data);
     $BMI        = calculateBmi($data);
 
     // IF suggestion based on user's spec
@@ -364,9 +371,9 @@ function calculateIf($data){
             }
         }
         if($data[0]->nutritionEng == "0") { // AI request has priority 
-            $IF['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
+            $IF['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'If'); //["This text should be generated using AI request!"];
         } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-            $IF['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'if');
+            $IF['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'If');
         }
     } else {
         $IF['val']  = [];
@@ -408,7 +415,9 @@ function calculateMacro($data){
     $Usergender = getGender($data);
     $Usergoal   = getGoal($data);
     $Userheight = getHeight($data);
-    $Userweight = getWeight($data);    
+    $Userweight = getWeight($data);  
+    $Userstress = getStress($data);
+    $Usersleep  = getSleep($data);
     $BMI        = calculateBmi($data);
     $BMR        = calculateBmr($data);
 
@@ -479,9 +488,9 @@ function calculateMacro($data){
             }
         } 
         if($data[0]->nutritionEng == "0") { // AI request has priority 
-            $Macro['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
+            $Macro['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Macro'); //["This text should be generated using AI request!"];
         } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-            $Macro['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'macro');
+            $Macro['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'Macro');
         }
     } else {
         $Macro['val'] = [];
@@ -500,6 +509,8 @@ function calculateMicro($data){
     $Usergoal   = getGoal($data);
     $Userheight = getHeight($data);
     $Userweight = getWeight($data);
+    $Userstress = getStress($data);
+    $Usersleep  = getSleep($data);
     $BMI        = calculateBmi($data);
     if($Userage != [] && $Usergender != []) {
         $valid = true;
@@ -557,11 +568,11 @@ function calculateMicro($data){
                    'tScale' => $tScale);  
     if($valid)  {                                      
         if($data[0]->nutritionEng == "0") { // AI request has priority 
-            $Micro['descVit']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal); //["This text should be generated using AI request!"];
-            $Micro['descTrace'] = $Micro['descVit'];
+            $Micro['descVit']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'MicroVit'); //["This text should be generated using AI request!"];
+            $Micro['descTrace'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'MicroTrace'); //["This text should be generated using AI request!"];
         } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-            $Micro['descVit']   = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'microvit');
-            $Micro['descTrace'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'microtrace');
+            $Micro['descVit']   = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'MicroVit');
+            $Micro['descTrace'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'MicroTrace');
         }
     } else {
         $Micro['descVit']    = [];
@@ -619,7 +630,7 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
     $LowOldFemaleLose  = $Bmi < 25 && $Usergender == 'female' && $Userage >= 35 && $Usergoal == 'lose';
     $LowOldFemaleGain  = $Bmi < 25 && $Usergender == 'female' && $Userage >= 35 && $Usergoal == 'gain';
 
-    if($contextFlag == 'bmi') {
+    if($contextFlag == 'Bmi') {
         if(!empty($dbOutRow['descBmi'])) { // use the entry by the user
             $desc = [$dbOutRow['descBmi']];
         } else { // use this software intelligence. (pre-set text not GPT ai)
@@ -675,14 +686,14 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
                 $desc = ['As a female with low BMI, it is recommended to have a slight calorie surplus diet and frequent exercises to reach your goals of gaining more muscle mass.'];
             }
         }
-    } elseif($contextFlag == "bmr") {
+    } elseif($contextFlag == "Bmr") {
         if(!empty($dbOutRow['descBmr'])) { // use the entry by the user
             $desc = [$dbOutRow['descBmr']];
         } else { 
             $desc = ['This number gives an estimate of how much calories you need per day at your current activity / stress levels', 
             'to reach your fitness goals.'];
         }
-    } elseif($contextFlag == "if") {
+    } elseif($contextFlag == "If") {
         if(!empty($dbOutRow['descIf'])) { // use the entry by the user
             $desc = [$dbOutRow['descIf']];
         } else { 
@@ -737,7 +748,7 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
                 $desc = ['As a female with low BMI, looking to gain more muscle, routine intermittent fasting is benefitial for you as recommended in the chart above.'];
             }
         }
-    } elseif($contextFlag == "macro") {
+    } elseif($contextFlag == "Macro") {
         if(!empty($dbOutRow['descMacro'])) { // use the entry by the user
             $desc = [$dbOutRow['descMacro']];
         } else { 
@@ -792,7 +803,7 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
                 $desc = ['Increase your calorie intake by increasing your protein and carbs in the form of leafy greens.'];
             }
         }
-    } elseif($contextFlag == "microvit") {
+    } elseif($contextFlag == "MicroVit") {
         if(!empty($dbOutRow['descMicroVit'])) { // use the entry by the user
             $desc = [$dbOutRow['descMicroVit']];
         } else { 
@@ -847,7 +858,7 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
                 $desc = ['Vitamins are not made in our bodies and need to be consumed from food. Generally, the amount needed is determined by gender and age. Fat soluable vitamins can be accumulated in our bodies but water soluble vitamins are not and any excess amount are flushed out.'];
             }
         }
-    } elseif($contextFlag == "microtrace") {
+    } elseif($contextFlag == "MicroTrace") {
         if(!empty($dbOutRow['descMicroTrace'])) { // use the entry by the user
             $desc = [$dbOutRow['descMicroTrace']];
         } else { 
@@ -906,8 +917,18 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
     return($desc); 
 }
 
-function requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal) {
-    $desc = ["this text must come from GPT"];
-    return($desc);
+
+// no DB checking ... these will be always from AI. 
+// might need to get a fast GPU when launching on the actual server.
+function requestGpt($weight, $height, $age, $gender, $goal, $stress, $sleep, $context) {
+    $_SESSION[$context]['meal']    = json_encode(''); // this is either empty or it is already filled by the language model
+    $_SESSION[$context]['gender']  = $gender; 
+    $_SESSION[$context]['age']     = $age; 
+    $_SESSION[$context]['height']  = $height; 
+    $_SESSION[$context]['weight']  = $weight; 
+    $_SESSION[$context]['goal']    = $goal; 
+    $_SESSION[$context]['stress']  = $stress; 
+    $_SESSION[$context]['sleep']   = $sleep;
+    $_SESSION[$context]['type']    = $context;
 }
 ?>

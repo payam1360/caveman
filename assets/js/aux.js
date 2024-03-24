@@ -12,6 +12,9 @@ let MAX_cnt   = 0;
 let globalQidx = 0;
 let choiceTracker = [[0], [0]];
 let multiButtonSelect = [];
+let eventSourceQueue = [];
+let allowNewAiStream = true;
+let intervalID = [];
 let multiTextSelect = [];
 let stripe = Stripe('pk_test_51Odb1JGvkwgMtml81N0ajd4C9xKKHD9DhnMhcfyBegjRS8eatgXQdBj1o2fnlpwCcEHOZrJJ7Sd7D0UJqXipzRmQ00CPr9wDNl');
 let stripeElements;
@@ -905,13 +908,13 @@ function submitUserData(inputDataBlob, page, userPage) {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
             if(data.status == 0 && page == 'main'){
-                plotBmi(data.bmi);
-                plotIf(data.if);
-                plotMacro(data.macro);
-                plotMicro(data.micro);
-                plotMicroVit(data.micro);
-                displayMeal(inputDataBlob);
-                // this part needs to go!!
+                plotBmi(data.bmi);  // 1
+                plotIf(data.if);    // 2
+                plotMacro(data.macro); // 3
+                plotMicro(data.micro); // 4
+                plotMicroVit(data.micro); // 5
+                displayMeal(inputDataBlob); // 6
+                intervalID = setInterval(handleAi, 2000);
             }
         }
     };
@@ -1039,6 +1042,7 @@ function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
     bmiDesc.style.margin = '20px';
     
     bmiDesc.innerHTML = bmi['desc'];
+    eventSourceQueue.push(true);
     // Config section
     let meanBmi = 25;
     let varBmi = 3.1;
@@ -1120,6 +1124,7 @@ function plotIf(If, ifTxt = 0, ifDiv = 0, ifDesc = 0){
     }
     let ifElement  = document.querySelector('#IntermittentFasting');
     
+    eventSourceQueue.push(true);
     ifDesc.innerHTML     = If['desc'];
     ifTxt.style.display  = 'block';
     ifDiv.style.display  = 'block';
@@ -1186,7 +1191,8 @@ function plotMacro(macro, macroTxt = 0, macroDiv = 0, macroDesc = 0){
     macroDesc.style.display = 'block';
 
     macroDesc.innerHTML = macro['desc'];
-    
+    eventSourceQueue.push(true);
+
     const macroData = {
       labels: ['fat','carbs', 'protein', 'fiber'],
       datasets: [{
@@ -1231,6 +1237,7 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     microDesc.style.display = 'block';
     
     microDesc.innerHTML = micro['descTrace'];
+    eventSourceQueue.push(true);
     tColors = ['coral','lightblue','limegreen','cyan','blue','green','orange',
                'magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod',
                'Peru','Sienna'];
@@ -1294,7 +1301,7 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     microTxt.style.display = 'block';
     microDiv.style.display = 'block';
     microDesc.style.display = 'block';
-    
+    eventSourceQueue.push(true);
     microDesc.innerHTML = micro['descVit'];
     vColors = ['coral','lightblue','limegreen','cyan','blue','green','orange','magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod','Peru','Sienna'];
     const microData = {
@@ -1344,10 +1351,10 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
 // function to display meal plan data returned by the server for the given user
 function displayMeal(inputDataBlob){
     // sending data first
+    eventSourceQueue.push(true);
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            handleAi();
         }
     };
     // sending the request
@@ -1359,41 +1366,67 @@ function displayMeal(inputDataBlob){
 }
 
 function handleAi() {
-    
     // creating the server side update event source
-
-    let eventSource = new EventSource("assets/php/ai.php");
-    let meal_txt = document.querySelector('.meal_text');
-    let meal = document.querySelector('.meal_plan');
-    meal.style.display = 'block';
-    meal_txt.innerHTML = '<br> The following information is created by zephyr-7b-beta language model:<br><br>';
-    eventSource.onmessage = function (e) {
-        aiText = e.data;
-        if(aiText.includes("DONE"))
-        {
-            meal_txt.innerHTML += "<br><br>Thank you!";
-            eventSource.close();
-        }
-        else {
-            // styling the text as it comes through
-            aiText = aiText.replace(/NewLine/g, '<br>');
-            if(aiText.includes('AI:') || aiText.includes('Trainer:') || aiText.includes('Q:')) {
-                s = document.createElement('span');
-                s.innerHTML = aiText;
-                s.style.fontSize = "16px";
-                s.style.color = 'seagreen';
-                meal_txt.appendChild(s);
-            } else if(parseFloat(aiText) && aiText.includes('.')) {
-                s = document.createElement('span');
-                s.innerHTML = '<br>&nbsp;' + aiText + ' ';
-                s.style.fontSize = "16px";
-                s.style.color = 'brown';
-                meal_txt.appendChild(s);
+    if(eventSourceQueue.length == 6) { // handle first in the queue
+        display_var = document.querySelector('.Bmi');
+        txt_var     = document.querySelector('.BMI_text_description');
+        typeEventSource    = 'Bmi';
+    } else if(eventSourceQueue.length == 5) {
+        display_var = document.querySelector('.IntermittentFasting');
+        txt_var     = document.querySelector('.IF_text_description');
+        typeEventSource    = 'If';
+    } else if(eventSourceQueue.length == 4) {
+        display_var = document.querySelector('.Macro');
+        txt_var     = document.querySelector('.MACRO_text_description');
+        typeEventSource    = 'Macro';
+    } else if(eventSourceQueue.length == 3) {
+        display_var = document.querySelector('.Micro');
+        txt_var     = document.querySelector('.MICRO_text_description');
+        typeEventSource    = 'MicroTrace';
+    } else if(eventSourceQueue.length == 2) {
+        display_var = document.querySelector('.Micro_vit');
+        txt_var     = document.querySelector('.MICRO_vit_text_description');
+        typeEventSource    = 'MicroVit';
+    } else if(eventSourceQueue.length == 1) {
+        txt_var     = document.querySelector('.meal_text');
+        display_var = document.querySelector('.meal_plan');
+        typeEventSource    = 'Meal';
+        clearInterval(intervalID);
+    }
+    if(allowNewAiStream == true) {
+        eventSource = new EventSource("assets/php/ai.php?type=" + typeEventSource);
+        allowNewAiStream = false; // lock serving other evenSources
+        display_var.style.display = 'block';
+        txt_var.innerHTML = '<br> Created by Zephyr 7 billion beta language model from Hugging Face:<br><br>';
+        eventSource.onmessage = function (e) {
+            aiText = e.data;
+            if(aiText.includes("DONE")) {
+                eventSourceQueue.pop();
+                txt_var.innerHTML += "<br><br>Thank you!";
+                eventSource.close();
+                allowNewAiStream = true;
             } else {
-                meal_txt.innerHTML += aiText + ' ';
+                // styling the text as it comes through
+                aiText = aiText.replace(/NewLine/g, '<br>');
+                if(aiText.includes('AI:') || aiText.includes('Trainer:') || aiText.includes('Q:')) {
+                    s = document.createElement('span');
+                    s.innerHTML = aiText;
+                    s.style.fontSize = "16px";
+                    s.style.color = 'seagreen';
+                    txt_var.appendChild(s);
+                } else if(parseFloat(aiText) && aiText.includes('.')) {
+                    s = document.createElement('span');
+                    s.innerHTML = '<br>&nbsp;' + aiText + ' ';
+                    s.style.fontSize = "16px";
+                    s.style.color = 'brown';
+                    txt_var.appendChild(s);
+                } else {
+                    txt_var.innerHTML += aiText + ' ';
+                }
             }
-        }
-    };
+        };
+    }
+    
 }
 
 

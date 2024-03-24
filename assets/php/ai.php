@@ -44,31 +44,60 @@ header('Cache-Control: no-cache');
 
 session_start();
 $loc = new mealAttributes();
-$loc->meal   = $_SESSION['meal'];
-$loc->age    = $_SESSION['age'];
-$loc->gender = $_SESSION['gender'];
-$loc->height = $_SESSION['height'];
-$loc->weight = $_SESSION['weight'];
-$loc->goal   = $_SESSION['goal'];
-$loc->stress = $_SESSION['stress'];
-$loc->sleep  = $_SESSION['sleep'];
+if(isset($_GET['type']) && $_SESSION[$_GET['type']]['type'] == $_GET['type']) {
+   $eventType   = $_GET['type'];
+   $loc->meal   = $_SESSION[$eventType]['meal'];
+   $loc->age    = $_SESSION[$eventType]['age'];
+   $loc->gender = $_SESSION[$eventType]['gender'];
+   $loc->height = $_SESSION[$eventType]['height'];
+   $loc->weight = $_SESSION[$eventType]['weight'];
+   $loc->goal   = $_SESSION[$eventType]['goal'];
+   $loc->stress = $_SESSION[$eventType]['stress'];
+   $loc->sleep  = $_SESSION[$eventType]['sleep'];
+} else {
+   $eventType   = '';
+   $loc->meal   = '';
+   $loc->age    = '';
+   $loc->gender = '';
+   $loc->height = '';
+   $loc->weight = '';
+   $loc->goal   = '';
+   $loc->stress = '';
+   $loc->sleep  = '';
+}
 
-$content     = "create a meal plan for a " . 
-               $loc->gender . 
-               " , of " . 
-               strval($loc->age) . 
-               " age , with height of " . 
-               strval($loc->height) . 
-               " inches, weight of " . 
-               strval($loc->weight) . 
-               " lb, wanting to " . 
-               $loc->goal . 
-               " , with " . 
-               $loc->stress . 
-               " stress levels who sleeps " . 
-               $loc->sleep;
 
-if(json_decode($loc->meal) == '') { // run the ai model
+switch ($eventType) {
+   case 'If':
+       $content = "write an intermittent fasting weekly program for a ";
+       break;
+   case 'MicroVit':
+       $content = "write a short paragraph about vitamins required by a ";
+       break;
+   case 'MicroTrace':
+       $content = "write a short paragraph about trace minerals required by a ";
+       break;    
+   case 'Macro':
+       $content = "write a short paragraph macros required by a ";
+       break;    
+   case 'Bmr':
+       $content = "write a short paragraph about Basal Metabolic Rate for a ";
+       break;    
+   case 'Bmi':
+       $content = "write a short paragraph about body mass index for a ";
+       break; 
+   case 'Meal':
+       $content = "create a meal plan for a ";
+       break;  
+   default:
+       $content = '';
+       break;          
+} 
+
+// input prompt to the AI language model
+$contentComplete   =  $content . $loc->gender . " , of " . strval($loc->age) . " age , with height of " . strval($loc->height) . " inches, weight of " . strval($loc->weight) . " lb, wanting to " . $loc->goal . " , with " . $loc->stress . " stress levels who sleeps " . $loc->sleep;
+
+if((json_decode($loc->meal) == '' && $eventType == 'Meal') || ($eventType != 'Meal' && $eventType != '') ) { // run the ai model
    // Call Python script with JSON input
    $pythonScript = '../py/ai.py';
    $message_list = [
@@ -78,7 +107,7 @@ if(json_decode($loc->meal) == '') { // run the ai model
       ],
       [
          "role" => "user", 
-         "content" => $content
+         "content" => $contentComplete
       ]
    ]; 
    $jsonInput = json_encode($message_list); 
@@ -88,9 +117,11 @@ if(json_decode($loc->meal) == '') { // run the ai model
    db_call($process, $loc, 'w');
    $process = explode(' ', $process); 
 
-} else { // load from the database ...
+} elseif($eventType == 'Meal') { // load from the database ...
    $process = db_call($loc->meal, $loc, 'r');
    $process = explode(' ', $process);
+} else {
+   $process = ['AI engine not called. DONE'];
 }
 
 $i = 0;

@@ -36,13 +36,13 @@ if(is_null($meal['meal'])) {
 }
 
 session_start();
-$_SESSION['meal']    = json_encode($meal['meal']); // this is either empty or it is already filled by the language model
-$_SESSION['gender']  = $gender; 
-$_SESSION['age']     = $age; 
-$_SESSION['height']  = $height; 
-$_SESSION['weight']  = $weight; 
-$_SESSION['goal']    = $goal; 
-$_SESSION['stress']  = $stress; 
-$_SESSION['sleep']   = $sleep; 
-
+$_SESSION['Meal']['meal']    = json_encode($meal['meal']); // this is either empty or it is already filled by the language model
+$_SESSION['Meal']['gender']  = $gender; 
+$_SESSION['Meal']['age']     = $age; 
+$_SESSION['Meal']['height']  = $height; 
+$_SESSION['Meal']['weight']  = $weight; 
+$_SESSION['Meal']['goal']    = $goal; 
+$_SESSION['Meal']['stress']  = $stress; 
+$_SESSION['Meal']['sleep']   = $sleep; 
+$_SESSION['Meal']['type']    = 'Meal';
 ?>
