@@ -37,7 +37,7 @@ function createClientIdandCampaign($email, $numAllocation, $numCampaign, $accoun
         } else {
             $campaignId = '';
         }
-        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, campaignIdSource, used, completed, name, gender, goal, nutritionEng, mealEng, descBmi, descBmr, descIf, descMacro, descMicroTrace, descMicroVit) VALUES('$userId','$clientId','', '$campaignId', '0', '0', '', '', '', '', '', '', '', '', '', '', '');";
+        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, campaignIdSource, used, completed, name, gender, goal, nutritionEng, mealEng, descBmi, descBmr, descIf, descMacro, descMicroTrace, descMicroVit, descMeal) VALUES('$userId','$clientId','', '$campaignId', '0', '0', '', '', '', '', '', '', '', '', '', '', '', '');";
         $conn->query($sql);
     }
     $conn->close();

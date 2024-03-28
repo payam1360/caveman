@@ -114,7 +114,9 @@ if((json_decode($loc->meal) == '' && $eventType == 'Meal') || ($eventType != 'Me
    $command = "python3 " . $pythonScript . " '" . $jsonInput . "'";
 
    $process = shell_exec($command);
-   db_call($process, $loc, 'w');
+   if($eventType == 'Meal') {
+      db_call($process, $loc, 'w');
+   }
    $process = explode(' ', $process); 
 
 } elseif($eventType == 'Meal') { // load from the database ...

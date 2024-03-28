@@ -175,7 +175,8 @@ $user_bmr      = calculateBmr($data);
 $user_if       = calculateIf($data);
 $user_macro    = calculateMacro($data);
 $user_micro    = calculateMicro($data);
-$output        = dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro);
+$user_meal     = calculateMeal($data);
+$output        = dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro, $user_meal);
 echo json_encode($output);
 ?>
 

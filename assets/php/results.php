@@ -176,12 +176,15 @@ if($userdata->clientId != '') {
     $user_if       = calculateIf($clientInfo);
     $user_macro    = calculateMacro($clientInfo);
     $user_micro    = calculateMicro($clientInfo);
-    $output        = dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro);
+    $user_meal     = calculateMeal($clientInfo);
+    $output        = dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro, $user_meal);
 
 } else {
     $output = '';
+    $clientInfo = '';
 }
 $userInfo['client'] = $output;
+$userInfo['input']  = $clientInfo;
 echo json_encode($userInfo);
 
 

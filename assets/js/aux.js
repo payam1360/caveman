@@ -913,8 +913,8 @@ function submitUserData(inputDataBlob, page, userPage) {
                 plotMacro(data.macro); // 3
                 plotMicro(data.micro); // 4
                 plotMicroVit(data.micro); // 5
-                displayMeal(inputDataBlob); // 6
-                intervalID = setInterval(handleAi, 2000);
+                displayMeal(inputDataBlob, userPage); // 6
+                intervalID = setInterval(handleAi, 2000, userPage);
             }
         }
     };
@@ -1349,7 +1349,7 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     );
 }
 // function to display meal plan data returned by the server for the given user
-function displayMeal(inputDataBlob){
+function displayMeal(inputDataBlob, userPage){
     // sending data first
     eventSourceQueue.push(true);
     var xmlhttp = new XMLHttpRequest();
@@ -1358,14 +1358,18 @@ function displayMeal(inputDataBlob){
         }
     };
     // sending the request
-    xmlhttp.open("POST", "assets/php/aiRx.php", true);
+    if(userPage == 0) {
+        xmlhttp.open("POST", "assets/php/aiRx.php", true);
+    } else {
+        xmlhttp.open("POST", "../assets/php/aiRx.php", true);
+    }
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     var request = "userInfo="+JSON.stringify(inputDataBlob);
     xmlhttp.send(request);
 
 }
 
-function handleAi() {
+function handleAi(userPage) {
     // creating the server side update event source
     if(eventSourceQueue.length == 6) { // handle first in the queue
         display_var = document.querySelector('.Bmi');
@@ -1394,7 +1398,11 @@ function handleAi() {
         clearInterval(intervalID);
     }
     if(allowNewAiStream == true) {
-        eventSource = new EventSource("assets/php/ai.php?type=" + typeEventSource);
+        if(userPage == 0){
+            eventSource = new EventSource("assets/php/ai.php?type=" + typeEventSource);
+        } else {
+            eventSource = new EventSource("../assets/php/ai.php?type=" + typeEventSource);
+        }
         allowNewAiStream = false; // lock serving other evenSources
         display_var.style.display = 'block';
         txt_var.innerHTML = '<br> Created by Zephyr 7 billion beta language model from Hugging Face:<br><br>';
@@ -1708,7 +1716,7 @@ function getClientDetails(parentNode, result, cidx){
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 clientData = JSON.parse(this.response);
-                    displayClientsDetails(parentNode, clientData.client, result, cidx);
+                    displayClientsDetails(parentNode, clientData.client, clientData.input, result, cidx);
             }
         };
         // sending the request
@@ -1720,7 +1728,7 @@ function getClientDetails(parentNode, result, cidx){
 }
 
 
-function displayClientsDetails(parentNode, clientData, results, cidx) {
+function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx) {
     
     userid = parentNode.children[cidx].getAttribute('userid');
     clientid = parentNode.children[cidx].getAttribute('clientid');
@@ -1879,7 +1887,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     bmiBtn.addEventListener('click', function(){
         addUsersuggestionContent(clientData.bmi, bmiDesc, bmiBtn, 'desc');
         if(bmiBtn.innerHTML == 'Edit') {
-            saveUserCommentstoDb(clientData.bmi['desc'], userid, clientid, 'bmi');
+            saveUserCommentstoDb(clientData.bmi['desc'], userid, clientid, 'Bmi');
         }
     });    
     bmiBtnDiv.appendChild(bmiBtn);
@@ -1929,7 +1937,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     microBtn.addEventListener('click', function(){
         addUsersuggestionContent(clientData.micro, microDesc, microBtn, 'descTrace');
         if(microBtn.innerHTML == 'Edit') {
-            saveUserCommentstoDb(clientData.micro['descTrace'], userid, clientid, 'micro');
+            saveUserCommentstoDb(clientData.micro['descTrace'], userid, clientid, 'Micro');
         }
     });    
     microBtnDiv.appendChild(microBtn);
@@ -1977,7 +1985,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     microVitBtn.addEventListener('click', function(){
         addUsersuggestionContent(clientData.micro, microVitDesc, microVitBtn, 'descVit');
         if(microVitBtn.innerHTML == 'Edit') {
-            saveUserCommentstoDb(clientData.micro['descVit'], userid, clientid, 'microVit');
+            saveUserCommentstoDb(clientData.micro['descVit'], userid, clientid, 'MicroVit');
         }
     });    
     microVitBtnDiv.appendChild(microVitBtn);
@@ -2025,7 +2033,7 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     macroBtn.addEventListener('click', function(){
         addUsersuggestionContent(clientData.macro, macroDesc, macroBtn, 'desc');
         if(macroBtn.innerHTML == 'Edit') {
-            saveUserCommentstoDb(clientData.macro['desc'], userid, clientid, 'macro');
+            saveUserCommentstoDb(clientData.macro['desc'], userid, clientid, 'Macro');
         }
     });    
     macroBtnDiv.appendChild(macroBtn);
@@ -2073,11 +2081,56 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     ifBtn.addEventListener('click', function(){
         addUsersuggestionContent(clientData.if, ifDesc, ifBtn, 'desc');
         if(ifBtn.innerHTML == 'Edit') {
-            saveUserCommentstoDb(clientData.if['desc'], userid, clientid, 'if');
+            saveUserCommentstoDb(clientData.if['desc'], userid, clientid, 'If');
         }
     });    
     ifBtnDiv.appendChild(ifBtn);
 
+
+
+    let divider5 = document.createElement('div');
+    divider5.style.height = '2px';
+    divider5.style.width = '80%';
+    divider5.style.backgroundColor = 'grey';
+    divider5.style.margin = 'auto';
+    divider5.style.marginTop = '20px';
+
+
+
+    // create meal plan text area 
+    let meal_text = document.createElement('p');
+    meal_text.innerHTML = 'meal plan';
+    meal_text.style.fontSize = '30px';
+    meal_text.setAttribute('id', 'mDivMealSugg');
+    let Meal = document.createElement('div');
+    Meal.setAttribute('class', 'col-sm col-lg-5 meal_plan');
+    Meal.style.margin = 'auto';
+    div1 = document.createElement('div');
+    let mealDesc = document.createElement('p');
+    mealDesc.setAttribute('class', 'meal_text');
+    div1.appendChild(mealDesc);
+    Meal.appendChild(div1);
+   
+    // ------------------------------------
+    // edit button for Intermittent fasting description. User can add his comments here.
+    // content of clientData.bmi['desc'] must be modified.
+    let mealBtnDiv = document.createElement('div');
+    mealBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+    mealBtnDiv.style.margin = '20px';
+    let mealBtn = document.createElement('button');
+    mealBtn.setAttribute('class', 'btn btn-outline-primary');
+    mealBtn.innerHTML = 'Edit';
+    mealBtn.addEventListener('click', function(){
+        addUsersuggestionContent(clientData.meal, mealDesc, mealBtn, 'desc');
+        if(mealBtn.innerHTML == 'Edit') {
+            saveUserCommentstoDb(clientData.meal['desc'], userid, clientid, 'Meal');
+        }
+    });    
+    mealBtnDiv.appendChild(mealBtn);
+
+
+    // -----------------------------
+    // appending to mDiv from here:
 
     mDiv.appendChild(closeBtn);
     if(!accessDenied){
@@ -2089,6 +2142,8 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     mDiv.appendChild(goalP);
     mDiv.appendChild(idP);
     mDiv.appendChild(campaignP);
+
+
     mDiv.appendChild(divider1);
     mDiv.appendChild(bmrSuggestion);
     mDiv.appendChild(bmiSuggestion);
@@ -2096,39 +2151,52 @@ function displayClientsDetails(parentNode, clientData, results, cidx) {
     if(!accessDenied){
         mDiv.appendChild(bmiBtnDiv);
     }
+
     mDiv.appendChild(divider2);
-    mDiv.appendChild(microSuggestion);
-    mDiv.appendChild(micro);
-    if(!accessDenied){
-        mDiv.appendChild(microBtnDiv);
-    }
-    mDiv.appendChild(divider2Vit);
-    mDiv.appendChild(microVitSuggestion);
-    mDiv.appendChild(microVit);
-    if(!accessDenied){
-        mDiv.appendChild(microVitBtnDiv);
-    }
-    mDiv.appendChild(divider3);
-    mDiv.appendChild(macroSuggestion);
-    mDiv.appendChild(macro);
-    if(!accessDenied){
-        mDiv.appendChild(macroBtnDiv);
-    }
-    mDiv.appendChild(divider4);
     mDiv.appendChild(ifSuggestion);
     mDiv.appendChild(If);
     if(!accessDenied){
         mDiv.appendChild(ifBtnDiv);
     }
 
-    parentNode.appendChild(mDiv);
+    mDiv.appendChild(divider2Vit);
+    mDiv.appendChild(macroSuggestion);
+    mDiv.appendChild(macro);
+    if(!accessDenied){
+        mDiv.appendChild(macroBtnDiv);
+    }
+
+    mDiv.appendChild(divider3);
+    mDiv.appendChild(microSuggestion);
+    mDiv.appendChild(micro);
+    if(!accessDenied){
+        mDiv.appendChild(microBtnDiv);
+    }
+
+    mDiv.appendChild(divider4);
+    mDiv.appendChild(microVitSuggestion);
+    mDiv.appendChild(microVit);
+    if(!accessDenied){
+        mDiv.appendChild(microVitBtnDiv);
+    }
     
+    mDiv.appendChild(divider5);
+    mDiv.appendChild(meal_text);
+    mDiv.appendChild(Meal);
+    if(!accessDenied){
+        mDiv.appendChild(mealBtnDiv);
+    }
+
+
+    parentNode.appendChild(mDiv);
     plotBmi(clientData.bmi, bmi, bmiTxt, bmiDesc);
+    plotIf(clientData.if, If, ifTxt, ifDesc);
+    plotMacro(clientData.macro, macro, macroTxt, macroDesc);
     plotMicro(clientData.micro, micro, microTxt, microDesc);
     plotMicroVit(clientData.micro, microVit, microVitTxt, microVitDesc);
-    plotMacro(clientData.macro, macro, macroTxt, macroDesc);
-    plotIf(clientData.if, If, ifTxt, ifDesc);
-    
+    displayMeal(inputBlob, 0); 
+    intervalID = setInterval(handleAi, 2000, 0);
+
 }
 
 function createPdf(node, data) {

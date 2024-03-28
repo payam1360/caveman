@@ -252,7 +252,7 @@ function calculateBmi($data){
         if($data[0]->nutritionEng == "0") { // AI request has priority 
             $BMI['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Bmi'); //["This text should be generated using AI request!"];
         } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-            $BMI['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'Bmi');
+            $BMI['desc'] = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Bmi');
         }
     } else {
         $BMI['val']  = [];
@@ -291,7 +291,7 @@ function calculateBmr($data) {
         if($data[0]->nutritionEng == "0") { // AI request has priority 
             $BMR['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Bmr'); //["This text should be generated using AI request!"];
         } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-            $BMR['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'Bmr');
+            $BMR['desc'] = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Bmr');
         }
 
     } else {
@@ -373,7 +373,7 @@ function calculateIf($data){
         if($data[0]->nutritionEng == "0") { // AI request has priority 
             $IF['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'If'); //["This text should be generated using AI request!"];
         } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-            $IF['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'If');
+            $IF['desc'] = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'If');
         }
     } else {
         $IF['val']  = [];
@@ -490,7 +490,7 @@ function calculateMacro($data){
         if($data[0]->nutritionEng == "0") { // AI request has priority 
             $Macro['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Macro'); //["This text should be generated using AI request!"];
         } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-            $Macro['desc'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'Macro');
+            $Macro['desc'] = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Macro');
         }
     } else {
         $Macro['val'] = [];
@@ -498,6 +498,36 @@ function calculateMacro($data){
     } 
     return($Macro);
 }
+
+function calculateMeal($data){
+    // add Micro computation code
+    // vitamin         = [A, B1, B2, B3, B5, B6, B7, B9, B12, C, D, E, K]
+    // trace minerals  = [Calcium, Chromium, Copper, Fluoride, 
+    //                    Iodine, Iron, Magnesium, Manganese, 
+    //                    Molybdenum, Phosphorus, Potassium, Selenium, Sodium, Zinc, Chloride]
+    $Userage    = getAge($data);
+    $Usergender = getGender($data);
+    $Usergoal   = getGoal($data);
+    $Userheight = getHeight($data);
+    $Userweight = getWeight($data);
+    $Userstress = getStress($data);
+    $Usersleep  = getSleep($data);
+    $BMI        = calculateBmi($data);
+    $Meal['val'] = array('gender' => $Usergender,
+                   'goal' => $Usergoal,
+                   'height' => $Userheight,
+                   'weight' => $Userweight,
+                   'stress' => $Userstress,
+                   'sleep' => $Usersleep, 
+                   'age' => $Userage); 
+    if($data[0]->nutritionEng == "0") { // AI request has priority 
+        $Meal['desc']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Meal'); 
+    } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
+        $Meal['desc']   = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Meal');
+    }
+    return($Meal);
+}
+
 function calculateMicro($data){
     // add Micro computation code
     // vitamin         = [A, B1, B2, B3, B5, B6, B7, B9, B12, C, D, E, K]
@@ -571,8 +601,8 @@ function calculateMicro($data){
             $Micro['descVit']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'MicroVit'); //["This text should be generated using AI request!"];
             $Micro['descTrace'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'MicroTrace'); //["This text should be generated using AI request!"];
         } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-            $Micro['descVit']   = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'MicroVit');
-            $Micro['descTrace'] = requestdB($BMI['val'], $Userage, $Usergender, $Usergoal, $data[0]->userId, $data[0]->clientId, 'MicroTrace');
+            $Micro['descVit']   = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'MicroVit');
+            $Micro['descTrace'] = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'MicroTrace');
         }
     } else {
         $Micro['descVit']    = [];
@@ -582,14 +612,35 @@ function calculateMicro($data){
     return($Micro);
 }
 
-function dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro){
+function dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro, $meal){
     $data = array('status' => 0,
                  'bmi'   => $user_bmi,
                  'bmr'   => $user_bmr,
                  'if'    => $user_if,
                  'macro' => $user_macro,
-                 'micro' => $user_micro);
+                 'micro' => $user_micro,
+                 'meal'  => $meal);
     return $data;
+}
+
+function dbMealCon($weight, $height, $age, $gender, $goal, $stress, $sleep) {
+    $servername   = "127.0.0.1";
+    $loginname    = "root";
+    $password     = "@Ssia123";
+    $dbname       = "Users";
+    $tablename    = "ai";
+    // Create connection
+    $conn         = new mysqli($servername, $loginname, $password, $dbname);
+    $sql          = "SELECT meal FROM $tablename WHERE 
+                                                        age    = '$age' AND 
+                                                        gender = '$gender' AND 
+                                                        stress = '$stress' AND 
+                                                        sleep  = '$sleep' AND 
+                                                        height = '$height' AND 
+                                                        weight = '$weight' AND 
+                                                        goal   = '$goal';";
+    $database_out = $conn->query($sql);
+    return($database_out);
 }
 
 function dbCon($userId, $clientId) {
@@ -602,12 +653,12 @@ function dbCon($userId, $clientId) {
     $conn         = new mysqli($servername, $loginname, $password, $dbname);
     // check if the client exists.
     $sql          = "SELECT * FROM $tablename WHERE userId = '$userId' AND clientId = '$clientId';";
-    $database_out = $conn->query($sql);
+    $database_out         = $conn->query($sql); 
     return($database_out);
 }
 
 
-function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $contextFlag){
+function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $userId, $clientId, $contextFlag){
     $dbOut    = dbCon($userId, $clientId);
     $dbOutRow = $dbOut->fetch_assoc();
     $desc = [];
@@ -913,7 +964,13 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
                 $desc = ['Trace minerals should be consumed in tiny doses. The recomended daily doses are presented for you in the above chart.'];
             } 
         } 
-    } 
+    } elseif($contextFlag == "Meal") {
+        if(!empty($dbOutRow['descMeal'])) { // use the entry by the user
+            $desc = [$dbOutRow['descMeal']];
+        } else { 
+            $desc = [''];
+        }
+    }
     return($desc); 
 }
 
@@ -921,7 +978,15 @@ function requestdB($Bmi, $Userage, $Usergender, $Usergoal, $userId, $clientId, $
 // no DB checking ... these will be always from AI. 
 // might need to get a fast GPU when launching on the actual server.
 function requestGpt($weight, $height, $age, $gender, $goal, $stress, $sleep, $context) {
-    $_SESSION[$context]['meal']    = json_encode(''); // this is either empty or it is already filled by the language model
+
+    $dbOutMeal = dbMealCon($weight, $height, $age, $gender, $goal, $stress, $sleep);
+    $dbOutMealRow = $dbOutMeal->fetch_assoc();
+    if(!empty($dbOutMealRow['meal'])) { // use the entry by the user
+        $desc = [$dbOutMealRow['meal']];
+    } else { 
+        $desc = [''];
+    }
+    $_SESSION[$context]['meal']    = json_encode($desc); // this is either empty or it is already filled by the language model
     $_SESSION[$context]['gender']  = $gender; 
     $_SESSION[$context]['age']     = $age; 
     $_SESSION[$context]['height']  = $height; 

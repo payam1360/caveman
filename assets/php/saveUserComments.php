@@ -10,15 +10,17 @@ function saveUserComment($clientId, $userId, $comment, $category) {
     // Create connection
     $conn         = new mysqli($servername, $loginname, $password, $dbname);
     // check if the client exists.
-    if($category == 'bmi') {
+    if($category == 'Bmi') {
         $field = 'descBmi';
-    } elseif($category == 'macro') {
+    } elseif($category == 'Macro') {
         $field = 'descMacro';
-    } elseif($category == 'micro') {
+    } elseif($category == 'Micro') {
         $field = 'descMicroTrace';
-    } elseif($category == 'microVit') {
+    } elseif($category == 'MicroVit') {
         $field = 'descMicroVit';
-    } elseif($category == 'if') {
+    } elseif($category == 'Meal') {
+        $field = 'descMeal';
+    } elseif($category == 'If') {
         $field = 'descIf';
     } elseif($category == 'campaign') {
         $field = 'campaignId';
