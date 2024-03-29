@@ -913,8 +913,8 @@ function submitUserData(inputDataBlob, page, userPage) {
                 plotMacro(data.macro); // 3
                 plotMicro(data.micro); // 4
                 plotMicroVit(data.micro); // 5
-                displayMeal(inputDataBlob, userPage); // 6
-                intervalID = setInterval(handleAi, 2000, userPage);
+                displayMeal(data.meal, inputDataBlob, userPage); // 6
+                intervalID = setInterval(handleAi, 2000, [userPage, 0, 0]);
             }
         }
     };
@@ -1349,12 +1349,16 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     );
 }
 // function to display meal plan data returned by the server for the given user
-function displayMeal(inputDataBlob, userPage){
+function displayMeal(mealIn, inputDataBlob, userPage){
     // sending data first
     eventSourceQueue.push(true);
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            txt_var     = document.querySelector('.meal_text');
+            display_var = document.querySelector('.meal_plan');    
+            display_var.style.display = 'block';
+            txt_var.innerHTML = mealIn['desc'];
         }
     };
     // sending the request
@@ -1369,35 +1373,44 @@ function displayMeal(inputDataBlob, userPage){
 
 }
 
-function handleAi(userPage) {
+function handleAi(inPut) {
+
+    userPage     = inPut[0];
+    nutritionEng = inPut[1];
+    mealEng      = inPut[2];
     // creating the server side update event source
-    if(eventSourceQueue.length == 6) { // handle first in the queue
+    if(eventSourceQueue.length == 6 && nutritionEng == 0) { // handle first in the queue
         display_var = document.querySelector('.Bmi');
         txt_var     = document.querySelector('.BMI_text_description');
         typeEventSource    = 'Bmi';
-    } else if(eventSourceQueue.length == 5) {
+    } else if(eventSourceQueue.length == 5 && nutritionEng == 0) {
         display_var = document.querySelector('.IntermittentFasting');
         txt_var     = document.querySelector('.IF_text_description');
         typeEventSource    = 'If';
-    } else if(eventSourceQueue.length == 4) {
+    } else if(eventSourceQueue.length == 4 && nutritionEng == 0) {
         display_var = document.querySelector('.Macro');
         txt_var     = document.querySelector('.MACRO_text_description');
         typeEventSource    = 'Macro';
-    } else if(eventSourceQueue.length == 3) {
+    } else if(eventSourceQueue.length == 3 && nutritionEng == 0) {
         display_var = document.querySelector('.Micro');
         txt_var     = document.querySelector('.MICRO_text_description');
         typeEventSource    = 'MicroTrace';
-    } else if(eventSourceQueue.length == 2) {
+    } else if(eventSourceQueue.length == 2 && nutritionEng == 0) {
         display_var = document.querySelector('.Micro_vit');
         txt_var     = document.querySelector('.MICRO_vit_text_description');
         typeEventSource    = 'MicroVit';
-    } else if(eventSourceQueue.length == 1) {
+    } else if(eventSourceQueue.length == 1 && mealEng == 0) {
         txt_var     = document.querySelector('.meal_text');
         display_var = document.querySelector('.meal_plan');
         typeEventSource    = 'Meal';
         clearInterval(intervalID);
+    } else if (eventSourceQueue.length != 1 && nutritionEng == 1) {
+        eventSourceQueue.pop();
+    } else if (eventSourceQueue.length == 1 && mealEng == 1) {
+        eventSourceQueue.pop();
     }
-    if(allowNewAiStream == true) {
+
+    if(allowNewAiStream == true && (mealEng == 0 || nutritionEng == 0)) {
         if(userPage == 0){
             eventSource = new EventSource("assets/php/ai.php?type=" + typeEventSource);
         } else {
@@ -2194,8 +2207,9 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     plotMacro(clientData.macro, macro, macroTxt, macroDesc);
     plotMicro(clientData.micro, micro, microTxt, microDesc);
     plotMicroVit(clientData.micro, microVit, microVitTxt, microVitDesc);
-    displayMeal(inputBlob, 0); 
-    intervalID = setInterval(handleAi, 2000, 0);
+    displayMeal(clientData.meal, inputBlob, 0); 
+    
+    intervalID = setInterval(handleAi, 2000, [0, inputBlob[0].nutritionEng, inputBlob[0].mealEng]);
 
 }
 

@@ -968,7 +968,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
         if(!empty($dbOutRow['descMeal'])) { // use the entry by the user
             $desc = [$dbOutRow['descMeal']];
         } else { 
-            $desc = [''];
+            $desc = ['Please provide your meal plan for your client.'];
         }
     }
     return($desc); 
