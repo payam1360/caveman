@@ -1356,8 +1356,10 @@ function displayMeal(mealIn, inputDataBlob, userPage){
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             txt_var     = document.querySelector('.meal_text');
-            display_var = document.querySelector('.meal_plan');    
+            display_var = document.querySelector('.meal_plan');  
+            title_var   = document.querySelector('.Meal_title');  
             display_var.style.display = 'block';
+            title_var.style.display = 'block';
             txt_var.innerHTML = mealIn['desc'];
         }
     };

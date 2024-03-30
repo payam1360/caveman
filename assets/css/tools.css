@@ -148,7 +148,8 @@
 .MACRO_text,
 .MICRO_text,
 .MICRO_vit_text,
-.AD_text {
+.AD_text,
+.Meal_title {
     color: black;
     font-size: 24px;
     font-weight: bold;
