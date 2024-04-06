@@ -520,9 +520,9 @@ function calculateMeal($data){
                    'stress' => $Userstress,
                    'sleep' => $Usersleep, 
                    'age' => $Userage); 
-    if($data[0]->nutritionEng == "0") { // AI request has priority 
+    if($data[0]->mealEng == "0") { // AI request has priority 
         $Meal['desc']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Meal'); 
-    } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
+    } elseif($data[0]->mealEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
         $Meal['desc']   = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Meal');
     }
     return($Meal);
@@ -630,8 +630,11 @@ function dbMealCon($weight, $height, $age, $gender, $goal, $stress, $sleep) {
     $dbname       = "Users";
     $tablename    = "ai";
     // Create connection
+    $query_flag = empty($weight) && empty($height) && empty($age) && empty($gender) && 
+                  empty($goal) && empty($stress) && empty($sleep);
     $conn         = new mysqli($servername, $loginname, $password, $dbname);
-    $sql          = "SELECT meal FROM $tablename WHERE 
+    if(!$query_flag) {
+        $sql          = "SELECT meal FROM $tablename WHERE 
                                                         age    = '$age' AND 
                                                         gender = '$gender' AND 
                                                         stress = '$stress' AND 
@@ -639,7 +642,10 @@ function dbMealCon($weight, $height, $age, $gender, $goal, $stress, $sleep) {
                                                         height = '$height' AND 
                                                         weight = '$weight' AND 
                                                         goal   = '$goal';";
-    $database_out = $conn->query($sql);
+        $database_out = $conn->query($sql);
+    } else {
+        $database_out['meal'] = '';
+    }
     return($database_out);
 }
 
@@ -979,8 +985,16 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
 // might need to get a fast GPU when launching on the actual server.
 function requestGpt($weight, $height, $age, $gender, $goal, $stress, $sleep, $context) {
 
-    $dbOutMeal = dbMealCon($weight, $height, $age, $gender, $goal, $stress, $sleep);
-    $dbOutMealRow = $dbOutMeal->fetch_assoc();
+    if($context == 'Meal') {
+        $dbOutMeal = dbMealCon($weight, $height, $age, $gender, $goal, $stress, $sleep);
+        if(!empty($dbOutMeal['meal'])){
+            $dbOutMealRow = $dbOutMeal->fetch_assoc();
+        } else {
+            $dbOutMealRow['meal'] = '';
+        }
+    } else {
+        $dbOutMealRow['meal'] = '';
+    }
     if(!empty($dbOutMealRow['meal'])) { // use the entry by the user
         $desc = [$dbOutMealRow['meal']];
     } else { 

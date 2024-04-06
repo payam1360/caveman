@@ -1385,26 +1385,32 @@ function handleAi(inPut) {
         display_var = document.querySelector('.Bmi');
         txt_var     = document.querySelector('.BMI_text_description');
         typeEventSource    = 'Bmi';
+        display_var.style.display = 'block';
     } else if(eventSourceQueue.length == 5 && nutritionEng == 0) {
         display_var = document.querySelector('.IntermittentFasting');
         txt_var     = document.querySelector('.IF_text_description');
         typeEventSource    = 'If';
+        display_var.style.display = 'block';
     } else if(eventSourceQueue.length == 4 && nutritionEng == 0) {
         display_var = document.querySelector('.Macro');
         txt_var     = document.querySelector('.MACRO_text_description');
         typeEventSource    = 'Macro';
+        display_var.style.display = 'block';
     } else if(eventSourceQueue.length == 3 && nutritionEng == 0) {
         display_var = document.querySelector('.Micro');
         txt_var     = document.querySelector('.MICRO_text_description');
         typeEventSource    = 'MicroTrace';
+        display_var.style.display = 'block';
     } else if(eventSourceQueue.length == 2 && nutritionEng == 0) {
         display_var = document.querySelector('.Micro_vit');
         txt_var     = document.querySelector('.MICRO_vit_text_description');
         typeEventSource    = 'MicroVit';
+        display_var.style.display = 'block';
     } else if(eventSourceQueue.length == 1 && mealEng == 0) {
         txt_var     = document.querySelector('.meal_text');
         display_var = document.querySelector('.meal_plan');
         typeEventSource    = 'Meal';
+        display_var.style.display = 'block';
         clearInterval(intervalID);
     } else if (eventSourceQueue.length != 1 && nutritionEng == 1) {
         eventSourceQueue.pop();
@@ -1419,7 +1425,6 @@ function handleAi(inPut) {
             eventSource = new EventSource("../assets/php/ai.php?type=" + typeEventSource);
         }
         allowNewAiStream = false; // lock serving other evenSources
-        display_var.style.display = 'block';
         txt_var.innerHTML = '<br> Created by Zephyr 7 billion beta language model from Hugging Face:<br><br>';
         eventSource.onmessage = function (e) {
             aiText = e.data;
@@ -2117,6 +2122,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     meal_text.innerHTML = 'meal plan';
     meal_text.style.fontSize = '30px';
     meal_text.setAttribute('id', 'mDivMealSugg');
+    meal_text.setAttribute('class', 'Meal_title');
     let Meal = document.createElement('div');
     Meal.setAttribute('class', 'col-sm col-lg-5 meal_plan');
     Meal.style.margin = 'auto';
@@ -2202,7 +2208,8 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         mDiv.appendChild(mealBtnDiv);
     }
 
-
+    eventSourceQueue = [];
+    allowNewAiStream = true;
     parentNode.appendChild(mDiv);
     plotBmi(clientData.bmi, bmi, bmiTxt, bmiDesc);
     plotIf(clientData.if, If, ifTxt, ifDesc);

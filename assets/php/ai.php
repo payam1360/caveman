@@ -123,7 +123,7 @@ if((json_decode($loc->meal) == '' && $eventType == 'Meal') || ($eventType != 'Me
    $process = db_call($loc->meal, $loc, 'r');
    $process = explode(' ', $process);
 } else {
-   $process = ['AI engine not called. DONE'];
+   $process = ['Please add your comments here. DONE'];
 }
 
 $i = 0;
