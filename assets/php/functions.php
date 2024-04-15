@@ -256,7 +256,7 @@ function calculateBmi($data){
         }
     } else {
         $BMI['val']  = [];
-        $BMI['desc'] = [];
+        $BMI['desc'] = ['Please provide your comments here'];
     }
     return($BMI);
 }
@@ -296,7 +296,7 @@ function calculateBmr($data) {
 
     } else {
         $BMR['val'] = [];
-        $BMR['desc'] = [];
+        $BMR['desc'] = ['Please provide your comments here'];
     }
     return($BMR);
 }
@@ -377,7 +377,7 @@ function calculateIf($data){
         }
     } else {
         $IF['val']  = [];
-        $IF['desc'] = [];
+        $IF['desc'] = ['Please provide your comments here'];
     }
         // -----------------------------------------------------------
     return($IF);
@@ -494,7 +494,7 @@ function calculateMacro($data){
         }
     } else {
         $Macro['val'] = [];
-        $Macro['desc']  = [];
+        $Macro['desc']  = ['Please provide your comments here'];
     } 
     return($Macro);
 }
@@ -605,8 +605,8 @@ function calculateMicro($data){
             $Micro['descTrace'] = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'MicroTrace');
         }
     } else {
-        $Micro['descVit']    = [];
-        $Micro['descTrace']  = [];
+        $Micro['descVit']    = ['Please provide your comments here'];
+        $Micro['descTrace']  = ['Please provide your comments here'];
     } 
 
     return($Micro);
@@ -643,6 +643,7 @@ function dbMealCon($weight, $height, $age, $gender, $goal, $stress, $sleep) {
                                                         weight = '$weight' AND 
                                                         goal   = '$goal';";
         $database_out = $conn->query($sql);
+        $database_out = $database_out->fetch_assoc();
     } else {
         $database_out['meal'] = '';
     }

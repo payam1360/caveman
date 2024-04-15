@@ -12,7 +12,7 @@ let MAX_cnt   = 0;
 let globalQidx = 0;
 let choiceTracker = [[0], [0]];
 let multiButtonSelect = [];
-let eventSourceQueue = [];
+let eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, MicroVit:false, Meal:false};
 let allowNewAiStream = true;
 let intervalID = [];
 let multiTextSelect = [];
@@ -908,6 +908,8 @@ function submitUserData(inputDataBlob, page, userPage) {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
             if(data.status == 0 && page == 'main'){
+                eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, MicroVit:false, Meal:false};
+                allowNewAiStream = true;
                 plotBmi(data.bmi);  // 1
                 plotIf(data.if);    // 2
                 plotMacro(data.macro); // 3
@@ -1042,7 +1044,7 @@ function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
     bmiDesc.style.margin = '20px';
     
     bmiDesc.innerHTML = bmi['desc'];
-    eventSourceQueue.push(true);
+    eventSourceQueue['Bmi'] = true; // arm stream even for SSE for BMI info
     // Config section
     let meanBmi = 25;
     let varBmi = 3.1;
@@ -1124,7 +1126,8 @@ function plotIf(If, ifTxt = 0, ifDiv = 0, ifDesc = 0){
     }
     let ifElement  = document.querySelector('#IntermittentFasting');
     
-    eventSourceQueue.push(true);
+    ifDesc.style.margin = '20px';
+    eventSourceQueue['If'] = true;
     ifDesc.innerHTML     = If['desc'];
     ifTxt.style.display  = 'block';
     ifDiv.style.display  = 'block';
@@ -1190,8 +1193,10 @@ function plotMacro(macro, macroTxt = 0, macroDiv = 0, macroDesc = 0){
     macroDiv.style.display = 'block';
     macroDesc.style.display = 'block';
 
+    macroDesc.style.margin = '20px';
+
     macroDesc.innerHTML = macro['desc'];
-    eventSourceQueue.push(true);
+    eventSourceQueue['Macro'] = true;
 
     const macroData = {
       labels: ['fat','carbs', 'protein', 'fiber'],
@@ -1236,8 +1241,10 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     microDiv.style.display = 'block';
     microDesc.style.display = 'block';
     
+
+    microDesc.style.margin = '20px';
     microDesc.innerHTML = micro['descTrace'];
-    eventSourceQueue.push(true);
+    eventSourceQueue['MicroTrace'] = true;
     tColors = ['coral','lightblue','limegreen','cyan','blue','green','orange',
                'magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod',
                'Peru','Sienna'];
@@ -1301,7 +1308,9 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     microTxt.style.display = 'block';
     microDiv.style.display = 'block';
     microDesc.style.display = 'block';
-    eventSourceQueue.push(true);
+    microDesc.style.margin = '20px';
+
+    eventSourceQueue['MicroVit'] = true;
     microDesc.innerHTML = micro['descVit'];
     vColors = ['coral','lightblue','limegreen','cyan','blue','green','orange','magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod','Peru','Sienna'];
     const microData = {
@@ -1351,7 +1360,7 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
 // function to display meal plan data returned by the server for the given user
 function displayMeal(mealIn, inputDataBlob, userPage){
     // sending data first
-    eventSourceQueue.push(true);
+    eventSourceQueue['Meal'] = true;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -1360,6 +1369,7 @@ function displayMeal(mealIn, inputDataBlob, userPage){
             title_var   = document.querySelector('.Meal_title');  
             display_var.style.display = 'block';
             title_var.style.display = 'block';
+            txt_var.style.margin = '20px';
             txt_var.innerHTML = mealIn['desc'];
         }
     };
@@ -1380,44 +1390,56 @@ function handleAi(inPut) {
     userPage     = inPut[0];
     nutritionEng = inPut[1];
     mealEng      = inPut[2];
+    contextSet   = ['Bmi', 'If', 'Macro', 'MicroTrace', 'MicroVit', 'Meal'];
     // creating the server side update event source
-    if(eventSourceQueue.length == 6 && nutritionEng == 0) { // handle first in the queue
-        display_var = document.querySelector('.Bmi');
-        txt_var     = document.querySelector('.BMI_text_description');
-        typeEventSource    = 'Bmi';
-        display_var.style.display = 'block';
-    } else if(eventSourceQueue.length == 5 && nutritionEng == 0) {
-        display_var = document.querySelector('.IntermittentFasting');
-        txt_var     = document.querySelector('.IF_text_description');
-        typeEventSource    = 'If';
-        display_var.style.display = 'block';
-    } else if(eventSourceQueue.length == 4 && nutritionEng == 0) {
-        display_var = document.querySelector('.Macro');
-        txt_var     = document.querySelector('.MACRO_text_description');
-        typeEventSource    = 'Macro';
-        display_var.style.display = 'block';
-    } else if(eventSourceQueue.length == 3 && nutritionEng == 0) {
-        display_var = document.querySelector('.Micro');
-        txt_var     = document.querySelector('.MICRO_text_description');
-        typeEventSource    = 'MicroTrace';
-        display_var.style.display = 'block';
-    } else if(eventSourceQueue.length == 2 && nutritionEng == 0) {
-        display_var = document.querySelector('.Micro_vit');
-        txt_var     = document.querySelector('.MICRO_vit_text_description');
-        typeEventSource    = 'MicroVit';
-        display_var.style.display = 'block';
-    } else if(eventSourceQueue.length == 1 && mealEng == 0) {
-        txt_var     = document.querySelector('.meal_text');
-        display_var = document.querySelector('.meal_plan');
-        typeEventSource    = 'Meal';
-        display_var.style.display = 'block';
-        clearInterval(intervalID);
-    } else if (eventSourceQueue.length != 1 && nutritionEng == 1) {
-        eventSourceQueue.pop();
-    } else if (eventSourceQueue.length == 1 && mealEng == 1) {
-        eventSourceQueue.pop();
+    for(contextCnt = 0; contextCnt < contextSet.length; contextCnt++){
+        if(nutritionEng == 0 && eventSourceQueue[contextSet[contextCnt]] == true){
+            if(contextCnt == 0) { // handle first in the queue
+                display_var = document.querySelector('.Bmi');
+                txt_var     = document.querySelector('.BMI_text_description');
+                typeEventSource    = contextSet[contextCnt];
+                display_var.style.display = 'block';
+                activeSSE   = contextCnt;
+            } else if(contextCnt == 1) {
+                display_var = document.querySelector('.IntermittentFasting');
+                txt_var     = document.querySelector('.IF_text_description');
+                typeEventSource    = contextSet[contextCnt];
+                display_var.style.display = 'block';
+                activeSSE   = contextCnt;
+            } else if(contextCnt == 2) {
+                display_var = document.querySelector('.Macro');
+                txt_var     = document.querySelector('.MACRO_text_description');
+                typeEventSource    = contextSet[contextCnt];
+                display_var.style.display = 'block';
+                activeSSE   = contextCnt;
+            } else if(contextCnt == 3) {
+                display_var = document.querySelector('.Micro');
+                txt_var     = document.querySelector('.MICRO_text_description');
+                typeEventSource    = contextSet[contextCnt];
+                display_var.style.display = 'block';
+                activeSSE   = contextCnt;
+            } else if(contextCnt == 4) {
+                display_var = document.querySelector('.Micro_vit');
+                txt_var     = document.querySelector('.MICRO_vit_text_description');
+                typeEventSource    = contextSet[contextCnt];
+                display_var.style.display = 'block';
+                activeSSE   = contextCnt;
+            }
+        }
+        if(mealEng == 0 && eventSourceQueue[contextSet[contextCnt]] == true) {
+            if(contextCnt == 5) {
+                txt_var     = document.querySelector('.meal_text');
+                display_var = document.querySelector('.meal_plan');
+                typeEventSource    = contextSet[contextCnt];
+                display_var.style.display = 'block';
+                activeSSE   = contextCnt;
+                clearInterval(intervalID);
+            }
+        }
     }
-
+    if(mealEng == 1 && nutritionEng == 1) {
+        allowNewAiStream = false;
+    }
     if(allowNewAiStream == true && (mealEng == 0 || nutritionEng == 0)) {
         if(userPage == 0){
             eventSource = new EventSource("assets/php/ai.php?type=" + typeEventSource);
@@ -1429,7 +1451,7 @@ function handleAi(inPut) {
         eventSource.onmessage = function (e) {
             aiText = e.data;
             if(aiText.includes("DONE")) {
-                eventSourceQueue.pop();
+                eventSourceQueue[contextSet[activeSSE]];
                 txt_var.innerHTML += "<br><br>Thank you!";
                 eventSource.close();
                 allowNewAiStream = true;
@@ -1807,8 +1829,10 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     let goalP = document.createElement('p');
     let goalPstyle = document.createElement('span');
     let campaignP = document.createElement('p');
-
-
+    let mealText  = document.createElement('p');
+    let mealPstyle = document.createElement('span');
+    let nutritionText = document.createElement('p');
+    let nutritionPstyle = document.createElement('span');
     
     nameP.innerHTML = "Client's name: ";
     nameP.style.marginTop = '100px';
@@ -1843,6 +1867,37 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     goalPstyle.setAttribute('id', 'mDivpGoal');
     goalP.appendChild(goalPstyle); 
 
+    if(inputBlob[0].mealEng == 0){
+        mealText.innerHTML = 'You have selected ';
+        mealPstyle.innerHTML = 'AI';
+        mealPstyle.style.fontSize = '24px';
+        mealPstyle.style.color = '#DB4437';
+        mealText.appendChild(mealPstyle);
+        mealText.innerHTML =  mealText.innerHTML + ' for meal planning for ' + results.names[cidx];
+    } else if(inputBlob[0].mealEng == 1){
+        mealText.innerHTML = 'You have selected ';
+        mealPstyle.innerHTML = 'nutritionist';
+        mealPstyle.style.fontSize = '24px';
+        mealPstyle.style.color = '#DB4437';
+        mealText.appendChild(mealPstyle);
+        mealText.innerHTML =  mealText.innerHTML + ' for meal planning for ' + results.names[cidx];
+    }
+
+    if(inputBlob[0].nutritionEng == 0){
+        nutritionText.innerHTML = 'You have selected ';
+        nutritionPstyle.innerHTML = 'AI';
+        nutritionPstyle.style.fontSize = '24px';
+        nutritionPstyle.style.color = '#DB4437';
+        nutritionText.appendChild(nutritionPstyle);
+        nutritionText.innerHTML =  nutritionText.innerHTML + ' for nutritional analysis for ' + results.names[cidx];
+    } else if(inputBlob[0].nutritionEng == 1){
+        nutritionText.innerHTML = 'You have selected ';
+        nutritionPstyle.innerHTML = 'nutritionist';
+        nutritionPstyle.style.fontSize = '24px';
+        nutritionPstyle.style.color = '#DB4437';
+        nutritionText.appendChild(nutritionPstyle);
+        nutritionText.innerHTML =  nutritionText.innerHTML + ' for nutritional analysis for ' + results.names[cidx];
+    }
 
     let link = '/userPages/' + userid + results.ids[cidx] + results.campaignidAssigned[cidx] + '.html'
     campaignP.innerHTML = 'Link to ' + results.names[cidx] + '\'s survey <a href="' + link + '"> page</a>';
@@ -2163,7 +2218,8 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     mDiv.appendChild(goalP);
     mDiv.appendChild(idP);
     mDiv.appendChild(campaignP);
-
+    mDiv.appendChild(mealText);
+    mDiv.appendChild(nutritionText);
 
     mDiv.appendChild(divider1);
     mDiv.appendChild(bmrSuggestion);
@@ -2208,7 +2264,8 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         mDiv.appendChild(mealBtnDiv);
     }
 
-    eventSourceQueue = [];
+    // resetting the Queue for re-arming.
+    eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, MicroVit:false, Meal:false};
     allowNewAiStream = true;
     parentNode.appendChild(mDiv);
     plotBmi(clientData.bmi, bmi, bmiTxt, bmiDesc);

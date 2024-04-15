@@ -27,8 +27,9 @@ function db_call($process, $location, $rw) {
    $stress = $location->stress; // lose, gain, 
    $sleep  = $location->sleep;  // lose, gain,
    $process = str_replace('\'','', $process);
-
-   if($rw == 'w') { 
+   $query_flag = empty($weight) && empty($height) && empty($age) && empty($gender) && 
+   empty($goal) && empty($stress) && empty($sleep);
+   if($rw == 'w' && !$query_flag) { 
       $sql      = "INSERT INTO $tablename (age, gender, height, weight, goal, stress, sleep, meal) VALUES('$age', '$gender', '$height', '$weight', '$goal', '$stress','$sleep', '$process');";
       $db_out   = $conn->query($sql);
       $meal     = $process;
