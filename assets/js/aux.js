@@ -1392,53 +1392,56 @@ function handleAi(inPut) {
     mealEng      = inPut[2];
     contextSet   = ['Bmi', 'If', 'Macro', 'MicroTrace', 'MicroVit', 'Meal'];
     // creating the server side update event source
+    if(mealEng == 1 && nutritionEng == 1) {
+        allowNewAiStream = false;
+    }
     for(contextCnt = 0; contextCnt < contextSet.length; contextCnt++){
-        if(nutritionEng == 0 && eventSourceQueue[contextSet[contextCnt]] == true){
+        if(nutritionEng == 0 && eventSourceQueue[contextSet[contextCnt]] == true && allowNewAiStream == true){
             if(contextCnt == 0) { // handle first in the queue
                 display_var = document.querySelector('.Bmi');
                 txt_var     = document.querySelector('.BMI_text_description');
                 typeEventSource    = contextSet[contextCnt];
                 display_var.style.display = 'block';
                 activeSSE   = contextCnt;
+                break;
             } else if(contextCnt == 1) {
                 display_var = document.querySelector('.IntermittentFasting');
                 txt_var     = document.querySelector('.IF_text_description');
                 typeEventSource    = contextSet[contextCnt];
                 display_var.style.display = 'block';
                 activeSSE   = contextCnt;
+                break;
             } else if(contextCnt == 2) {
                 display_var = document.querySelector('.Macro');
                 txt_var     = document.querySelector('.MACRO_text_description');
                 typeEventSource    = contextSet[contextCnt];
                 display_var.style.display = 'block';
                 activeSSE   = contextCnt;
+                break;
             } else if(contextCnt == 3) {
                 display_var = document.querySelector('.Micro');
                 txt_var     = document.querySelector('.MICRO_text_description');
                 typeEventSource    = contextSet[contextCnt];
                 display_var.style.display = 'block';
                 activeSSE   = contextCnt;
+                break;
             } else if(contextCnt == 4) {
                 display_var = document.querySelector('.Micro_vit');
                 txt_var     = document.querySelector('.MICRO_vit_text_description');
                 typeEventSource    = contextSet[contextCnt];
                 display_var.style.display = 'block';
                 activeSSE   = contextCnt;
-            }
-        }
-        if(mealEng == 0 && eventSourceQueue[contextSet[contextCnt]] == true) {
-            if(contextCnt == 5) {
+                break;
+            } else if(contextCnt == 5 && mealEng == 0) {
                 txt_var     = document.querySelector('.meal_text');
                 display_var = document.querySelector('.meal_plan');
                 typeEventSource    = contextSet[contextCnt];
                 display_var.style.display = 'block';
                 activeSSE   = contextCnt;
                 clearInterval(intervalID);
+                break;
             }
         }
-    }
-    if(mealEng == 1 && nutritionEng == 1) {
-        allowNewAiStream = false;
     }
     if(allowNewAiStream == true && (mealEng == 0 || nutritionEng == 0)) {
         if(userPage == 0){
@@ -1451,7 +1454,7 @@ function handleAi(inPut) {
         eventSource.onmessage = function (e) {
             aiText = e.data;
             if(aiText.includes("DONE")) {
-                eventSourceQueue[contextSet[activeSSE]];
+                eventSourceQueue[contextSet[activeSSE]] = false;
                 txt_var.innerHTML += "<br><br>Thank you!";
                 eventSource.close();
                 allowNewAiStream = true;
@@ -1476,7 +1479,6 @@ function handleAi(inPut) {
             }
         };
     }
-    
 }
 
 
