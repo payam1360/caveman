@@ -176,8 +176,9 @@ if($userdata->clientId != '') {
     $user_if       = calculateIf($clientInfo);
     $user_macro    = calculateMacro($clientInfo);
     $user_micro    = calculateMicro($clientInfo);
+    $user_cal      = calculateCalories($clientInfo);    
     $user_meal     = calculateMeal($clientInfo);
-    $output        = dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro, $user_meal);
+    $output        = dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro, $user_cal, $user_meal);
 
 } else {
     $output = '';

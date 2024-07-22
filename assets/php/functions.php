@@ -86,8 +86,12 @@ function getHeight($data) {
                 } elseif(str_contains($Userheight, '>')){
                     $Userheight = ft2in(7); // maximum height in inches
                 } else {
-                    $height = explode('-', $Userheight);
-                    $Userheight = ft2in(intval($height[0])) + intval($height[1]); // hright in inches
+                    if(str_contains($Userheight, '-')){
+                        $height = explode('-', $Userheight);
+                        $Userheight = ft2in(intval($height[0])) + intval($height[1]); // hright in inches
+                    } else {
+                        $Userheight = ft2in(intval($Userheight));
+                    }
                 }
                 $heightDone = true;
             } else {
@@ -382,6 +386,91 @@ function calculateIf($data){
         // -----------------------------------------------------------
     return($IF);
 }
+
+
+
+function calculateCalories($data){
+    // this function is the algorithm for calculating calories during 8 weeks of
+    // program working with the nutritionist.
+    $CAL['val']  = [[1200,1200,1200,1200,1200,1200,1200,1200]];
+    $CAL['desc'] = [''];
+    $Userage    = getAge($data);
+    $Usergender = getGender($data);
+    $Usergoal   = getGoal($data);
+    $Userheight = getHeight($data);
+    $Userweight = getWeight($data);
+    $Userstress = getStress($data);
+    $Usersleep  = getSleep($data);
+    $BMI        = calculateBmi($data);
+
+    // IF suggestion based on user's spec
+    // -----------------------------------------------------------
+    if($Userweight != []  && $Userage != [] 
+            && $Usergender != [] && $Usergoal != []) {
+        $valid = true;
+    } else {
+        $valid = false;       
+    }
+    if($valid) {
+        if($Userweight >= 70 && $Userweight < 120) {
+            if(str_contains($Usergender, 'female')){
+                if(str_contains($Usergoal, 'lose')) {
+                    $CAL['val'] = [[1550,1500,1450,1400,1350,1300,1250,1200]];
+                } elseif(str_contains($Usergoal, 'gain')) {
+                    $CAL['val'] = [[1200,1250,1300,1350,1400,1450,1500,1550]];
+                }
+            } elseif($Usergender === 'male'){
+                if(str_contains($Usergoal, 'lose')) {
+                    $CAL['val'] = [[1550,1500,1450,1400,1350,1300,1250,1200]];
+                } elseif(str_contains($Usergoal, 'gain')) {
+                    $CAL['val'] = [[1200,1250,1300,1350,1400,1450,1500,1550]];
+                }
+            }
+        }
+        elseif($Userweight >= 120 && $Userweight < 220) {
+            if(str_contains($Usergender, 'female')){
+                if(str_contains($Usergoal, 'lose')) {
+                    $CAL['val'] = [[1550,1500,1450,1400,1350,1300,1250,1200]];
+                } elseif(str_contains($Usergoal, 'gain')) {
+                    $CAL['val'] = [[1200,1250,1300,1350,1400,1450,1500,1550]];
+                }
+            } elseif($Usergender === 'male'){
+                if(str_contains($Usergoal, 'lose')) {
+                    $CAL['val'] = [[1550,1500,1450,1400,1350,1300,1250,1200]];
+                } elseif(str_contains($Usergoal, 'gain')) {
+                    $CAL['val'] = [[1200,1250,1300,1350,1400,1450,1500,1550]];
+                }
+            }
+        }
+        elseif($Userweight >= 220 && $Userweight < 300) {
+            if(str_contains($Usergender, 'female')){
+                if(str_contains($Usergoal, 'lose')) {
+                    $CAL['val'] = [[1550,1500,1450,1400,1350,1300,1250,1200]];
+                } elseif(str_contains($Usergoal, 'gain')) {
+                    $CAL['val'] = [[1200,1250,1300,1350,1400,1450,1500,1550]];
+                }
+            } elseif($Usergender === 'male'){
+                if(str_contains($Usergoal, 'lose')) {
+                    $CAL['val'] = [[1550,1500,1450,1400,1350,1300,1250,1200]];
+                } elseif(str_contains($Usergoal, 'gain')) {
+                    $CAL['val'] = [[1200,1250,1300,1350,1400,1450,1500,1550]];
+                }
+            }
+        }
+        if($data[0]->nutritionEng == "0") { // AI request has priority 
+            $CAL['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Cal'); //["This text should be generated using AI request!"];
+        } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
+            $CAL['desc'] = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Cal');
+        }
+    } else {
+        $CAL['val']  = [];
+        $CAL['desc'] = ['Please provide your comments here'];
+    }
+        // -----------------------------------------------------------
+    return($CAL);
+}
+
+
 // function to calculate adjusted body weight
 function calculateAjBW($data) {
     $Userweight = getWeight($data); // lb
@@ -612,13 +701,14 @@ function calculateMicro($data){
     return($Micro);
 }
 
-function dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro, $meal){
+function dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro, $user_cal, $meal){
     $data = array('status' => 0,
                  'bmi'   => $user_bmi,
                  'bmr'   => $user_bmr,
                  'if'    => $user_if,
                  'macro' => $user_macro,
                  'micro' => $user_micro,
+                 'cal'   => $user_cal,
                  'meal'  => $meal);
     return $data;
 }
@@ -760,6 +850,61 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             }
             if($HighYoungMaleGain) {
                 $desc = ['As a young male whose objective is to gain weight, given your BMI is high, you can consider fasting few days per week to keep your insulin resistance to a minimum.'];
+            }
+            if($HighYoungFemaleLose) {
+                $desc = ['As a young female whose objective is to lose weight, it is recomended to keep your eating window to a minimum. This will help you with insulin resistance.'];
+            }
+            if($HighYoungFemaleGain) {
+                $desc = ['As a young female with high BMI, you could benefit from intermitent fasting to maximize your insulin sensitivity.'];
+            }
+            // -------
+            if($LowYoungMaleLose) {
+                $desc = ['As a young male with low BMI, normal eating windows are recommended.'];
+            }
+            if($LowYoungMaleGain) {
+                $desc = ['As a young male with low BMI, to increase muscle mass, you can fast few times a week to maximize your gains by increasing your insulin sensitivity.'];
+            }
+            if($LowYoungFemaleLose) {
+                $desc = ['As a young female with low BMI, you should increase your calorie intake but incorporate intermttent fasting will increase your insulin sensitivity and therefore maximize your nutrition intake.'];
+            }
+            if($LowYoungFemaleGain) {
+                $desc = ['As a young female with low BMI looking to gain more muscle, routine intermittent fasting is benefitial for you as recommended in the chart above.'];
+            }
+            if($HighOldMaleLose) {
+                $desc = ['As a male whose objective is to lose weight, it is recommended to keep the eating window per day to a minimum.'];
+            }
+            if($HighOldMaleGain) {
+                $desc = ['As a male whose objective is to gain weight, given your BMI is high, you can consider fasting few days per week to keep your insulin resistance to a minimum.'];
+            }
+            if($HighOldFemaleLose) {
+                $desc = ['As a female whose objective is to lose weight, it is recomended to keep your eating window to a minimum. This will help you with insulin resistance.'];
+            }
+            if($HighOldFemaleGain) {
+                $desc = ['As a female with high BMI, you could benefit from intermitent fasting to maximize your insulin sensitivity.'];
+            }
+            // -------
+            if($LowOldMaleLose) {
+                $desc = ['As a male with low BMI, normal eating windows are recommended.'];
+            }
+            if($LowOldMaleGain) {
+                $desc = ['As a male with low BMI, to increase muscle mass, you can fast few times a week to maximize your gains by increasing your insulin sensitivity.'];
+            }
+            if($LowOldFemaleLose) {
+                $desc = ['As a female with low BMI, you should increase your calorie intake but incorporate intermttent fasting will increase your insulin sensitivity and therefore maximize your nutrition intake.'];
+            }
+            if($LowOldFemaleGain) {
+                $desc = ['As a female with low BMI, looking to gain more muscle, routine intermittent fasting is benefitial for you as recommended in the chart above.'];
+            }
+        }
+    } elseif($contextFlag == "Cal") {
+        if(!empty($dbOutRow['descCal'])) { // use the entry by the user
+            $desc = [$dbOutRow['descCal']];
+        } else { 
+            if($HighYoungMaleLose) {
+                $desc = ['As a young male whose objective is to lose weight, it is recommended to reduce 50 kCal per week to reduce your weight.'];
+            }
+            if($HighYoungMaleGain) {
+                $desc = ['As a young male whose objective is to gain weight, it is recommended to add 50 kCal per week to increase your weight.'];
             }
             if($HighYoungFemaleLose) {
                 $desc = ['As a young female whose objective is to lose weight, it is recomended to keep your eating window to a minimum. This will help you with insulin resistance.'];
@@ -989,7 +1134,7 @@ function requestGpt($weight, $height, $age, $gender, $goal, $stress, $sleep, $co
     if($context == 'Meal') {
         $dbOutMeal = dbMealCon($weight, $height, $age, $gender, $goal, $stress, $sleep);
         if(!empty($dbOutMeal['meal'])){
-            $dbOutMealRow = $dbOutMeal->fetch_assoc();
+            $dbOutMealRow = $dbOutMeal;
         } else {
             $dbOutMealRow['meal'] = '';
         }

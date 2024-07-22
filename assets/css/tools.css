@@ -132,7 +132,8 @@
 .Macro,
 .Micro,
 .Micro_vit,
-.Advertisement {
+.Advertisement,
+.Calories {
     color: grey;
     background-color: white;
     border-radius: 5px;
@@ -149,7 +150,8 @@
 .MICRO_text,
 .MICRO_vit_text,
 .AD_text,
-.Meal_title {
+.Meal_title, 
+.Cal_text{
     color: black;
     font-size: 24px;
     font-weight: bold;
@@ -161,7 +163,8 @@
 .MACRO_text_description,
 .MICRO_text_description, 
 .MICRO_vit_text_description,
-.AD_description {
+.AD_description, 
+.Cal_description {
     color: black;
     font-size: 16px;
     font-weight: normal;

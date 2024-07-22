@@ -72,6 +72,9 @@ switch ($eventType) {
    case 'If':
        $content = "write an intermittent fasting weekly program for a ";
        break;
+   case 'Cal':
+       $content = "write a short paragraph about consistent weekly calories intake change to increase or decrease weight ";
+       break;
    case 'MicroVit':
        $content = "write a short paragraph about vitamins required by a ";
        break;

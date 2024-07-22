@@ -22,6 +22,8 @@ function saveUserComment($clientId, $userId, $comment, $category) {
         $field = 'descMeal';
     } elseif($category == 'If') {
         $field = 'descIf';
+    } elseif($category == 'Cal') {
+            $field = 'descCal';    
     } elseif($category == 'campaign') {
         $field = 'campaignId';
     }

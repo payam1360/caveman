@@ -62,8 +62,8 @@ function getPublicForm() {
 
     $data['qContent'] = [
                             ["1. Hey there, what is your name?"],
-                            ["2. Hi #mainNameTag, what is your nutritional goal?"],
-                            ["3. How much do you weigh? (lb)"],
+                            ["2. Hi #mainNameTag, what is your target weight or goal?"],
+                            ["3. How much do you weigh now? (lb)"],
                             ["4. How tall are you? (ft-in)"],
                             ["5. What is your age?"],
                             ["6. How is your stress level?"],
@@ -97,7 +97,7 @@ function getPublicForm() {
     
     $data['optionsText'] = [
                                 [[""]],
-                                [["lose weight","gain muscles","be less tired"]],
+                                [["lose weight","gain muscle","be healthy"]],
                                 [[""]],
                                 [[""]],
                                 [[""]],

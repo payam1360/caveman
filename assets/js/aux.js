@@ -12,7 +12,7 @@ let MAX_cnt   = 0;
 let globalQidx = 0;
 let choiceTracker = [[0], [0]];
 let multiButtonSelect = [];
-let eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, MicroVit:false, Meal:false};
+let eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, MicroVit:false, Cal:false, Meal:false};
 let allowNewAiStream = true;
 let intervalID = [];
 let multiTextSelect = [];
@@ -908,13 +908,14 @@ function submitUserData(inputDataBlob, page, userPage) {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
             if(data.status == 0 && page == 'main'){
-                eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, MicroVit:false, Meal:false};
+                eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, MicroVit:false, Cal:false, Meal:false};
                 allowNewAiStream = true;
-                plotBmi(data.bmi);  // 1
-                plotIf(data.if);    // 2
-                plotMacro(data.macro); // 3
-                plotMicro(data.micro); // 4
-                plotMicroVit(data.micro); // 5
+                plotBmi(data.bmi);  // 0
+                plotIf(data.if);    // 1
+                plotMacro(data.macro); // 2
+                plotMicro(data.micro); // 3
+                plotMicroVit(data.micro); // 4
+                plotCalories(data.cal); // 5
                 displayMeal(data.meal, inputDataBlob, userPage); // 6
                 intervalID = setInterval(handleAi, 2000, [userPage, 0, 0]);
             }
@@ -1175,6 +1176,63 @@ function plotIf(If, ifTxt = 0, ifDiv = 0, ifDesc = 0){
     );
 }
 
+// function to plot Calory intake data returned by the server for the given user
+function plotCalories(Cal, calTxt = 0, calDiv = 0, calDesc = 0){
+    // Canvas element section
+    if(calDiv == 0){
+        calDiv = document.querySelector('.Calories');
+    }
+    if(calTxt == 0) {
+        calTxt = document.querySelector('.Cal_text');
+    }
+    if(calDesc == 0) {
+        calDesc = document.querySelector('.Cal_description');
+    }
+    let calElement  = document.querySelector('#Calories');
+    
+    calDesc.style.margin = '20px';
+    eventSourceQueue['Cal'] = true;
+    calDesc.innerHTML     = Cal['desc'];
+    calTxt.style.display  = 'block';
+    calDiv.style.display  = 'block';
+    calDesc.style.display = 'block';
+
+    const calData = {
+      labels: ['1','2','3','4','5','6','7','8'],
+      datasets: [
+        {
+            label: 'Calory intake per week (kCal)',
+            data: Cal['val'][0],
+            backgroundColor: 'mediumseagreen',
+            borderColor: 'grey',
+            borderWidth: 1,
+        }
+    ]
+    };
+    const config = {
+      type: 'bar',
+      data: calData,
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        devicePixelRatio: 2,
+        scales: {
+            x: {
+              stacked: true,
+            },
+            y: {
+              stacked: true
+            }
+        }
+      }
+    };
+    calChart = new Chart(
+      calElement,
+      config
+    );
+}
+
+
 // function to plot Macro data returned by the server for the given user
 function plotMacro(macro, macroTxt = 0, macroDiv = 0, macroDesc = 0){
     // Canvas element section
@@ -1390,7 +1448,7 @@ function handleAi(inPut) {
     userPage     = inPut[0];
     nutritionEng = inPut[1];
     mealEng      = inPut[2];
-    contextSet   = ['Bmi', 'If', 'Macro', 'MicroTrace', 'MicroVit', 'Meal'];
+    contextSet   = ['Bmi', 'If', 'Macro', 'MicroTrace', 'MicroVit', 'Cal', 'Meal'];
     // creating the server side update event source
     if(mealEng == 1 && nutritionEng == 1) {
         allowNewAiStream = false;
@@ -1432,15 +1490,23 @@ function handleAi(inPut) {
                 display_var.style.display = 'block';
                 activeSSE   = contextCnt;
                 break;
-            } else if(contextCnt == 5 && mealEng == 0) {
-                txt_var     = document.querySelector('.meal_text');
-                display_var = document.querySelector('.meal_plan');
+            } else if(contextCnt == 5) {
+                display_var = document.querySelector('.Calories');
+                txt_var     = document.querySelector('.Cal_description');
                 typeEventSource    = contextSet[contextCnt];
                 display_var.style.display = 'block';
                 activeSSE   = contextCnt;
-                clearInterval(intervalID);
                 break;
             }
+        } 
+        if(contextCnt == 6 && mealEng == 0 && eventSourceQueue[contextSet[contextCnt]] == true && allowNewAiStream == true) {
+            txt_var     = document.querySelector('.meal_text');
+            display_var = document.querySelector('.meal_plan');
+            typeEventSource    = contextSet[contextCnt];
+            display_var.style.display = 'block';
+            activeSSE   = contextCnt;
+            clearInterval(intervalID);
+            break;
         }
     }
     if(allowNewAiStream == true && (mealEng == 0 || nutritionEng == 0)) {
@@ -2164,7 +2230,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     ifBtnDiv.appendChild(ifBtn);
 
 
-
+    
     let divider5 = document.createElement('div');
     divider5.style.height = '2px';
     divider5.style.width = '80%';
@@ -2172,6 +2238,55 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     divider5.style.margin = 'auto';
     divider5.style.marginTop = '20px';
 
+
+    // create plot Intermittent Fasting plots
+    let calSuggestion = document.createElement('p');
+    calSuggestion.innerHTML = 'Calories intake recommendation';
+    calSuggestion.style.fontSize = '30px';
+    calSuggestion.setAttribute('id', 'mDivCalSugg');
+    let Cal = document.createElement('div');
+    Cal.setAttribute('class', 'col-sm col-lg-5 Calories');
+    Cal.style.margin = 'auto';
+    div1 = document.createElement('div');
+    div2 = document.createElement('div');
+    div3 = document.createElement('div');
+    let calDiv = document.createElement('canvas');
+    let calTxt = document.createElement('p');
+    let calDesc = document.createElement('p');
+    calDiv.setAttribute('id', 'Calories');
+    calTxt.setAttribute('class', 'Cal_text');
+    calDesc.setAttribute('class', 'Cal_description');
+    div1.appendChild(calTxt);
+    div2.appendChild(calDiv);
+    div3.appendChild(calDesc);
+    Cal.appendChild(div1);
+    Cal.appendChild(div2);
+    Cal.appendChild(div3);
+    // ------------------------------------
+    // edit button for Intermittent fasting description. User can add his comments here.
+    // content of clientData.bmi['desc'] must be modified.
+    let calBtnDiv = document.createElement('div');
+    calBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+    calBtnDiv.style.margin = '20px';
+    let calBtn = document.createElement('button');
+    calBtn.setAttribute('class', 'btn btn-outline-primary');
+    calBtn.innerHTML = 'Edit';
+    calBtn.addEventListener('click', function(){
+        addUsersuggestionContent(clientData.cal, calDesc, calBtn, 'desc');
+        if(calBtn.innerHTML == 'Edit') {
+            saveUserCommentstoDb(clientData.cal['desc'], userid, clientid, 'Cal');
+        }
+    });    
+    calBtnDiv.appendChild(calBtn);
+
+
+
+    let divider5_1 = document.createElement('div');
+    divider5_1.style.height = '2px';
+    divider5_1.style.width = '80%';
+    divider5_1.style.backgroundColor = 'grey';
+    divider5_1.style.margin = 'auto';
+    divider5_1.style.marginTop = '20px';
 
 
     // create meal plan text area 
@@ -2258,8 +2373,15 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     if(!accessDenied){
         mDiv.appendChild(microVitBtnDiv);
     }
-    
+
     mDiv.appendChild(divider5);
+    mDiv.appendChild(calSuggestion);
+    mDiv.appendChild(Cal);
+    if(!accessDenied){
+        mDiv.appendChild(calBtnDiv);
+    }   
+
+    mDiv.appendChild(divider5_1);
     mDiv.appendChild(meal_text);
     mDiv.appendChild(Meal);
     if(!accessDenied){
@@ -2267,7 +2389,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     }
 
     // resetting the Queue for re-arming.
-    eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, MicroVit:false, Meal:false};
+    eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, MicroVit:false, Cal:false, Meal:false};
     allowNewAiStream = true;
     parentNode.appendChild(mDiv);
     plotBmi(clientData.bmi, bmi, bmiTxt, bmiDesc);
@@ -2275,6 +2397,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     plotMacro(clientData.macro, macro, macroTxt, macroDesc);
     plotMicro(clientData.micro, micro, microTxt, microDesc);
     plotMicroVit(clientData.micro, microVit, microVitTxt, microVitDesc);
+    plotCalories(clientData.cal, Cal, calTxt, calDesc);
     displayMeal(clientData.meal, inputBlob, 0); 
     
     intervalID = setInterval(handleAi, 2000, [0, inputBlob[0].nutritionEng, inputBlob[0].mealEng]);
