@@ -18,6 +18,7 @@ let intervalID = [];
 let multiTextSelect = [];
 let stripe = Stripe('pk_test_51Odb1JGvkwgMtml81N0ajd4C9xKKHD9DhnMhcfyBegjRS8eatgXQdBj1o2fnlpwCcEHOZrJJ7Sd7D0UJqXipzRmQ00CPr9wDNl');
 let stripeElements;
+let gSearchClients = [];
 // user <-> client class definition
 class question {
     constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired, qKey, clientId, campaignId){
@@ -676,6 +677,24 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
         }
     });
 
+    // dynamic search clients
+    // enter keypress also works for navigation
+    if(page == 'clients') {
+        input[1].addEventListener('keydown', function(s) {
+            if(s.key == 'Backspace'){
+                if(gSearchClients.length > 0) {
+                    gSearchClients = gSearchClients.slice(0, gSearchClients.length - 1);
+                } else if(gSearchClients.length == 0) {
+                    gSearchClients = gSearchClients;
+                }
+            } else {
+                gSearchClients += s.key; 
+            }
+            let searchStruct = {'searchStr': gSearchClients, 'key': Questions[0].qAnswer};
+            searchClients(searchStruct);
+        });
+    }
+
     input[2].addEventListener('transitionend', function(event) {
         ChangeForm(event.target, '0.0s', '0', 0, '0%');
         resetFormType(event.target);
@@ -703,6 +722,12 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
     multiButtonSelect = [];
     multiTextSelect = [];
 }
+
+
+function searchClients(searchStruct) {
+    fetchClients(searchStruct);
+}
+
 
 function restorePrevAnswer(serverStruct = 0, serverStructOption = 0) {
     
@@ -1549,14 +1574,14 @@ function handleAi(inPut) {
 }
 
 
-function fetchClients() {
+function fetchClients(searchStruct) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             user = JSON.parse(this.response);
             let username = user.username;
             let userid = user.userid;
-            constructClients(userid, username);
+            constructClients(userid, username, searchStruct);
         }
     };
     // sending the request
@@ -1650,12 +1675,12 @@ function campaignDetail(campaignSourceInfo, userid, cidx){
 }
 
 
-function constructClients(userid, username){
+function constructClients(userid, username, searchStruct){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             results = JSON.parse(this.response);
-            displayClients(results, userid, username);
+            displayClients(results, userid, username, searchStruct);
         }
     };
     // sending the request
@@ -1666,13 +1691,33 @@ function constructClients(userid, username){
     xmlhttp.send(userdata);
 }
 
-function displayClients(results, userid, username) {
+function displayClients(results, userid, username, searchStruct) {
     let blur = document.querySelector('.blur');
     blur.style.filter = 'blur(0px)';
     let parentNode = document.querySelector('.client-list-parent');
     cleanClientDiv(parentNode);
     numClients = results.names.length;
     for(let kk = 0; kk < numClients; kk++) {
+
+        // only display matching search strings
+        if(searchStruct == undefined || searchStruct.searchStr.length == 0) {
+        } else {
+            if(searchStruct.key == 0) { // search ID
+                if(results.ids[kk].slice(0, searchStruct.searchStr.length) != searchStruct.searchStr){
+                    continue;
+                }
+            } else if(searchStruct.key == 1) { // search email
+                if(results.emails[kk].slice(0, searchStruct.searchStr.length) != searchStruct.searchStr){
+                    continue;
+                }
+            } else if(searchStruct.key == 2) { // search name
+                let nameClient = results.names[kk].toLowerCase();
+                if(nameClient.slice(0, searchStruct.searchStr.length) != searchStruct.searchStr.toLowerCase()){
+                    continue;
+                }
+            }
+        }
+
         CampaignIdSelected = results.campaignidAssigned[kk];
         CampaignTimeSelected = '';
         kx = 0;

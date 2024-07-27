@@ -8,20 +8,22 @@ function getCampaignIdSource($userId){
     $dbname      = "Users";
     $tablename  = "userAllocation";
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
-    $sql         = "SELECT campaignIdSource, campaignTimeStamp, completed FROM $tablename WHERE userId = '$userId';";
+    $sql         = "SELECT campaignIdSource, campaignTimeStamp, completed, name FROM $tablename WHERE userId = '$userId';";
     $data        = $conn->query($sql);
     $campaignIdSource = array();
     $campaignTimeStamp = array();
     $completed = array();
-    
+    $name = array();
     while($campaign = $data->fetch_assoc()){
         array_push($campaignIdSource, $campaign['campaignIdSource']);
         array_push($campaignTimeStamp, $campaign['campaignTimeStamp']);
         array_push($completed, $campaign['completed']);
+        array_push($name, $campaign['name']);
     }
     $data->campaignIdSource = $campaignIdSource;
     $data->campaignTimeStamp = $campaignTimeStamp;
     $data->completed = $completed;
+    $data->name = $name;
     return($data);
 }
 
