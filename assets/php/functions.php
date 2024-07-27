@@ -609,7 +609,9 @@ function calculateMeal($data){
                    'stress' => $Userstress,
                    'sleep' => $Usersleep, 
                    'age' => $Userage); 
-    if($data[0]->mealEng == "0") { // AI request has priority 
+    if(!isset($data[0])){
+        $Meal['desc'] = [''];
+    } elseif($data[0]->mealEng == "0") { // AI request has priority 
         $Meal['desc']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Meal'); 
     } elseif($data[0]->mealEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
         $Meal['desc']   = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Meal');

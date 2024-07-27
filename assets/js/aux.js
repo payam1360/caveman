@@ -962,6 +962,7 @@ function getUserInfo(userTxt, welcomeTxt){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+          
             user = JSON.parse(this.response);
             if(user.status == 1) {
                 window.location.assign('login.html');
@@ -1682,7 +1683,7 @@ function displayClients(results, userid, username) {
             } else {
                 CampaignTimeSelected = '';
             }
-        kx++;
+            kx++;
         }
         let mDiv = document.createElement('div');
         mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
@@ -1715,7 +1716,7 @@ function displayClients(results, userid, username) {
         } else if (results.genders[kk] == 'male') {
             avatar.setAttribute('src', './assets/img/man.png');
         } else {
-            avatar.setAttribute('src', './assets/img/nuetral.png');
+            avatar.setAttribute('src', './assets/img/addNew.png');
         }
         avatar.style.width = '60%';
         avatar.style.display = 'block';
@@ -1842,566 +1843,571 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     
     userid = parentNode.children[cidx].getAttribute('userid');
     clientid = parentNode.children[cidx].getAttribute('clientid');
-    let accountType = results.accountType[0];
-    if(accountType == 'free') {
-        accessDenied = true;
-    } else {
-        accessDenied = false;
-    }
-    let blur = document.querySelector('.blur');
-    blur.style.zIndex = '1';
-    blur.style.filter = 'blur(10px)';
-    blur.addEventListener('click', function(){
-        displayClients(results, userid);
-    });
+    // if not set, go to add client page.
     cleanClientDiv(parentNode);
-    let mDiv = document.createElement('div');
-    mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list-magnified');
-    let closeBtn = document.createElement('button');
-    closeBtn.setAttribute('class', 'closeExpandedClient');
-    let spn = document.createElement('span');
-    spn.setAttribute('class', 'fa-regular fa-circle-xmark');
-    spn.style.fontSize = '50px';
-    closeBtn.appendChild(spn);
-    closeBtn.addEventListener('click', function(){
-        displayClients(results, userid);
-    });
-    
-    let pdfBtn = document.createElement('button');
-    pdfBtn.setAttribute('class', 'pdfReport');
-    spn = document.createElement('span');
-    spn.setAttribute('class', 'fa-regular fa-file-pdf');
-    spn.style.fontSize = '50px';
-    pdfBtn.appendChild(spn);
-    pdfBtn.addEventListener('click', function(){
-        createPdf(parentNode, clientData);
-    });
-
-    let emailBtn = document.createElement('button');
-    emailBtn.setAttribute('class', 'emailReport');
-    spn = document.createElement('span');
-    spn.setAttribute('class', 'fa-regular fa-paper-plane');
-    spn.style.fontSize = '50px';
-    emailBtn.appendChild(spn);
-    emailBtn.addEventListener('click', function(){
-        // send email from the server side ... prefer send a copy to nutritionist as well
-        sendEmail(parentNode, clientData, userid, clientid);
-    });
-    
-    let nameP = document.createElement('p');
-    let namePstyle = document.createElement('span');
-    let idP = document.createElement('p');
-    let idPstyle = document.createElement('span');
-    let genderP = document.createElement('p');
-    let genderPstyle = document.createElement('span');
-    let goalP = document.createElement('p');
-    let goalPstyle = document.createElement('span');
-    let campaignP = document.createElement('p');
-    let mealText  = document.createElement('p');
-    let mealPstyle = document.createElement('span');
-    let nutritionText = document.createElement('p');
-    let nutritionPstyle = document.createElement('span');
-    
-    nameP.innerHTML = "Client's name: ";
-    nameP.style.marginTop = '100px';
-    namesTemp = results.names[cidx].charAt(0).toUpperCase() + results.names[cidx].slice(1);
-    namePstyle.innerHTML = namesTemp;
-    namePstyle.style.fontSize = '40px';
-    namePstyle.style.color = 'brown';
-    namePstyle.setAttribute('id', 'mDivpName');
-    nameP.appendChild(namePstyle);
-
-    idP.innerHTML = "Client's ID: ";
-    idPstyle.innerHTML = results.ids[cidx];
-    idPstyle.style.fontSize = '40px';
-    idPstyle.style.color = 'green';
-    idPstyle.setAttribute('id', 'mDivpId');
-    idP.appendChild(idPstyle);    
-
-    genderP.innerHTML = "Client's gender: ";
-    genderTemp = results.genders[cidx].charAt(0).toUpperCase() + results.genders[cidx].slice(1);
-    genderPstyle.innerHTML = genderTemp;
-    genderPstyle.style.fontSize = '40px';
-    genderPstyle.style.color = '#F4B400';
-    genderPstyle.setAttribute('id', 'mDivpGender');
-    genderP.appendChild(genderPstyle);  
-
-
-    goalP.innerHTML = "Client's goal: ";
-    goalsTemp = results.goals[cidx].charAt(0).toUpperCase() + results.goals[cidx].slice(1);
-    goalPstyle.innerHTML = goalsTemp;
-    goalPstyle.style.fontSize = '40px';
-    goalPstyle.style.color = '#DB4437';
-    goalPstyle.setAttribute('id', 'mDivpGoal');
-    goalP.appendChild(goalPstyle); 
-
-    if(inputBlob[0].mealEng == 0){
-        mealText.innerHTML = 'You have selected ';
-        mealPstyle.innerHTML = 'AI';
-        mealPstyle.style.fontSize = '24px';
-        mealPstyle.style.color = '#DB4437';
-        mealText.appendChild(mealPstyle);
-        mealText.innerHTML =  mealText.innerHTML + ' for meal planning for ' + results.names[cidx];
-    } else if(inputBlob[0].mealEng == 1){
-        mealText.innerHTML = 'You have selected ';
-        mealPstyle.innerHTML = 'nutritionist';
-        mealPstyle.style.fontSize = '24px';
-        mealPstyle.style.color = '#DB4437';
-        mealText.appendChild(mealPstyle);
-        mealText.innerHTML =  mealText.innerHTML + ' for meal planning for ' + results.names[cidx];
-    }
-
-    if(inputBlob[0].nutritionEng == 0){
-        nutritionText.innerHTML = 'You have selected ';
-        nutritionPstyle.innerHTML = 'AI';
-        nutritionPstyle.style.fontSize = '24px';
-        nutritionPstyle.style.color = '#DB4437';
-        nutritionText.appendChild(nutritionPstyle);
-        nutritionText.innerHTML =  nutritionText.innerHTML + ' for nutritional analysis for ' + results.names[cidx];
-    } else if(inputBlob[0].nutritionEng == 1){
-        nutritionText.innerHTML = 'You have selected ';
-        nutritionPstyle.innerHTML = 'nutritionist';
-        nutritionPstyle.style.fontSize = '24px';
-        nutritionPstyle.style.color = '#DB4437';
-        nutritionText.appendChild(nutritionPstyle);
-        nutritionText.innerHTML =  nutritionText.innerHTML + ' for nutritional analysis for ' + results.names[cidx];
-    }
-
-    let link = '/userPages/' + userid + results.ids[cidx] + results.campaignidAssigned[cidx] + '.html'
-    campaignP.innerHTML = 'Link to ' + results.names[cidx] + '\'s survey <a href="' + link + '"> page</a>';
-    
-    let divider1 = document.createElement('div');
-    divider1.style.height = '2px';
-    divider1.style.width = '80%';
-    divider1.style.backgroundColor = 'grey';
-    divider1.style.margin = 'auto';
-    
-    // create BMR data info
-    let bmrSuggestion = document.createElement('p');
-    let bmrValue = document.createElement('span');
-    bmrSuggestion.innerHTML = 'Basal Metabolic Rate (BMR):';
-    bmrSuggestion.style.fontSize = '30px';
-    bmrValue.innerHTML = Math.floor(clientData.bmr['val']*100)/100;
-    bmrValue.style.fontSize = '40px';
-    bmrValue.style.color = '#4285F4';
-    bmrSuggestion.setAttribute('id', 'mDivBmrSugg');
-    bmrSuggestion.appendChild(bmrValue);
-
-    // create plot BMI
-    let bmiSuggestion = document.createElement('p');
-    let bmiValue = document.createElement('span');
-    bmiSuggestion.innerHTML = 'Body mass index: ';
-    bmiSuggestion.style.fontSize = '30px';
-    bmiValue.innerHTML = Math.floor(clientData.bmi['val']*100)/100;
-    bmiValue.style.fontSize = '40px';
-    bmiValue.style.color = '#0F9D58';
-    bmiSuggestion.setAttribute('id', 'mDivBmiSugg');
-    bmiSuggestion.appendChild(bmiValue);
-
-    
-    let bmi = document.createElement('div');
-    bmi.setAttribute('class', 'col-sm col-lg-5 Bmi');
-    bmi.style.margin = 'auto';
-    let div1 = document.createElement('div');
-    let div2 = document.createElement('div');
-    let div3 = document.createElement('div');
-    let bmiDiv = document.createElement('canvas');
-    let bmiTxt = document.createElement('p');
-    let bmiDesc = document.createElement('p');
-    
-    bmiDiv.setAttribute('id', 'Bmi');
-    bmiTxt.setAttribute('class', 'BMI_text');
-    bmiDesc.setAttribute('class', 'BMI_text_description');
-    div1.appendChild(bmiTxt);
-    div2.appendChild(bmiDiv);
-    div3.appendChild(bmiDesc);
-    bmi.appendChild(div1);
-    bmi.appendChild(div2);
-    bmi.appendChild(div3);
-    // ------------------------------------
-    // edit button for BMI description. User can add his comments here.
-    // content of clientData.bmi['desc'] must be modified.
-    let bmiBtnDiv = document.createElement('div');
-    bmiBtnDiv.setAttribute('class', 'd-flex justify-content-center');
-    bmiBtnDiv.style.margin = '20px';
-    let bmiBtn = document.createElement('button');
-    bmiBtn.setAttribute('class', 'btn btn-outline-primary');
-    bmiBtn.innerHTML = 'Edit';
-    bmiBtn.addEventListener('click', function(){
-        addUsersuggestionContent(clientData.bmi, bmiDesc, bmiBtn, 'desc');
-        if(bmiBtn.innerHTML == 'Edit') {
-            saveUserCommentstoDb(clientData.bmi['desc'], userid, clientid, 'Bmi');
+    if(results.campaigntime[cidx] == null) {
+        window.location.assign('addClients.html');
+    } else {  
+        let accountType = results.accountType[0];
+        if(accountType == 'free') {
+            accessDenied = true;
+        } else {
+            accessDenied = false;
         }
-    });    
-    bmiBtnDiv.appendChild(bmiBtn);
-    // ------------------------------------
+        let blur = document.querySelector('.blur');
+        blur.style.zIndex = '1';
+        blur.style.filter = 'blur(10px)';
+        blur.addEventListener('click', function(){
+            displayClients(results, userid);
+        });
+        
+        let mDiv = document.createElement('div');
+        mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list-magnified');
+        let closeBtn = document.createElement('button');
+        closeBtn.setAttribute('class', 'closeExpandedClient');
+        let spn = document.createElement('span');
+        spn.setAttribute('class', 'fa-regular fa-circle-xmark');
+        spn.style.fontSize = '50px';
+        closeBtn.appendChild(spn);
+        closeBtn.addEventListener('click', function(){
+            displayClients(results, userid);
+        });
+        
+        let pdfBtn = document.createElement('button');
+        pdfBtn.setAttribute('class', 'pdfReport');
+        spn = document.createElement('span');
+        spn.setAttribute('class', 'fa-regular fa-file-pdf');
+        spn.style.fontSize = '50px';
+        pdfBtn.appendChild(spn);
+        pdfBtn.addEventListener('click', function(){
+            createPdf(parentNode, clientData);
+        });
+
+        let emailBtn = document.createElement('button');
+        emailBtn.setAttribute('class', 'emailReport');
+        spn = document.createElement('span');
+        spn.setAttribute('class', 'fa-regular fa-paper-plane');
+        spn.style.fontSize = '50px';
+        emailBtn.appendChild(spn);
+        emailBtn.addEventListener('click', function(){
+            // send email from the server side ... prefer send a copy to nutritionist as well
+            sendEmail(parentNode, clientData, userid, clientid);
+        });
+        
+        let nameP = document.createElement('p');
+        let namePstyle = document.createElement('span');
+        let idP = document.createElement('p');
+        let idPstyle = document.createElement('span');
+        let genderP = document.createElement('p');
+        let genderPstyle = document.createElement('span');
+        let goalP = document.createElement('p');
+        let goalPstyle = document.createElement('span');
+        let campaignP = document.createElement('p');
+        let mealText  = document.createElement('p');
+        let mealPstyle = document.createElement('span');
+        let nutritionText = document.createElement('p');
+        let nutritionPstyle = document.createElement('span');
+        
+        nameP.innerHTML = "Client's name: ";
+        nameP.style.marginTop = '100px';
+        namesTemp = results.names[cidx].charAt(0).toUpperCase() + results.names[cidx].slice(1);
+        namePstyle.innerHTML = namesTemp;
+        namePstyle.style.fontSize = '40px';
+        namePstyle.style.color = 'brown';
+        namePstyle.setAttribute('id', 'mDivpName');
+        nameP.appendChild(namePstyle);
+
+        idP.innerHTML = "Client's ID: ";
+        idPstyle.innerHTML = results.ids[cidx];
+        idPstyle.style.fontSize = '40px';
+        idPstyle.style.color = 'green';
+        idPstyle.setAttribute('id', 'mDivpId');
+        idP.appendChild(idPstyle);    
+
+        genderP.innerHTML = "Client's gender: ";
+        genderTemp = results.genders[cidx].charAt(0).toUpperCase() + results.genders[cidx].slice(1);
+        genderPstyle.innerHTML = genderTemp;
+        genderPstyle.style.fontSize = '40px';
+        genderPstyle.style.color = '#F4B400';
+        genderPstyle.setAttribute('id', 'mDivpGender');
+        genderP.appendChild(genderPstyle);  
 
 
-    let divider2 = document.createElement('div');
-    divider2.style.height = '2px';
-    divider2.style.width = '80%';
-    divider2.style.backgroundColor = 'grey';
-    divider2.style.margin = 'auto';
-    divider2.style.marginTop = '20px';
+        goalP.innerHTML = "Client's goal: ";
+        goalsTemp = results.goals[cidx].charAt(0).toUpperCase() + results.goals[cidx].slice(1);
+        goalPstyle.innerHTML = goalsTemp;
+        goalPstyle.style.fontSize = '40px';
+        goalPstyle.style.color = '#DB4437';
+        goalPstyle.setAttribute('id', 'mDivpGoal');
+        goalP.appendChild(goalPstyle); 
+
+        if(inputBlob[0].mealEng == 0){
+            mealText.innerHTML = 'You have selected ';
+            mealPstyle.innerHTML = 'AI';
+            mealPstyle.style.fontSize = '24px';
+            mealPstyle.style.color = '#DB4437';
+            mealText.appendChild(mealPstyle);
+            mealText.innerHTML =  mealText.innerHTML + ' for meal planning for ' + results.names[cidx];
+        } else if(inputBlob[0].mealEng == 1){
+            mealText.innerHTML = 'You have selected ';
+            mealPstyle.innerHTML = 'nutritionist';
+            mealPstyle.style.fontSize = '24px';
+            mealPstyle.style.color = '#DB4437';
+            mealText.appendChild(mealPstyle);
+            mealText.innerHTML =  mealText.innerHTML + ' for meal planning for ' + results.names[cidx];
+        }
+
+        if(inputBlob[0].nutritionEng == 0){
+            nutritionText.innerHTML = 'You have selected ';
+            nutritionPstyle.innerHTML = 'AI';
+            nutritionPstyle.style.fontSize = '24px';
+            nutritionPstyle.style.color = '#DB4437';
+            nutritionText.appendChild(nutritionPstyle);
+            nutritionText.innerHTML =  nutritionText.innerHTML + ' for nutritional analysis for ' + results.names[cidx];
+        } else if(inputBlob[0].nutritionEng == 1){
+            nutritionText.innerHTML = 'You have selected ';
+            nutritionPstyle.innerHTML = 'nutritionist';
+            nutritionPstyle.style.fontSize = '24px';
+            nutritionPstyle.style.color = '#DB4437';
+            nutritionText.appendChild(nutritionPstyle);
+            nutritionText.innerHTML =  nutritionText.innerHTML + ' for nutritional analysis for ' + results.names[cidx];
+        }
+
+        let link = '/userPages/' + userid + results.ids[cidx] + results.campaignidAssigned[cidx] + '.html'
+        campaignP.innerHTML = 'Link to ' + results.names[cidx] + '\'s survey <a href="' + link + '"> page</a>';
+        
+        let divider1 = document.createElement('div');
+        divider1.style.height = '2px';
+        divider1.style.width = '80%';
+        divider1.style.backgroundColor = 'grey';
+        divider1.style.margin = 'auto';
+        
+        // create BMR data info
+        let bmrSuggestion = document.createElement('p');
+        let bmrValue = document.createElement('span');
+        bmrSuggestion.innerHTML = 'Basal Metabolic Rate (BMR):';
+        bmrSuggestion.style.fontSize = '30px';
+        bmrValue.innerHTML = Math.floor(clientData.bmr['val']*100)/100;
+        bmrValue.style.fontSize = '40px';
+        bmrValue.style.color = '#4285F4';
+        bmrSuggestion.setAttribute('id', 'mDivBmrSugg');
+        bmrSuggestion.appendChild(bmrValue);
+
+        // create plot BMI
+        let bmiSuggestion = document.createElement('p');
+        let bmiValue = document.createElement('span');
+        bmiSuggestion.innerHTML = 'Body mass index: ';
+        bmiSuggestion.style.fontSize = '30px';
+        bmiValue.innerHTML = Math.floor(clientData.bmi['val']*100)/100;
+        bmiValue.style.fontSize = '40px';
+        bmiValue.style.color = '#0F9D58';
+        bmiSuggestion.setAttribute('id', 'mDivBmiSugg');
+        bmiSuggestion.appendChild(bmiValue);
+
+        
+        let bmi = document.createElement('div');
+        bmi.setAttribute('class', 'col-sm col-lg-5 Bmi');
+        bmi.style.margin = 'auto';
+        let div1 = document.createElement('div');
+        let div2 = document.createElement('div');
+        let div3 = document.createElement('div');
+        let bmiDiv = document.createElement('canvas');
+        let bmiTxt = document.createElement('p');
+        let bmiDesc = document.createElement('p');
+        
+        bmiDiv.setAttribute('id', 'Bmi');
+        bmiTxt.setAttribute('class', 'BMI_text');
+        bmiDesc.setAttribute('class', 'BMI_text_description');
+        div1.appendChild(bmiTxt);
+        div2.appendChild(bmiDiv);
+        div3.appendChild(bmiDesc);
+        bmi.appendChild(div1);
+        bmi.appendChild(div2);
+        bmi.appendChild(div3);
+        // ------------------------------------
+        // edit button for BMI description. User can add his comments here.
+        // content of clientData.bmi['desc'] must be modified.
+        let bmiBtnDiv = document.createElement('div');
+        bmiBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+        bmiBtnDiv.style.margin = '20px';
+        let bmiBtn = document.createElement('button');
+        bmiBtn.setAttribute('class', 'btn btn-outline-primary');
+        bmiBtn.innerHTML = 'Edit';
+        bmiBtn.addEventListener('click', function(){
+            addUsersuggestionContent(clientData.bmi, bmiDesc, bmiBtn, 'desc');
+            if(bmiBtn.innerHTML == 'Edit') {
+                saveUserCommentstoDb(clientData.bmi['desc'], userid, clientid, 'Bmi');
+            }
+        });    
+        bmiBtnDiv.appendChild(bmiBtn);
+        // ------------------------------------
+
+
+        let divider2 = document.createElement('div');
+        divider2.style.height = '2px';
+        divider2.style.width = '80%';
+        divider2.style.backgroundColor = 'grey';
+        divider2.style.margin = 'auto';
+        divider2.style.marginTop = '20px';
+        
+        // create plot MICRO
+        let microSuggestion = document.createElement('p');
+        microSuggestion.innerHTML = 'Micro-nutrients (Trace minerals) recommendation';
+        microSuggestion.setAttribute('id', 'mDivMicroSugg');
+        microSuggestion.style.fontSize = '30px';
+        let micro = document.createElement('div');
+        micro.setAttribute('class', 'col-sm col-lg-5 Micro');
+        micro.style.margin = 'auto';
+        div1 = document.createElement('div');
+        div2 = document.createElement('div');
+        div3 = document.createElement('div');
+        let microDiv = document.createElement('canvas');
+        let microTxt = document.createElement('p');
+        let microDesc = document.createElement('p');
+        microDiv.setAttribute('id', 'Micro');
+        microTxt.setAttribute('class', 'MICRO_text');
+        microDesc.setAttribute('class', 'MICRO_text_description');
+        div1.appendChild(microTxt);
+        div2.appendChild(microDiv);
+        div3.appendChild(microDesc);
+        micro.appendChild(div1);
+        micro.appendChild(div2);
+        micro.appendChild(div3);
+
+        // ------------------------------------
+        // edit button for mico description. User can add his comments here.
+        // content of clientData.bmi['desc'] must be modified.
+        let microBtnDiv = document.createElement('div');
+        microBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+        microBtnDiv.style.margin = '20px';
+        let microBtn = document.createElement('button');
+        microBtn.setAttribute('class', 'btn btn-outline-primary');
+        microBtn.innerHTML = 'Edit';
+        microBtn.addEventListener('click', function(){
+            addUsersuggestionContent(clientData.micro, microDesc, microBtn, 'descTrace');
+            if(microBtn.innerHTML == 'Edit') {
+                saveUserCommentstoDb(clientData.micro['descTrace'], userid, clientid, 'Micro');
+            }
+        });    
+        microBtnDiv.appendChild(microBtn);
+
+        // Micto vitamines
+        let divider2Vit = document.createElement('div');
+        divider2Vit.style.height = '2px';
+        divider2Vit.style.width = '80%';
+        divider2Vit.style.backgroundColor = 'grey';
+        divider2Vit.style.margin = 'auto';
+        divider2Vit.style.marginTop = '20px';
+        
+        // create plot MICRO
+        let microVitSuggestion = document.createElement('p');
+        microVitSuggestion.innerHTML = 'Micro-nutrients (Vitamines) recommendation';
+        microVitSuggestion.style.fontSize = '30px';
+        microVitSuggestion.setAttribute('id', 'mDivMicroVitSugg');
+        let microVit = document.createElement('div');
+        microVit.setAttribute('class', 'col-sm col-lg-5 Micro_vit');
+        microVit.style.margin = 'auto';
+        div1 = document.createElement('div');
+        div2 = document.createElement('div');
+        div3 = document.createElement('div');
+        let microVitDiv = document.createElement('canvas');
+        let microVitTxt = document.createElement('p');
+        let microVitDesc = document.createElement('p');
+        microVitDiv.setAttribute('id', 'Micro_vit');
+        microVitTxt.setAttribute('class', 'MICRO_vit_text');
+        microVitDesc.setAttribute('class', 'MICRO_vit_text_description');
+        div1.appendChild(microVitTxt);
+        div2.appendChild(microVitDiv);
+        div3.appendChild(microVitDesc);
+        microVit.appendChild(div1);
+        microVit.appendChild(div2);
+        microVit.appendChild(div3);
+        // ------------------------------------
+        // edit button for mico description. User can add his comments here.
+        // content of clientData.bmi['desc'] must be modified.
+        let microVitBtnDiv = document.createElement('div');
+        microVitBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+        microVitBtnDiv.style.margin = '20px';
+        let microVitBtn = document.createElement('button');
+        microVitBtn.setAttribute('class', 'btn btn-outline-primary');
+        microVitBtn.innerHTML = 'Edit';
+        microVitBtn.addEventListener('click', function(){
+            addUsersuggestionContent(clientData.micro, microVitDesc, microVitBtn, 'descVit');
+            if(microVitBtn.innerHTML == 'Edit') {
+                saveUserCommentstoDb(clientData.micro['descVit'], userid, clientid, 'MicroVit');
+            }
+        });    
+        microVitBtnDiv.appendChild(microVitBtn);
+
+        // -----------
+        let divider3 = document.createElement('div');
+        divider3.style.height = '2px';
+        divider3.style.width = '80%';
+        divider3.style.backgroundColor = 'grey';
+        divider3.style.margin = 'auto';
+        divider3.style.marginTop = '20px';
+
+        // create plot MACRO
+        let macroSuggestion = document.createElement('p');
+        macroSuggestion.innerHTML = 'Macro-nutrients recommendation';
+        macroSuggestion.style.fontSize = '30px';
+        macroSuggestion.setAttribute('id', 'mDivMacroSugg');
+        let macro = document.createElement('div');
+        macro.setAttribute('class', 'col-sm col-lg-5 Macro');
+        macro.style.margin = 'auto';
+        div1 = document.createElement('div');
+        div2 = document.createElement('div');
+        div3 = document.createElement('div');
+        let macroDiv = document.createElement('canvas');
+        let macroTxt = document.createElement('p');
+        let macroDesc = document.createElement('p');
+        macroDiv.setAttribute('id', 'Macro');
+        macroTxt.setAttribute('class', 'MACRO_text');
+        macroDesc.setAttribute('class', 'MACRO_text_description');
+        div1.appendChild(macroTxt);
+        div2.appendChild(macroDiv);
+        div3.appendChild(macroDesc);
+        macro.appendChild(div1);
+        macro.appendChild(div2);
+        macro.appendChild(div3);
+        // ------------------------------------
+        // edit button for macro description. User can add his comments here.
+        // content of clientData.bmi['desc'] must be modified.
+        let macroBtnDiv = document.createElement('div');
+        macroBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+        macroBtnDiv.style.margin = '20px';
+        let macroBtn = document.createElement('button');
+        macroBtn.setAttribute('class', 'btn btn-outline-primary');
+        macroBtn.innerHTML = 'Edit';
+        macroBtn.addEventListener('click', function(){
+            addUsersuggestionContent(clientData.macro, macroDesc, macroBtn, 'desc');
+            if(macroBtn.innerHTML == 'Edit') {
+                saveUserCommentstoDb(clientData.macro['desc'], userid, clientid, 'Macro');
+            }
+        });    
+        macroBtnDiv.appendChild(macroBtn);
+
+
+        let divider4 = document.createElement('div');
+        divider4.style.height = '2px';
+        divider4.style.width = '80%';
+        divider4.style.backgroundColor = 'grey';
+        divider4.style.margin = 'auto';
+        divider4.style.marginTop = '20px';
+
+        // create plot Intermittent Fasting plots
+        let ifSuggestion = document.createElement('p');
+        ifSuggestion.innerHTML = 'Intermittent fasting recommendation';
+        ifSuggestion.style.fontSize = '30px';
+        ifSuggestion.setAttribute('id', 'mDivIfSugg');
+        let If = document.createElement('div');
+        If.setAttribute('class', 'col-sm col-lg-5 IntermittentFasting');
+        If.style.margin = 'auto';
+        div1 = document.createElement('div');
+        div2 = document.createElement('div');
+        div3 = document.createElement('div');
+        let ifDiv = document.createElement('canvas');
+        let ifTxt = document.createElement('p');
+        let ifDesc = document.createElement('p');
+        ifDiv.setAttribute('id', 'IntermittentFasting');
+        ifTxt.setAttribute('class', 'IF_text');
+        ifDesc.setAttribute('class', 'IF_text_description');
+        div1.appendChild(ifTxt);
+        div2.appendChild(ifDiv);
+        div3.appendChild(ifDesc);
+        If.appendChild(div1);
+        If.appendChild(div2);
+        If.appendChild(div3);
+        // ------------------------------------
+        // edit button for Intermittent fasting description. User can add his comments here.
+        // content of clientData.bmi['desc'] must be modified.
+        let ifBtnDiv = document.createElement('div');
+        ifBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+        ifBtnDiv.style.margin = '20px';
+        let ifBtn = document.createElement('button');
+        ifBtn.setAttribute('class', 'btn btn-outline-primary');
+        ifBtn.innerHTML = 'Edit';
+        ifBtn.addEventListener('click', function(){
+            addUsersuggestionContent(clientData.if, ifDesc, ifBtn, 'desc');
+            if(ifBtn.innerHTML == 'Edit') {
+                saveUserCommentstoDb(clientData.if['desc'], userid, clientid, 'If');
+            }
+        });    
+        ifBtnDiv.appendChild(ifBtn);
+
+
+        
+        let divider5 = document.createElement('div');
+        divider5.style.height = '2px';
+        divider5.style.width = '80%';
+        divider5.style.backgroundColor = 'grey';
+        divider5.style.margin = 'auto';
+        divider5.style.marginTop = '20px';
+
+
+        // create plot Intermittent Fasting plots
+        let calSuggestion = document.createElement('p');
+        calSuggestion.innerHTML = 'Calories intake recommendation';
+        calSuggestion.style.fontSize = '30px';
+        calSuggestion.setAttribute('id', 'mDivCalSugg');
+        let Cal = document.createElement('div');
+        Cal.setAttribute('class', 'col-sm col-lg-5 Calories');
+        Cal.style.margin = 'auto';
+        div1 = document.createElement('div');
+        div2 = document.createElement('div');
+        div3 = document.createElement('div');
+        let calDiv = document.createElement('canvas');
+        let calTxt = document.createElement('p');
+        let calDesc = document.createElement('p');
+        calDiv.setAttribute('id', 'Calories');
+        calTxt.setAttribute('class', 'Cal_text');
+        calDesc.setAttribute('class', 'Cal_description');
+        div1.appendChild(calTxt);
+        div2.appendChild(calDiv);
+        div3.appendChild(calDesc);
+        Cal.appendChild(div1);
+        Cal.appendChild(div2);
+        Cal.appendChild(div3);
+        // ------------------------------------
+        // edit button for Intermittent fasting description. User can add his comments here.
+        // content of clientData.bmi['desc'] must be modified.
+        let calBtnDiv = document.createElement('div');
+        calBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+        calBtnDiv.style.margin = '20px';
+        let calBtn = document.createElement('button');
+        calBtn.setAttribute('class', 'btn btn-outline-primary');
+        calBtn.innerHTML = 'Edit';
+        calBtn.addEventListener('click', function(){
+            addUsersuggestionContent(clientData.cal, calDesc, calBtn, 'desc');
+            if(calBtn.innerHTML == 'Edit') {
+                saveUserCommentstoDb(clientData.cal['desc'], userid, clientid, 'Cal');
+            }
+        });    
+        calBtnDiv.appendChild(calBtn);
+
+
+
+        let divider5_1 = document.createElement('div');
+        divider5_1.style.height = '2px';
+        divider5_1.style.width = '80%';
+        divider5_1.style.backgroundColor = 'grey';
+        divider5_1.style.margin = 'auto';
+        divider5_1.style.marginTop = '20px';
+
+
+        // create meal plan text area 
+        let meal_text = document.createElement('p');
+        meal_text.innerHTML = 'meal plan';
+        meal_text.style.fontSize = '30px';
+        meal_text.setAttribute('id', 'mDivMealSugg');
+        meal_text.setAttribute('class', 'Meal_title');
+        let Meal = document.createElement('div');
+        Meal.setAttribute('class', 'col-sm col-lg-5 meal_plan');
+        Meal.style.margin = 'auto';
+        div1 = document.createElement('div');
+        let mealDesc = document.createElement('p');
+        mealDesc.setAttribute('class', 'meal_text');
+        div1.appendChild(mealDesc);
+        Meal.appendChild(div1);
     
-    // create plot MICRO
-    let microSuggestion = document.createElement('p');
-    microSuggestion.innerHTML = 'Micro-nutrients (Trace minerals) recommendation';
-    microSuggestion.setAttribute('id', 'mDivMicroSugg');
-    microSuggestion.style.fontSize = '30px';
-    let micro = document.createElement('div');
-    micro.setAttribute('class', 'col-sm col-lg-5 Micro');
-    micro.style.margin = 'auto';
-    div1 = document.createElement('div');
-    div2 = document.createElement('div');
-    div3 = document.createElement('div');
-    let microDiv = document.createElement('canvas');
-    let microTxt = document.createElement('p');
-    let microDesc = document.createElement('p');
-    microDiv.setAttribute('id', 'Micro');
-    microTxt.setAttribute('class', 'MICRO_text');
-    microDesc.setAttribute('class', 'MICRO_text_description');
-    div1.appendChild(microTxt);
-    div2.appendChild(microDiv);
-    div3.appendChild(microDesc);
-    micro.appendChild(div1);
-    micro.appendChild(div2);
-    micro.appendChild(div3);
+        // ------------------------------------
+        // edit button for Intermittent fasting description. User can add his comments here.
+        // content of clientData.bmi['desc'] must be modified.
+        let mealBtnDiv = document.createElement('div');
+        mealBtnDiv.setAttribute('class', 'd-flex justify-content-center');
+        mealBtnDiv.style.margin = '20px';
+        let mealBtn = document.createElement('button');
+        mealBtn.setAttribute('class', 'btn btn-outline-primary');
+        mealBtn.innerHTML = 'Edit';
+        mealBtn.addEventListener('click', function(){
+            addUsersuggestionContent(clientData.meal, mealDesc, mealBtn, 'desc');
+            if(mealBtn.innerHTML == 'Edit') {
+                saveUserCommentstoDb(clientData.meal['desc'], userid, clientid, 'Meal');
+            }
+        });    
+        mealBtnDiv.appendChild(mealBtn);
 
-    // ------------------------------------
-    // edit button for mico description. User can add his comments here.
-    // content of clientData.bmi['desc'] must be modified.
-    let microBtnDiv = document.createElement('div');
-    microBtnDiv.setAttribute('class', 'd-flex justify-content-center');
-    microBtnDiv.style.margin = '20px';
-    let microBtn = document.createElement('button');
-    microBtn.setAttribute('class', 'btn btn-outline-primary');
-    microBtn.innerHTML = 'Edit';
-    microBtn.addEventListener('click', function(){
-        addUsersuggestionContent(clientData.micro, microDesc, microBtn, 'descTrace');
-        if(microBtn.innerHTML == 'Edit') {
-            saveUserCommentstoDb(clientData.micro['descTrace'], userid, clientid, 'Micro');
+
+        // -----------------------------
+        // appending to mDiv from here:
+
+        mDiv.appendChild(closeBtn);
+        if(!accessDenied){
+            mDiv.appendChild(pdfBtn);
+            mDiv.appendChild(emailBtn);
         }
-    });    
-    microBtnDiv.appendChild(microBtn);
+        mDiv.appendChild(nameP);
+        mDiv.appendChild(genderP);
+        mDiv.appendChild(goalP);
+        mDiv.appendChild(idP);
+        mDiv.appendChild(campaignP);
+        mDiv.appendChild(mealText);
+        mDiv.appendChild(nutritionText);
 
-    // Micto vitamines
-    let divider2Vit = document.createElement('div');
-    divider2Vit.style.height = '2px';
-    divider2Vit.style.width = '80%';
-    divider2Vit.style.backgroundColor = 'grey';
-    divider2Vit.style.margin = 'auto';
-    divider2Vit.style.marginTop = '20px';
-    
-    // create plot MICRO
-    let microVitSuggestion = document.createElement('p');
-    microVitSuggestion.innerHTML = 'Micro-nutrients (Vitamines) recommendation';
-    microVitSuggestion.style.fontSize = '30px';
-    microVitSuggestion.setAttribute('id', 'mDivMicroVitSugg');
-    let microVit = document.createElement('div');
-    microVit.setAttribute('class', 'col-sm col-lg-5 Micro_vit');
-    microVit.style.margin = 'auto';
-    div1 = document.createElement('div');
-    div2 = document.createElement('div');
-    div3 = document.createElement('div');
-    let microVitDiv = document.createElement('canvas');
-    let microVitTxt = document.createElement('p');
-    let microVitDesc = document.createElement('p');
-    microVitDiv.setAttribute('id', 'Micro_vit');
-    microVitTxt.setAttribute('class', 'MICRO_vit_text');
-    microVitDesc.setAttribute('class', 'MICRO_vit_text_description');
-    div1.appendChild(microVitTxt);
-    div2.appendChild(microVitDiv);
-    div3.appendChild(microVitDesc);
-    microVit.appendChild(div1);
-    microVit.appendChild(div2);
-    microVit.appendChild(div3);
-    // ------------------------------------
-    // edit button for mico description. User can add his comments here.
-    // content of clientData.bmi['desc'] must be modified.
-    let microVitBtnDiv = document.createElement('div');
-    microVitBtnDiv.setAttribute('class', 'd-flex justify-content-center');
-    microVitBtnDiv.style.margin = '20px';
-    let microVitBtn = document.createElement('button');
-    microVitBtn.setAttribute('class', 'btn btn-outline-primary');
-    microVitBtn.innerHTML = 'Edit';
-    microVitBtn.addEventListener('click', function(){
-        addUsersuggestionContent(clientData.micro, microVitDesc, microVitBtn, 'descVit');
-        if(microVitBtn.innerHTML == 'Edit') {
-            saveUserCommentstoDb(clientData.micro['descVit'], userid, clientid, 'MicroVit');
+        mDiv.appendChild(divider1);
+        mDiv.appendChild(bmrSuggestion);
+        mDiv.appendChild(bmiSuggestion);
+        mDiv.appendChild(bmi);
+        if(!accessDenied){
+            mDiv.appendChild(bmiBtnDiv);
         }
-    });    
-    microVitBtnDiv.appendChild(microVitBtn);
 
-    // -----------
-    let divider3 = document.createElement('div');
-    divider3.style.height = '2px';
-    divider3.style.width = '80%';
-    divider3.style.backgroundColor = 'grey';
-    divider3.style.margin = 'auto';
-    divider3.style.marginTop = '20px';
-
-    // create plot MACRO
-    let macroSuggestion = document.createElement('p');
-    macroSuggestion.innerHTML = 'Macro-nutrients recommendation';
-    macroSuggestion.style.fontSize = '30px';
-    macroSuggestion.setAttribute('id', 'mDivMacroSugg');
-    let macro = document.createElement('div');
-    macro.setAttribute('class', 'col-sm col-lg-5 Macro');
-    macro.style.margin = 'auto';
-    div1 = document.createElement('div');
-    div2 = document.createElement('div');
-    div3 = document.createElement('div');
-    let macroDiv = document.createElement('canvas');
-    let macroTxt = document.createElement('p');
-    let macroDesc = document.createElement('p');
-    macroDiv.setAttribute('id', 'Macro');
-    macroTxt.setAttribute('class', 'MACRO_text');
-    macroDesc.setAttribute('class', 'MACRO_text_description');
-    div1.appendChild(macroTxt);
-    div2.appendChild(macroDiv);
-    div3.appendChild(macroDesc);
-    macro.appendChild(div1);
-    macro.appendChild(div2);
-    macro.appendChild(div3);
-    // ------------------------------------
-    // edit button for macro description. User can add his comments here.
-    // content of clientData.bmi['desc'] must be modified.
-    let macroBtnDiv = document.createElement('div');
-    macroBtnDiv.setAttribute('class', 'd-flex justify-content-center');
-    macroBtnDiv.style.margin = '20px';
-    let macroBtn = document.createElement('button');
-    macroBtn.setAttribute('class', 'btn btn-outline-primary');
-    macroBtn.innerHTML = 'Edit';
-    macroBtn.addEventListener('click', function(){
-        addUsersuggestionContent(clientData.macro, macroDesc, macroBtn, 'desc');
-        if(macroBtn.innerHTML == 'Edit') {
-            saveUserCommentstoDb(clientData.macro['desc'], userid, clientid, 'Macro');
+        mDiv.appendChild(divider2);
+        mDiv.appendChild(ifSuggestion);
+        mDiv.appendChild(If);
+        if(!accessDenied){
+            mDiv.appendChild(ifBtnDiv);
         }
-    });    
-    macroBtnDiv.appendChild(macroBtn);
 
-
-    let divider4 = document.createElement('div');
-    divider4.style.height = '2px';
-    divider4.style.width = '80%';
-    divider4.style.backgroundColor = 'grey';
-    divider4.style.margin = 'auto';
-    divider4.style.marginTop = '20px';
-
-    // create plot Intermittent Fasting plots
-    let ifSuggestion = document.createElement('p');
-    ifSuggestion.innerHTML = 'Intermittent fasting recommendation';
-    ifSuggestion.style.fontSize = '30px';
-    ifSuggestion.setAttribute('id', 'mDivIfSugg');
-    let If = document.createElement('div');
-    If.setAttribute('class', 'col-sm col-lg-5 IntermittentFasting');
-    If.style.margin = 'auto';
-    div1 = document.createElement('div');
-    div2 = document.createElement('div');
-    div3 = document.createElement('div');
-    let ifDiv = document.createElement('canvas');
-    let ifTxt = document.createElement('p');
-    let ifDesc = document.createElement('p');
-    ifDiv.setAttribute('id', 'IntermittentFasting');
-    ifTxt.setAttribute('class', 'IF_text');
-    ifDesc.setAttribute('class', 'IF_text_description');
-    div1.appendChild(ifTxt);
-    div2.appendChild(ifDiv);
-    div3.appendChild(ifDesc);
-    If.appendChild(div1);
-    If.appendChild(div2);
-    If.appendChild(div3);
-    // ------------------------------------
-    // edit button for Intermittent fasting description. User can add his comments here.
-    // content of clientData.bmi['desc'] must be modified.
-    let ifBtnDiv = document.createElement('div');
-    ifBtnDiv.setAttribute('class', 'd-flex justify-content-center');
-    ifBtnDiv.style.margin = '20px';
-    let ifBtn = document.createElement('button');
-    ifBtn.setAttribute('class', 'btn btn-outline-primary');
-    ifBtn.innerHTML = 'Edit';
-    ifBtn.addEventListener('click', function(){
-        addUsersuggestionContent(clientData.if, ifDesc, ifBtn, 'desc');
-        if(ifBtn.innerHTML == 'Edit') {
-            saveUserCommentstoDb(clientData.if['desc'], userid, clientid, 'If');
+        mDiv.appendChild(divider2Vit);
+        mDiv.appendChild(macroSuggestion);
+        mDiv.appendChild(macro);
+        if(!accessDenied){
+            mDiv.appendChild(macroBtnDiv);
         }
-    });    
-    ifBtnDiv.appendChild(ifBtn);
 
-
-    
-    let divider5 = document.createElement('div');
-    divider5.style.height = '2px';
-    divider5.style.width = '80%';
-    divider5.style.backgroundColor = 'grey';
-    divider5.style.margin = 'auto';
-    divider5.style.marginTop = '20px';
-
-
-    // create plot Intermittent Fasting plots
-    let calSuggestion = document.createElement('p');
-    calSuggestion.innerHTML = 'Calories intake recommendation';
-    calSuggestion.style.fontSize = '30px';
-    calSuggestion.setAttribute('id', 'mDivCalSugg');
-    let Cal = document.createElement('div');
-    Cal.setAttribute('class', 'col-sm col-lg-5 Calories');
-    Cal.style.margin = 'auto';
-    div1 = document.createElement('div');
-    div2 = document.createElement('div');
-    div3 = document.createElement('div');
-    let calDiv = document.createElement('canvas');
-    let calTxt = document.createElement('p');
-    let calDesc = document.createElement('p');
-    calDiv.setAttribute('id', 'Calories');
-    calTxt.setAttribute('class', 'Cal_text');
-    calDesc.setAttribute('class', 'Cal_description');
-    div1.appendChild(calTxt);
-    div2.appendChild(calDiv);
-    div3.appendChild(calDesc);
-    Cal.appendChild(div1);
-    Cal.appendChild(div2);
-    Cal.appendChild(div3);
-    // ------------------------------------
-    // edit button for Intermittent fasting description. User can add his comments here.
-    // content of clientData.bmi['desc'] must be modified.
-    let calBtnDiv = document.createElement('div');
-    calBtnDiv.setAttribute('class', 'd-flex justify-content-center');
-    calBtnDiv.style.margin = '20px';
-    let calBtn = document.createElement('button');
-    calBtn.setAttribute('class', 'btn btn-outline-primary');
-    calBtn.innerHTML = 'Edit';
-    calBtn.addEventListener('click', function(){
-        addUsersuggestionContent(clientData.cal, calDesc, calBtn, 'desc');
-        if(calBtn.innerHTML == 'Edit') {
-            saveUserCommentstoDb(clientData.cal['desc'], userid, clientid, 'Cal');
+        mDiv.appendChild(divider3);
+        mDiv.appendChild(microSuggestion);
+        mDiv.appendChild(micro);
+        if(!accessDenied){
+            mDiv.appendChild(microBtnDiv);
         }
-    });    
-    calBtnDiv.appendChild(calBtn);
 
-
-
-    let divider5_1 = document.createElement('div');
-    divider5_1.style.height = '2px';
-    divider5_1.style.width = '80%';
-    divider5_1.style.backgroundColor = 'grey';
-    divider5_1.style.margin = 'auto';
-    divider5_1.style.marginTop = '20px';
-
-
-    // create meal plan text area 
-    let meal_text = document.createElement('p');
-    meal_text.innerHTML = 'meal plan';
-    meal_text.style.fontSize = '30px';
-    meal_text.setAttribute('id', 'mDivMealSugg');
-    meal_text.setAttribute('class', 'Meal_title');
-    let Meal = document.createElement('div');
-    Meal.setAttribute('class', 'col-sm col-lg-5 meal_plan');
-    Meal.style.margin = 'auto';
-    div1 = document.createElement('div');
-    let mealDesc = document.createElement('p');
-    mealDesc.setAttribute('class', 'meal_text');
-    div1.appendChild(mealDesc);
-    Meal.appendChild(div1);
-   
-    // ------------------------------------
-    // edit button for Intermittent fasting description. User can add his comments here.
-    // content of clientData.bmi['desc'] must be modified.
-    let mealBtnDiv = document.createElement('div');
-    mealBtnDiv.setAttribute('class', 'd-flex justify-content-center');
-    mealBtnDiv.style.margin = '20px';
-    let mealBtn = document.createElement('button');
-    mealBtn.setAttribute('class', 'btn btn-outline-primary');
-    mealBtn.innerHTML = 'Edit';
-    mealBtn.addEventListener('click', function(){
-        addUsersuggestionContent(clientData.meal, mealDesc, mealBtn, 'desc');
-        if(mealBtn.innerHTML == 'Edit') {
-            saveUserCommentstoDb(clientData.meal['desc'], userid, clientid, 'Meal');
+        mDiv.appendChild(divider4);
+        mDiv.appendChild(microVitSuggestion);
+        mDiv.appendChild(microVit);
+        if(!accessDenied){
+            mDiv.appendChild(microVitBtnDiv);
         }
-    });    
-    mealBtnDiv.appendChild(mealBtn);
 
+        mDiv.appendChild(divider5);
+        mDiv.appendChild(calSuggestion);
+        mDiv.appendChild(Cal);
+        if(!accessDenied){
+            mDiv.appendChild(calBtnDiv);
+        }   
 
-    // -----------------------------
-    // appending to mDiv from here:
+        mDiv.appendChild(divider5_1);
+        mDiv.appendChild(meal_text);
+        mDiv.appendChild(Meal);
+        if(!accessDenied){
+            mDiv.appendChild(mealBtnDiv);
+        }
 
-    mDiv.appendChild(closeBtn);
-    if(!accessDenied){
-        mDiv.appendChild(pdfBtn);
-        mDiv.appendChild(emailBtn);
+        // resetting the Queue for re-arming.
+        eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, MicroVit:false, Cal:false, Meal:false};
+        allowNewAiStream = true;
+        parentNode.appendChild(mDiv);
+        plotBmi(clientData.bmi, bmi, bmiTxt, bmiDesc);
+        plotIf(clientData.if, If, ifTxt, ifDesc);
+        plotMacro(clientData.macro, macro, macroTxt, macroDesc);
+        plotMicro(clientData.micro, micro, microTxt, microDesc);
+        plotMicroVit(clientData.micro, microVit, microVitTxt, microVitDesc);
+        plotCalories(clientData.cal, Cal, calTxt, calDesc);
+        displayMeal(clientData.meal, inputBlob, 0); 
+        
+        intervalID = setInterval(handleAi, 2000, [0, inputBlob[0].nutritionEng, inputBlob[0].mealEng]);
     }
-    mDiv.appendChild(nameP);
-    mDiv.appendChild(genderP);
-    mDiv.appendChild(goalP);
-    mDiv.appendChild(idP);
-    mDiv.appendChild(campaignP);
-    mDiv.appendChild(mealText);
-    mDiv.appendChild(nutritionText);
-
-    mDiv.appendChild(divider1);
-    mDiv.appendChild(bmrSuggestion);
-    mDiv.appendChild(bmiSuggestion);
-    mDiv.appendChild(bmi);
-    if(!accessDenied){
-        mDiv.appendChild(bmiBtnDiv);
-    }
-
-    mDiv.appendChild(divider2);
-    mDiv.appendChild(ifSuggestion);
-    mDiv.appendChild(If);
-    if(!accessDenied){
-        mDiv.appendChild(ifBtnDiv);
-    }
-
-    mDiv.appendChild(divider2Vit);
-    mDiv.appendChild(macroSuggestion);
-    mDiv.appendChild(macro);
-    if(!accessDenied){
-        mDiv.appendChild(macroBtnDiv);
-    }
-
-    mDiv.appendChild(divider3);
-    mDiv.appendChild(microSuggestion);
-    mDiv.appendChild(micro);
-    if(!accessDenied){
-        mDiv.appendChild(microBtnDiv);
-    }
-
-    mDiv.appendChild(divider4);
-    mDiv.appendChild(microVitSuggestion);
-    mDiv.appendChild(microVit);
-    if(!accessDenied){
-        mDiv.appendChild(microVitBtnDiv);
-    }
-
-    mDiv.appendChild(divider5);
-    mDiv.appendChild(calSuggestion);
-    mDiv.appendChild(Cal);
-    if(!accessDenied){
-        mDiv.appendChild(calBtnDiv);
-    }   
-
-    mDiv.appendChild(divider5_1);
-    mDiv.appendChild(meal_text);
-    mDiv.appendChild(Meal);
-    if(!accessDenied){
-        mDiv.appendChild(mealBtnDiv);
-    }
-
-    // resetting the Queue for re-arming.
-    eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, MicroVit:false, Cal:false, Meal:false};
-    allowNewAiStream = true;
-    parentNode.appendChild(mDiv);
-    plotBmi(clientData.bmi, bmi, bmiTxt, bmiDesc);
-    plotIf(clientData.if, If, ifTxt, ifDesc);
-    plotMacro(clientData.macro, macro, macroTxt, macroDesc);
-    plotMicro(clientData.micro, micro, microTxt, microDesc);
-    plotMicroVit(clientData.micro, microVit, microVitTxt, microVitDesc);
-    plotCalories(clientData.cal, Cal, calTxt, calDesc);
-    displayMeal(clientData.meal, inputBlob, 0); 
-    
-    intervalID = setInterval(handleAi, 2000, [0, inputBlob[0].nutritionEng, inputBlob[0].mealEng]);
-
 }
 
 function createPdf(node, data) {
@@ -2518,6 +2524,7 @@ function cleanClientDiv(mDiv) {
     while( mDiv.childElementCount > 0){
         mDiv.removeChild(mDiv.children[0]);
     }
+    clearInterval(intervalID);
 }
 
 function cleanCampaignDiv(mDiv) {

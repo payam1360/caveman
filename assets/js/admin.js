@@ -23,11 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
             e.target.children[1].style.transform = 'scale(1, 1)';
         });
         container[kk].addEventListener('click',function(e) {
-            if(kk == 0){
-                window.location.assign('addClients.html');
-            } else if(kk == 1) {
+            if(kk == 0) {
                 window.location.assign('adminQ.html');
-            } else if(kk == 2) {
+            } else if(kk == 1) {
                 window.location.assign('clients.html');
             }
         });
