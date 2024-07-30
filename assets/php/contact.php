@@ -11,9 +11,8 @@ require '../../vendor/phpmailer/phpmailer/src/Exception.php';
 
 function sendEmail($emailAddr, $bodyContent) {
     $mail = new PHPMailer(true);
-
-    // app password: azqb ochq lfot btnc
     $emailAddr = 'rabiei.p@gmail.com';
+    // app password: azqb ochq lfot btnc
     // Server settings
     $mail->SMTPDebug = 0;                         //Enable verbose debug output
     $mail->isSMTP();                              // Set mailer to use SMTP
@@ -50,27 +49,146 @@ function getClientEmail($userId, $clientId) {
     $password    = "@Ssia123";
     $dbname      = "Users";
     $tablename   = "Users";
+    $table1name  = "userAllocation";
     // Create connection
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
     // check if the client exists.
     $sql         = "SELECT qAnswer FROM $tablename WHERE userId = '$userId' AND clientId = '$clientId' AND qType = 'email';";
     $db_out      = $conn->query($sql);
     $clientEmail = $db_out->fetch_assoc();
-    return $clientEmail['qAnswer'];
+    if(is_null($clientEmail)){ // check the other table to see if there is email for this client
+        $sql         = "SELECT cEmail FROM $table1name WHERE userId = '$userId' AND clientId = '$clientId';";
+        $db_out      = $conn->query($sql);
+        $clientEmail = $db_out->fetch_assoc(); 
+        $clientEmail = $clientEmail['cEmail']; 
+    } else {
+        $clientEmail = $clientEmail['qAnswer'];
+    }
+    return $clientEmail;
 }
 
+function resizeImage($sourceImagePath, $destinationImagePath, $newWidth) {
+    // Create an image resource from the source file
+    $sourceImage = imagecreatefromstring(file_get_contents($sourceImagePath));
+    if (!$sourceImage) {
+        die("Unable to create image resource from source.");
+    }
+
+    // Get original image dimensions
+    list($originalWidth, $originalHeight) = getimagesize($sourceImagePath);
+    // Calculate the new height to maintain aspect ratio
+    $aspectRatio = $originalWidth / $originalHeight;
+    $newHeight   = round(floor($newWidth / $aspectRatio * 1000) / 1000);
+
+    // Create a new true color image with the new dimensions
+    $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+
+    // Resize the source image and copy it into the resized image
+    imagecopyresampled(
+        $resizedImage, $sourceImage,
+        0, 0, 0, 0,
+        $newWidth, $newHeight,
+        $originalWidth, $originalHeight
+    );
+
+    // Save the resized image to the destination path
+    imagepng($resizedImage, $destinationImagePath);
+
+    // Free up memory
+    imagedestroy($sourceImage);
+    imagedestroy($resizedImage);
+}
 
 function prepareBody($userdata) {
-    $bodyContent = 'test';
+
+    $ImageIds = array(
+        'Bmi', 'IntermittentFasting', 'Micro', 'Micro_vit', 'Macro', 'Calories' 
+    );
+    $ImageNames = array(
+        'bmi', 'if', 'microTrace', 'microVit', 'macro', 'cal' 
+    );
+    $outerHTML = $userdata->parentNode;
+    for($kk = 0; $kk < count($ImageNames); $kk++){
+
+        $sourceImagePath = '../../clientEmails/' . $ImageNames[$kk] . 'File.png';
+        $destinationImagePath = '../../clientEmails/resized' . $ImageIds[$kk] . 'File.png';
+        $newWidth = 500; // Desired width in pixels
+        resizeImage($sourceImagePath, $destinationImagePath, $newWidth);
+        // process $userdata->parentNode outerHTML for canvas and replace with src img 
+        // also remove buttons 
+        
+        // Regular expression to find <canvas> tags
+        $pattern   = '/<canvas id=\"' . $ImageIds[$kk] . '\"[^>]*>(.*?)<\/canvas>/is';
+        $imagePath = $destinationImagePath;
+        $imageData = base64_encode(file_get_contents($imagePath));
+        $src       = 'data:image/png;base64,' . $imageData;
+        // Replacement string
+        // Here we use a placeholder image URL. You can adjust it as needed.
+        $replacement = '<img src="' . $src . '"alt="Canvas Image" />';
+
+        // Replace <canvas> tags with <img> tags
+        $outerHTML = preg_replace($pattern, $replacement, $outerHTML);
+    }
+    $bodyContent = '<!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body { font-family: Arial, sans-serif; }
+            .container { width: 80%; margin: auto; }
+            .header { background-color: #f4f4f4; padding: 10px; text-align: center; }
+            .content { margin: 20px 0; }
+            .footer { background-color: #f4f4f4; padding: 10px; text-align: center; }
+        </style>
+              
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>NutriAi Progress report</h1>
+            </div>
+            <div class="content">
+                <p>Hello,</p>
+                <p>Here is the report for your progress this past month.</p>' . 
+                $outerHTML 
+                . '<p>Best regards,<br>NutriAi team</p>
+            </div>
+            <div class="footer">
+                <p>NutriAi | Carlsbad, Ca 92008 | 6129785987</p>
+            </div>
+        </div>
+    </body>
+    </html>';
     return $bodyContent;
 }
+function saveImagesOnServer($data){
 
+    $ImageNames = array(
+        'bmi', 'if', 'microTrace', 'microVit', 'macro', 'cal' 
+    );
+    $ImageData = array(
+        $data->bmiImg, $data->ifImg, $data->microTraceImg, $data->microVitImg, $data->macroImg, $data->calImg 
+    );    
+    $success = true;
+    for($kk = 0; $kk < count($ImageNames); $kk++){
+        $Img         = $ImageData[$kk];
+        $Img         = str_replace('data:image/png;base64,', '', $Img);
+        $Img         = str_replace(' ', '+', $Img);
+        $imgData     = base64_decode($Img);
+        $imgFile     = '../../clientEmails/' . $ImageNames[$kk] . 'File.png';
+        $success     = $success && file_put_contents($imgFile, $imgData);
+    }
+    return $success;
+
+}
 /// -------------------------
 /// main routin starts here.
 /// -------------------------
 $userData    = json_decode($_POST['userInfo']);
-$clientEmail = getClientEmail($userData->userId, $userData->clientId);
-$bodyContent = prepareBody($userData);
-$data        = sendEmail($clientEmail, $bodyContent);
+$success     = saveImagesOnServer($userData);
+if($success){
+    $clientEmail = getClientEmail($userData->userId, $userData->clientId);
+    $bodyContent = prepareBody($userData);
+    $data        = sendEmail($clientEmail, $bodyContent);
+}
 echo json_encode($data);
 ?>

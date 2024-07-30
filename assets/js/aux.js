@@ -1700,23 +1700,26 @@ function displayClients(results, userid, username, searchStruct) {
     for(let kk = 0; kk < numClients; kk++) {
 
         // only display matching search strings
-        if(searchStruct == undefined || searchStruct.searchStr.length == 0) {
-        } else {
-            if(searchStruct.key == 0) { // search ID
-                if(results.ids[kk].slice(0, searchStruct.searchStr.length) != searchStruct.searchStr){
-                    continue;
-                }
-            } else if(searchStruct.key == 1) { // search email
-                if(results.emails[kk].slice(0, searchStruct.searchStr.length) != searchStruct.searchStr){
-                    continue;
-                }
-            } else if(searchStruct.key == 2) { // search name
-                let nameClient = results.names[kk].toLowerCase();
-                if(nameClient.slice(0, searchStruct.searchStr.length) != searchStruct.searchStr.toLowerCase()){
-                    continue;
+        if(typeof(searchStruct) == 'undefined' || searchStruct == '') {
+        } else if(typeof(searchStruct) !== 'undefined' ) {
+            if(searchStruct.searchStr.length == 0){
+            } else {
+                if(searchStruct.key == 0) { // search ID
+                    if(results.ids[kk].slice(0, searchStruct.searchStr.length) != searchStruct.searchStr){
+                        continue;
+                    }
+                } else if(searchStruct.key == 1) { // search email
+                    if(results.emails[kk].slice(0, searchStruct.searchStr.length) != searchStruct.searchStr){
+                        continue;
+                    }
+                } else if(searchStruct.key == 2) { // search name
+                    let nameClient = results.names[kk].toLowerCase();
+                    if(nameClient.slice(0, searchStruct.searchStr.length) != searchStruct.searchStr.toLowerCase()){
+                        continue;
+                    }
                 }
             }
-        }
+        } 
 
         CampaignIdSelected = results.campaignidAssigned[kk];
         CampaignTimeSelected = '';
@@ -2580,6 +2583,14 @@ function cleanCampaignDiv(mDiv) {
 
 function sendEmail(parentNode, clientData, userid, clientid) {
 
+    const canvasImgBmi        = document.getElementById('Bmi').toDataURL('image/png', 1.0);
+    const canvasImgIf         = document.getElementById('IntermittentFasting').toDataURL('image/png', 1.0);
+    const canvasImgMicroTrace = document.getElementById('Micro').toDataURL('image/png', 1.0);
+    const canvasImgMicroVit   = document.getElementById('Micro_vit').toDataURL('image/png', 1.0);
+    const canvasImgMacro      = document.getElementById('Macro').toDataURL('image/png', 1.0);
+    const canvasImgCal        = document.getElementById('Calories').toDataURL('image/png', 1.0);
+
+
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -2592,7 +2603,19 @@ function sendEmail(parentNode, clientData, userid, clientid) {
     // sending the request
     xmlhttp.open("POST", "assets/php/contact.php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    let info = {'parentNode': parentNode, 'clientData': clientData, 'userId': userid, 'clientId': clientid};
+    let info = 
+            {
+                'parentNode':    parentNode.outerHTML, 
+                'bmiImg':        canvasImgBmi, 
+                'ifImg':         canvasImgIf,
+                'microTraceImg': canvasImgMicroTrace,
+                'microVitImg':   canvasImgMicroVit,
+                'macroImg':      canvasImgMacro,
+                'calImg':        canvasImgCal,
+                'clientData':    clientData, 
+                'userId':        userid, 
+                'clientId':      clientid
+            };
     var userdata = "userInfo="+JSON.stringify(info);
     xmlhttp.send(userdata);
 }
