@@ -110,13 +110,11 @@ function prepareBody($userdata) {
     $outerHTML = $userdata->parentNode;
     for($kk = 0; $kk < count($ImageNames); $kk++){
 
-        $sourceImagePath = '../../clientEmails/' . $ImageNames[$kk] . 'File.png';
-        $destinationImagePath = '../../clientEmails/resized' . $ImageIds[$kk] . 'File.png';
+        $sourceImagePath = '../../clientEmails/' . $userdata->userId . $userdata->clientId . $ImageNames[$kk] . 'File.png';
+        $destinationImagePath = '../../clientEmails/resized' . $userdata->userId . $userdata->clientId . $ImageIds[$kk] . 'File.png';
         $newWidth = 500; // Desired width in pixels
         resizeImage($sourceImagePath, $destinationImagePath, $newWidth);
-        // process $userdata->parentNode outerHTML for canvas and replace with src img 
-        // also remove buttons 
-        
+        // process $userdata->parentNode outerHTML for canvas and replace with src img  
         // Regular expression to find <canvas> tags
         $pattern   = '/<canvas id=\"' . $ImageIds[$kk] . '\"[^>]*>(.*?)<\/canvas>/is';
         $imagePath = $destinationImagePath;
@@ -129,6 +127,9 @@ function prepareBody($userdata) {
         // Replace <canvas> tags with <img> tags
         $outerHTML = preg_replace($pattern, $replacement, $outerHTML);
     }
+    // also remove buttons
+    $outerHTML = preg_replace('/<button\b[^>]*>(.*?)<\/button>/is', '', $outerHTML);
+
     $bodyContent = '<!DOCTYPE html>
     <html>
     <head>
@@ -174,11 +175,27 @@ function saveImagesOnServer($data){
         $Img         = str_replace('data:image/png;base64,', '', $Img);
         $Img         = str_replace(' ', '+', $Img);
         $imgData     = base64_decode($Img);
-        $imgFile     = '../../clientEmails/' . $ImageNames[$kk] . 'File.png';
+        $imgFile     = '../../clientEmails/' . $data->userId . $data->clientId . $ImageNames[$kk] . 'File.png';
         $success     = $success && file_put_contents($imgFile, $imgData);
     }
     return $success;
+}
 
+function cleanup(){
+    $directory = '../../clientEmails';
+
+    if (is_dir($directory)) {
+        $files = array_diff(scandir($directory), array('.', '..'));
+
+        foreach ($files as $file) {
+            $filePath = $directory . DIRECTORY_SEPARATOR . $file;
+
+            if (is_file($filePath)) {
+                unlink($filePath); // Deletes the file
+            }
+        }
+    } else {
+    }
 }
 /// -------------------------
 /// main routin starts here.
@@ -190,5 +207,7 @@ if($success){
     $bodyContent = prepareBody($userData);
     $data        = sendEmail($clientEmail, $bodyContent);
 }
+// clean the clientEmail directory.
+cleanup();
 echo json_encode($data);
 ?>

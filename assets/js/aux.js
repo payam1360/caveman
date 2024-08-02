@@ -2467,6 +2467,7 @@ function createPdf(node, data) {
     const canvasImgMicroVit   = document.getElementById('Micro_vit').toDataURL('image/png', 1.0);
     const canvasImgMacro      = document.getElementById('Macro').toDataURL('image/png', 1.0);
     const canvasImgIf         = document.getElementById('IntermittentFasting').toDataURL('image/png', 1.0);
+    const canvasImgCal        = document.getElementById('Calories').toDataURL('image/png', 1.0);
     const nameP               = document.getElementById('mDivpName');
     const goalP               = document.getElementById('mDivpGoal');
     const idP                 = document.getElementById('mDivpId');
@@ -2506,62 +2507,109 @@ function createPdf(node, data) {
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text('Your body mass index: ', 50, 120); 
-
-    pdf.setFontSize(20);
-    pdf.setTextColor('#2E8B57');
-    pdf.text(String(Math.floor(data.bmi['val']*100)/100), 130, 120); 
-
-    pdf.setFontSize(10);
-    pdf.setTextColor('#000000');
-    pdf.text('Your basal metabolic rate (BMR) kcal / day: ', 50, 140); 
+    pdf.text('Your basal metabolic rate (BMR) kcal / day: ', 50, 120); 
 
     pdf.setFontSize(20);
     pdf.setTextColor('#FFA500');
-    pdf.text(String(Math.floor(data.bmr['val']*100)/100), 200, 140); 
+    pdf.text(String(Math.floor(data.bmr['val']*100)/100), 200, 120); 
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.bmr['desc'], 50, 160); 
-
-    pdf.addImage(canvasImgBmi, 'JPEG', 80, 180, 300, 220, 'alias1', 'NONE');
+    pdf.text(data.bmr['desc'], 50, 140, {maxWidth:370}); 
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.bmi['desc'] , 50, 420, {maxWidth:370}); 
+    pdf.text('Your body mass index: ', 50, 180); 
+
+    pdf.setFontSize(20);
+    pdf.setTextColor('#2E8B57');
+    pdf.text(String(Math.floor(data.bmi['val']*100)/100), 130, 180); 
+
+    pdf.setFontSize(22);
+    pdf.setTextColor('#000000');
+    pdf.text('BMI plot', 50, 220);
+
+    pdf.addImage(canvasImgBmi, 'JPEG', 80, 240, 300, 220, 'alias1', 'NONE');
+
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000');
+    pdf.text(data.bmi['desc'] , 50, 480, {maxWidth:370}); 
     
     // page reset
     pdf.addPage();
-    pdf.addImage(canvasImgMicroTrace, 'JPEG', 80, 50, 300, 220, 'alias2', 'NONE');
+
+    pdf.setFontSize(22);
+    pdf.setTextColor('#000000');
+    pdf.text('Intermittent fasting recommendation', 50, 50);
+
+    pdf.addImage(canvasImgIf, 'JPEG', 80, 70, 300, 160, 'alias2', 'NONE');
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.micro['descTrace'] , 50, 420, {maxWidth:370});
+    pdf.text(data.if['desc'] , 50, 280, {maxWidth:370});
 
     // page reset
     pdf.addPage();
-    pdf.addImage(canvasImgMicroVit, 'JPEG', 80, 50, 300, 220, 'alias3', 'NONE');
+
+    pdf.setFontSize(22);
+    pdf.setTextColor('#000000');
+    pdf.text('Macro nutrients recommendation', 50, 50);
+
+    pdf.addImage(canvasImgMacro, 'JPEG', 80, 70, 300, 220, 'alias3', 'NONE');
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.micro['descVit'] , 50, 420, {maxWidth:370});
+    pdf.text(data.macro['desc'] , 50, 320, {maxWidth:370});
 
     // page reset
     pdf.addPage();
-    pdf.addImage(canvasImgMacro, 'JPEG', 80, 50, 300, 220, 'alias4', 'NONE');
+
+    pdf.setFontSize(22);
+    pdf.setTextColor('#000000');
+    pdf.text('Micro Trace mineral recommendation', 50, 50);
+
+    pdf.addImage(canvasImgMicroTrace, 'JPEG', 80, 70, 300, 220, 'alias4', 'NONE');
     
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.macro['desc'] , 50, 420, {maxWidth:370});
+    pdf.text(data.micro['descTrace'] , 50, 320, {maxWidth:370});
 
     // page reset
     pdf.addPage();
-    pdf.addImage(canvasImgIf, 'JPEG', 80, 50, 300, 150, 'alias5', 'NONE');
+
+    pdf.setFontSize(22);
+    pdf.setTextColor('#000000');
+    pdf.text('Micro Vitamins recommendation', 50, 50);
+
+    pdf.addImage(canvasImgMicroVit, 'JPEG', 80, 70, 300, 220, 'alias5', 'NONE');
         
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.if['desc'] , 50, 420, {maxWidth:370});
-    
+    pdf.text(data.micro['descVit'] , 50, 320, {maxWidth:370});
+
+    // page reset
+    pdf.addPage();
+
+    pdf.setFontSize(22);
+    pdf.setTextColor('#000000');
+    pdf.text('Calories intake recommendation', 50, 50);
+
+    pdf.addImage(canvasImgCal, 'JPEG', 80, 70, 300, 170, 'alias6', 'NONE');
+       
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000');
+    pdf.text(data.cal['desc'] , 50, 280, {maxWidth:370});
+   
+    // page reset
+    pdf.addPage();
+    pdf.setFontSize(22);
+    pdf.setTextColor('#000000');
+    pdf.text('Meal plan', 50, 50);
+      
+    pdf.setFontSize(10);
+    pdf.setTextColor('#000000');
+    pdf.text(data.meal['desc'] , 50, 70, {maxWidth:370});
+
 
     let idNumber = idP.innerHTML;
     const currentDate = new Date().toDateString();
