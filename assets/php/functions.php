@@ -868,7 +868,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
                 body fat. It is calculated by dividing a persons weight in kilograms by 
                 the square of their height in meters (kg/m²). 
                 The BMI categories are:
-                Underweight: BMI < 18.5
+                Underweight: BMI less than 18.5
                 Normal weight: BMI 18.5-24.9
                 Overweight: BMI 25-29.9
                 Obesity: BMI ≥ 30
@@ -922,10 +922,10 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
                 to estimate body fat. It is calculated by dividing a persons 
                 weight in kilograms by the square of their height in meters (kg/m²). 
                 The BMI categories are:
-                Underweight: BMI < 18.5
+                Underweight: BMI less than 18.5
                 Normal weight: BMI 18.5-24.9
                 Overweight: BMI 25-29.9
-                Obesity: BMI ≥ 30
+                Obesity: BMI more than 30
                 Advice
                 If you already have a low BMI (under 18.5) and are considering losing 
                 more weight, it is important to prioritize your health. Further weight 
@@ -941,10 +941,10 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
                 estimate body fat. It is calculated by dividing a persons weight 
                 in kilograms by the square of their height in meters (kg/m²). The 
                 BMI categories are:
-                Underweight: BMI < 18.5
+                Underweight: BMI less than 18.5
                 Normal weight: BMI 18.5-24.9
                 Overweight: BMI 25-29.9
-                Obesity: BMI ≥ 30
+                Obesity: BMI more than 30
                 Advice
                 For a young female with a low BMI looking to gain muscle mass:
                 Increase Caloric Intake: Eat more calories than you burn, focusing 
@@ -1035,7 +1035,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             if($LowOldMaleLose) {
                 $desc = ['BMI Description for an Older Male Above 40 with Low BMI Trying to Lose Weight
                 Body Mass Index (BMI) is a measure of body fat based on height and weight:
-                Underweight: BMI < 18.5
+                Underweight: BMI less than 18.5
                 Advice
                 For an older male with a low BMI trying to lose weight:
                 Monitor Health: Focus on overall health rather than just weight loss.
@@ -1048,7 +1048,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
                 $desc = ['BMI Description for an Older Male Above 40 with Low BMI 
                 Trying to Gain Muscle Mass
                 Body Mass Index (BMI) is a measure of body fat based on height and weight:
-                Underweight: BMI < 18.5
+                Underweight: BMI less than 18.5
                 Advice
                 For an older male with a low BMI aiming to gain muscle mass:
                 Increase Caloric Intake: Eat more calories with a focus on nutrient-dense foods.
@@ -1061,7 +1061,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             if($LowOldFemaleLose) {
                 $desc = ['BMI Description for an Older Female Above 40 with Low BMI Trying to Lose Weight
                 Body Mass Index (BMI) is a measure of body fat based on height and weight:
-                Underweight: BMI < 18.5
+                Underweight: BMI less than 18.5
                 Advice
                 For an older female with a low BMI trying to lose weight:
                 Consult a Healthcare Provider: Ensure that further weight loss is safe and 
@@ -1073,7 +1073,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
                 $desc = ['BMI Description for an Older Female Above 40 with Low BMI 
                 Trying to Gain Muscle Mass
                 Body Mass Index (BMI) is a measure of body fat based on height and weight:
-                Underweight: BMI < 18.5
+                Underweight: BMI less than 18.5
                 Advice
                 For an older female with a low BMI aiming to gain muscle mass:
                 Increase Caloric Intake: Eat more calories with a focus on nutrient-dense 
@@ -1746,48 +1746,145 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
                 Adjust based on individual progress and specific needs.'];
             }
             if($HighYoungFemaleLose) {
-                $desc = [''];
+                $desc = ['Macronutrient Percentage Recommendations Including Fiber 
+                for a Young Female Under 35 with High BMI Trying to Lose Weight
+                Proteins: 25-30% of total daily calories
+                Carbohydrates: 40-50% of total daily calories
+                Fiber: Aim for 21-25 grams per day within the carbohydrate intake.
+                Fats: 25-30% of total daily calories
+                Note:
+                Adjust based on individual progress and specific needs.'];
             }
             if($HighYoungFemaleGain) {
-                $desc = [''];
+                $desc = ['Macronutrient Percentage Recommendations Including Fiber 
+                for a Young Female Under 35 with High BMI Trying to Gain Muscle Mass
+                Proteins: 25-30% of total daily calories
+                Carbohydrates: 45-55% of total daily calories
+                Fiber: Aim for 21-25 grams per day within the carbohydrate intake.
+                Fats: 20-30% of total daily calories
+                Note:
+                Adjust based on progress and individual needs.'];
             }
             // -------
             if($LowYoungMaleLose) {
-                $desc = [''];
+                $desc = ['Macronutrient Percentage Recommendations Including Fiber 
+                for a Young Male Under 35 with Low BMI Trying to Lose Weight
+                Proteins: 30-35% of total daily calories
+                Carbohydrates: 35-45% of total daily calories
+                Fiber: Aim for 30-38 grams per day within the carbohydrate intake.
+                Fats: 25-30% of total daily calories
+                Note:
+                Adjust based on progress and individual needs.'];
             }
             if($LowYoungMaleGain) {
-                $desc = [''];
+                $desc = ['Macronutrient Percentage Recommendations Including Fiber 
+                for a Young Male Under 35 with Low BMI Trying to Gain Weight
+                Proteins: 25-30% of total daily calories
+                Carbohydrates: 50-60% of total daily calories
+                Fiber: Aim for 30-38 grams per day within the carbohydrate intake.
+                Fats: 20-30% of total daily calories
+                Note:
+                Adjust based on progress and individual needs.'];
             }
             if($LowYoungFemaleLose) {
-                $desc = [''];
+                $desc = ['Macronutrient Percentage Recommendations Including 
+                Fiber for a Young Female Under 35 with Low BMI Trying to Lose Weight
+                Proteins: 30-35% of total daily calories
+                Carbohydrates: 40-50% of total daily calories
+                Fiber: Aim for 21-25 grams per day within the carbohydrate intake.
+                Fats: 20-30% of total daily calories
+                Note:
+                Adjust based on progress and individual needs.'];
             }
             if($LowYoungFemaleGain) {
-                $desc = [''];
+                $desc = ['For a young female under 35 with a low BMI aiming to gain 
+                muscle mass, here are some concise macronutrient percentage recommendations, including fiber:
+                Protein: 25-30% of total daily calories
+                Carbohydrates: 45-50% of total daily calories (ensure these include complex carbs and fiber)
+                Fats: 20-25% of total daily calories
+                Fiber: Aim for 25-30 grams per day'];
             }
+            // -------
             if($HighOldMaleLose) {
-                $desc = [''];
+                $desc = ['For an older male (over 35-40) with a high BMI aiming to 
+                lose weight, here are some concise macronutrient percentage 
+                recommendations, including fiber:
+                Protein: 25-30% of total daily calories
+                Carbohydrates: 35-40% of total daily calories (focus on high-fiber, 
+                low-glycemic carbs)
+                Fats: 30-35% of total daily calories (prioritize healthy fats)
+                Fiber: Aim for 30-35 grams per day'];
             }
             if($HighOldMaleGain) {
-                $desc = [''];
+                $desc = ['For an older male (over 35-40) with a high BMI aiming to gain 
+                muscle mass, here are some 
+                concise macronutrient percentage recommendations, including fiber:
+                Protein: 25-30% of total daily calories
+                Carbohydrates: 40-45% of total daily calories (focus on complex carbs 
+                with adequate fiber)
+                Fats: 25-30% of total daily calories (include healthy fats)
+                Fiber: Aim for 30-35 grams per day'];
             }
             if($HighOldFemaleLose) {
-                $desc = [''];
+                $desc = ['For an older female (over 35-40) with a high BMI aiming 
+                to lose weight, here are some concise macronutrient percentage 
+                recommendations, including fiber:
+                Protein: 25-30% of total daily calories
+                Carbohydrates: 35-40% of total daily calories (focus on high-fiber, 
+                low-glycemic carbs)
+                Fats: 30-35% of total daily calories (prioritize healthy fats)
+                Fiber: Aim for 25-30 grams per day'];
             }
             if($HighOldFemaleGain) {
-                $desc = [''];
+                $desc = ['For an older female (over 35-40) with a high BMI aiming 
+                to gain muscle mass, here are some concise macronutrient percentage 
+                recommendations, including fiber:
+                Protein: 25-30% of total daily calories
+                Carbohydrates: 40-45% of total daily calories (focus on complex 
+                carbs with adequate fiber)
+                Fats: 25-30% of total daily calories (include healthy fats)
+                Fiber: Aim for 25-30 grams per day'];
             }
             // -------
             if($LowOldMaleLose) {
-                $desc = [''];
+                $desc = ['For an older male (over 35-40) with a low BMI aiming 
+                to lose weight, here are some concise macronutrient percentage 
+                recommendations, including fiber:
+                Protein: 25-30% of total daily calories
+                Carbohydrates: 40-45% of total daily calories (focus on high-fiber, 
+                low-glycemic carbs)
+                Fats: 25-30% of total daily calories (prioritize healthy fats)
+                Fiber: Aim for 25-30 grams per day'];
             }
             if($LowOldMaleGain) {
-                $desc = [''];
+                $desc = ['For an older male (over 35-40) with a low BMI aiming 
+                to gain muscle mass, here are some concise macronutrient 
+                percentage recommendations, including fiber:
+                Protein: 25-30% of total daily calories
+                Carbohydrates: 45-50% of total daily calories (focus on 
+                complex carbs with adequate fiber)
+                Fats: 20-25% of total daily calories (include healthy fats)
+                Fiber: Aim for 25-30 grams per day'];
             }
             if($LowOldFemaleLose) {
-                $desc = [''];
+                $desc = ['For an older female (over 35-40) with a low BMI aiming 
+                to lose weight, here are some concise macronutrient percentage 
+                recommendations, including fiber:
+                Protein: 25-30% of total daily calories
+                Carbohydrates: 35-40% of total daily calories (focus on high-fiber, 
+                low-glycemic carbs)
+                Fats: 30-35% of total daily calories (prioritize healthy fats)
+                Fiber: Aim for 25-30 grams per day'];
             }
             if($LowOldFemaleGain) {
-                $desc = [''];
+                $desc = ['For an older female (over 35-40) with a low BMI aiming 
+                to gain muscle mass, here are some concise macronutrient percentage 
+                recommendations, including fiber:
+                Protein: 25-30% of total daily calories
+                Carbohydrates: 45-50% of total daily calories (focus on complex 
+                carbs with adequate fiber)
+                Fats: 20-25% of total daily calories (include healthy fats)
+                Fiber: Aim for 25-30 grams per day'];
             }
         }
     } elseif($contextFlag == "MicroVit") {
@@ -1810,51 +1907,189 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
                 healthcare provider can help ensure you meet your individual needs.'];
             }
             if($HighYoungMaleGain) {
-                $desc = [''];
+                $desc = ['For a young male under 35 with a high BMI aiming to gain 
+                muscle mass, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
+                Vitamin C: 90 mg per day (aids in collagen formation and tissue repair)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (essential for energy metabolism and muscle 
+                growth)
+                Vitamin B6: 1.3-1.7 mg per day (involved in protein metabolism)
+                Folate (Vitamin B9): 400 mcg per day (important for cell growth and repair)
+                Ensure these vitamins are included in a balanced diet or consider 
+                supplements if necessary.'];
             }
             if($HighYoungFemaleLose) {
-                $desc = [''];
+                $desc = ['For a young female under 35 with a high BMI aiming to lose 
+                weight, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports metabolism and bone health)
+                Vitamin C: 75 mg per day (aids in tissue repair and immune function)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy metabolism)
+                Vitamin B6: 1.3-1.5 mg per day (supports protein metabolism and energy 
+                production)
+                Folate (Vitamin B9): 400 mcg per day (supports cell function and 
+                metabolism)
+                These vitamins can help support overall health and metabolic 
+                function during weight loss.'];
             }
             if($HighYoungFemaleGain) {
-                $desc = [''];
+                $desc = ['For a young female under 35 with a high BMI aiming to gain 
+                muscle mass, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
+                Vitamin C: 75 mg per day (aids in collagen formation and recovery)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
+                Vitamin B6: 1.3-1.5 mg per day (helps with protein metabolism)
+                Folate (Vitamin B9): 400 mcg per day (supports cell growth and repair)
+                These vitamins can help with muscle development and overall health.'];
             }
             // -------
             if($LowYoungMaleLose) {
-                $desc = [''];
+                $desc = ['For a young male under 35 with a low BMI aiming to lose weight, 
+                here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports bone health and metabolism)
+                Vitamin C: 90 mg per day (aids in immune function and tissue repair)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy levels)
+                Vitamin B6: 1.3-1.7 mg per day (supports metabolism and energy production)
+                Folate (Vitamin B9): 400 mcg per day (important for cell function and 
+                repair)
+                These vitamins support overall health and metabolic function during 
+                weight loss.'];
             }
             if($LowYoungMaleGain) {
-                $desc = [''];
+                $desc = ['For a young male under 35 with a low BMI aiming to gain 
+                muscle mass, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
+                Vitamin C: 90 mg per day (aids in muscle repair and immune function)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
+                Vitamin B6: 1.3-1.7 mg per day (supports protein metabolism)
+                Folate (Vitamin B9): 400 mcg per day (important for cell growth 
+                and repair)
+                These vitamins support muscle development and overall health.'];
             }
             if($LowYoungFemaleLose) {
-                $desc = [''];
+                $desc = ['For a young female under 35 with a low BMI aiming to lose 
+                weight, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports bone health and metabolism)
+                Vitamin C: 75 mg per day (aids in immune function and skin health)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy and red blood cell 
+                formation)
+                Vitamin B6: 1.3-1.5 mg per day (supports metabolism and energy production)
+                Folate (Vitamin B9): 400 mcg per day (supports cell function and repair)
+                These vitamins help with overall health and metabolic function during 
+                weight loss.'];
             }
             if($LowYoungFemaleGain) {
-                $desc = [''];
+                $desc = ['For a young female under 35 with a low BMI aiming to gain 
+                muscle mass, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
+                Vitamin C: 75 mg per day (aids in muscle repair and immune function)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
+                Vitamin B6: 1.3-1.5 mg per day (supports protein metabolism)
+                Folate (Vitamin B9): 400 mcg per day (supports cell growth and repair)
+                These vitamins help with muscle development and overall health.'];
             }
+            // ------
             if($HighOldMaleLose) {
-                $desc = [''];
+                $desc = ['For an older male (above 35-40) with a high BMI aiming to 
+                lose weight, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports bone health and metabolism)
+                Vitamin C: 90 mg per day (aids in immune function and skin health)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy and red blood cell 
+                formation)
+                Vitamin B6: 1.3-1.7 mg per day (supports metabolism and energy production)
+                Folate (Vitamin B9): 400 mcg per day (supports cell function and repair)
+                These vitamins support overall health and metabolic function during 
+                weight loss.'];
             }
             if($HighOldMaleGain) {
-                $desc = [''];
+                $desc = ['For an older male (above 35-40) with a high BMI aiming to gain 
+                muscle mass, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
+                Vitamin C: 90 mg per day (aids in muscle repair and immune function)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
+                Vitamin B6: 1.3-1.7 mg per day (supports protein metabolism)
+                Folate (Vitamin B9): 400 mcg per day (supports cell growth and repair)
+                These vitamins can help with muscle development and overall health.'];
             }
             if($HighOldFemaleLose) {
-                $desc = [''];
+                $desc = ['For an older female (above 35-40) with a high BMI aiming to 
+                lose weight, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports bone health and metabolism)
+                Vitamin C: 75 mg per day (aids in immune function and skin health)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy and red blood cell 
+                formation)
+                Vitamin B6: 1.3-1.5 mg per day (supports metabolism and energy production)
+                Folate (Vitamin B9): 400 mcg per day (supports cell function and repair)
+                These vitamins support overall health and metabolic function during 
+                weight loss.'];
             }
             if($HighOldFemaleGain) {
-                $desc = [''];
+                $desc = ['For an older female (above 35-40) with a high BMI aiming to gain 
+                muscle mass, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
+                Vitamin C: 75 mg per day (aids in muscle repair and immune function)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
+                Vitamin B6: 1.3-1.5 mg per day (supports protein metabolism)
+                Folate (Vitamin B9): 400 mcg per day (supports cell growth and repair)
+                These vitamins help with muscle development and overall health.'];
             }
             // -------
             if($LowOldMaleLose) {
-                $desc = [''];
+                $desc = ['For an older male (above 35-40) with a low BMI aiming to lose 
+                weight, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports bone health and metabolism)
+                Vitamin C: 90 mg per day (aids in immune function and tissue repair)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy levels)
+                Vitamin B6: 1.3-1.7 mg per day (supports metabolism and energy production)
+                Folate (Vitamin B9): 400 mcg per day (supports cell function and repair)
+                These vitamins support overall health and metabolic function during 
+                weight loss.'];
             }
             if($LowOldMaleGain) {
-                $desc = [''];
+                $desc = ['For an older male (above 35-40) with a low BMI aiming to gain 
+                muscle mass, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
+                Vitamin C: 90 mg per day (aids in muscle repair and immune function)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
+                Vitamin B6: 1.3-1.7 mg per day (supports protein metabolism)
+                Folate (Vitamin B9): 400 mcg per day (supports cell growth and repair)
+                These vitamins can help with muscle development and overall health.'];
             }
             if($LowOldFemaleLose) {
-                $desc = [''];
+                $desc = ['For an older female (above 35-40) with a low BMI aiming to 
+                lose weight, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports bone health and metabolism)
+                Vitamin C: 75 mg per day (aids in immune function and tissue repair)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy levels and red 
+                blood cell formation)
+                Vitamin B6: 1.3-1.5 mg per day (supports metabolism and energy production)
+                Folate (Vitamin B9): 400 mcg per day (supports cell function and repair)
+                These vitamins support overall health and metabolic function during 
+                weight loss.'];
             }
             if($LowOldFemaleGain) {
-                $desc = [''];
+                $desc = ['For an older female (above 35-40) with a low BMI aiming to 
+                gain muscle mass, here are some concise micronutrient vitamin recommendations:
+                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
+                Vitamin C: 75 mg per day (aids in muscle repair and immune function)
+                Vitamin E: 15 mg per day (acts as an antioxidant)
+                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
+                Vitamin B6: 1.3-1.5 mg per day (supports protein metabolism)
+                Folate (Vitamin B9): 400 mcg per day (supports cell growth and repair)
+                These vitamins help with muscle development and overall health.'];
             }
         }
     } elseif($contextFlag == "MicroTrace") {
@@ -1877,51 +2112,173 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
                 consulting a healthcare provider for personalized advice.'];
             }
             if($HighYoungMaleGain) {
-                $desc = [''];
+                $desc = ['For a young male under 35 with a high BMI aiming to gain 
+                muscle mass, here are some concise trace mineral recommendations:
+                Iron: 8-11 mg per day (supports oxygen transport and energy)
+                Zinc: 11 mg per day (important for muscle growth and immune function)
+                Magnesium: 400-420 mg per day (supports muscle function and recovery)
+                Copper: 900 mcg per day (important for energy production and connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals are essential for muscle growth and overall health.'];
             }
             if($HighYoungFemaleLose) {
-                $desc = [''];
+                $desc = ['For a young female under 35 with a high BMI aiming to lose 
+                weight, here are some concise trace mineral recommendations:
+                Iron: 18 mg per day (supports oxygen transport and energy levels)
+                Zinc: 8 mg per day (important for metabolism and immune function)
+                Magnesium: 310-320 mg per day (supports metabolism and muscle function)
+                Copper: 900 mcg per day (important for energy production and connective 
+                tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals are essential for metabolic health and overall 
+                well-being during weight loss.'];
             }
             if($HighYoungFemaleGain) {
-                $desc = [''];
+                $desc = ['For a young female under 35 with a high BMI aiming to gain 
+                muscle mass, here are some concise trace mineral recommendations:
+                Iron: 18 mg per day (supports oxygen transport and energy)
+                Zinc: 8 mg per day (important for muscle growth and immune function)
+                Magnesium: 310-320 mg per day (supports muscle function and recovery)
+                Copper: 900 mcg per day (important for energy production and connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals support muscle development and overall health.'];
             }
             // -------
             if($LowYoungMaleLose) {
-                $desc = [''];
+                $desc = ['For a young male under 35 with a low BMI aiming to lose 
+                weight, here are some concise trace mineral recommendations:
+                Iron: 8-11 mg per day (supports oxygen transport and energy)
+                Zinc: 11 mg per day (important for metabolism and immune function)
+                Magnesium: 400-420 mg per day (supports muscle function and metabolism)
+                Copper: 900 mcg per day (important for energy production and connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals help maintain overall health and metabolic function 
+                during weight loss.'];
             }
             if($LowYoungMaleGain) {
-                $desc = [''];
+                $desc = ['For a young male under 35 with a low BMI aiming to gain 
+                muscle mass, here are some concise trace mineral recommendations:
+                Iron: 8-11 mg per day (supports oxygen transport and energy)
+                Zinc: 11 mg per day (important for muscle growth and immune function)
+                Magnesium: 400-420 mg per day (supports muscle function and recovery)
+                Copper: 900 mcg per day (important for energy production and connective 
+                tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals are essential for muscle development and overall 
+                health.'];
             }
             if($LowYoungFemaleLose) {
-                $desc = [''];
+                $desc = ['For a young female under 35 with a low BMI aiming to lose 
+                weight, here are some concise trace mineral recommendations:
+                Iron: 18 mg per day (supports oxygen transport and energy)
+                Zinc: 8 mg per day (important for metabolism and immune function)
+                Magnesium: 310-320 mg per day (supports metabolism and muscle function)
+                Copper: 900 mcg per day (important for energy production and connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals support overall health and metabolic function during weight loss.'];
             }
             if($LowYoungFemaleGain) {
-                $desc = [''];
+                $desc = ['For a young female under 35 with a low BMI aiming to gain 
+                muscle mass, here are some concise trace mineral recommendations:
+                Iron: 18 mg per day (supports oxygen transport and energy)
+                Zinc: 8 mg per day (important for muscle growth and immune function)
+                Magnesium: 310-320 mg per day (supports muscle function and recovery)
+                Copper: 900 mcg per day (important for energy production and 
+                connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals are essential for muscle development and 
+                overall health.'];
             }
+            // -------
             if($HighOldMaleLose) {
-                $desc = [''];
+                $desc = ['For an older male (above 35-40) with a high BMI aiming to lose 
+                weight, here are some concise trace mineral recommendations:
+                Iron: 8 mg per day (supports oxygen transport and energy)
+                Zinc: 11 mg per day (important for metabolism and immune function)
+                Magnesium: 400-420 mg per day (supports muscle function and metabolism)
+                Copper: 900 mcg per day (important for energy production and connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals support overall health and metabolic function during weight loss.'];
             }
             if($HighOldMaleGain) {
-                $desc = [''];
+                $desc = ['For an older male (above 35-40) with a high BMI aiming to 
+                gain muscle mass, here are some concise trace mineral recommendations:
+                Iron: 8 mg per day (supports oxygen transport and energy)
+                Zinc: 11 mg per day (important for muscle growth and immune function)
+                Magnesium: 400-420 mg per day (supports muscle function and recovery)
+                Copper: 900 mcg per day (important for energy production and 
+                connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals help support muscle development and overall health.'];
             }
             if($HighOldFemaleLose) {
-                $desc = [''];
+                $desc = ['For an older female (above 35-40) with a high BMI aiming 
+                to lose weight, here are some concise trace mineral recommendations:
+                Iron: 8 mg per day (supports oxygen transport and energy levels)
+                Zinc: 8 mg per day (important for metabolism and immune function)
+                Magnesium: 320 mg per day (supports muscle function and metabolism)
+                Copper: 900 mcg per day (important for energy production and 
+                connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals support overall health and metabolic 
+                function during weight loss.'];
             }
             if($HighOldFemaleGain) {
-                $desc = [''];
+                $desc = ['For an older female (above 35-40) with a high BMI aiming 
+                to gain muscle mass, here are some concise trace mineral recommendations:
+                Iron: 8 mg per day (supports oxygen transport and energy)
+                Zinc: 8 mg per day (important for muscle growth and immune function)
+                Magnesium: 320 mg per day (supports muscle function and recovery)
+                Copper: 900 mcg per day (important for energy production and 
+                connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals help support muscle development and overall health.'];
             }
             // -------
             if($LowOldMaleLose) {
-                $desc = [''];
+                $desc = ['For an older male (above 35-40) with a low BMI aiming to 
+                lose weight, here are some concise trace mineral recommendations:
+                Iron: 8 mg per day (supports oxygen transport and energy)
+                Zinc: 11 mg per day (important for metabolism and immune function)
+                Magnesium: 400-420 mg per day (supports muscle function and metabolism)
+                Copper: 900 mcg per day (important for energy production and 
+                connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals support overall health and metabolic function 
+                during weight loss.'];
             }
             if($LowOldMaleGain) {
-                $desc = [''];
+                $desc = ['For an older male (above 35-40) with a low BMI aiming to 
+                gain muscle mass, here are some concise trace mineral recommendations:
+                Iron: 8 mg per day (supports oxygen transport and energy)
+                Zinc: 11 mg per day (important for muscle growth and immune function)
+                Magnesium: 400-420 mg per day (supports muscle function and recovery)
+                Copper: 900 mcg per day (important for energy production and 
+                connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals help support muscle development and overall health.'];
             }
             if($LowOldFemaleLose) {
-                $desc = [''];
+                $desc = ['For an older female (above 35-40) with a low BMI aiming 
+                to lose weight, here are some concise trace mineral recommendations:
+                Iron: 8 mg per day (supports oxygen transport and energy levels)
+                Zinc: 8 mg per day (important for metabolism and immune function)
+                Magnesium: 320 mg per day (supports muscle function and metabolism)
+                Copper: 900 mcg per day (important for energy production and 
+                connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals support overall health and metabolic function during weight loss.'];
             }
             if($LowOldFemaleGain) {
-                $desc = [''];
+                $desc = ['For an older female (above 35-40) with a low BMI aiming 
+                to gain muscle mass, here are some concise trace mineral recommendations:
+                Iron: 8 mg per day (supports oxygen transport and energy)
+                Zinc: 8 mg per day (important for muscle growth and immune function)
+                Magnesium: 320 mg per day (supports muscle function and recovery)
+                Copper: 900 mcg per day (important for energy production and 
+                connective tissue)
+                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                These trace minerals help support muscle development and overall health.'];
             } 
         } 
     } elseif($contextFlag == "Meal") {

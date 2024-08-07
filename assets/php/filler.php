@@ -321,7 +321,7 @@ function addClients() {
     $data['options'] = [
                             [[""]],
                             [["fa-solid fa-mars", "fa-solid fa-venus", "fa-solid fa-question"]],
-                            [["fa-solid fa-arrow-up-right-dots", "fa-solid fa-hand-fist", "fa-solid fa-weight-scale", "fa-solid fa-question"]],
+                            [["fa-solid fa-arrow-up-right-dots", "fa-solid fa-hand-fist", "fa-solid fa-weight-scale"]],
                             [["fa-solid fa-brain", "fa-brands fa-nutritionix"]],
                             [["fa-solid fa-brain", "fa-brands fa-nutritionix"]],
                             [["fa-regular fa-circle-check"]],
@@ -329,7 +329,7 @@ function addClients() {
     $data['optionsText'] = [
                                 [[""]],
                                 [["male", "female", 'do not know']],
-                                [["increase testosterone", "gain muscle", "lose weight", "do not know"]],
+                                [["increase testosterone", "gain muscle", "lose weight"]],
                                 [["ai", "nutritionist"]],
                                 [["ai", "nutritionist"]],
                                 [["New client is created!"]]
