@@ -100,7 +100,6 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 if(moveleft.disabled == true) {
                     moveleft.style.opacity = 1;
                     moveleft.disabled = false;
-                    moveleft.firstChild.style.color = '#f08080';
                 }
             }
             dynamicQcontent(page);
@@ -1227,8 +1226,8 @@ function plotCalories(Cal, calTxt = 0, calDiv = 0, calDesc = 0){
       labels: ['1','2','3','4','5','6','7','8'],
       datasets: [
         {
-            label: 'Calory intake per week (kCal)',
-            data: Cal['val'][0],
+            label: 'Daily Calories intake (kCal) over 8 week period',
+            data: Cal['val'],
             backgroundColor: 'mediumseagreen',
             borderColor: 'grey',
             borderWidth: 1,
@@ -1286,6 +1285,7 @@ function plotMacro(macro, macroTxt = 0, macroDiv = 0, macroDesc = 0){
       labels: ['fat','carbs', 'protein', 'fiber'],
       datasets: [{
         data: macro['val'],
+        labels: ['fat','carbs', 'protein', 'fiber'],
         backgroundColor: [
           'coral',
           'lightblue',
@@ -1298,6 +1298,18 @@ function plotMacro(macro, macroTxt = 0, macroDiv = 0, macroDesc = 0){
       type: 'pie',
       data: macroData,
       options: {
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.dataset.labels[context.dataIndex] + ": " + 
+                        context.dataset.data[context.dataIndex] + " gr";
+                        console.log(context);
+                        return label;
+                    }
+                }
+            }
+        },
         responsive: true,
         devicePixelRatio: 2,
         maintainAspectRatio: false,
@@ -1333,6 +1345,7 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
                'magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod',
                'Peru','Sienna'];
     const microData = {
+        labels: micro['val'].tNames,
         datasets: [{
             data: micro['val'].tValues,
             backgroundColor: tColors,
@@ -1355,6 +1368,9 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
       data: microData,
       options: {
         plugins: {
+            legend: {
+                position: 'right',
+            },
             tooltip: {
                 callbacks: {
                     label: function(context) {
@@ -1398,6 +1414,7 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     microDesc.innerHTML = micro['descVit'];
     vColors = ['coral','lightblue','limegreen','cyan','blue','green','orange','magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod','Peru','Sienna'];
     const microData = {
+        labels: micro['val'].vNames,
         datasets: [{
             data: micro['val'].vValues,
             backgroundColor: vColors,
@@ -1420,6 +1437,9 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
       data: microData,
       options: {
         plugins: {
+            legend: {
+                position: 'right',
+            },
             tooltip: {
                 callbacks: {
                     label: function(context) {
@@ -1428,7 +1448,7 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
                         return label;
                     }
                 }
-            }
+            },
         },
         responsive: true,
         devicePixelRatio: 2,

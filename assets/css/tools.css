@@ -81,15 +81,9 @@
     justify-content: space-between;
    
 }
-.form-go-left{
-    color: coral;
-    background-color: white;
-    border-radius: 5%;
-    border: 2px solid coral;
-    margin: 5px;
-}
 
-.form-go-right{
+.form-go-right,
+.form-go-left {
     color: coral;
     background-color: white;
     border-radius: 5px;
@@ -107,6 +101,7 @@
     border: 2px solid white;
     color: white;
 }
+
 
 .multiButton-tooltip {
     position: absolute;
