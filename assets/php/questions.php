@@ -76,7 +76,7 @@ function buildCampaignPage($userId, $campaignId){
 
 function createDefaultForm($userId, $campaignId){
 
-    $numDefaultQ = 8;
+    $numDefaultQ = 9;
     global $supportedAge;
     global $supportedHeight;
     global $supportedWeight;
@@ -141,10 +141,17 @@ function createDefaultForm($userId, $campaignId){
             break;
             case 7:
                 $qType = 'button';
-                $qContent = '8. And finally, you identify as:';
+                $qContent = '8. And you identify as:';
                 $options = "fa-solid fa-mars,fa-solid fa-venus";
                 $optionsText = "male,female";
                 $qKey = 'gender';
+            break;
+            case 8:
+                $qType = 'email';
+                $qContent = '9. #dynomicContent, will you share your email with me?';
+                $options = "";
+                $optionsText = "";
+                $qKey = 'email';
             break;
         }
         $sql         = "INSERT INTO $tablename (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId','', '', '$campaignId', '$kk', '$qType', '$qContent', '', '$options', '$optionsText', '0', '1', '$qKey')";
@@ -205,7 +212,7 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
         // Keyword of the question
         $qKey = $Questions[5]->qAnswer;
     } else {
-        $qContent = 'Mind sharing your email #dynomicContent?';
+        $qContent = '- Mind sharing your email #dynomicContent?';
         $qKey = 'email';
     }
     // get the campaignId

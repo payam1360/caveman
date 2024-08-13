@@ -15,6 +15,7 @@ function addClient($userId, $Data) {
     $goal         = $Data[2]->qAnswer;
     $nutritionEng = $Data[3]->qAnswer;
     $mealEng      = $Data[4]->qAnswer;
+    $cEmail       = $Data[5]->qAnswer;
     // Create connection
     $conn         = new mysqli($servername, $loginname, $password, $dbname);
     // check if the client exists.
@@ -22,7 +23,8 @@ function addClient($userId, $Data) {
                                            gender = '$gender', 
                                            goal = '$goal', 
                                            nutritionEng = '$nutritionEng', 
-                                           mealEng = '$mealEng' 
+                                           mealEng = '$mealEng',
+                                           cEmail  = '$cEmail' 
                                            WHERE 
                                            userId = '$userId' 
                                            AND 

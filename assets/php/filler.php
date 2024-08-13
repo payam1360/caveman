@@ -312,6 +312,7 @@ function addClients() {
                             ["3. What is your client's goal?"],
                             ["4. How do you want nutrition analysis be done?"],
                             ["5. How do you want meal planning be done?"],
+                            ["6. What is your client's email address?"],
                             [""]
                         ];
     $data['qType'] = [
@@ -320,15 +321,17 @@ function addClients() {
                             ["button"],
                             ["button"],
                             ["button"],
+                            ["email"],
                             ["message"]
                      ];
-    $data['qIdx'] = [0, 1, 2, 3, 4, 5];
+    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6];
     $data['options'] = [
                             [[""]],
                             [["fa-solid fa-mars", "fa-solid fa-venus", "fa-solid fa-question"]],
                             [["fa-solid fa-arrow-up-right-dots", "fa-solid fa-hand-fist", "fa-solid fa-weight-scale"]],
                             [["fa-solid fa-brain", "fa-brands fa-nutritionix"]],
                             [["fa-solid fa-brain", "fa-brands fa-nutritionix"]],
+                            [[""]],
                             [["fa-regular fa-circle-check"]],
                        ];
     $data['optionsText'] = [
@@ -337,18 +340,20 @@ function addClients() {
                                 [["increase testosterone", "gain muscle", "lose weight"]],
                                 [["ai", "nutritionist"]],
                                 [["ai", "nutritionist"]],
+                                [[""]],
                                 [["New client is created!"]]
                            ];
-    $data['qRequired'] = [0, 1, 1, 1, 1, 1];
+    $data['qRequired'] = [0, 1, 1, 1, 1, 1, 0];
     $data['qKey'] = [
                         ['name'],
                         ['gender'],
                         ['goal'],
                         ['engine'],
                         ['engine'],
+                        ['email'],
                         ['']
                     ];
-    $data['MAX_cnt'] = 6;
+    $data['MAX_cnt'] = 7;
     return $data;
 }
 
