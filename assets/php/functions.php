@@ -769,6 +769,9 @@ function calculateMeal($data){
         $Meal['desc']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Meal'); 
     } elseif($data[0]->mealEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
         $Meal['desc']   = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Meal');
+    } else {
+        $Macro['val'] = [];
+        $Macro['desc']  = ['Please provide your comments here'];
     }
     return($Meal);
 }
@@ -1025,50 +1028,14 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
                 Normal weight: BMI 18.5-24.9
                 Overweight: BMI 25-29.9
                 Obesity: BMI ≥ 30
-                Advice for a Young Male Under 35 with Low BMI Trying to Gain Muscle Mass
-                Nutritional Guidance:
-                Increase Caloric Intake: Consume more calories than you burn. Aim for a 
-                calorie surplus by eating nutrient-dense foods.
-                Balanced Diet: Focus on a balanced diet with a mix of carbohydrates, 
-                proteins, and fats. Include plenty of fruits, vegetables, whole grains, 
-                and lean proteins.
-                Protein-Rich Foods: Incorporate high-protein foods such as chicken, 
-                beef, fish, eggs, dairy products, legumes, and protein supplements to 
-                support muscle growth.
-                Healthy Fats: Include healthy fats from sources like avocados, nuts, 
-                seeds, and olive oil to help increase your calorie intake.
-                Exercise and Training:
-                Strength Training: Engage in regular strength training exercises, 
-                focusing on compound movements like squats, deadlifts, bench presses, 
-                and pull-ups. These exercises target multiple muscle groups and promote 
-                muscle growth.
-                Progressive Overload: Gradually increase the weight and intensity of 
-                your workouts to challenge your muscles and encourage growth.
-                Consistency: Stick to a regular workout schedule, aiming for at least 
-                3-4 strength training sessions per week.
-                Rest and Recovery:
-                Adequate Sleep: Ensure you get 7-9 hours of sleep per night to allow 
-                your muscles to recover and grow.
-                Rest Days: Incorporate rest days into your training routine to prevent
-                overtraining and reduce the risk of injury.
-                Hydration:
-                Drink plenty of water throughout the day to stay hydrated, as dehydration 
-                can hinder muscle recovery and performance.
-                Supplements:
-                Protein Supplements: Consider protein powders, such as whey or 
-                plant-based options, to help meet your daily protein requirements.
-                Creatine: This supplement can improve strength and muscle mass when 
-                combined with a proper training regimen.
-                Monitoring Progress:
-                Track Your Intake: Keep a food diary or use a nutrition app to monitor 
-                your daily caloric and protein intake.
-                Measure Progress: Track changes in your body composition, strength, and
-                 weight to assess your progress and make necessary adjustments to 
-                 your diet and exercise plan. Professional Guidance
-                Consider consulting with a nutritionist or personal trainer to 
-                create a personalized plan tailored to your specific needs and goals. 
-                They can provide expert advice and ensure that you are following a 
-                safe and effective regimen.'];
+                For a young male under 35 with a low BMI (below 18.5), gaining 
+                muscle mass involves a strategic approach. This individual is 
+                likely underweight and should aim to increase both caloric intake 
+                and protein consumption to support muscle growth. A well-rounded 
+                diet rich in lean proteins, complex carbohydrates, and healthy fats 
+                is essential, alongside a consistent strength training regimen. 
+                The ultimate goal is to achieve a healthier BMI through muscle gain 
+                and improved overall body composition.'];
             }
             if($LowYoungFemaleLose) {
                 $desc = ['Body Mass Index (BMI) is a measure that uses height and weight 
@@ -2438,7 +2405,903 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
         if(!empty($dbOutRow['descMeal'])) { // use the entry by the user
             $desc = [$dbOutRow['descMeal']];
         } else { 
-            $desc = ['Please provide your meal plan for your client here!'];
+            if($HighYoungMaleLose) {
+                $desc = ['For weight loss, especially with a high BMI, it is important 
+                    to focus on a balanced, calorie-controlled meal plan that supports 
+                    a sustainable caloric deficit while providing adequate nutrition. 
+                    Here is a sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a daily intake around 1,500-2,000 calories, 
+                    depending on your activity level and specific needs.
+                    Macronutrient Balance: Focus on a balanced intake of proteins, 
+                    healthy fats, and complex carbohydrates.
+                    Meal Timing: Consider intermittent fasting (e.g., 16:8) if it 
+                    aligns with your lifestyle. This involves eating within an 8-hour 
+                    window and fasting for 16 hours.
+                    Hydration: Drink plenty of water throughout the day—aim for at 
+                    least 2-3 liters.
+                    Sample Meal Plan:
+                    Morning (Optional for IF)
+                    Green Tea or Black Coffee: No sugar, minimal calories, helps 
+                    boost metabolism.
+                    Meal 1 (Breaking Fast - Around 12 PM)
+                    Protein-Rich Breakfast:
+                    3 scrambled eggs or a veggie omelette (spinach, tomatoes, mushrooms).
+                    1 slice of whole-grain toast.
+                    1 avocado (half or a quarter) or a handful of nuts for healthy fats.
+                    1 serving of Greek yogurt with berries.
+                    Meal 2 (Lunch - Around 3 PM)
+                    Lean Protein + Veggies:
+                    Grilled chicken breast or tofu (150-200g).
+                    Mixed salad with leafy greens, tomatoes, cucumbers, and a light 
+                    vinaigrette.
+                    Quinoa or brown rice (1/2 cup) for fiber and carbs.
+                    Steamed broccoli or roasted sweet potatoes.
+                    Snack (Optional - Around 5 PM)
+                    Healthy Snack:
+                    A small handful of almonds or walnuts.
+                    1 apple or carrot sticks with hummus.
+                    Meal 3 (Dinner - Around 7 PM)
+                    Low-Carb, High-Protein Dinner:
+                    Baked salmon or grilled lean meat (150-200g).
+                    Steamed asparagus, zucchini, or cauliflower rice.
+                    A side salad with olive oil and lemon dressing.
+                    Evening (Post-Dinner - Optional)
+                    Herbal Tea: Peppermint or chamomile to aid digestion and relaxation.
+                    Additional Tips:
+                    Exercise: Incorporate regular physical activity, including both 
+                    cardio and strength training, to boost metabolism and muscle mass.
+                    Sleep: Aim for 7-9 hours of quality sleep per night, as poor sleep 
+                    can hinder weight loss efforts.
+                    Mindful Eating: Eat slowly and pay attention to hunger and fullness 
+                    cues.'];
+            }
+            if($HighYoungMaleGain) {
+                $desc = ['For gaining muscle mass, especially with a high BMI, it is 
+                    crucial to focus on a high-protein, calorie-controlled diet that 
+                    supports muscle growth while minimizing fat gain. Here is a sample 
+                    meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a slight caloric surplus, around 
+                    2,500-3,000 calories daily, depending on your activity level and 
+                    metabolism.
+                    Macronutrient Balance: Prioritize protein intake (1.2-2.2 grams 
+                    per kg of body weight) along with complex carbs and healthy fats.
+                    Meal Frequency: Eat 4-6 meals throughout the day to ensure a 
+                    steady supply of nutrients for muscle growth.
+                    Hydration: Drink plenty of water—aim for at least 3-4 liters 
+                    daily, especially around workouts.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    High-Protein Breakfast:
+                    5 egg whites + 2 whole eggs scrambled with spinach and 
+                    bell peppers.
+                    1 cup of oatmeal topped with a tablespoon of peanut butter 
+                    or mixed berries.
+                    1 banana or apple.
+                    1 glass of low-fat milk or a protein shake.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Protein and Carbs:
+                    1 cup of Greek yogurt with honey and granola.
+                    A handful of almonds or a protein bar.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Complex Carbs:
+                    Grilled chicken breast, turkey, or lean beef (200-250g).
+                    1 cup of brown rice, quinoa, or whole-grain pasta.
+                    Steamed broccoli, green beans, or a mixed vegetable stir-fry.
+                    A small salad with olive oil dressing.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Muscle-Building Snack:
+                    Cottage cheese with a handful of mixed nuts.
+                    Whole-grain toast with avocado slices or a smoothie with 
+                    protein powder, spinach, and a banana.
+                    Meal 5 (Dinner - 7 PM)
+                    Protein and Veggies:
+                    Grilled salmon, tuna, or chicken (200-250g).
+                    1 large sweet potato or mashed potatoes.
+                    Roasted asparagus, Brussels sprouts, or a side of sautéed greens.
+                    1 cup of mixed berries or a small fruit salad.
+                    Meal 6 (Evening Snack - 9 PM)
+                    Slow-Digesting Protein:
+                    Casein protein shake or a serving of cottage cheese.
+                    A small handful of walnuts or chia seeds.
+                    Additional Tips:
+                    Workout: Incorporate resistance training at least 4-5 times 
+                    a week, focusing on compound exercises like squats, deadlifts, 
+                    bench presses, and rows.
+                    Recovery: Ensure adequate rest between workouts and prioritize 
+                    sleep to support muscle recovery.
+                    Supplements: Consider using whey protein, creatine, and 
+                    branched-chain amino acids (BCAAs) to enhance muscle growth, 
+                    but consult with a healthcare professional first.'];
+            }
+            if($HighYoungFemaleLose) {
+                $desc = ['For weight loss in a high BMI young female under 35 years old, 
+                    the goal is to create a balanced, calorie-controlled meal plan 
+                    that promotes fat loss while maintaining muscle mass and overall 
+                    health. Here is a sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a daily intake of 1,200-1,600 calories, 
+                    depending on activity level and metabolism.
+                    Macronutrient Balance: Focus on lean proteins, healthy fats, 
+                    and complex carbohydrates.
+                    Meal Timing: Consider eating smaller, balanced meals throughout 
+                    the day to keep metabolism active.
+                    Hydration: Drink plenty of water—2-3 liters per day.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - Around 7 AM)
+                    Protein and Fiber-Rich Breakfast:
+                    2 boiled eggs or a veggie omelette (with spinach, mushrooms, 
+                    and tomatoes).
+                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a 
+                    sprinkle of flaxseeds.
+                    1 piece of fruit (apple, orange, or berries).
+                    Herbal tea or black coffee.
+                    Meal 2 (Mid-Morning Snack - Around 10 AM)
+                    Light Snack:
+                    1 small handful of almonds or walnuts.
+                    1 cup of Greek yogurt or a small piece of fruit.
+                    Meal 3 (Lunch - Around 1 PM)
+                    Lean Protein + Veggies:
+                    Grilled chicken breast, tofu, or fish (100-150g).
+                    Mixed salad with leafy greens, cucumbers, cherry tomatoes, 
+                    and a light vinaigrette.
+                    1/2 cup of quinoa, brown rice, or a small sweet potato.
+                    Steamed broccoli or green beans.
+                    Meal 4 (Afternoon Snack - Around 4 PM)
+                    Healthy Snack:
+                    Carrot sticks or cucumber slices with hummus.
+                    A small handful of berries or a low-fat string cheese.
+                    Meal 5 (Dinner - Around 7 PM)
+                    Low-Carb, High-Protein Dinner:
+                    Grilled salmon, turkey, or chicken (100-150g).
+                    Stir-fried or steamed vegetables (zucchini, bell peppers, spinach).
+                    A side salad with olive oil and lemon dressing.
+                    Meal 6 (Evening Snack - Optional)
+                    Light Snack (If Needed):
+                    A small serving of cottage cheese or a casein protein shake.
+                    Herbal tea, such as chamomile or peppermint.
+                    Additional Tips:
+                    Exercise: Incorporate a mix of cardio (e.g., brisk walking, 
+                    cycling) and strength training to enhance fat loss and muscle tone.
+                    Sleep: Ensure 7-8 hours of sleep per night to support weight loss 
+                    efforts.
+                    Mindful Eating: Focus on eating slowly and recognizing hunger 
+                    and fullness cues to prevent overeating.'];
+            }
+            if($HighYoungFemaleGain) {
+                $desc = ['To gain muscle mass, especially for a high BMI young female 
+                    under 35, the focus should be on a high-protein, balanced diet 
+                    that supports muscle growth while avoiding excessive fat gain. 
+                    Here is a sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a slight caloric surplus, around 2,000-2,500
+                    calories daily, depending on your activity level and metabolism.
+                    Macronutrient Balance: Prioritize protein (1.2-2.0 grams per kg 
+                    of body weight) along with complex carbohydrates and healthy fats.
+                    Meal Frequency: Eat 4-6 meals throughout the day to keep a steady 
+                    supply of nutrients for muscle building.
+                    Hydration: Drink at least 3-4 liters of water daily, especially 
+                    around workouts.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    Protein-Packed Breakfast:
+                    3 egg whites + 1 whole egg scrambled with spinach and bell peppers.
+                    1 cup of oatmeal with a tablespoon of almond butter or a 
+                    handful of nuts.
+                    1 banana or mixed berries.
+                    1 glass of low-fat milk or a protein shake.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Protein and Healthy Fats:
+                    1 cup of Greek yogurt with honey and a sprinkle of granola.
+                    A small handful of almonds or a slice of whole-grain toast 
+                    with avocado.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Complex Carbs:
+                    Grilled chicken breast, turkey, or tofu (150-200g).
+                    1 cup of brown rice, quinoa, or whole-grain pasta.
+                    A large mixed salad with leafy greens, cucumbers, cherry 
+                    tomatoes, and a light vinaigrette.
+                    Steamed vegetables like broccoli or green beans.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Muscle-Building Snack:
+                    Cottage cheese with a handful of mixed nuts.
+                    A protein smoothie with spinach, a banana, and a scoop of 
+                    protein powder.
+                    Meal 5 (Dinner - 7 PM)
+                    Protein and Veggies:
+                    Grilled salmon, chicken, or lean beef (150-200g).
+                    1 large sweet potato or mashed potatoes.
+                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
+                    A small side of brown rice or quinoa if needed.
+                    Meal 6 (Evening Snack - 9 PM)
+                    Slow-Digesting Protein:
+                    Casein protein shake or a serving of cottage cheese.
+                    A small handful of walnuts or a tablespoon of chia seeds.
+                    Additional Tips:
+                    Workout: Engage in strength training 4-5 times a week, 
+                    focusing on compound movements like squats, deadlifts, and 
+                    bench presses.
+                    Recovery: Ensure adequate rest and recovery between workouts, 
+                    including 7-8 hours of sleep per night.
+                    Supplements: Consider using whey protein, creatine, and 
+                    branched-chain amino acids (BCAAs) to support muscle growth, 
+                    but consult with a healthcare professional before starting 
+                    any new supplement.'];
+            }
+            // -------
+            if($LowYoungMaleLose) {
+                $desc = ['For a young male under 35 years old with a low BMI trying 
+                    to lose weight, the focus should be on creating a balanced diet 
+                    that ensures you maintain muscle mass while losing fat. Since a 
+                    low BMI indicates a leaner body type, it is essential to avoid 
+                    excessive calorie restriction to prevent muscle loss. Here is a 
+                    sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a slight caloric deficit, around 1,500-2,000 
+                    calories daily, depending on your activity level and goals.
+                    Macronutrient Balance: Prioritize lean proteins, complex carbohydrates, and healthy fats.
+                    Meal Timing: Eat 3-5 small, balanced meals throughout the day to 
+                    maintain energy levels.
+                    Hydration: Drink plenty of water—at least 2-3 liters per day.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    Balanced Breakfast:
+                    2 whole eggs or an omelette with veggies like spinach, tomatoes, 
+                    and mushrooms.
+                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a 
+                    sprinkle of chia seeds.
+                    1 small piece of fruit (apple, orange, or berries).
+                    Herbal tea or black coffee.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Light Snack:
+                    1 cup of Greek yogurt with a small handful of mixed nuts or seeds.
+                    1 small piece of fruit like a banana or pear.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Complex Carbs:
+                    Grilled chicken breast, turkey, or tofu (100-150g).
+                    1/2 cup of quinoa, brown rice, or sweet potato.
+                    Steamed vegetables such as broccoli, green beans, or carrots.
+                    A small side salad with leafy greens and a light vinaigrette.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Healthy Snack:
+                    Carrot sticks or cucumber slices with hummus.
+                    A small handful of almonds or walnuts.
+                    Meal 5 (Dinner - 7 PM)
+                    Low-Carb, High-Protein Dinner:
+                    Grilled fish (such as salmon or tilapia) or lean meat (100-150g).
+                    Stir-fried or steamed vegetables like zucchini, asparagus, or spinach.
+                    A side salad with olive oil and lemon dressing.
+                    Meal 6 (Evening Snack - Optional)
+                    Light Snack (If Needed):
+                    A small serving of cottage cheese or a casein protein shake.
+                    Herbal tea, such as chamomile or peppermint.
+                    Additional Tips:
+                    Exercise: Focus on a combination of light resistance training 
+                    to maintain muscle mass and moderate cardio for fat loss.
+                    Sleep: Ensure 7-8 hours of quality sleep each night to support 
+                    recovery and weight loss.
+                    Mindful Eating: Eat slowly, paying attention to hunger and 
+                    fullness cues, to avoid overeating.'];
+            }
+            if($LowYoungMaleGain) {
+                $desc = ['For a young male under 35 years old with a low BMI aiming 
+                    to gain muscle mass, the focus should be on a high-calorie, 
+                    protein-rich diet to support muscle growth. Here is a sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a caloric surplus, around 2,500-3,000 
+                    calories daily, depending on your metabolism and activity level.
+                    Macronutrient Balance: Prioritize protein intake (1.5-2.0 grams per 
+                    kg of body weight), along with healthy fats and complex carbohydrates.
+                    Meal Frequency: Eat 5-6 meals throughout the day to ensure a steady s
+                    upply of nutrients.
+                    Hydration: Drink at least 3-4 liters of water daily, especially 
+                    around workouts.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    High-Calorie Breakfast:
+                    3 whole eggs scrambled with spinach, bell peppers, and onions.
+                    1 cup of oatmeal with a tablespoon of almond butter or peanut butter.
+                    1 banana or a handful of mixed berries.
+                    1 glass of whole milk or a protein shake.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Protein and Healthy Fats:
+                    1 cup of Greek yogurt with honey and granola.
+                    A handful of mixed nuts or a protein bar.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Complex Carbs:
+                    Grilled chicken breast, turkey, or lean beef (200-250g).
+                    1 cup of brown rice, quinoa, or whole-grain pasta.
+                    A large salad with leafy greens, cucumbers, tomatoes, and a 
+                    light vinaigrette.
+                    Steamed vegetables like broccoli or green beans.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Muscle-Building Snack:
+                    Cottage cheese with a handful of mixed nuts.
+                    A protein smoothie with spinach, a banana, and a scoop of protein powder.
+                    Meal 5 (Dinner - 7 PM)
+                    Protein and Veggies:
+                    Grilled salmon, chicken, or lean beef (200-250g).
+                    1 large sweet potato or mashed potatoes.
+                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
+                    A small side of brown rice or quinoa if needed.
+                    Meal 6 (Evening Snack - 9 PM)
+                    Slow-Digesting Protein:
+                    Casein protein shake or a serving of cottage cheese.
+                    A small handful of walnuts or a tablespoon of chia seeds.
+                    Additional Tips:
+                    Workout: Engage in strength training 4-5 times a week, focusing 
+                    on compound movements like squats, deadlifts, and bench presses.
+                    Recovery: Ensure adequate rest and recovery between workouts, 
+                    including 7-8 hours of sleep per night.
+                    Supplements: Consider using whey protein, creatine, and 
+                    branched-chain amino acids (BCAAs) to support muscle growth, 
+                    but consult with a healthcare professional before starting any 
+                    new supplement.'];
+            }
+            if($LowYoungFemaleLose) {
+                $desc = ['For a low BMI young female under 35 years old trying to 
+                    lose weight, the focus should be on a balanced, nutrient-dense 
+                    diet that supports fat loss while preserving lean muscle mass. 
+                    Here is a sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a slight caloric deficit, around 1,200-1,500 
+                    calories daily, depending on activity level.
+                    Macronutrient Balance: Emphasize lean proteins, healthy fats, and 
+                    complex carbohydrates.
+                    Meal Timing: Eat 3-5 small, balanced meals throughout the day to 
+                    keep metabolism active.
+                    Hydration: Drink plenty of water—2-3 liters per day.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    Protein and Fiber-Rich Breakfast:
+                    2 whole eggs or an omelette with veggies like spinach, tomatoes, 
+                    and mushrooms.
+                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle 
+                    of flaxseeds.
+                    1 piece of fruit (apple, orange, or berries).
+                    Herbal tea or black coffee.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Light Snack:
+                    1 cup of Greek yogurt with a small handful of almonds or walnuts.
+                    1 small piece of fruit like a banana or a few berries.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Complex Carbs:
+                    Grilled chicken breast, tofu, or fish (100-150g).
+                    1/2 cup of quinoa, brown rice, or sweet potato.
+                    Steamed vegetables such as broccoli, green beans, or carrots.
+                    A small side salad with leafy greens and a light vinaigrette.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Healthy Snack:
+                    Carrot sticks or cucumber slices with hummus.
+                    A small handful of mixed nuts or a low-fat string cheese.
+                    Meal 5 (Dinner - 7 PM)
+                    Low-Carb, High-Protein Dinner:
+                    Grilled fish (such as salmon or tilapia) or lean meat (100-150g).
+                    Stir-fried or steamed vegetables like zucchini, asparagus, or spinach.
+                    A side salad with olive oil and lemon dressing.
+                    Meal 6 (Evening Snack - Optional)
+                    Light Snack (If Needed):
+                    A small serving of cottage cheese or a casein protein shake.
+                    Herbal tea, such as chamomile or peppermint.
+                    Additional Tips:
+                    Exercise: Focus on a combination of light resistance training 
+                    to maintain muscle mass and moderate cardio for fat loss.
+                    Sleep: Ensure 7-8 hours of quality sleep each night to support 
+                    recovery and weight loss.
+                    Mindful Eating: Eat slowly, paying attention to hunger and 
+                    fullness cues, to avoid overeating.'];
+            }
+            if($LowYoungFemaleGain) {
+                $desc = ['For a young female under 35 years old with a low BMI aiming 
+                    to gain muscle mass, the focus should be on a high-calorie, protein-rich 
+                    diet that supports muscle growth. Here is a sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a caloric surplus, around 2,000-2,500 
+                    calories daily, depending on your activity level.
+                    Macronutrient Balance: Prioritize protein intake (1.5-2.0 grams per 
+                    kg of body weight) along with healthy fats and complex carbohydrates.
+                    Meal Frequency: Eat 5-6 meals throughout the day to ensure a steady 
+                    supply of nutrients for muscle growth.
+                    Hydration: Drink at least 3-4 liters of water daily, especially 
+                    around workouts.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    Protein-Packed Breakfast:
+                    2 whole eggs scrambled with spinach, tomatoes, and mushrooms.
+                    1 cup of oatmeal with a tablespoon of almond butter or peanut butter.
+                    1 banana or a handful of mixed berries.
+                    1 glass of whole milk or a protein shake.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Protein and Healthy Fats:
+                    1 cup of Greek yogurt with honey and granola.
+                    A handful of mixed nuts or a slice of whole-grain toast with avocado.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Complex Carbs:
+                    Grilled chicken breast, turkey, or tofu (150-200g).
+                    1 cup of brown rice, quinoa, or whole-grain pasta.
+                    A large salad with leafy greens, cucumbers, cherry tomatoes, and a light vinaigrette.
+                    Steamed vegetables like broccoli or green beans.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Muscle-Building Snack:
+                    Cottage cheese with a handful of mixed nuts.
+                    A protein smoothie with spinach, a banana, and a scoop of protein powder.
+                    Meal 5 (Dinner - 7 PM)
+                    Protein and Veggies:
+                    Grilled salmon, chicken, or lean beef (150-200g).
+                    1 large sweet potato or mashed potatoes.
+                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
+                    A small side of brown rice or quinoa if needed.
+                    Meal 6 (Evening Snack - 9 PM)
+                    Slow-Digesting Protein:
+                    Casein protein shake or a serving of cottage cheese.
+                    A small handful of walnuts or a tablespoon of chia seeds.
+                    Additional Tips:
+                    Workout: Engage in strength training 4-5 times a week, focusing 
+                    on compound movements like squats, deadlifts, and bench presses.
+                    Recovery: Ensure adequate rest and recovery between workouts, 
+                    including 7-8 hours of sleep per night.
+                    Supplements: Consider using whey protein, creatine, and branched-chain 
+                    amino acids (BCAAs) to support muscle growth, but consult with a 
+                    healthcare professional before starting any new supplement.'];
+            }
+            // -------
+            if($HighOldMaleLose) {
+                $desc = ['For a high BMI older male above 35-40 years old trying to 
+                    lose weight, the focus should be on a balanced, calorie-controlled
+                    diet that promotes fat loss while maintaining muscle mass. Here is 
+                    a sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a daily intake of 1,500-2,000 calories, 
+                    depending on activity level and metabolism.
+                    Macronutrient Balance: Focus on lean proteins, healthy fats, 
+                    and complex carbohydrates.
+                    Meal Timing: Eat 3-5 small, balanced meals throughout the day 
+                    to keep metabolism active.
+                    Hydration: Drink plenty of water—2-3 liters per day.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    Balanced Breakfast:
+                    3 egg whites and 1 whole egg scrambled with spinach, tomatoes, 
+                    and onions.
+                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle 
+                    of flaxseeds.
+                    1 piece of fruit (apple, orange, or berries).
+                    Black coffee or green tea.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Light Snack:
+                    1 small handful of almonds or walnuts.
+                    1 cup of Greek yogurt with a small amount of honey or berries.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Vegetables:
+                    Grilled chicken breast, turkey, or fish (150g).
+                    Mixed salad with leafy greens, cucumbers, cherry tomatoes, and 
+                    a light vinaigrette.
+                    1/2 cup of quinoa, brown rice, or a small sweet potato.
+                    Steamed broccoli or green beans.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Healthy Snack:
+                    Carrot sticks or cucumber slices with hummus.
+                    A small apple or a few slices of cheese.
+                    Meal 5 (Dinner - 7 PM)
+                    Low-Carb, High-Protein Dinner:
+                    Grilled salmon, chicken, or lean beef (150g).
+                    Stir-fried or steamed vegetables like zucchini, asparagus, or spinach.
+                    A side salad with olive oil and lemon dressing.
+                    Meal 6 (Evening Snack - Optional)
+                    Light Snack (If Needed):
+                    A small serving of cottage cheese or a casein protein shake.
+                    Herbal tea, such as chamomile or peppermint.
+                    Additional Tips:
+                    Exercise: Incorporate a mix of moderate cardio (e.g., walking, 
+                    cycling) and strength training to support fat loss and muscle 
+                    preservation.
+                    Sleep: Ensure 7-8 hours of sleep per night to support weight 
+                    loss and overall health.
+                    Mindful Eating: Focus on eating slowly and recognizing hunger 
+                    and fullness cues to prevent overeating.'];
+            }
+            if($HighOldMaleGain) {
+                $desc = ['For a high BMI older male above 35-40 years old trying to
+                    gain muscle mass, the focus should be on a nutrient-dense, 
+                    protein-rich diet that supports muscle growth while managing body 
+                    fat. Here is a sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a moderate caloric surplus, around 
+                    2,200-2,800 calories daily, depending on your activity level.
+                    Macronutrient Balance: Prioritize protein intake (1.2-1.6 grams 
+                    per kg of body weight), along with healthy fats and complex 
+                    carbohydrates.
+                    Meal Frequency: Eat 4-5 meals throughout the day to ensure a steady 
+                    supply of nutrients for muscle growth.
+                    Hydration: Drink at least 3-4 liters of water daily, especially 
+                    around workouts.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    Protein and Fiber-Rich Breakfast:
+                    3 whole eggs scrambled with spinach, tomatoes, and onions.
+                    1 cup of oatmeal with a tablespoon of almond butter or peanut butter.
+                    1 banana or a handful of mixed berries.
+                    1 glass of low-fat milk or a protein shake.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Protein and Healthy Fats:
+                    1 cup of Greek yogurt with honey and a sprinkle of granola.
+                    A handful of mixed nuts or a slice of whole-grain toast with avocado.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Complex Carbs:
+                    Grilled chicken breast, turkey, or lean beef (200g).
+                    1 cup of brown rice, quinoa, or whole-grain pasta.
+                    A large mixed salad with leafy greens, cucumbers, cherry tomatoes, 
+                    and a light vinaigrette.
+                    Steamed vegetables like broccoli, cauliflower, or green beans.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Muscle-Building Snack:
+                    Cottage cheese with a handful of mixed nuts.
+                    A protein smoothie with spinach, a banana, and a scoop of protein 
+                    powder.
+                    Meal 5 (Dinner - 7 PM)
+                    Protein and Veggies:
+                    Grilled salmon, chicken, or lean beef (200g).
+                    1 large sweet potato or mashed potatoes.
+                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
+                    A small side of brown rice or quinoa if needed.
+                    Meal 6 (Evening Snack - 9 PM)
+                    
+                    Slow-Digesting Protein:
+                    Casein protein shake or a serving of cottage cheese.
+                    A small handful of walnuts or a tablespoon of chia seeds.
+                    Additional Tips:
+                    Exercise: Engage in strength training 3-5 times a week, focusing 
+                    on compound movements like squats, deadlifts, and bench presses. 
+                    Incorporate moderate cardio to support cardiovascular health.
+                    Recovery: Prioritize rest and recovery, including 7-8 hours of 
+                    sleep per night.
+                    Supplements: Consider using whey protein, creatine, and 
+                    branched-chain amino acids (BCAAs) to support muscle growth, 
+                    but consult with a healthcare professional before starting any 
+                    new supplement.'];
+            }
+            if($HighOldFemaleLose) {
+                $desc = ['For a high BMI older female above 35-40 years old trying 
+                    to lose weight, the focus should be on a balanced, calorie-controlled 
+                    diet that promotes fat loss while maintaining muscle mass and overall 
+                    health. Here is a sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a daily intake of 1,200-1,600 calories, 
+                    depending on activity level.
+                    Macronutrient Balance: Emphasize lean proteins, healthy fats, 
+                    and complex carbohydrates with a focus on nutrient-dense foods.
+                    Meal Timing: Eat 3-5 small, balanced meals throughout the day to
+                    maintain energy levels and prevent overeating.
+                    Hydration: Drink at least 2-3 liters of water daily.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    Protein and Fiber-Rich Breakfast:
+                    2 scrambled eggs or an omelette with spinach, tomatoes, and onions.
+                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle 
+                    of chia seeds.
+                    1 small piece of fruit (apple, orange, or berries).
+                    Herbal tea or black coffee.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Light Snack:
+                    1 small handful of almonds or walnuts.
+                    1 cup of Greek yogurt with a few berries.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Vegetables:
+                    Grilled chicken breast, turkey, or fish (100-150g).
+                    Mixed salad with leafy greens, cucumbers, cherry tomatoes, and 
+                    a light vinaigrette.
+                    1/2 cup of quinoa, brown rice, or a small sweet potato.
+                    Steamed vegetables like broccoli, green beans, or zucchini.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Healthy Snack:
+                    Carrot sticks or cucumber slices with hummus.
+                    A small apple or a low-fat string cheese.
+                    Meal 5 (Dinner - 7 PM)
+                    Low-Carb, High-Protein Dinner:
+                    Grilled salmon, chicken, or lean beef (100-150g).
+                    Stir-fried or steamed vegetables like zucchini, asparagus, 
+                    or spinach.
+                    A side salad with olive oil and lemon dressing.
+                    Meal 6 (Evening Snack - Optional)
+                    Light Snack (If Needed):
+                    A small serving of cottage cheese or a casein protein shake.
+                    Herbal tea, such as chamomile or peppermint.
+                    Additional Tips:
+                    Exercise: Incorporate a mix of moderate cardio (e.g., walking, 
+                    cycling) and strength training to support fat loss and muscle 
+                    preservation.
+                    Sleep: Ensure 7-8 hours of quality sleep each night to support 
+                    weight loss and overall health.
+                    Mindful Eating: Focus on eating slowly and recognizing hunger and 
+                    fullness cues to avoid overeating.'];
+            }
+            if($HighOldFemaleGain) {
+                $desc = ['For a high BMI older female above 35-40 years old trying to 
+                    gain muscle mass, the focus should be on a nutrient-dense, 
+                    protein-rich diet that supports muscle growth while managing 
+                    body composition. Here is a sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a moderate caloric surplus, around 
+                    1,800-2,200 calories daily, depending on your activity level.
+                    Macronutrient Balance: Prioritize protein intake (1.2-1.6 grams 
+                    per kg of body weight), along with healthy fats and complex 
+                    carbohydrates.
+                    Meal Frequency: Eat 4-5 meals throughout the day to ensure a 
+                    steady supply of nutrients for muscle growth.
+                    Hydration: Drink at least 2.5-3 liters of water daily, especially 
+                    around workouts.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    Protein and Complex Carbs:
+                    3 scrambled egg whites and 1 whole egg with spinach, tomatoes, 
+                    and onions.
+                    1/2 cup of oatmeal with a tablespoon of almond butter or peanut 
+                    butter.
+                    1 small banana or a handful of mixed berries.
+                    1 glass of low-fat milk or a protein shake.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Protein and Healthy Fats:
+                    1 cup of Greek yogurt with honey and a sprinkle of granola.
+                    A handful of mixed nuts or a slice of whole-grain toast with avocado.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Complex Carbs:
+                    Grilled chicken breast, turkey, or lean beef (150g).
+                    1 cup of brown rice, quinoa, or whole-grain pasta.
+                    A large mixed salad with leafy greens, cucumbers, cherry tomatoes, 
+                    and a light vinaigrette.
+                    Steamed vegetables like broccoli, cauliflower, or green beans.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Muscle-Building Snack:
+                    Cottage cheese with a handful of mixed nuts.
+                    A protein smoothie with spinach, a banana, and a scoop of protein 
+                    powder.
+                    Meal 5 (Dinner - 7 PM)
+                    Protein and Veggies:
+                    Grilled salmon, chicken, or lean beef (150g).
+                    1 large sweet potato or mashed potatoes.
+                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
+                    A small side of brown rice or quinoa if needed.
+                    Meal 6 (Evening Snack - 9 PM)
+                    Slow-Digesting Protein:
+                    Casein protein shake or a serving of cottage cheese.
+                    A small handful of walnuts or a tablespoon of chia seeds.
+                    Additional Tips:
+                    Exercise: Engage in strength training 3-5 times a week, focusing 
+                    on compound movements like squats, deadlifts, and bench presses. 
+                    Incorporate moderate cardio to support cardiovascular health.
+                    Recovery: Prioritize rest and recovery, including 7-8 hours of 
+                    sleep per night.
+                    Supplements: Consider using whey protein, creatine, and 
+                    branched-chain amino acids (BCAAs) to support muscle growth, but 
+                    consult with a healthcare professional before starting any new 
+                    supplement.'];
+            }
+            // -------
+            if($LowOldMaleLose) {
+                $desc = ['For a low BMI older male above 35-40 years old trying to 
+                    lose weight, the focus should be on a balanced diet that promotes 
+                    fat loss while maintaining or even slightly increasing muscle mass. 
+                    This approach ensures that weight loss comes from fat rather than 
+                    muscle, which is crucial for maintaining overall health and strength.
+                    General Guidelines:
+                    Caloric Intake: Aim for a slight caloric deficit, around 1,500-1,800 
+                    calories daily, depending on activity level.
+                    Macronutrient Balance: Emphasize lean proteins, healthy fats, and 
+                    complex carbohydrates with a focus on nutrient-dense foods.
+                    Meal Timing: Eat 3-4 small, balanced meals throughout the day to 
+                    maintain energy levels.
+                    Hydration: Drink at least 2.5-3 liters of water daily.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    Protein and Fiber-Rich Breakfast:
+                    3 egg whites and 1 whole egg scrambled with spinach, tomatoes, 
+                    and onions.
+                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle 
+                    of flaxseeds.
+                    1 piece of fruit (apple, orange, or berries).
+                    Green tea or black coffee.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Light Snack:
+                    1 small handful of almonds or walnuts.
+                    1 cup of Greek yogurt with a small amount of honey or berries.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Vegetables:
+                    Grilled chicken breast, turkey, or fish (150g).
+                    Mixed salad with leafy greens, cucumbers, cherry tomatoes, and 
+                    a light vinaigrette.
+                    1/2 cup of quinoa, brown rice, or a small sweet potato.
+                    Steamed vegetables like broccoli, green beans, or zucchini.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Healthy Snack:
+                    Carrot sticks or cucumber slices with hummus.
+                    A small apple or a low-fat string cheese.
+                    Meal 5 (Dinner - 7 PM)
+                    Low-Carb, High-Protein Dinner:
+                    Grilled salmon, chicken, or lean beef (150g).
+                    Stir-fried or steamed vegetables like zucchini, asparagus, or spinach.
+                    A side salad with olive oil and lemon dressing.
+                    Meal 6 (Evening Snack - Optional)
+                    Light Snack (If Needed):
+                    A small serving of cottage cheese or a casein protein shake.
+                    Herbal tea, such as chamomile or peppermint.
+                    Additional Tips:
+                    Exercise: Incorporate a mix of moderate cardio (e.g., walking, 
+                    cycling) and strength training to support fat loss and muscle 
+                    preservation.
+                    Sleep: Ensure 7-8 hours of quality sleep each night to support 
+                    weight loss and overall health.
+                    Mindful Eating: Focus on eating slowly and recognizing hunger and 
+                    fullness cues to avoid overeating.'];
+            }
+            if($LowOldMaleGain) {
+                $desc = ['For a low BMI older male above 35-40 years old trying to gain 
+                    muscle mass, the focus should be on a calorie-rich, protein-dense 
+                    diet that supports muscle growth while maintaining overall health. 
+                    Here is a sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a moderate caloric surplus, around 2,200-2,800 
+                    calories daily, depending on activity level.
+                    Macronutrient Balance: Prioritize protein intake (1.2-1.6 grams per 
+                    kg of body weight), along with healthy fats and complex carbohydrates.
+                    Meal Frequency: Eat 4-5 meals throughout the day to ensure a steady 
+                    supply of nutrients for muscle growth.
+                    Hydration: Drink at least 3-4 liters of water daily, especially 
+                    around workouts.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    Protein and Complex Carbs:
+                    3 whole eggs scrambled with spinach, tomatoes, and onions.
+                    1 cup of oatmeal with a tablespoon of almond butter or peanut butter.
+                    1 banana or a handful of mixed berries.
+                    1 glass of low-fat milk or a protein shake.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Protein and Healthy Fats:
+                    1 cup of Greek yogurt with honey and a sprinkle of granola.
+                    A handful of mixed nuts or a slice of whole-grain toast with avocado.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Complex Carbs:
+                    Grilled chicken breast, turkey, or lean beef (200g).
+                    1 cup of brown rice, quinoa, or whole-grain pasta.
+                    A large mixed salad with leafy greens, cucumbers, cherry tomatoes, 
+                    and a light vinaigrette.
+                    Steamed vegetables like broccoli, cauliflower, or green beans.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Muscle-Building Snack:
+                    Cottage cheese with a handful of mixed nuts.
+                    A protein smoothie with spinach, a banana, and a scoop of protein 
+                    powder.
+                    Meal 5 (Dinner - 7 PM)
+                    Protein and Veggies:
+                    Grilled salmon, chicken, or lean beef (200g).
+                    1 large sweet potato or mashed potatoes.
+                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
+                    A small side of brown rice or quinoa if needed.
+                    Meal 6 (Evening Snack - 9 PM)
+                    Slow-Digesting Protein:
+                    Casein protein shake or a serving of cottage cheese.
+                    A small handful of walnuts or a tablespoon of chia seeds.
+                    Additional Tips:
+                    Exercise: Engage in strength training 3-5 times a week, focusing 
+                    on compound movements like squats, deadlifts, and bench presses. 
+                    Incorporate moderate cardio to support cardiovascular health.
+                    Recovery: Prioritize rest and recovery, including 7-8 hours of 
+                    sleep per night.
+                    Supplements: Consider using whey protein, creatine, and 
+                    branched-chain amino acids (BCAAs) to support muscle growth, 
+                    but consult with a healthcare professional before starting any 
+                    new supplement.'];
+            }
+            if($LowOldFemaleLose) {
+                $desc = ['For a low BMI older female above 35-40 years old trying to 
+                    lose weight, the focus should be on a nutrient-dense diet that 
+                    promotes fat loss while maintaining lean muscle mass. Here is a 
+                    sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a slight caloric deficit, around 1,200-1,500 
+                    calories daily, depending on activity level.
+                    Macronutrient Balance: Emphasize lean proteins, healthy fats, 
+                    and complex carbohydrates with plenty of fiber.
+                    Meal Timing: Eat 3-4 small, balanced meals throughout the day to 
+                    maintain energy levels and prevent muscle loss.
+                    Hydration: Drink at least 2-3 liters of water daily.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    Protein and Fiber-Rich Breakfast:
+                    2 scrambled eggs with spinach and tomatoes.
+                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle 
+                    of chia seeds.
+                    1 small piece of fruit (apple, orange, or berries).
+                    Green tea or black coffee.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Light Snack:
+                    1 small handful of almonds or walnuts.
+                    1 cup of Greek yogurt with a few berries or a drizzle of honey.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Vegetables:
+                    Grilled chicken breast, turkey, or fish (100-150g).
+                    Mixed salad with leafy greens, cucumbers, cherry tomatoes, and a 
+                    light vinaigrette.
+                    1/2 cup of quinoa, brown rice, or a small sweet potato.
+                    Steamed vegetables like broccoli, green beans, or zucchini.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Healthy Snack:
+                    Carrot sticks or cucumber slices with hummus.
+                    A small apple or a low-fat string cheese.
+                    Meal 5 (Dinner - 7 PM)
+                    Low-Carb, High-Protein Dinner:
+                    Grilled salmon, chicken, or lean beef (100-150g).
+                    Stir-fried or steamed vegetables like zucchini, asparagus, or spinach.
+                    A side salad with olive oil and lemon dressing.
+                    Meal 6 (Evening Snack - Optional)
+                    Light Snack (If Needed):
+                    A small serving of cottage cheese or a casein protein shake.
+                    Herbal tea, such as chamomile or peppermint.
+                    Additional Tips:
+                    Exercise: Incorporate a mix of moderate cardio (e.g., walking, cycling) and strength training to preserve muscle while losing fat.
+                    Sleep: Ensure 7-8 hours of quality sleep each night to support weight 
+                    loss and overall health.
+                    Mindful Eating: Focus on eating slowly and recognizing hunger and 
+                    fullness cues to avoid overeating.'];
+            }
+            if($LowOldFemaleGain) {
+                $desc = ['For a low BMI older female above 35-40 years old trying to 
+                    gain muscle mass, the focus should be on a nutrient-rich, 
+                    calorie-dense diet that supports muscle growth while maintaining 
+                    overall health. Here is a sample meal plan:
+                    General Guidelines:
+                    Caloric Intake: Aim for a moderate caloric surplus, around 1,800-2,200 
+                    calories daily, depending on activity level.
+                    Macronutrient Balance: Prioritize protein intake (1.2-1.6 grams per 
+                    kg of body weight), along with healthy fats and complex carbohydrates.
+                    Meal Frequency: Eat 4-5 meals throughout the day to ensure a steady 
+                    supply of nutrients for muscle growth.
+                    Hydration: Drink at least 2.5-3 liters of water daily, especially 
+                    around workouts.
+                    Sample Meal Plan:
+                    Meal 1 (Breakfast - 7 AM)
+                    Protein and Complex Carbs:
+                    2 whole eggs and 2 egg whites scrambled with spinach, tomatoes, 
+                    and onions.
+                    1 cup of oatmeal with a tablespoon of almond butter or peanut butter.
+                    1 small banana or a handful of mixed berries.
+                    1 glass of low-fat milk or a protein shake.
+                    Meal 2 (Mid-Morning Snack - 10 AM)
+                    Protein and Healthy Fats:
+                    1 cup of Greek yogurt with honey and a sprinkle of granola.
+                    A handful of mixed nuts or a slice of whole-grain toast with avocado.
+                    Meal 3 (Lunch - 1 PM)
+                    Lean Protein + Complex Carbs:
+                    Grilled chicken breast, turkey, or lean beef (150g).
+                    1 cup of brown rice, quinoa, or whole-grain pasta.
+                    A large mixed salad with leafy greens, cucumbers, cherry tomatoes, 
+                    and a light vinaigrette.
+                    Steamed vegetables like broccoli, cauliflower, or green beans.
+                    Meal 4 (Afternoon Snack - 4 PM)
+                    Muscle-Building Snack:
+                    Cottage cheese with a handful of mixed nuts.
+                    A protein smoothie with spinach, a banana, and a scoop of protein 
+                    powder.
+                    Meal 5 (Dinner - 7 PM)
+                    Protein and Veggies:
+                    Grilled salmon, chicken, or lean beef (150g).
+                    1 large sweet potato or mashed potatoes.
+                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
+                    A small side of brown rice or quinoa if needed.
+                    Meal 6 (Evening Snack - 9 PM)
+                    Slow-Digesting Protein:
+                    Casein protein shake or a serving of cottage cheese.
+                    A small handful of walnuts or a tablespoon of chia seeds.
+                    Additional Tips:
+                    Exercise: Engage in strength training 3-5 times a week, focusing on 
+                    compound movements like squats, deadlifts, and bench presses. 
+                    Incorporate moderate cardio to support cardiovascular health.
+                    Recovery: Prioritize rest and recovery, including 7-8 hours of 
+                    sleep per night.
+                    Supplements: Consider using whey protein, creatine, and branched-chain 
+                    amino acids (BCAAs) to support muscle growth, but consult with a 
+                    healthcare professional before starting any new supplement.'];
+            }         
         }
     }
     return($desc); 

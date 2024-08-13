@@ -99,7 +99,7 @@ function createDefaultForm($userId, $campaignId){
             break;
             case 1:
                 $qType = 'button';
-                $qContent = '2. Hi #mainNameTag, what is your nutritional goal?';
+                $qContent = '2. Hi #dynomicContent, what is your nutritional / target weight goal?';
                 $options = "fa-solid fa-weight-scale,fa-solid fa-dumbbell,fa-solid fa-heart-pulse";
                 $optionsText = "lose weight,gain muscles,be less tired";
                 $qKey = 'goal';
@@ -202,13 +202,14 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
     if($qType != 'email') {
     // get question content:
         $qContent = $Questions[4]->qAnswer;
+        // Keyword of the question
+        $qKey = $Questions[5]->qAnswer;
     } else {
-        $qContent = 'Hey #mainNameTag, what is your email address?';
+        $qContent = 'Mind sharing your email #dynomicContent?';
+        $qKey = 'email';
     }
     // get the campaignId
-    $campaignIdSource  = $Questions[0]->campaignId;
-    // Keyword of the question
-    $qKey = $Questions[5]->qAnswer;
+    $campaignIdSource  = $Questions[0]->campaignId;    
     // visited field
     $visited = 0;
     // required field

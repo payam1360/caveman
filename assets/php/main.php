@@ -98,7 +98,13 @@ function saveUserDataIntoDB($Questions, $userId, $clientId, $campaignId, $ip) {
             $visited = $Questions[$kk]->visited;
             $qRequired = $Questions[$kk]->qRequired;
             $qKey = $Questions[$kk]->qKey[0];
-            $sql = "INSERT INTO $table1name (userId, clientId, ip, campaignId, qIdx, qType, qContent, qAnswer, options, optionsText, visited, qRequired, qKey) VALUES('$userId', '$clientId', '$ip', '$campaignId', '$qIdx', '$qType', '$qContent', '$qAnswer', '$options', '$optionsText', '$visited', '$qRequired', '$qKey');";
+            $sql = "INSERT INTO $table1name (userId, clientId, ip, campaignId, qIdx, 
+                                             qType, qContent, qAnswer, options, optionsText,
+                                             visited, qRequired, qKey) VALUES('$userId', 
+                                             '$clientId', '$ip', '$campaignId', '$qIdx', 
+                                             '$qType', '$qContent', '$qAnswer', '$options', 
+                                             '$optionsText', '$visited', '$qRequired', 
+                                             '$qKey');";
             $conn->query($sql);
             $kk++;
         }
@@ -116,8 +122,8 @@ function extractUserInfo($info, $ip) {
         $userInfo['userId']       = $userId;
         $userInfo['clientId']     = $clientId;
         $userInfo['campaignId']   = $campaignId;
-        $userInfo['mealEng']      = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
-        $userInfo['nutritionEng'] = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
+        $userInfo['mealEng']      = 1; // 0 means AI takes over, 1 means software content 
+        $userInfo['nutritionEng'] = 1; // 0 means AI takes over, 1 means software content 
         
     } else {
 
@@ -132,8 +138,8 @@ function extractUserInfo($info, $ip) {
         $userInfo['userId']       = $userId;
         $userInfo['clientId']     = $clientId;
         $userInfo['campaignId']   = $campaignId;
-        $userInfo['mealEng']      = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
-        $userInfo['nutritionEng'] = 0; // 0 means AI takes over, 1 means nutritionist can modify pre-saved info in DB
+        $userInfo['mealEng']      = 1; // 0 means AI takes over, 1 means software content 
+        $userInfo['nutritionEng'] = 1; // 0 means AI takes over, 1 means software content
     }
     return $userInfo;
 }
@@ -168,7 +174,8 @@ $data['clientId']      = $userInfo['clientId'];
 $data['campaignId']    = $userInfo['campaignId'];
 $data[0]->mealEng      = $userInfo['mealEng'];
 $data[0]->nutritionEng = $userInfo['nutritionEng'];
-$dbflag        = saveUserDataIntoDB($data, $data['userId'], $data['clientId'], $data['campaignId'], $ip);
+$dbflag        = saveUserDataIntoDB($data, $data['userId'], $data['clientId'], 
+                                    $data['campaignId'], $ip);
 // perform calculations
 $user_bmi      = calculateBmi($data);
 $user_bmr      = calculateBmr($data);
@@ -177,7 +184,8 @@ $user_macro    = calculateMacro($data);
 $user_micro    = calculateMicro($data);
 $user_cal      = calculateCalories($data);
 $user_meal     = calculateMeal($data);
-$output        = dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro, $user_cal, $user_meal);
+$output        = dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro, 
+                          $user_cal, $user_meal);
 echo json_encode($output);
 ?>
 

@@ -62,7 +62,7 @@ function getPublicForm() {
 
     $data['qContent'] = [
                             ["1. Hey there, what is your name?"],
-                            ["2. Hi #mainNameTag, what is your target weight or goal?"],
+                            ["2. Hi #dynomicContent, what is your target weight or goal?"],
                             ["3. How much do you weigh now? (lb)"],
                             ["4. How tall are you? (ft-in)"],
                             ["5. What is your age?"],
@@ -161,7 +161,7 @@ function getRegisterForm() {
     $data['qContent'] = [
                             ["1. Which plan are you interested?"],
                             ["1. enter your name:"],
-                            ["2. Hi #nameRegister, what is your email?"],
+                            ["2. Hi #dynomicContent, what is your email?"],
                             ["please on the next screen, enter the verification code we just emailed you:"],
                             ["3. verification code:"],
                             [""],
@@ -350,7 +350,7 @@ function addClients() {
 function clientsSearchForm() {
     $data['qContent'] = [
                             ["1. search clients:"],
-                            ["2. client's #clientsTag"]
+                            ["2. enter client's info:"]
                         ];
     $data['qType'] = [
                         ["button"],

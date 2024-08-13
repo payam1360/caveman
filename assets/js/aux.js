@@ -102,7 +102,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                     moveleft.disabled = false;
                 }
             }
-            dynamicQcontent(page);
+            dynamicQcontent('name');
             
             if(counter == MAX_cnt - 1 && page == 'login') {
                 callLoginUser(header, headerTxt, input, Questions);
@@ -180,7 +180,7 @@ function moveLeft(moveleft, input, header, headerTxt, Questions, page){
                 moveright.disabled = false;
             }
             counter--;
-            resetDynamicQcontent(page);
+            resetDynamicQcontent('name');
             transition2Left(header, headerTxt, input, Questions);
         });
     }
@@ -493,50 +493,29 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
     }
 }
 
-function dynamicQcontent(page) {
+
+function dynamicQcontent(context) {
     
-    if(page == 'clients') {
-        let searchTag = [];
-        if(Questions[counter-1].qAnswer == 0) {
-            searchTag = 'ID';
-        } else if(Questions[counter-1].qAnswer == 1) {
-            searchTag = 'email';
-        } else if(Questions[counter-1].qAnswer == 2) {
-            searchTag = 'name';
+    if(Questions[counter].qContent[0].includes('#dynomicContent')){
+        for(kk = 0; kk < counter; kk++){
+            if(Questions[kk].qKey == context){
+                let dyno = Questions[counter].qContent[0].replace('#dynomicContent', Questions[kk].qAnswer + '!!');
+                Questions[counter].qContent[0] = dyno;
+            }
         }
-        let dyno = Questions[counter].qContent[0].replace('#clientsTag', searchTag);
-        Questions[counter].qContent[0] = dyno;
-    } else if(page == 'main' && Questions[counter].qContent[0].includes('#mainNameTag')) {
-        let dyno = Questions[counter].qContent[0].replace('#mainNameTag', Questions[counter-1].qAnswer);
-        Questions[counter].qContent[0] = dyno;
-    } else if (page == 'register' && Questions[counter].qContent[0].includes('#nameRegister')) {
-        let dyno = Questions[counter].qContent[0].replace('#nameRegister', Questions[counter-1].qAnswer);
-        Questions[counter].qContent[0] = dyno;
-    }
+    } 
 }
 
-function resetDynamicQcontent(page) {
-    
-    if(page == 'clients') {
-        let searchTag = [];
-        if(Questions[counter].qAnswer == 0) {
-            searchTag = 'ID';
-        } else if(Questions[counter].qAnswer == 1) {
-            searchTag = 'email';
-        } else if(Questions[counter].qAnswer == 2) {
-            searchTag = 'name';
+function resetDynamicQcontent(context) {
+    if(Questions[counter + 1].qContent[0].includes('!!')){
+        for(kk = 0; kk < counter + 1; kk++){
+            if(Questions[kk].qKey == context){
+                let dyno = Questions[counter + 1].qContent[0].replace(Questions[kk].qAnswer, '#dynomicContent');
+                Questions[counter + 1].qContent[0] = dyno;
+            }
         }
-        let dyno = Questions[counter + 1].qContent[0].replace(searchTag, '#clientsTag');
-        Questions[counter + 1].qContent[0] = dyno;
-    } else if(page == 'main' && counter == 0) {
-        let dyno = Questions[counter + 1].qContent[0].replace(Questions[counter].qAnswer, '#mainNameTag');
-        Questions[counter + 1].qContent[0] = dyno;
-    } else if (page == 'register' && counter == 1) {
-        let dyno = Questions[counter + 1].qContent[0].replace(Questions[counter].qAnswer, '#nameRegister');
-        Questions[counter + 1].qContent[0] = dyno;
-    }
+    } 
 }
-
 
 function getUserButtonSelection(alt){
     Questions[counter].qAnswer = alt.value;
@@ -941,7 +920,7 @@ function submitUserData(inputDataBlob, page, userPage) {
                 plotMicroVit(data.micro); // 4
                 plotCalories(data.cal); // 5
                 displayMeal(data.meal, inputDataBlob, userPage); // 6
-                intervalID = setInterval(handleAi, 2000, [userPage, 0, 0]);
+                intervalID = setInterval(handleAi, 2000, [userPage, 1, 1]);
             }
         }
     };
@@ -1304,7 +1283,6 @@ function plotMacro(macro, macroTxt = 0, macroDiv = 0, macroDesc = 0){
                     label: function(context) {
                         let label = context.dataset.labels[context.dataIndex] + ": " + 
                         context.dataset.data[context.dataIndex] + " gr";
-                        console.log(context);
                         return label;
                     }
                 }
@@ -1498,6 +1476,7 @@ function handleAi(inPut) {
     // creating the server side update event source
     if(mealEng == 1 && nutritionEng == 1) {
         allowNewAiStream = false;
+        clearInterval(intervalID);
     }
     for(contextCnt = 0; contextCnt < contextSet.length; contextCnt++){
         if(nutritionEng == 0 && eventSourceQueue[contextSet[contextCnt]] == true && allowNewAiStream == true){
@@ -1542,8 +1521,11 @@ function handleAi(inPut) {
                 typeEventSource    = contextSet[contextCnt];
                 display_var.style.display = 'block';
                 activeSSE   = contextCnt;
+                if(mealEng == 1) {
+                    clearInterval(intervalID);
+                }
                 break;
-            }
+            } 
         } 
         if(contextCnt == 6 && mealEng == 0 && eventSourceQueue[contextSet[contextCnt]] == true && allowNewAiStream == true) {
             txt_var     = document.querySelector('.meal_text');
@@ -1913,7 +1895,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     clientid = parentNode.children[cidx].getAttribute('clientid');
     // if not set, go to add client page.
     cleanClientDiv(parentNode);
-    if(results.campaigntime[cidx] == null) {
+    if(results.campaignidAssigned[cidx] == '' && results.names[cidx] == '' && results.genders[cidx] == 'No response' && results.goals[cidx] == 'No response') {
         window.location.assign('addClients.html');
     } else {  
         let accountType = results.accountType[0];
@@ -2009,14 +1991,14 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         goalPstyle.setAttribute('id', 'mDivpGoal');
         goalP.appendChild(goalPstyle); 
 
-        if(inputBlob[0].mealEng == 0){
+        if(results.mealEng[cidx] == 0){
             mealText.innerHTML = 'You have selected ';
             mealPstyle.innerHTML = 'AI';
             mealPstyle.style.fontSize = '24px';
             mealPstyle.style.color = '#DB4437';
             mealText.appendChild(mealPstyle);
             mealText.innerHTML =  mealText.innerHTML + ' for meal planning for ' + results.names[cidx];
-        } else if(inputBlob[0].mealEng == 1){
+        } else if(results.mealEng[cidx] == 1){
             mealText.innerHTML = 'You have selected ';
             mealPstyle.innerHTML = 'nutritionist';
             mealPstyle.style.fontSize = '24px';
@@ -2025,14 +2007,14 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
             mealText.innerHTML =  mealText.innerHTML + ' for meal planning for ' + results.names[cidx];
         }
 
-        if(inputBlob[0].nutritionEng == 0){
+        if(results.nutritionEng[cidx] == 0){
             nutritionText.innerHTML = 'You have selected ';
             nutritionPstyle.innerHTML = 'AI';
             nutritionPstyle.style.fontSize = '24px';
             nutritionPstyle.style.color = '#DB4437';
             nutritionText.appendChild(nutritionPstyle);
             nutritionText.innerHTML =  nutritionText.innerHTML + ' for nutritional analysis for ' + results.names[cidx];
-        } else if(inputBlob[0].nutritionEng == 1){
+        } else if(results.nutritionEng[cidx] == 1){
             nutritionText.innerHTML = 'You have selected ';
             nutritionPstyle.innerHTML = 'nutritionist';
             nutritionPstyle.style.fontSize = '24px';
@@ -2474,7 +2456,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         plotCalories(clientData.cal, Cal, calTxt, calDesc);
         displayMeal(clientData.meal, inputBlob, 0); 
         
-        intervalID = setInterval(handleAi, 2000, [0, inputBlob[0].nutritionEng, inputBlob[0].mealEng]);
+        intervalID = setInterval(handleAi, 2000, [0, results.nutritionEng[cidx], results.mealEng[cidx]]);
     }
 }
 

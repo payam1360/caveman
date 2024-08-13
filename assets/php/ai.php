@@ -99,9 +99,13 @@ switch ($eventType) {
 } 
 
 // input prompt to the AI language model
-$contentComplete   =  $content . $loc->gender . " , of " . strval($loc->age) . " age , with height of " . strval($loc->height) . " inches, weight of " . strval($loc->weight) . " lb, wanting to " . $loc->goal . " , with " . $loc->stress . " stress levels who sleeps " . $loc->sleep;
+$contentComplete   =  $content . $loc->gender . " , of " . strval($loc->age) . 
+                     " age , with height of " . strval($loc->height) . 
+                     " inches, weight of " . strval($loc->weight) . 
+                     " lb, wanting to " . $loc->goal . " , with " . 
+                     $loc->stress . " stress levels who sleeps " . $loc->sleep;
 
-if((json_decode($loc->meal) == '' && $eventType == 'Meal') || ($eventType != 'Meal' && $eventType != '') ) { // run the ai model
+if((json_decode($loc->meal) == '' && $eventType == 'Meal' && !empty($loc->height)) || ($eventType != 'Meal' && $eventType != '') ) { // run the ai model
    // Call Python script with JSON input
    $pythonScript = '../py/ai.py';
    $message_list = [
