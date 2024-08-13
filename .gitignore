@@ -15,3 +15,5 @@ build/
 
 # Ignore environment configuration files
 .env
+
+phpmyadmin/tmp/
