@@ -203,18 +203,11 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
         $qType = "text";
     } else if($Questions[1]->qAnswer == 2) {
         $qType = "button";
-    } else if($Questions[1]->qAnswer == 3) {
-        $qType = "email";
-    }
-    if($qType != 'email') {
+    } 
     // get question content:
-        $qContent = $Questions[4]->qAnswer;
-        // Keyword of the question
-        $qKey = $Questions[5]->qAnswer;
-    } else {
-        $qContent = '- Mind sharing your email #dynomicContent?';
-        $qKey = 'email';
-    }
+    $qContent = $Questions[4]->qAnswer;
+    // Keyword of the question
+    $qKey = $Questions[5]->qAnswer;
     // get the campaignId
     $campaignIdSource  = $Questions[0]->campaignId;    
     // visited field
@@ -254,10 +247,7 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
     } else if($qType == "text") {
         $options = "";
         $optionsText = "";
-    } else if($qType == "email") {
-        $options = "";
-        $optionsText = "";
-    }
+    } 
     // first check if there is incomplete campaigns
     $sql = "SELECT used, completed 
                     FROM $table1name 

@@ -266,7 +266,7 @@ function QuestionBackendForm() {
     
     $data['options'] = [
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
-                            [['fa-regular fa-circle-check'], ["fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope"]],
+                            [['fa-regular fa-circle-check'], ["fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer"]],
                             [['fa-regular fa-circle-check'], ["fa-solid fa-gears", "fa-regular fa-hand-point-right"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
@@ -279,7 +279,7 @@ function QuestionBackendForm() {
     
     $data['optionsText'] = [
                                 [["YES", "NO"]],
-                                [["Your campaign is added to your account."], ["list options", "write text", "multiple choice", "email"]],
+                                [["Your campaign is added to your account."], ["list options", "write text", "multiple choice"]],
                                 [["Your campaign is added to your account."], ["your form is being built ... please continue!", "please answer the prevous question"]],
                                 [["YES", "NO"]],
                                 [["YES", "NO"], [""]],

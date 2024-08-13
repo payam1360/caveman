@@ -849,7 +849,7 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
                 moveright.disabled = true;
             } else if(data.status == 1) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0); 
-                globalQidx = 8;   
+                globalQidx = 9;   
             } else if(data.status == 100) {
                 transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);       
             } else if(data.status == 3) { 
