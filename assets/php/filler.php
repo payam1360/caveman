@@ -68,7 +68,8 @@ function getPublicForm() {
                             ["5. What is your age?"],
                             ["6. How is your stress level?"],
                             ["7. How is your sleep?"],
-                            ["8. And finally, you identify as:"],
+                            ["8. And you identify as:"],
+                            ["9. #dynomicContent, will you share your email with us?"],
                             [""]
                         ];
     $data['qType'] = [
@@ -80,9 +81,10 @@ function getPublicForm() {
                         ["button"],
                         ["button"],
                         ["button"],
+                        ["email"],
                         ["message"]
                     ];
-    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     $data['options'] = [
                             [[""]],
                             [["fa-solid fa-weight-scale","fa-solid fa-dumbbell","fa-solid fa-heart-pulse"]],
@@ -92,6 +94,7 @@ function getPublicForm() {
                             [["fa-regular fa-face-angry","fa-regular fa-face-meh","fa-regular fa-face-smile"]],
                             [["fa-regular fa-moon","fa-regular fa-face-tired"]],
                             [["fa-solid fa-mars","fa-solid fa-venus"]],
+                            [[""]],
                             [["fa-regular fa-circle-check"]]
                        ];
     
@@ -104,10 +107,11 @@ function getPublicForm() {
                                 [["high stress","medium stress","low stress"]],
                                 [["well rested","get less sleep"]],
                                 [["male","female"]],
+                                [[""]],
                                 [["All Done!"]]
                            ];
     
-    $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1, 0];
+    $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1, 0, 0];
     $data['qKey'] = [
                         ['name'],
                         ['goal'],
@@ -117,9 +121,10 @@ function getPublicForm() {
                         ['stress'],
                         ['sleep'],
                         ['gender'],
+                        ['email'],
                         ['']
                     ];
-    $data['MAX_cnt'] = 9;
+    $data['MAX_cnt'] = 10;
     return $data;
 }
 
