@@ -21,6 +21,7 @@ function extractUserInfo($userId) {
     $database_out = $conn->query($sql);
     $ids          = array();
     $names        = array();
+    $emails       = array();
     $genders      = array();
     $goals        = array();
     $campaignids  = array();
@@ -34,13 +35,16 @@ function extractUserInfo($userId) {
         // filling out info briefs
         array_push($names, $database_row['name']);
         array_push($ids, $database_row['clientId']);
+        if($database_row['cEmail'] != ''){
+            array_push($emails, $database_row['cEmail']);  
+        }      
         array_push($formFlag, $database_row['completed']);
         array_push($mealEng, $database_row['mealEng']);
         array_push($nutritionEng, $database_row['nutritionEng']);
         // --------------- update gender and goal based on possible client's reply
-        $tempClientId = $database_row['clientId'];
-        $sqlupdate       = "SELECT qKey, qAnswer, optionsText FROM $table2name WHERE userId = '$userId' AND clientId = '$tempClientId';";
-        $dOut          = $conn->query($sqlupdate);
+        $tempClientId   = $database_row['clientId'];
+        $sqlupdate      = "SELECT qKey, qAnswer, optionsText FROM $table2name WHERE userId = '$userId' AND clientId = '$tempClientId';";
+        $dOut           = $conn->query($sqlupdate);
         while($dOut_row = $dOut->fetch_assoc()) {
             if($dOut_row['qKey'] == 'gender'){
                 $genderUpdateIndex = $dOut_row['qAnswer'];
@@ -56,13 +60,16 @@ function extractUserInfo($userId) {
                 if($goalUpdateIndex != ''){
                     $updatedGoal = $goalText[$goalUpdateIndex];
                 }
+            } elseif($dOut_row['qKey'] == 'email') {
+                $emailText = $dOut_row['qAnswer'];
+                $updatedEmail = $emailText;
             }
         }
         if(isset($updatedGender) && isset($updatedGoal)) {
             array_push($genders, $updatedGender);
             array_push($goals, $updatedGoal);
-            unset($updatedGender);
             unset($updatedGoal);
+            unset($updatedGender);
         } else {
             if($database_row['gender'] == 0) {
                 array_push($genders, 'male');
@@ -81,6 +88,13 @@ function extractUserInfo($userId) {
                 array_push($goals, 'No response');
             }
         }
+        if(isset($updatedEmail) && ($updatedEmail != $database_row['cEmail']) && $database_row['cEmail'] == ''){
+            array_push($emails, $updatedEmail);
+            unset($updatedEmail);
+        } else {
+            array_push($emails, 'No response');
+        }
+
         array_push($campaignids, $database_row['campaignIdSource']);
         array_push($campaigntime, $database_row['campaignTimeStamp']);
         array_push($campaignidAssigned, $database_row['campaignId']);
@@ -88,6 +102,7 @@ function extractUserInfo($userId) {
     
     $userInfo['names']          = $names;
     $userInfo['ids']            = $ids;
+    $userInfo['emails']         = $emails;
     $userInfo['genders']        = $genders;
     $userInfo['goals']          = $goals;
     $userInfo['campaignids']    = $campaignids;
