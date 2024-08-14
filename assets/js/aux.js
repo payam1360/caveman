@@ -1752,6 +1752,8 @@ function displayClients(results, userid, username, searchStruct) {
         idPStyle     = document.createElement('span');
         genderP      = document.createElement('p');
         genderPStyle = document.createElement('span');
+        emailP       = document.createElement('p');
+        emailPStyle  = document.createElement('span');
         goalP        = document.createElement('p');
         goalPStyle   = document.createElement('span');
         campaignP    = document.createElement('p');
@@ -1784,6 +1786,13 @@ function displayClients(results, userid, username, searchStruct) {
         genderPStyle.style.color = '#F4B400';
         genderPStyle.style.fontSize = '24px';
         genderP.appendChild(genderPStyle);
+
+        emailP.innerHTML = 'Email: ';
+        emailPStyle.textContent = results.emails[kk];
+        emailPStyle.style.color = '#DB4437';
+        emailPStyle.style.fontSize = '20px';
+        emailP.appendChild(emailPStyle);
+
         goalP.innerHTML = 'Goal: ';
         goalPStyle.textContent = results.goals[kk];    
         goalPStyle.style.fontSize = '24px';  
@@ -1826,8 +1835,8 @@ function displayClients(results, userid, username, searchStruct) {
             i++;
         }
         userFile =  userid + results.ids[kk] + CampaignIdSelected; 
-        createQP.innerHTML = 'Campaign for ' + results.names[kk] + ': ';
-        createQPStyle.style.fontSize = '24px';
+        createQP.innerHTML = 'Campaign created on : ';
+        createQPStyle.style.fontSize = '18px';
         createQPStyle.style.color = 'seagreen';
         createQPStyle.textContent = CampaignTimeSelected;
         createQP.appendChild(createQPStyle);
@@ -1835,6 +1844,7 @@ function displayClients(results, userid, username, searchStruct) {
         campaignP.innerHTML = 'Link to ' + results.names[kk] + ': <a href="' + link + '"> Campaign page</a>';
         mDiv.appendChild(avatar);
         mDiv.appendChild(nameP);
+        mDiv.appendChild(emailP);
         mDiv.appendChild(genderP);
         mDiv.appendChild(goalP);
         mDiv.appendChild(idP);

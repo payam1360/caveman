@@ -82,11 +82,81 @@ function sendEmail($emailAddr) {
     // Set email format to HTML
     $mail->isHTML(true);
     // Mail subject
-    $mail->Subject = 'Verify your email';
+    $mail->Subject = 'Nutri-Ai: Verify your email';
     $verification_code = mt_rand(10000, 99999);
     // Mail body content
-    $bodyContent  = 'your verification code is: <b>' . $verification_code . '</b>';
-    $bodyContent .= '<p>This email is sent from Nutrition4guys </p>';
+    $imagePath = '../img/nutrition4guys.png';
+    $imageData = base64_encode(file_get_contents($imagePath));
+    $src       = 'data:image/png;base64,' . $imageData;
+    $bodyContent = 
+    '<!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>ManHub</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+  
+    <!-- Favicons -->
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="#"> 
+    <!-- Vendor CSS Files -->
+    <link  href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <style>
+    .client-page {
+    height:60px;
+    width: 50%;
+    margin: auto;
+    background-color: dodgerblue;
+    } 
+    .footer-page {
+    height:60px;
+    width: 50%;
+    margin: auto;
+    background-color: white;
+    } 
+    .client-footer {
+    height:2px;
+    width: 50%;
+    margin: auto;
+    background-color: grey;
+    } 
+    .header-clients-text{
+    font-size: 30px;
+    color: white;
+    text-align: center;
+    font-weight: normal;
+    font-family: "Lucida Casual", "Comic Sans MS";
+    }
+    .email-body{
+    text-align: center;
+    margin-top: 5px;
+    }
+    .email-text{
+    font-size: 24px;
+    color: #A9A9A9;
+    margin-top: 5px;
+    font-weight: normal;
+    font-family: "Lucida Casual", "Comic Sans MS";
+    }
+    .footer-clients-text{
+    font-size: 16px;
+    color: black;
+    text-align: center;
+    font-weight: normal;
+    font-family: "Lucida Casual", "Comic Sans MS";
+    }
+    </style></head><header></header>
+    <body> 
+    <div><a href="index.html"><img src="' . $src . '" width="150" height="150"/></a></div>
+    <div class="client-page"><p class="header-clients-text">Email verification</p></div>';
+    $bodyContent .= '<div class="email-body"><p class=email-text>your email verification code: <b>' . $verification_code . '</b></p>';
+    $bodyContent .= '<p class=email-text>This email is sent from NutriAi server</p></div>';
+    $bodyContent .= '<div class="client-footer"></div>';
+    $bodyContent .= '<div class="footer-page"><p class="footer-clients-text">Nutri-Ai All rights reserved &copy 2024</p></div>';
+    $bodyContent .= '</body></html>';
     $mail->Body   = $bodyContent;
     // Send email
     if(!$mail->send()) {
