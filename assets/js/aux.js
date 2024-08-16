@@ -78,7 +78,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 let resultBtn = document.querySelector('.results-btn');
                 moveright.disabled = true;
                 moveright.style.opacity = 0;
-                if(page == 'register') {
+                if(page == 'register' || page == 'main' || page == 'addClients') {
                     let moveleft = document.querySelector('.form-go-left');
                     moveleft.disabled = true;
                     moveleft.style.opacity = 0;
@@ -125,10 +125,10 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 transition2Right(header, headerTxt, input, Questions, 0, 0);
             }
             // updating the progress
-            if(page == 'main' || page == 'questions' || page == 'analysis') {
+            if(page == 'main' || page == 'questions' || page == 'register' || page == 'login' || page == 'addClients') {
                 let p = (prog / (MAX_cnt - 1));
-                progChart.data.datasets[0].data.pop(0);
-                progChart.data.datasets[0].data.pop(1);
+                progChart.data.datasets[0].data.pop();
+                progChart.data.datasets[0].data.pop();
                 progChart.data.datasets[0].data.push(p * 100);
                 progChart.data.datasets[0].data.push((1 - p) * 100);
                 progChart.update();
@@ -619,10 +619,19 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
     resetFormType(input[2]);
     resetFormType(input[1]);
     resetFormType(input[0]);
-    let moveleft = document.querySelector('.form-go-left');  
-    let spinner = document.querySelector('.spinner-js');
+    let moveleft = document.querySelector('.form-go-left'); 
     moveleft.disabled = true;
     moveleft.style.opacity = 0;
+    let moveright = document.querySelector('.form-go-right');
+    moveright.disabled = false;
+    moveright.style.opacity = 1; 
+
+    let resultBtn = document.querySelector('.results-btn');
+    if(resultBtn) {
+        resultBtn.innerHTML = 'Show results';
+        resultBtn.onclick = null;
+    }
+    let spinner = document.querySelector('.spinner-js');
 
     header[0].addEventListener('transitionend', function(event) {
         ChangeForm(event.target, '0.0s', '0', 0, '0%');
@@ -699,6 +708,57 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
     choiceTracker = [[0],[0]];
     multiButtonSelect = [];
     multiTextSelect = [];
+    // reset the progress bar
+    let ctx = document.querySelector('#ProgressCircle');
+    if(typeof ctx !== undefined){
+        const progress = {
+        datasets: [{
+            data: [0, 100],
+            backgroundColor: [
+                '#FF7F50',
+                '#808080'
+                ],
+            }]
+        };
+        const config = {
+        type: 'doughnut',
+        data: progress,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: 35,
+            }
+        };
+        // generate the chart
+        
+        if(progChart.length != 0 ){
+            
+            progChart.destroy(); 
+        }
+        if(ctx){
+            progChart = new Chart(ctx, config);
+        }
+    }
+    if(page == 'main'){
+        bmiDiv = document.querySelector('.Bmi');
+        bmiDiv.style.display = 'none';
+        ifDiv = document.querySelector('.IntermittentFasting');
+        ifDiv.style.display = 'none'; 
+        macroDiv = document.querySelector('.Macro');
+        macroDiv.style.display = 'none';
+        microDiv = document.querySelector('.Micro');
+        microDiv.style.display = 'none';           
+        microVitDiv = document.querySelector('.Micro_vit');
+        microVitDiv.style.display = 'none';
+        calDiv = document.querySelector('.Calories');
+        calDiv.style.display = 'none';   
+        mealDiv = document.querySelector('.meal_plan');
+        mealDiv.style.display = 'none';   
+        adDiv = document.querySelector('.Advertisement');
+        adDiv.style.display = 'none';       
+    }
+
+
 }
 
 
@@ -911,6 +971,15 @@ function submitUserData(inputDataBlob, page, userPage) {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.response);
             if(data.status == 0 && page == 'main'){
+                let resultBtn = document.querySelector('.results-btn');
+                resultBtn.innerHTML = 'Restart';
+                resultBtn.onclick = function(){
+                    resultBtn.style.display = 'none';
+                    let input = document.querySelectorAll('.form-input');
+                    let header = document.querySelectorAll('.form-header');
+                    let headerTxt = document.querySelectorAll('.form-header-style');
+                    resetStart(input, header, headerTxt, page, 0);
+                }
                 eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, MicroVit:false, Cal:false, Meal:false};
                 allowNewAiStream = true;
                 plotBmi(data.bmi);  // 0
@@ -920,6 +989,7 @@ function submitUserData(inputDataBlob, page, userPage) {
                 plotMicroVit(data.micro); // 4
                 plotCalories(data.cal); // 5
                 displayMeal(data.meal, inputDataBlob, userPage); // 6
+                callAd();
                 intervalID = setInterval(handleAi, 2000, [userPage, 1, 1]);
             }
         }
@@ -1110,7 +1180,10 @@ function plotBmi(bmi, bmiTxt = 0, bmiDiv = 0, bmiDesc = 0){
       },
         plugins: [bgColor],
     };
-    
+
+    if(typeof bmiChart !== 'undefined'){
+        bmiChart.destroy(); 
+    }
     bmiChart = new Chart(
       bmiElement,
       bmiConfig,
@@ -1174,6 +1247,9 @@ function plotIf(If, ifTxt = 0, ifDiv = 0, ifDesc = 0){
         }
       }
     };
+    if(typeof ifChart !== 'undefined'){
+        ifChart.destroy(); 
+    }
     ifChart = new Chart(
       ifElement,
       config
@@ -1230,6 +1306,9 @@ function plotCalories(Cal, calTxt = 0, calDiv = 0, calDesc = 0){
         }
       }
     };
+    if(typeof calChart !== 'undefined'){
+        calChart.destroy(); 
+    }
     calChart = new Chart(
       calElement,
       config
@@ -1293,6 +1372,9 @@ function plotMacro(macro, macroTxt = 0, macroDiv = 0, macroDesc = 0){
         maintainAspectRatio: false,
       }
     };
+    if(typeof macroChart !== 'undefined'){
+        macroChart.destroy(); 
+    }
     macroChart = new Chart(
       macroElement,
       config
@@ -1365,6 +1447,9 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
       },
         plugins: [bgColor],
     };
+    if(typeof microChart !== 'undefined'){
+        microChart.destroy(); 
+    }
     microChart = new Chart(
       microElement,
       config
@@ -1434,7 +1519,10 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
       },
         plugins: [bgColor],
     };
-    microChart = new Chart(
+    if(typeof microChartVit !== 'undefined'){
+        microChartVit.destroy(); 
+    }
+    microChartVit = new Chart(
       microElement,
       config
     );
@@ -1453,6 +1541,7 @@ function displayMeal(mealIn, inputDataBlob, userPage){
             title_var.style.display = 'block';
             txt_var.style.margin = '20px';
             txt_var.innerHTML = mealIn['desc'];
+            display_var.style.height = 'auto';
         }
     };
     // sending the request
@@ -1466,6 +1555,22 @@ function displayMeal(mealIn, inputDataBlob, userPage){
     xmlhttp.send(request);
 
 }
+
+function callAd(adTxt = 0){
+    // add section
+
+    let adDiv  = document.querySelector('.Advertisement');
+    let adTextDiv  = document.querySelector('.AD_text');
+
+    if(adTxt == 0 ){
+        adTextDiv.innerHTML = 'Your AD here';
+    }
+    adDiv.style.display = 'block';
+    adTextDiv.style.display = 'block';
+    adTextDiv.style.margin = '20px';
+    adTextDiv.style
+}
+
 
 function handleAi(inPut) {
 
@@ -1549,7 +1654,7 @@ function handleAi(inPut) {
             aiText = e.data;
             if(aiText.includes("DONE")) {
                 eventSourceQueue[contextSet[activeSSE]] = false;
-                txt_var.innerHTML += "<br><br>Thank you!";
+                txt_var.innerHTML += "<br><br>Good Luck!";
                 eventSource.close();
                 allowNewAiStream = true;
             } else {

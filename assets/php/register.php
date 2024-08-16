@@ -98,65 +98,75 @@ function sendEmail($emailAddr) {
     <meta content="" name="description">
     <meta content="" name="keywords">
   
-    <!-- Favicons -->
-    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     <link rel="shortcut icon" href="#"> 
     <!-- Vendor CSS Files -->
-    <link  href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
     <style>
     .client-page {
     height:60px;
-    width: 50%;
+    width: 70%;
     margin: auto;
     background-color: dodgerblue;
     } 
     .footer-page {
-    height:60px;
+    height:50px;
     width: 50%;
     margin: auto;
-    background-color: white;
+    background-color: transparent;
     } 
     .client-footer {
     height:2px;
-    width: 50%;
+    width: 70%;
     margin: auto;
     background-color: grey;
     } 
     .header-clients-text{
-    font-size: 30px;
+    font-size: clamp(14px, 2vw, 18px);
     color: white;
     text-align: center;
     font-weight: normal;
-    font-family: "Lucida Casual", "Comic Sans MS";
+    font-family: "Arial";
+    padding-top: 20px;
     }
     .email-body{
     text-align: center;
     margin-top: 5px;
     }
     .email-text{
-    font-size: 24px;
+    font-size: clamp(14px, 2vw, 18px);
     color: #A9A9A9;
     margin-top: 5px;
     font-weight: normal;
-    font-family: "Lucida Casual", "Comic Sans MS";
+    font-family: "Verdana";
     }
     .footer-clients-text{
-    font-size: 16px;
+    font-size: clamp(14px, 2vw, 18px);
     color: black;
     text-align: center;
     font-weight: normal;
-    font-family: "Lucida Casual", "Comic Sans MS";
+    font-family: "Arial";
     }
-    </style></head><header></header>
+    </style>
+    </head>
+    <header>
+    </header>
     <body> 
-    <div><a href="index.html"><img src="' . $src . '" width="150" height="150"/></a></div>
-    <div class="client-page"><p class="header-clients-text">Email verification</p></div>';
-    $bodyContent .= '<div class="email-body"><p class=email-text>your email verification code: <b>' . $verification_code . '</b></p>';
-    $bodyContent .= '<p class=email-text>This email is sent from NutriAi server</p></div>';
-    $bodyContent .= '<div class="client-footer"></div>';
-    $bodyContent .= '<div class="footer-page"><p class="footer-clients-text">Nutri-Ai All rights reserved &copy 2024</p></div>';
-    $bodyContent .= '</body></html>';
+        <div><a href="index.html">
+            <img style= "background-color: transparent" src="' . $src . '" width="150" height="150"/>
+            </a>
+        </div>
+    <div class="client-page">
+        <p class="header-clients-text">Email verification</p>
+    </div>
+    <div class="email-body">
+        <p class=email-text>your email verification code: <b>' . $verification_code . '</b></p>
+        <p class=email-text>This email is sent from NutriAi server</p>
+    </div>
+    <div class="client-footer"></div>
+    <div class="footer-page">
+        <p class="footer-clients-text">Nutri-Ai All rights reserved &copy 2024</p>
+    </div>
+    </body>
+    </html>';
     $mail->Body   = $bodyContent;
     // Send email
     if(!$mail->send()) {

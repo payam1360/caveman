@@ -942,629 +942,549 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             $desc = [$dbOutRow['descBmi']];
         } else { // use this software intelligence. (pre-set text not GPT ai)
             if($HighYoungMaleLose) {
-                $desc = ['BMI Overview for Young Males Under 35
-                What is BMI?
-                Body Mass Index (BMI) estimates body fat based on height and weight.
-                BMI Categories: Normal (18.5-24.9), Overweight (25-29.9), Obese (30+).
-                High BMI Concerns
-                High BMI can lead to health risks like heart disease, diabetes, and high blood pressure.
-                Weight Loss Tips
-                Set Goals: Aim to lose 1-2 pounds per week.
-                Healthy Eating: Choose whole foods, reduce sugar and fat intake.
-                Exercise: At least 150 minutes of moderate activity weekly, plus strength training.
-                Hydration: Drink plenty of water.
-                Sleep: Get 7-9 hours of sleep per night.
-                Track Progress: Monitor weight and habits.
-                Seek Support: Consult healthcare providers for guidance.
+                $desc = ['BMI Overview for Young Males Under 35.<br>
+                <b>What is BMI?</b><br>
+                Body Mass Index (BMI) estimates body fat based on height and weight.<br>
+                <b>BMI Categories: </b><br>
+                <b>Normal:</b> (18.5-24.9),<br> 
+                <b>Overweight:</b> (25-29.9),<br>
+                <b>Obese:</b> (30+).<br>
+                <b>High BMI Concerns:</b><br>
+                High BMI can lead to health risks like heart disease, diabetes, and high blood pressure.<br>
+                <b>Weight Loss Tips:</b><br>
+                <b>Set Goals:</b> Aim to lose 1-2 pounds per week.<br>
+                <b>Healthy Eating:</b> Choose whole foods, reduce sugar and fat intake.<br>
+                <b>Exercise:</b> At least 150 minutes of moderate activity weekly, plus strength training.<br>
+                <b>Hydration:</b> Drink plenty of water.<br>
+                <b>Sleep:</b> Get 7-9 hours of sleep per night.<br>
+                <b>Track Progress:</b> Monitor weight and habits.<br>
+                <b>Seek Support:</b> Consult healthcare providers for guidance.<br>
                 Stay patient and consistent for long-term success.'];
             }
             if($HighYoungMaleGain) {
-                $desc = ['BMI Overview for Young Males Under 35
-                What is BMI?
-                Body Mass Index (BMI) estimates body fat based on height and weight.
-                BMI Categories: Normal (18.5-24.9), Overweight (25-29.9), Obese (30+).
-                High BMI and Muscle Gain
-                High BMI can include muscle mass, not just fat.
-                Muscle mass gain involves strength training and proper nutrition.
-                Muscle Gain Tips
-                Strength Training: Focus on compound exercises (squats, deadlifts, bench press) 3-4 times a week.
-                Nutrition: Increase protein intake (chicken, fish, beans), eat balanced meals.
-                Caloric Surplus: Consume more calories than you burn, focusing on healthy foods.
-                Hydration: Drink plenty of water to support muscle recovery.
-                Rest: Ensure 7-9 hours of sleep per night for muscle repair.
-                Track Progress: Monitor muscle growth and adjust your plan as needed.
-                Professional Advice: Consider consulting a fitness trainer or nutritionist for personalized guidance.
-                Consistency and proper technique are key for effective muscle gain.'];
+                $desc = ['<b>BMI Overview for Young Males Under 35</b><br>
+                <b>What is BMI?</b><br>
+                Body Mass Index (BMI) estimates body fat based on height and weight.<br>
+                <b>BMI Categories:</b> Normal (18.5-24.9), Overweight (25-29.9), Obese (30+).<br>
+                <b>High BMI and Muscle Gain</b><br>
+                High BMI can include muscle mass, not just fat.<br>
+                Muscle mass gain involves strength training and proper nutrition.<br>
+                <b>Muscle Gain Tips</b><br>
+                <b>Strength Training:</b> Focus on compound exercises (squats, deadlifts, bench press) 3-4 times a week.<br>
+                <b>Nutrition:</b> Increase protein intake (chicken, fish, beans), eat balanced meals.<br>
+                <b>Caloric Surplus:</b> Consume more calories than you burn, focusing on healthy foods.<br>
+                <b>Hydration:</b> Drink plenty of water to support muscle recovery.<br>
+                <b>Rest:</b> Ensure 7-9 hours of sleep per night for muscle repair.<br>
+                <b>Track Progress:</b> Monitor muscle growth and adjust your plan as needed.<br>
+                <b>Professional Advice:</b> Consider consulting a fitness trainer or nutritionist for personalized guidance.<br>
+                Consistency and proper technique are key for effective muscle gain.<br>'];
             }
             if($HighYoungFemaleLose) {
-                $desc = ['BMI Overview for Young Females Under 35
-                What is BMI?
-                Body Mass Index (BMI) estimates body fat based on height and weight.
-                BMI Categories: Normal (18.5-24.9), Overweight (25-29.9), Obese (30+).
-                High BMI Concerns
-                High BMI can lead to health risks like heart disease, diabetes, and high blood pressure.
-                Weight Loss Tips
-                Set Goals: Aim to lose 1-2 pounds per week.
-                Healthy Eating: Choose whole foods, reduce sugar and fat intake.
-                Exercise: At least 150 minutes of moderate activity weekly, plus strength training.
-                Hydration: Drink plenty of water.
-                Sleep: Get 7-9 hours of sleep per night.
-                Track Progress: Monitor weight and habits.
-                Seek Support: Consult healthcare providers for guidance.
-                Patience and consistency are key to successful weight loss.'];
+                $desc = ['<b>BMI Overview for Young Females Under 35</b><br>
+                <b>What is BMI?</b><br>
+                Body Mass Index (BMI) estimates body fat based on height and weight.<br>
+                <b>BMI Categories:</b> Normal (18.5-24.9), Overweight (25-29.9), Obese (30+).<br>
+                <b>High BMI Concerns</b><br>
+                High BMI can lead to health risks like heart disease, diabetes, and high blood pressure.<br>
+                <b>Weight Loss Tips</b><br>
+                <b>Set Goals:</b> Aim to lose 1-2 pounds per week.<br>
+                <b>Healthy Eating:</b> Choose whole foods, reduce sugar and fat intake.<br>
+                <b>Exercise:</b> At least 150 minutes of moderate activity weekly, plus strength training.<br>
+                <b>Hydration:</b> Drink plenty of water.<br>
+                <b>Sleep:</b> Get 7-9 hours of sleep per night.<br>
+                <b>Track Progress:</b> Monitor weight and habits.<br>
+                <b>Seek Support:</b> Consult healthcare providers for guidance.<br>
+                Patience and consistency are key to successful weight loss.<br>'];
             }
             if($HighYoungFemaleGain) {
-                $desc = ['BMI Overview for Young Females Under 35
-                What is BMI?
-                Body Mass Index (BMI) estimates body fat based on height and weight.
-                BMI Categories: Normal (18.5-24.9), Overweight (25-29.9), Obese (30+).
-                High BMI and Muscle Gain
-                High BMI can include muscle mass, not just fat.
-                Muscle gain requires strength training and proper nutrition.
-                Muscle Gain Tips
-                Strength Training: Focus on compound exercises (squats, deadlifts, bench press) 3-4 times a week.
-                Nutrition: Increase protein intake (chicken, fish, beans), eat balanced meals.
-                Caloric Surplus: Consume more calories than you burn, focusing on healthy foods.
-                Hydration: Drink plenty of water to support muscle recovery.
-                Rest: Ensure 7-9 hours of sleep per night for muscle repair.
-                Track Progress: Monitor muscle growth and adjust your plan as needed.
-                Professional Advice: Consider consulting a fitness trainer or nutritionist for personalized guidance.
-                Consistency and proper technique are key for effective muscle gain.'];
+                $desc = ['<b>BMI Overview for Young Females Under 35</b><br>
+                <b>What is BMI?</b><br>
+                Body Mass Index (BMI) estimates body fat based on height and weight.<br>
+                <b>BMI Categories:</b> Normal (18.5-24.9), Overweight (25-29.9), Obese (30+).<br>
+                <b>High BMI and Muscle Gain</b><br>
+                High BMI can include muscle mass, not just fat.<br>
+                Muscle gain requires strength training and proper nutrition.<br>
+                <b>Muscle Gain Tips</b><br>
+                <b>Strength Training:</b> Focus on compound exercises (squats, deadlifts, bench press) 3-4 times a week.<br>
+                <b>Nutrition:</b> Increase protein intake (chicken, fish, beans), eat balanced meals.<br>
+                <b>Caloric Surplus:</b> Consume more calories than you burn, focusing on healthy foods.<br>
+                <b>Hydration:</b> Drink plenty of water to support muscle recovery.<br>
+                <b>Rest:</b> Ensure 7-9 hours of sleep per night for muscle repair.<br>
+                <b>Track Progress:</b> Monitor muscle growth and adjust your plan as needed.<br>
+                <b>Professional Advice:</b> Consider consulting a fitness trainer or nutritionist for personalized guidance.<br>
+                Consistency and proper technique are key for effective muscle gain.<br>'];
             }
             // -------
             if($LowYoungMaleLose) {
-                $desc = ['For a young male under 35 with a low BMI trying to lose weight: 
-                "Underweight. Focus on gaining lean muscle mass through strength 
-                training and a balanced, nutrient-rich diet. Consult a healthcare 
-                professional for personalized guidance.'];
-            }
-            if($LowYoungMaleGain) {
-                $desc = ['BMI Description and Definition
-                Body Mass Index (BMI) is a measure that uses height and weight to estimate 
-                body fat. It is calculated by dividing a persons weight in kilograms by 
-                the square of their height in meters (kg/m²). 
-                The BMI categories are:
-                Underweight: BMI less than 18.5
-                Normal weight: BMI 18.5-24.9
-                Overweight: BMI 25-29.9
-                Obesity: BMI ≥ 30
-                For a young male under 35 with a low BMI (below 18.5), gaining 
-                muscle mass involves a strategic approach. This individual is 
-                likely underweight and should aim to increase both caloric intake 
-                and protein consumption to support muscle growth. A well-rounded 
-                diet rich in lean proteins, complex carbohydrates, and healthy fats 
-                is essential, alongside a consistent strength training regimen. 
-                The ultimate goal is to achieve a healthier BMI through muscle gain 
-                and improved overall body composition.'];
-            }
-            if($LowYoungFemaleLose) {
-                $desc = ['Body Mass Index (BMI) is a measure that uses height and weight 
-                to estimate body fat. It is calculated by dividing a persons 
-                weight in kilograms by the square of their height in meters (kg/m²). 
-                The BMI categories are:
-                Underweight: BMI less than 18.5
-                Normal weight: BMI 18.5-24.9
-                Overweight: BMI 25-29.9
-                Obesity: BMI more than 30
-                Advice
+                $desc = ['<b>Body Mass Index (BMI)</b> is a measure that uses height and 
+                weight to estimate body fat. It is calculated by dividing a person’s 
+                weight in kilograms by the square of their height in meters (kg/m²).<br>
+                The <b>BMI categories are:</b><br>
+                <b>Underweight:</b> BMI less than 18.5<br>
+                <b>Normal weight:</b> BMI 18.5-24.9<br>
+                <b>Overweight:</b> BMI 25-29.9<br>
+                <b>Obesity:</b> BMI more than 30<br>
+                <b>Advice</b><br>
                 If you already have a low BMI (under 18.5) and are considering losing 
                 more weight, it is important to prioritize your health. Further weight 
-                loss could lead to various health issues, including nutrient 
-                deficiencies, weakened immune system, and decreased muscle mass. It is 
-                strongly recommended to consult with a healthcare provider or a 
-                nutritionist to ensure your health and well-being.'];
+                loss could lead to various health issues, including nutrient deficiencies,
+                weakened immune system, and decreased muscle mass. It is strongly 
+                recommended to consult with a healthcare provider or a nutritionist to 
+                ensure your health and well-being.<br>'];
+            }
+            if($LowYoungMaleGain) {
+                $desc = ['<b>BMI Description and Definition</b><br>
+                Body Mass Index (BMI) is a measure that uses height and weight to 
+                estimate body fat. It is calculated by dividing a person’s 
+                weight in kilograms by the square of their height in meters (kg/m²).<br>
+                The <b>BMI categories are:</b><br>
+                <b>Underweight:</b> BMI less than 18.5<br>
+                <b>Normal weight:</b> BMI 18.5-24.9<br>
+                <b>Overweight:</b> BMI 25-29.9<br>
+                <b>Obesity:</b> BMI ≥ 30<br>
+                For a young male under 35 with a low BMI (below 18.5), gaining muscle 
+                mass involves a strategic approach. This individual is likely 
+                underweight and should aim to increase both caloric intake and protein 
+                consumption to support muscle growth. A well-rounded diet rich in lean 
+                proteins, complex carbohydrates, and healthy fats is essential, 
+                alongside a consistent strength training regimen.<br>
+                The ultimate goal is to achieve a healthier BMI through muscle gain 
+                and improved overall body composition.<br>'];
+            }
+            if($LowYoungFemaleLose) {
+                $desc = ['<b>Body Mass Index (BMI)</b> is a measure that uses height 
+                and weight to estimate body fat. It is calculated by dividing a 
+                person’s weight in kilograms by the square of their height in meters 
+                (kg/m²).<br>
+                The <b>BMI categories are:</b><br>
+                <b>Underweight:</b> BMI less than 18.5<br>
+                <b>Normal weight:</b> BMI 18.5-24.9<br>
+                <b>Overweight:</b> BMI 25-29.9<br>
+                <b>Obesity:</b> BMI more than 30<br>
+                <b>Advice</b><br>
+                If you already have a low BMI (under 18.5) and are considering 
+                losing more weight, it is important to prioritize your health. 
+                Further weight loss could lead to various health issues, 
+                including nutrient deficiencies, weakened immune system, and 
+                decreased muscle mass. It is strongly recommended to consult with 
+                a healthcare provider or a nutritionist to ensure your health and 
+                well-being.<br>'];
             }
             if($LowYoungFemaleGain) {
-                $desc = ['BMI Description for a Young Female Under 35 with Low BMI 
-                Trying to Gain Muscle Mass
+                $desc = ['<b>BMI Description for a Young Female Under 35 with Low BMI 
+                Trying to Gain Muscle Mass</b><br>
                 Body Mass Index (BMI) is a measure that uses height and weight to 
-                estimate body fat. It is calculated by dividing a persons weight 
-                in kilograms by the square of their height in meters (kg/m²). The 
-                BMI categories are:
-                Underweight: BMI less than 18.5
-                Normal weight: BMI 18.5-24.9
-                Overweight: BMI 25-29.9
-                Obesity: BMI more than 30
-                Advice
-                For a young female with a low BMI looking to gain muscle mass:
-                Increase Caloric Intake: Eat more calories than you burn, focusing 
-                on nutrient-dense foods.
-                Consume Protein: Include high-protein foods like lean meats, dairy, 
-                legumes, and protein supplements.
-                Strength Training: Engage in regular strength training exercises to
-                 build muscle.
-                Rest and Recover: Ensure adequate sleep and rest days to support
-                 muscle growth.
+                estimate body fat. It is calculated by dividing a person’s weight 
+                in kilograms by the square of their height in meters (kg/m²). 
+                The <b>BMI categories are:</b><br>
+                <b>Underweight:</b> BMI less than 18.5<br>
+                <b>Normal weight:</b> BMI 18.5-24.9<br>
+                <b>Overweight:</b> BMI 25-29.9<br>
+                <b>Obesity:</b> BMI more than 30<br>
+                <b>Advice</b><br>
+                For a young female with a low BMI looking to gain muscle mass:<br>
+                <b>Increase Caloric Intake:</b> Eat more calories than you burn, 
+                focusing on nutrient-dense foods.<br>
+                <b>Consume Protein:</b> Include high-protein foods like lean meats, 
+                dairy, legumes, and protein supplements.<br>
+                <b>Strength Training:</b> Engage in regular strength training exercises 
+                to build muscle.<br>
+                <b>Rest and Recover:</b> Ensure adequate sleep and rest days to support 
+                muscle growth.<br>
                 Always consider consulting a healthcare provider or nutritionist for 
-                personalized guidance.'];
+                personalized guidance.<br>'];
             }
 
             if($HighOldMaleLose) {
-                $desc = ['BMI Description for an Older Male Above 40 with High BMI 
-                Trying to Lose Weight
-                Body Mass Index (BMI) is a measure of body fat based on height and 
-                weight, calculated as weight (kg) divided by height (m²).
-                Overweight: BMI 25-29.9
-                Obesity: BMI ≥ 30
-                Advice
-                For an older male with a high BMI:
-                Aim for a Caloric Deficit: Consume fewer calories than you burn to 
-                promote weight loss.
-                Focus on Balanced Nutrition: Include a mix of lean proteins, healthy 
-                fats, and complex carbohydrates.
-                Incorporate Physical Activity: Engage in regular exercise, including 
-                both cardio and strength training.
-                Monitor Health: Consider regular check-ups to manage any age-related 
-                health issues.
-                Consult with a healthcare provider for personalized advice and to 
-                ensure a safe weight loss approach.'];
+                $desc = ['<b>BMI Description for an Older Male Above 40 with High BMI Trying to Lose Weight</b><br>
+                Body Mass Index (BMI) is a measure of body fat based on height and weight, calculated as weight (kg) divided by height (m²).<br>
+                <b>Overweight:</b> BMI 25-29.9<br>
+                <b>Obesity:</b> BMI ≥ 30<br>
+                <b>Advice</b><br>
+                For an older male with a high BMI:<br>
+                <b>Aim for a Caloric Deficit:</b> Consume fewer calories than you burn to promote weight loss.<br>
+                <b>Focus on Balanced Nutrition:</b> Include a mix of lean proteins, healthy fats, and complex carbohydrates.<br>
+                <b>Incorporate Physical Activity:</b> Engage in regular exercise, including both cardio and strength training.<br>
+                <b>Monitor Health:</b> Consider regular check-ups to manage any age-related health issues.<br>
+                Consult with a healthcare provider for personalized advice and to ensure a safe weight loss approach.<br>'];
             }
             if($HighOldMaleGain) {
-                $desc = ['BMI Description for an Older Male Above 40 with High BMI 
-                Trying to Gain Muscle Mass
-                Body Mass Index (BMI) is a measure of body fat based on height 
-                and weight:
-                Overweight: BMI 25-29.9
-                Obesity: BMI ≥ 30
-                Advice
-                For an older male with a high BMI looking to gain muscle mass:
-                Increase Caloric Intake: Focus on nutrient-dense, higher-calorie foods 
-                to support muscle growth.
-                Emphasize Protein: Include high-protein foods to aid muscle development.
-                Strength Training: Engage in regular resistance exercises to build muscle.
-                Monitor Progress: Track changes in muscle mass and adjust your diet 
-                and training as needed.
-                Consult with a healthcare provider to ensure a safe and effective 
-                approach.'];
+                $desc = ['<b>BMI Description for an Older Male Above 40 with High BMI Trying to Gain Muscle Mass</b><br>
+                Body Mass Index (BMI) is a measure of body fat based on height and weight:<br>
+                <b>Overweight:</b> BMI 25-29.9<br>
+                <b>Obesity:</b> BMI ≥ 30<br>
+                <b>Advice</b><br>
+                For an older male with a high BMI looking to gain muscle mass:<br>
+                <b>Increase Caloric Intake:</b> Focus on nutrient-dense, higher-calorie foods to support muscle growth.<br>
+                <b>Emphasize Protein:</b> Include high-protein foods to aid muscle development.<br>
+                <b>Strength Training:</b> Engage in regular resistance exercises to build muscle.<br>
+                <b>Monitor Progress:</b> Track changes in muscle mass and adjust your diet and training as needed.<br>
+                Consult with a healthcare provider to ensure a safe and effective approach.<br>'];
             }
             if($HighOldFemaleLose) {
-                $desc = ['BMI Description for an Older Female Above 40 with High BMI 
-                Trying to Lose Weight
-                Body Mass Index (BMI) is a measure of body fat based on height and weight:
-                Overweight: BMI 25-29.9
-                Obesity: BMI ≥ 30
-                Advice
-                For an older female with a high BMI:
-                Create a Caloric Deficit: Consume fewer calories than you burn to 
-                promote weight loss.
-                Balanced Diet: Focus on nutrient-rich foods like lean proteins, 
-                vegetables, and whole grains.
-                Regular Exercise: Incorporate both cardio and strength training to 
-                support weight loss and maintain muscle mass.
-                Monitor Health: Consult with a healthcare provider to ensure the 
-                weight loss plan is safe and effective.'];
+                $desc = ['<b>BMI Description for an Older Female Above 40 with High BMI Trying to Lose Weight</b><br>
+                Body Mass Index (BMI) is a measure of body fat based on height and weight:<br>
+                <b>Overweight:</b> BMI 25-29.9<br>
+                <b>Obesity:</b> BMI ≥ 30<br>
+                <b>Advice</b><br>
+                For an older female with a high BMI:<br>
+                <b>Create a Caloric Deficit:</b> Consume fewer calories than you burn to promote weight loss.<br>
+                <b>Balanced Diet:</b> Focus on nutrient-rich foods like lean proteins, vegetables, and whole grains.<br>
+                <b>Regular Exercise:</b> Incorporate both cardio and strength training to support weight loss and maintain muscle mass.<br>
+                <b>Monitor Health:</b> Consult with a healthcare provider to ensure the weight loss plan is safe and effective.<br>'];
             }
             if($HighOldFemaleGain) {
-                $desc = ['BMI Description for an Older Female Above 40 with High BMI 
-                Trying to Gain Muscle Mass
-                Body Mass Index (BMI) is a measure of body fat based on height and 
-                weight:
-                Overweight: BMI 25-29.9
-                Obesity: BMI ≥ 30
-                Advice
-                For an older female with a high BMI aiming to gain muscle mass:
-                Increase Caloric Intake: Eat more calories with a focus on 
-                nutrient-dense foods.
-                High-Protein Diet: Include protein-rich foods to support muscle growth.
-                Strength Training: Engage in regular resistance exercises.
-                Monitor Progress: Track muscle gains and adjust your diet and 
-                exercise plan as needed.
-                Consult a healthcare provider to ensure a safe and effective approach.'];
+                $desc = ['<b>BMI Description for an Older Female Above 40 with High BMI Trying to Gain Muscle Mass</b><br>
+                Body Mass Index (BMI) is a measure of body fat based on height and weight:<br>
+                <b>Overweight:</b> BMI 25-29.9<br>
+                <b>Obesity:</b> BMI ≥ 30<br>
+                <b>Advice</b><br>
+                For an older female with a high BMI aiming to gain muscle mass:<br>
+                <b>Increase Caloric Intake:</b> Eat more calories with a focus on nutrient-dense foods.<br>
+                <b>High-Protein Diet:</b> Include protein-rich foods to support muscle growth.<br>
+                <b>Strength Training:</b> Engage in regular resistance exercises.<br>
+                <b>Monitor Progress:</b> Track muscle gains and adjust your diet and exercise plan as needed.<br>
+                Consult a healthcare provider to ensure a safe and effective approach.<br>'];
             }
             // -------
             if($LowOldMaleLose) {
-                $desc = ['BMI Description for an Older Male Above 40 with Low BMI Trying to Lose Weight
-                Body Mass Index (BMI) is a measure of body fat based on height and weight:
-                Underweight: BMI less than 18.5
-                Advice
-                For an older male with a low BMI trying to lose weight:
-                Monitor Health: Focus on overall health rather than just weight loss.
-                Consult a Healthcare Provider: Ensure weight loss is safe and 
-                appropriate given the low BMI.
-                Balanced Approach: Maintain a balanced diet and incorporate regular 
-                physical activity, but prioritize health over further weight loss.'];
+                $desc = ['<b>BMI Description for an Older Male Above 40 with Low BMI Trying to Lose Weight</b><br>
+                Body Mass Index (BMI) is a measure of body fat based on height and weight:<br>
+                <b>Underweight:</b> BMI less than 18.5<br>
+                <b>Advice</b><br>
+                For an older male with a low BMI trying to lose weight:<br>
+                <b>Monitor Health:</b> Focus on overall health rather than just weight loss.<br>
+                <b>Consult a Healthcare Provider:</b> Ensure weight loss is safe and appropriate given the low BMI.<br>
+                <b>Balanced Approach:</b> Maintain a balanced diet and incorporate regular physical activity, but prioritize health over further weight loss.<br>'];
             }
             if($LowOldMaleGain) {
-                $desc = ['BMI Description for an Older Male Above 40 with Low BMI 
-                Trying to Gain Muscle Mass
-                Body Mass Index (BMI) is a measure of body fat based on height and weight:
-                Underweight: BMI less than 18.5
-                Advice
-                For an older male with a low BMI aiming to gain muscle mass:
-                Increase Caloric Intake: Eat more calories with a focus on nutrient-dense foods.
-                Protein-Rich Diet: Include plenty of protein to support muscle growth.
-                Strength Training: Engage in regular resistance exercises.
-                Monitor Progress: Track changes in muscle mass and adjust your diet 
-                and exercise routine as needed.
-                Consult with a healthcare provider to ensure a safe and effective plan.'];
+                $desc = ['<b>BMI Description for an Older Male Above 40 with Low BMI Trying to Gain Muscle Mass</b><br>
+                Body Mass Index (BMI) is a measure of body fat based on height and weight:<br>
+                <b>Underweight:</b> BMI less than 18.5<br>
+                <b>Advice</b><br>
+                For an older male with a low BMI aiming to gain muscle mass:<br>
+                <b>Increase Caloric Intake:</b> Eat more calories with a focus on nutrient-dense foods.<br>
+                <b>Protein-Rich Diet:</b> Include plenty of protein to support muscle growth.<br>
+                <b>Strength Training:</b> Engage in regular resistance exercises.<br>
+                <b>Monitor Progress:</b> Track changes in muscle mass and adjust your diet and exercise routine as needed.<br>
+                Consult with a healthcare provider to ensure a safe and effective plan.<br>'];
             }
             if($LowOldFemaleLose) {
-                $desc = ['BMI Description for an Older Female Above 40 with Low BMI Trying to Lose Weight
-                Body Mass Index (BMI) is a measure of body fat based on height and weight:
-                Underweight: BMI less than 18.5
-                Advice
-                For an older female with a low BMI trying to lose weight:
-                Consult a Healthcare Provider: Ensure that further weight loss is safe and 
-                appropriate given the low BMI.
-                Focus on Health: Prioritize overall health and well-being rather than just weight loss.
-                Balanced Diet: Maintain a nutrient-rich diet and consider moderate physical activity.'];
+                $desc = ['<b>BMI Description for an Older Female Above 40 with Low BMI Trying to Lose Weight</b><br>
+                Body Mass Index (BMI) is a measure of body fat based on height and weight:<br>
+                <b>Underweight:</b> BMI less than 18.5<br>
+                <b>Advice</b><br>
+                For an older female with a low BMI trying to lose weight:<br>
+                <b>Consult a Healthcare Provider:</b> Ensure that further weight loss is safe and appropriate given the low BMI.<br>
+                <b>Focus on Health:</b> Prioritize overall health and well-being rather than just weight loss.<br>
+                <b>Balanced Diet:</b> Maintain a nutrient-rich diet and consider moderate physical activity.<br>'];
             }
             if($LowOldFemaleGain) {
-                $desc = ['BMI Description for an Older Female Above 40 with Low BMI 
-                Trying to Gain Muscle Mass
-                Body Mass Index (BMI) is a measure of body fat based on height and weight:
-                Underweight: BMI less than 18.5
-                Advice
-                For an older female with a low BMI aiming to gain muscle mass:
-                Increase Caloric Intake: Eat more calories with a focus on nutrient-dense 
-                foods.
-                Protein-Rich Diet: Include high-protein foods to support muscle growth.
-                Strength Training: Engage in regular resistance exercises.
-                Monitor Progress: Track changes in muscle mass and adjust your diet 
-                and exercise plan as needed.
-                Consult a healthcare provider to ensure a safe and effective approach.'];
+                $desc = ['<b>BMI Description for an Older Female Above 40 with Low BMI Trying to Gain Muscle Mass</b><br>
+                Body Mass Index (BMI) is a measure of body fat based on height and weight:<br>
+                <b>Underweight:</b> BMI less than 18.5<br>
+                <b>Advice</b><br>
+                For an older female with a low BMI aiming to gain muscle mass:<br>
+                <b>Increase Caloric Intake:</b> Eat more calories with a focus on nutrient-dense foods.<br>
+                <b>Protein-Rich Diet:</b> Include high-protein foods to support muscle growth.<br>
+                <b>Strength Training:</b> Engage in regular resistance exercises.<br>
+                <b>Monitor Progress:</b> Track changes in muscle mass and adjust your diet and exercise plan as needed.<br>
+                Consult a healthcare provider to ensure a safe and effective approach.<br>'];
             }
         }
     } elseif($contextFlag == "Bmr") {
         if(!empty($dbOutRow['descBmr'])) { // use the entry by the user
             $desc = [$dbOutRow['descBmr']];
         } else { 
-            $desc = ['Basal Metabolic Rate (BMR) Definition and Description
-            What is BMR?
-            Basal Metabolic Rate (BMR) is the number of calories your body needs to 
-            maintain basic physiological functions while at rest. These functions 
-            include breathing, circulation, cell production, nutrient processing, 
-            and temperature regulation.
-            Key Points About BMR:
-            Basic Function Maintenance: BMR represents the energy required for 
-            essential bodily functions, not including physical activities or digestion.
-            Measurement Conditions: BMR is typically measured under very specific 
-            conditions: after a full nights sleep, in a fasted state, and in a 
-            thermoneutral environment to ensure the body is at rest and not expending 
-            extra energy for digestion or temperature regulation.
-            Influencing Factors: Several factors influence BMR, including:
-            Age: BMR generally decreases with age.
-            Sex: Males typically have a higher BMR than females due to a greater 
-            muscle mass.
-            Body Composition: More muscle mass increases BMR, while more fat mass 
-            does not.
-            Genetics: Genetic makeup can influence BMR.
-            Hormones: Hormonal levels (e.g., thyroid hormones) can affect BMR.
-            Calculating BMR: While direct measurement requires specialized equipment, 
-            BMR can be estimated using equations such as the Harris-Benedict Equation 
-            or the Mifflin-St Jeor Equation, which take into account age, sex, weight, 
-            and height.
-            Importance of BMR:
-            Weight Management: Understanding your BMR can help in planning dietary 
-            intake and exercise routines for weight loss, maintenance, or gain.
-            Caloric Needs: BMR forms the baseline for calculating Total Daily Energy 
-            Expenditure (TDEE), which includes additional calories burned through 
-            physical activity and digestion.
-            Example Calculation (Using Mifflin-St Jeor Equation):
-            For a 30-year-old woman, 65 kg, 165 cm tall:
-            BMR = (10 * weight in kg) + (6.25 * height in cm) - (5 * age in years) - 161
-            BMR = (10 * 65) + (6.25 * 165) - (5 * 30) - 161
-            BMR = 650 + 1031.25 - 150 - 161
-            BMR ≈ 1370 kcal/day
-            This means she needs approximately 1370 calories per day to maintain 
-            basic bodily functions at rest.'];
+            $desc = ['<b>Basal Metabolic Rate (BMR) Definition and Description</b><br>
+            <b>What is BMR?</b><br>
+            Basal Metabolic Rate (BMR) is the number of calories your body needs to maintain basic physiological functions while at rest. These functions include breathing, circulation, cell production, nutrient processing, and temperature regulation.<br>
+            <b>Key Points About BMR:</b><br>
+            <b>Basic Function Maintenance:</b> BMR represents the energy required for essential bodily functions, not including physical activities or digestion.<br>
+            <b>Measurement Conditions:</b> BMR is typically measured under very specific conditions: after a full night’s sleep, in a fasted state, and in a thermoneutral environment to ensure the body is at rest and not expending extra energy for digestion or temperature regulation.<br>
+            <b>Influencing Factors:</b> Several factors influence BMR, including:<br>
+            <b>Age:</b> BMR generally decreases with age.<br>
+            <b>Sex:</b> Males typically have a higher BMR than females due to a greater muscle mass.<br>
+            <b>Body Composition:</b> More muscle mass increases BMR, while more fat mass does not.<br>
+            <b>Genetics:</b> Genetic makeup can influence BMR.<br>
+            <b>Hormones:</b> Hormonal levels (e.g., thyroid hormones) can affect BMR.<br>
+            <b>Calculating BMR:</b> While direct measurement requires specialized equipment, BMR can be estimated using equations such as the Harris-Benedict Equation or the Mifflin-St Jeor Equation, which take into account age, sex, weight, and height.<br>
+            <b>Importance of BMR:</b><br>
+            <b>Weight Management:</b> Understanding your BMR can help in planning dietary intake and exercise routines for weight loss, maintenance, or gain.<br>
+            <b>Caloric Needs:</b> BMR forms the baseline for calculating Total Daily Energy Expenditure (TDEE), which includes additional calories burned through physical activity and digestion.<br>
+            <b>Example Calculation (Using Mifflin-St Jeor Equation):</b><br>
+            For a 30-year-old woman, 65 kg, 165 cm tall:<br>
+            BMR = (10 * weight in kg) + (6.25 * height in cm) - (5 * age in years) - 161<br>
+            BMR = (10 * 65) + (6.25 * 165) - (5 * 30) - 161<br>
+            BMR = 650 + 1031.25 - 150 - 161<br>
+            BMR ≈ 1370 kcal/day<br>
+            This means she needs approximately 1370 calories per day to maintain basic bodily functions at rest.<br>'];
         }
     } elseif($contextFlag == "If") {
         if(!empty($dbOutRow['descIf'])) { // use the entry by the user
             $desc = [$dbOutRow['descIf']];
         } else { 
             if($HighYoungMaleLose) {
-                $desc = ['Intermittent Fasting Recommendation for a Young Male Under 35
-                 with High BMI Trying to Lose Weight
-                Intermittent Fasting (IF) involves cycling between periods of eating 
-                and fasting. It can help with weight loss by reducing calorie intake 
-                and improving metabolic health.
-                Simple IF Recommendation:
-                16/8 Method:
-                Fasting Window: Fast for 16 hours.
-                Eating Window: Eat all your meals within an 8-hour window 
-                (e.g., 12 PM to 8 PM).
-                Eat Balanced Meals: Focus on nutrient-dense foods during your 
-                eating window, including lean proteins, healthy fats, and plenty of 
-                vegetables.
-                Stay Hydrated: Drink water, tea, or black coffee during the fasting 
-                period to stay hydrated.
-                Consistency: Stick to the schedule daily for best results.
-                Note:
-                Consult with a healthcare provider before starting any new diet 
-                regimen to ensure it is safe and appropriate for your individual 
-                health needs.'];
+                $desc = ['<b>Intermittent Fasting Recommendation for a Young Male Under 35 with High BMI Trying to Lose Weight</b><br>
+                Intermittent Fasting (IF) involves cycling between periods of eating and fasting. It can help with weight loss by reducing calorie intake and improving metabolic health.<br>
+                <b>Simple IF Recommendation:</b><br>
+                <b>16/8 Method:</b><br>
+                <b>Fasting Window:</b> Fast for 16 hours.<br>
+                <b>Eating Window:</b> Eat all your meals within an 8-hour window (e.g., 12 PM to 8 PM).<br>
+                <b>Eat Balanced Meals:</b> Focus on nutrient-dense foods during your eating window, including lean proteins, healthy fats, and plenty of vegetables.<br>
+                <b>Stay Hydrated:</b> Drink water, tea, or black coffee during the fasting period to stay hydrated.<br>
+                <b>Consistency:</b> Stick to the schedule daily for best results.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider before starting any new diet regimen to ensure it is safe and appropriate for your individual health needs.'];
             }
             if($HighYoungMaleGain) {
-                $desc = ['Intermittent Fasting Recommendation for a Young Male Under 35 
-                with High BMI Trying to Gain Muscle Mass
-                Intermittent Fasting (IF) can help manage your eating schedule while 
-                focusing on muscle gain. Here is a simple approach:
-                16/8 Method:
-                Fasting Window: Fast for 16 hours.
-                Eating Window: Eat all meals within an 8-hour window (e.g., 12 PM to 8 PM).
-                Nutrient-Dense Meals:
-                Protein: Include protein-rich foods like lean meats, fish, eggs, 
-                and dairy.
-                Healthy Fats: Eat avocados, nuts, seeds, and olive oil.
-                Complex Carbs: Focus on whole grains, fruits, and vegetables.
-                Pre- and Post-Workout Nutrition:
-                Eat a balanced meal or snack before and after workouts within your 
-                eating window to support muscle growth and recovery.
-                Stay Hydrated:
-                Drink water, black coffee, or tea during fasting periods.
-                Supplements:
-                Consider protein supplements and creatine if needed.
-                Note:
-                Consult with a healthcare provider or nutritionist to ensure this 
-                plan suits your individual health needs and goals.
-                '];
+                $desc = ['<b>Intermittent Fasting Recommendation for a Young Male Under 35 with High BMI Trying to Gain Muscle Mass</b><br>
+                Intermittent Fasting (IF) can help manage your eating schedule while focusing on muscle gain. Here is a simple approach:<br>
+                <b>16/8 Method:</b><br>
+                <b>Fasting Window:</b> Fast for 16 hours.<br>
+                <b>Eating Window:</b> Eat all meals within an 8-hour window (e.g., 12 PM to 8 PM).<br>
+                <b>Nutrient-Dense Meals:</b><br>
+                <b>Protein:</b> Include protein-rich foods like lean meats, fish, eggs, and dairy.<br>
+                <b>Healthy Fats:</b> Eat avocados, nuts, seeds, and olive oil.<br>
+                <b>Complex Carbs:</b> Focus on whole grains, fruits, and vegetables.<br>
+                <b>Pre- and Post-Workout Nutrition:</b><br>
+                Eat a balanced meal or snack before and after workouts within your eating window to support muscle growth and recovery.<br>
+                <b>Stay Hydrated:</b><br>
+                Drink water, black coffee, or tea during fasting periods.<br>
+                <b>Supplements:</b><br>
+                Consider protein supplements and creatine if needed.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider or nutritionist to ensure this plan suits your individual health needs and goals.'];
             }
             if($HighYoungFemaleLose) {
-                $desc = ['Intermittent Fasting Recommendation for a Young Male Under 
-                35 with High BMI Trying to Lose Weight
-                Intermittent Fasting (IF) can be an effective strategy for weight 
-                loss. Here is a straightforward approach:
-                16/8 Method:
-                Fasting Window: Fast for 16 hours.
-                Eating Window: Consume all meals within an 8-hour window (e.g., 
-                12 PM to 8 PM).
-                Balanced Meals:
-                Nutrient-Dense Foods: Focus on lean proteins, vegetables, whole 
-                grains, and healthy fats.
-                Portion Control: Be mindful of portion sizes to maintain a 
-                calorie deficit.
-                Stay Hydrated:
-                Drink plenty of water, black coffee, or tea during fasting periods.
-                Exercise:
-                Incorporate regular physical activity, including both cardio and 
-                strength training.
-                Note:
-                Consult with a healthcare provider to ensure this plan is safe 
-                and effective for your individual needs.'];
+                $desc = ['<b>Intermittent Fasting Recommendation for a Young Male Under 35 with High BMI Trying to Lose Weight</b><br>
+                Intermittent Fasting (IF) can be an effective strategy for weight loss. Here is a straightforward approach:<br>
+                <b>16/8 Method:</b><br>
+                <b>Fasting Window:</b> Fast for 16 hours.<br>
+                <b>Eating Window:</b> Consume all meals within an 8-hour window (e.g., 12 PM to 8 PM).<br>
+                <b>Balanced Meals:</b><br>
+                <b>Nutrient-Dense Foods:</b> Focus on lean proteins, vegetables, whole grains, and healthy fats.<br>
+                <b>Portion Control:</b> Be mindful of portion sizes to maintain a calorie deficit.<br>
+                <b>Stay Hydrated:</b><br>
+                Drink plenty of water, black coffee, or tea during fasting periods.<br>
+                <b>Exercise:</b><br>
+                Incorporate regular physical activity, including both cardio and strength training.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider to ensure this plan is safe and effective for your individual needs.'];
             }
             if($HighYoungFemaleGain) {
-                $desc = ['Intermittent Fasting Recommendation for a Young Male Under 
-                35 with High BMI Trying to Gain Muscle Mass
-                16/8 Method:
-                Fasting Window: 16 hours.
-                Eating Window: 8 hours (e.g., 12 PM to 8 PM).
-                Focus on Nutrient-Dense Meals:
-                Protein: Include sources like lean meats, fish, and protein supplements.
-                Healthy Fats: Add avocados, nuts, and olive oil.
-                Complex Carbs: Eat whole grains, fruits, and vegetables.
-                Pre- and Post-Workout Nutrition:
-                Ensure meals around workouts to support energy and recovery.
-                Hydrate:
-                Drink plenty of water, and consider black coffee or tea during fasting.
-                Note:
+                $desc = ['<b>Intermittent Fasting Recommendation for a Young Male Under 35 with High BMI Trying to Gain Muscle Mass</b><br>
+                <b>16/8 Method:</b><br>
+                <b>Fasting Window:</b> 16 hours.<br>
+                <b>Eating Window:</b> 8 hours (e.g., 12 PM to 8 PM).<br>
+                <b>Focus on Nutrient-Dense Meals:</b><br>
+                <b>Protein:</b> Include sources like lean meats, fish, and protein supplements.<br>
+                <b>Healthy Fats:</b> Add avocados, nuts, and olive oil.<br>
+                <b>Complex Carbs:</b> Eat whole grains, fruits, and vegetables.<br>
+                <b>Pre- and Post-Workout Nutrition:</b><br>
+                Ensure meals around workouts to support energy and recovery.<br>
+                <b>Hydrate:</b><br>
+                Drink plenty of water, and consider black coffee or tea during fasting.<br>
+                <b>Note:</b><br>
                 Consult a healthcare provider to tailor the plan to your specific needs.'];
             }
             // -------
             if($LowYoungMaleLose) {
-                $desc = ['Intermittent Fasting Recommendation for a Young Male Under 
-                35 with Low BMI Trying to Lose Weight
-                12/12 Method:
-                Fasting Window: 12 hours.
-                Eating Window: 12 hours (e.g., 8 AM to 8 PM).
-                Balanced Nutrition:
-                Nutrient-Dense Foods: Focus on lean proteins, healthy fats, and whole 
-                grains.
-                Maintain Energy: Ensure you are not undereating, even while creating 
-                a caloric deficit.
-                Hydrate:
-                Drink water, and black coffee or tea during fasting.
-                Monitor Health:
-                Track progress and adjust as needed. Consult a healthcare provider 
-                to ensure safety.
-                Note:
-                A cautious approach is crucial to avoid further reducing an already 
-                low BMI.'];
+                $desc = ['<b>Intermittent Fasting Recommendation for a Young Male Under 35 with Low BMI Trying to Lose Weight</b><br>
+                <b>12/12 Method:</b><br>
+                <b>Fasting Window:</b> 12 hours.<br>
+                <b>Eating Window:</b> 12 hours (e.g., 8 AM to 8 PM).<br>
+                <b>Balanced Nutrition:</b><br>
+                <b>Nutrient-Dense Foods:</b> Focus on lean proteins, healthy fats, and whole grains.<br>
+                <b>Maintain Energy:</b> Ensure you are not undereating, even while creating a caloric deficit.<br>
+                <b>Hydrate:</b><br>
+                Drink water, and black coffee or tea during fasting.<br>
+                <b>Monitor Health:</b><br>
+                Track progress and adjust as needed. Consult a healthcare provider to ensure safety.<br>
+                <b>Note:</b><br>
+                A cautious approach is crucial to avoid further reducing an already low BMI.'];
             }
             if($LowYoungMaleGain) {
-                $desc = ['Intermittent Fasting Recommendation for a Young Male Under 35 
-                with Low BMI Trying to Gain Muscle Mass
-                14/10 Method:
-                Fasting Window: 14 hours.
-                Eating Window: 10 hours (e.g., 10 AM to 8 PM).
-                High-Calorie, Nutrient-Dense Meals:
-                Protein: Include lean meats, fish, eggs, and protein shakes.
-                Healthy Fats: Add avocados, nuts, and olive oil.
-                Complex Carbs: Eat whole grains, fruits, and vegetables.
-                Pre- and Post-Workout:
-                Ensure adequate meals or snacks around workouts for energy and recovery.
-                Hydrate:
-                Drink water, and consider black coffee or tea during fasting.
-                Note:
-                Consult a healthcare provider to tailor the approach to your needs and 
-                avoid further reducing BMI.'];
+                $desc = ['<b>Intermittent Fasting Recommendation for a Young Male Under 35 with Low BMI Trying to Gain Muscle Mass</b><br>
+                <b>14/10 Method:</b><br>
+                <b>Fasting Window:</b> 14 hours.<br>
+                <b>Eating Window:</b> 10 hours (e.g., 10 AM to 8 PM).<br>
+                <b>High-Calorie, Nutrient-Dense Meals:</b><br>
+                <b>Protein:</b> Include lean meats, fish, eggs, and protein shakes.<br>
+                <b>Healthy Fats:</b> Add avocados, nuts, and olive oil.<br>
+                <b>Complex Carbs:</b> Eat whole grains, fruits, and vegetables.<br>
+                <b>Pre- and Post-Workout:</b><br>
+                Ensure adequate meals or snacks around workouts for energy and recovery.<br>
+                <b>Hydrate:</b><br>
+                Drink water, and consider black coffee or tea during fasting.<br>
+                <b>Note:</b><br>
+                Consult a healthcare provider to tailor the approach to your needs and avoid further reducing BMI.'];
             }
             if($LowYoungFemaleLose) {
-                $desc = ['Intermittent Fasting Recommendation for a Young Female Under 
-                35 with Low BMI Trying to Lose Weight
-                12/12 Method:
-                Fasting Window: 12 hours.
-                Eating Window: 12 hours (e.g., 8 AM to 8 PM).
-                Nutrient-Dense Foods:
-                Balanced Meals: Focus on lean proteins, healthy fats, and whole grains.
-                Monitor Intake: Ensure you are still meeting nutritional needs even 
-                with a caloric deficit.
-                Hydrate:
-                Drink water, and black coffee or tea during fasting.
-                Consult a Healthcare Provider:
-                Ensure that the approach is safe given your low BMI and adjust as needed.
-                Note:
+                $desc = ['<b>Intermittent Fasting Recommendation for a Young Female Under 35 with Low BMI Trying to Lose Weight</b><br>
+                <b>12/12 Method:</b><br>
+                <b>Fasting Window:</b> 12 hours.<br>
+                <b>Eating Window:</b> 12 hours (e.g., 8 AM to 8 PM).<br>
+                <b>Nutrient-Dense Foods:</b><br>
+                <b>Balanced Meals:</b> Focus on lean proteins, healthy fats, and whole grains.<br>
+                <b>Monitor Intake:</b> Ensure you are still meeting nutritional needs even with a caloric deficit.<br>
+                <b>Hydrate:</b><br>
+                Drink water, and black coffee or tea during fasting.<br>
+                <b>Consult a Healthcare Provider:</b><br>
+                Ensure that the approach is safe given your low BMI and adjust as needed.<br>
+                <b>Note:</b><br>
                 Be cautious to avoid further reducing an already low BMI.'];
             }
             if($LowYoungFemaleGain) {
-                $desc = ['Intermittent Fasting Recommendation for a Young Female Under 
-                35 with Low BMI Trying to Gain Muscle Mass
-                14/10 Method:
-                Fasting Window: 14 hours.
-                Eating Window: 10 hours (e.g., 10 AM to 8 PM).
-                High-Calorie, Nutrient-Dense Meals:
-                Protein: Include sources like lean meats, fish, eggs, and protein shakes.
-                Healthy Fats: Add avocados, nuts, and olive oil.
-                Complex Carbs: Focus on whole grains, fruits, and vegetables.
-                Pre- and Post-Workout Nutrition:
-                Ensure meals or snacks around workouts to support muscle growth
-                and recovery.
-                Hydrate:
-                Drink water, and consider black coffee or tea during fasting.
-                Note:
-                Consult a healthcare provider to ensure the approach supports muscle 
-                gain without negatively affecting your low BMI.'];
+                $desc = ['<b>Intermittent Fasting Recommendation for a Young Female Under 35 with Low BMI Trying to Gain Muscle Mass</b><br>
+                <b>14/10 Method:</b><br>
+                <b>Fasting Window:</b> 14 hours.<br>
+                <b>Eating Window:</b> 10 hours (e.g., 10 AM to 8 PM).<br>
+                <b>High-Calorie, Nutrient-Dense Meals:</b><br>
+                <b>Protein:</b> Include sources like lean meats, fish, eggs, and protein shakes.<br>
+                <b>Healthy Fats:</b> Add avocados, nuts, and olive oil.<br>
+                <b>Complex Carbs:</b> Focus on whole grains, fruits, and vegetables.<br>
+                <b>Pre- and Post-Workout Nutrition:</b><br>
+                Ensure meals or snacks around workouts to support muscle growth and recovery.<br>
+                <b>Hydrate:</b><br>
+                Drink water, and consider black coffee or tea during fasting.<br>
+                <b>Note:</b><br>
+                Consult a healthcare provider to ensure the approach supports muscle gain without negatively affecting your low BMI.'];
             }
             // --------
             if($HighOldMaleLose) {
-                $desc = ['Intermittent Fasting Recommendation for an Older Male Above 
-                35-40 with High BMI Trying to Lose Weight
-                16/8 Method:
-                Fasting Window: 16 hours.
-                Eating Window: 8 hours (e.g., 12 PM to 8 PM).
-                Balanced Nutrition:
-                Lean Proteins: Include sources like chicken, fish, and legumes.
-                Healthy Fats: Add nuts, seeds, and olive oil.
-                Complex Carbs: Focus on whole grains and vegetables.
-                Hydrate:
-                Drink plenty of water, and consider black coffee or tea during fasting.
-                Exercise:
-                Incorporate regular physical activity, including both cardio and 
-                strength training.
-                Note:
-                Consult with a healthcare provider to ensure the approach is safe 
-                and effective for your health needs.'];
+                $desc = ['<b>Intermittent Fasting Recommendation for an Older Male Above 35-40 with High BMI Trying to Lose Weight</b><br>
+                <b>16/8 Method:</b><br>
+                <b>Fasting Window:</b> 16 hours.<br>
+                <b>Eating Window:</b> 8 hours (e.g., 12 PM to 8 PM).<br>
+                <b>Balanced Nutrition:</b><br>
+                <b>Lean Proteins:</b> Include sources like chicken, fish, and legumes.<br>
+                <b>Healthy Fats:</b> Add nuts, seeds, and olive oil.<br>
+                <b>Complex Carbs:</b> Focus on whole grains and vegetables.<br>
+                <b>Hydrate:</b><br>
+                Drink plenty of water, and consider black coffee or tea during fasting.<br>
+                <b>Exercise:</b><br>
+                Incorporate regular physical activity, including both cardio and strength training.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider to ensure the approach is safe and effective for your health needs.'];
             }
             if($HighOldMaleGain) {
-                $desc = ['Intermittent Fasting Recommendation for an Older Male 
-                Above 35-40 with High BMI Trying to Gain Muscle Mass
-                16/8 Method:
-                Fasting Window: 16 hours.
-                Eating Window: 8 hours (e.g., 12 PM to 8 PM).
-                High-Calorie, Nutrient-Dense Meals:
-                Protein: Include sources like lean meats, fish, eggs, and protein shakes.
-                Healthy Fats: Add avocados, nuts, and olive oil.
-                Complex Carbs: Focus on whole grains, fruits, and vegetables.
-                Pre- and Post-Workout Nutrition:
-                Eat balanced meals or snacks around workouts for muscle support 
-                and recovery.
-                Hydrate:
-                Drink plenty of water, and consider black coffee or tea during fasting.
-                Note:
-                Consult with a healthcare provider to ensure the approach aligns 
-                with your health and muscle gain goals.'];
+                $desc = ['<b>Intermittent Fasting Recommendation for an Older Male Above 35-40 with High BMI Trying to Gain Muscle Mass</b><br>
+                <b>16/8 Method:</b><br>
+                <b>Fasting Window:</b> 16 hours.<br>
+                <b>Eating Window:</b> 8 hours (e.g., 12 PM to 8 PM).<br>
+                <b>High-Calorie, Nutrient-Dense Meals:</b><br>
+                <b>Protein:</b> Include sources like lean meats, fish, eggs, and protein shakes.<br>
+                <b>Healthy Fats:</b> Add avocados, nuts, and olive oil.<br>
+                <b>Complex Carbs:</b> Focus on whole grains, fruits, and vegetables.<br>
+                <b>Pre- and Post-Workout Nutrition:</b><br>
+                Eat balanced meals or snacks around workouts for muscle support and recovery.<br>
+                <b>Hydrate:</b><br>
+                Drink plenty of water, and consider black coffee or tea during fasting.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider to ensure the approach aligns with your health and muscle gain goals.
+                '];
             }
             if($HighOldFemaleLose) {
-                $desc = ['Intermittent Fasting Recommendation for an Older Female 
-                Above 35-40 with High BMI Trying to Lose Weight
-                16/8 Method:
-                Fasting Window: 16 hours.
-                Eating Window: 8 hours (e.g., 12 PM to 8 PM).
-                Balanced Diet:
-                Lean Proteins: Include sources like chicken, fish, and legumes.
-                Healthy Fats: Add nuts, seeds, and olive oil.
-                Complex Carbs: Focus on whole grains and vegetables.
-                Hydrate:
-                Drink plenty of water, and consider black coffee or tea during fasting.
-                Exercise:
-                Include regular physical activity, such as walking or strength training.
-                Note:
-                Consult with a healthcare provider to ensure the plan is safe and 
-                effective for your individual health needs.'];
+                $desc = ['<b>Intermittent Fasting Recommendation for an Older Female Above 35-40 with High BMI Trying to Lose Weight</b><br>
+                <b>16/8 Method:</b><br>
+                <b>Fasting Window:</b> 16 hours.<br>
+                <b>Eating Window:</b> 8 hours (e.g., 12 PM to 8 PM).<br>
+                <b>Balanced Diet:</b><br>
+                <b>Lean Proteins:</b> Include sources like chicken, fish, and legumes.<br>
+                <b>Healthy Fats:</b> Add nuts, seeds, and olive oil.<br>
+                <b>Complex Carbs:</b> Focus on whole grains and vegetables.<br>
+                <b>Hydrate:</b><br>
+                Drink plenty of water, and consider black coffee or tea during fasting.<br>
+                <b>Exercise:</b><br>
+                Include regular physical activity, such as walking or strength training.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider to ensure the plan is safe and effective for your individual health needs.
+                '];
             }
             if($HighOldFemaleGain) {
-                $desc = ['Intermittent Fasting Recommendation for an Older Female Above 
-                35-40 with High BMI Trying to Gain Muscle Mass
-                14/10 Method:
-                Fasting Window: 14 hours.
-                Eating Window: 10 hours (e.g., 10 AM to 8 PM).
-                High-Calorie, Nutrient-Dense Meals:
-                Protein: Include lean meats, fish, eggs, and protein shakes.
-                Healthy Fats: Add avocados, nuts, and olive oil.
-                Complex Carbs: Focus on whole grains, fruits, and vegetables.
-                Pre- and Post-Workout Nutrition:
-                Ensure balanced meals or snacks around workouts for muscle support and recovery.
-                Hydrate:
-                Drink plenty of water, and consider black coffee or tea during fasting.
-                Note:
-                Consult a healthcare provider to tailor the approach to your needs and 
-                ensure safety.'];
+                $desc = ['<b>Intermittent Fasting Recommendation for an Older Female Above 35-40 with High BMI Trying to Gain Muscle Mass</b><br>
+                <b>14/10 Method:</b><br>
+                <b>Fasting Window:</b> 14 hours.<br>
+                <b>Eating Window:</b> 10 hours (e.g., 10 AM to 8 PM).<br>
+                <b>High-Calorie, Nutrient-Dense Meals:</b><br>
+                <b>Protein:</b> Include lean meats, fish, eggs, and protein shakes.<br>
+                <b>Healthy Fats:</b> Add avocados, nuts, and olive oil.<br>
+                <b>Complex Carbs:</b> Focus on whole grains, fruits, and vegetables.<br>
+                <b>Pre- and Post-Workout Nutrition:</b><br>
+                Ensure balanced meals or snacks around workouts for muscle support and recovery.<br>
+                <b>Hydrate:</b><br>
+                Drink plenty of water, and consider black coffee or tea during fasting.<br>
+                <b>Note:</b><br>
+                Consult a healthcare provider to tailor the approach to your needs and ensure safety.
+                '];
             }
             // -------
             if($LowOldMaleLose) {
-                $desc = ['Intermittent Fasting Recommendation for an Older Male Above 
-                35-40 with Low BMI Trying to Lose Weight
-                12/12 Method:
-                Fasting Window: 12 hours.
-                Eating Window: 12 hours (e.g., 8 AM to 8 PM).
-                Balanced Nutrition:
-                Nutrient-Dense Foods: Focus on lean proteins, healthy fats, and 
-                complex carbs.
-                Monitor Intake: Ensure you are not undereating, even with a 
-                caloric deficit.
-                Hydrate:
-                Drink water, and consider black coffee or tea during fasting.
-                Consult a Healthcare Provider:
-                Ensure the approach is safe given your low BMI and adjust as needed.
-                Note:
-                Be cautious to avoid further reducing an already low BMI.'];
+                $desc = ['<b>Intermittent Fasting Recommendation for an Older Male Above 35-40 with Low BMI Trying to Lose Weight</b><br>
+                <b>12/12 Method:</b><br>
+                <b>Fasting Window:</b> 12 hours.<br>
+                <b>Eating Window:</b> 12 hours (e.g., 8 AM to 8 PM).<br>
+                <b>Balanced Nutrition:</b><br>
+                <b>Nutrient-Dense Foods:</b> Focus on lean proteins, healthy fats, and complex carbs.<br>
+                <b>Monitor Intake:</b> Ensure you are not undereating, even with a caloric deficit.<br>
+                <b>Hydrate:</b><br>
+                Drink water, and consider black coffee or tea during fasting.<br>
+                <b>Consult a Healthcare Provider:</b><br>
+                Ensure the approach is safe given your low BMI and adjust as needed.<br>
+                <b>Note:</b><br>
+                Be cautious to avoid further reducing an already low BMI.
+                '];
             }
             if($LowOldMaleGain) {
-                $desc = ['Intermittent Fasting Recommendation for an Older Male Above 
-                35-40 with Low BMI Trying to Gain Muscle Mass
-                14/10 Method:
-                Fasting Window: 14 hours.
-                Eating Window: 10 hours (e.g., 10 AM to 8 PM).
-                High-Calorie, Nutrient-Dense Meals:
-                Protein: Include lean meats, fish, eggs, and protein shakes.
-                Healthy Fats: Add avocados, nuts, and olive oil.
-                Complex Carbs: Focus on whole grains, fruits, and vegetables.
-                Pre- and Post-Workout Nutrition:
-                Ensure balanced meals or snacks around workouts for muscle growth
-                and recovery.
-                Hydrate:
-                Drink plenty of water, and consider black coffee or tea during fasting.
-                Note:
-                Consult a healthcare provider to ensure the approach is appropriate 
-                for your low BMI and muscle gain goals.'];
+                $desc = ['<b>Intermittent Fasting Recommendation for an Older Male Above 35-40 with Low BMI Trying to Gain Muscle Mass</b><br>
+                <b>14/10 Method:</b><br>
+                <b>Fasting Window:</b> 14 hours.<br>
+                <b>Eating Window:</b> 10 hours (e.g., 10 AM to 8 PM).<br>
+                <b>High-Calorie, Nutrient-Dense Meals:</b><br>
+                <b>Protein:</b> Include lean meats, fish, eggs, and protein shakes.<br>
+                <b>Healthy Fats:</b> Add avocados, nuts, and olive oil.<br>
+                <b>Complex Carbs:</b> Focus on whole grains, fruits, and vegetables.<br>
+                <b>Pre- and Post-Workout Nutrition:</b><br>
+                Ensure balanced meals or snacks around workouts for muscle growth and recovery.<br>
+                <b>Hydrate:</b><br>
+                Drink plenty of water, and consider black coffee or tea during fasting.<br>
+                <b>Note:</b><br>
+                Consult a healthcare provider to ensure the approach is appropriate for your low BMI and muscle gain goals.
+                '];
             }
             if($LowOldFemaleLose) {
-                $desc = ['Intermittent Fasting Recommendation for an Older Female Above 
-                35-40 with Low BMI Trying to Lose Weight
-                12/12 Method:
-                Fasting Window: 12 hours.
-                Eating Window: 12 hours (e.g., 8 AM to 8 PM).
-                Balanced Diet:
-                Nutrient-Dense Foods: Focus on lean proteins, healthy fats, and 
-                complex carbs.
-                Monitor Intake: Ensure you are meeting nutritional needs while 
-                maintaining a slight caloric deficit.
-                Hydrate:
-                Drink water, and consider black coffee or tea during fasting.
-                Consult a Healthcare Provider:
-                Ensure the approach is safe and appropriate for your low BMI and 
-                health status.
-                Note:
-                Be cautious to avoid further reducing your already low BMI.'];
+                $desc = ['<b>Intermittent Fasting Recommendation for an Older Female Above 35-40 with Low BMI Trying to Lose Weight</b><br>
+                <b>12/12 Method:</b><br>
+                <b>Fasting Window:</b> 12 hours.<br>
+                <b>Eating Window:</b> 12 hours (e.g., 8 AM to 8 PM).<br>
+                <b>Balanced Diet:</b><br>
+                <b>Nutrient-Dense Foods:</b> Focus on lean proteins, healthy fats, and complex carbs.<br>
+                <b>Monitor Intake:</b> Ensure you are meeting nutritional needs while maintaining a slight caloric deficit.<br>
+                <b>Hydrate:</b><br>
+                Drink water, and consider black coffee or tea during fasting.<br>
+                <b>Consult a Healthcare Provider:</b><br>
+                Ensure the approach is safe and appropriate for your low BMI and health status.<br>
+                <b>Note:</b><br>
+                Be cautious to avoid further reducing your already low BMI.
+                '];
             }
             if($LowOldFemaleGain) {
-                $desc = ['Daily Intermittent Fasting Recommendation for an Older 
-                Female Above 35-40 with Low BMI Trying to Gain Muscle Mass
-                14/10 Method:
-                Fasting Window: 14 hours.
-                Eating Window: 10 hours (e.g., 10 AM to 8 PM).
-                High-Calorie, Nutrient-Dense Meals:
-                Protein: Include sources like lean meats, fish, eggs, and protein shakes.
-                Healthy Fats: Add avocados, nuts, and olive oil.
-                Complex Carbs: Focus on whole grains, fruits, and vegetables.
-                Pre- and Post-Workout Nutrition:
-                Ensure balanced meals or snacks around workouts for muscle growth and 
-                recovery.
-                Hydrate:
-                Drink plenty of water, and consider black coffee or tea during fasting.
-                Note:
-                Consult with a healthcare provider to ensure the approach supports 
-                muscle gain without negatively impacting your low BMI.'];
+                $desc = ['<b>Daily Intermittent Fasting Recommendation for an Older Female Above 35-40 with Low BMI Trying to Gain Muscle Mass</b><br>
+                <b>14/10 Method:</b><br>
+                <b>Fasting Window:</b> 14 hours.<br>
+                <b>Eating Window:</b> 10 hours (e.g., 10 AM to 8 PM).<br>
+                <b>High-Calorie, Nutrient-Dense Meals:</b><br>
+                <b>Protein:</b> Include sources like lean meats, fish, eggs, and protein shakes.<br>
+                <b>Healthy Fats:</b> Add avocados, nuts, and olive oil.<br>
+                <b>Complex Carbs:</b> Focus on whole grains, fruits, and vegetables.<br>
+                <b>Pre- and Post-Workout Nutrition:</b><br>
+                Ensure balanced meals or snacks around workouts for muscle growth and recovery.<br>
+                <b>Hydrate:</b><br>
+                Drink plenty of water, and consider black coffee or tea during fasting.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider to ensure the approach supports muscle gain without negatively impacting your low BMI.
+                '];
             }
         }
     } elseif($contextFlag == "Cal") {
@@ -1572,269 +1492,210 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             $desc = [$dbOutRow['descCal']];
         } else { 
             if($HighYoungMaleLose) {
-                $desc = ['Caloric Intake Recommendation for a Young Male Under 35 with 
-                High BMI Trying to Lose Weight
-                Calculate Daily Caloric Needs: Determine your Total Daily Energy 
-                Expenditure (TDEE) using an online calculator or formula.
-                Create a Caloric Deficit: Aim to consume 500-750 calories less than 
-                your TDEE to lose weight at a healthy rate of about 1-1.5 pounds per week.
-                Monitor and Adjust: Track your weight loss progress and adjust your 
-                calorie intake as needed based on your results and goals.
-                Note:
-                Consulting with a healthcare provider or nutritionist for personalized 
-                advice is recommended.'];
+                $desc = ['Caloric Intake Recommendation for a <b>Young Male Under 35 with High BMI Trying to Lose Weight</b><br>
+                <b>Calculate Daily Caloric Needs:</b> Determine your Total Daily Energy Expenditure (TDEE) using an online calculator or formula.<br>
+                <b>Create a Caloric Deficit:</b> Aim to consume 500-750 calories less than your TDEE to lose weight at a healthy rate of about 1-1.5 pounds per week.<br>
+                <b>Monitor and Adjust:</b> Track your weight loss progress and adjust your calorie intake as needed based on your results and goals.<br>
+                <b>Note:</b><br>
+                Consulting with a healthcare provider or nutritionist for personalized advice is recommended.'];
             }
             if($HighYoungMaleGain) {
-                $desc = ['Caloric Intake Recommendation for a Young Male Under 35 with 
-                High BMI Trying to Gain Muscle Mass
-                Caloric Surplus:
-                Target: Consume 250-500 calories above your maintenance level to 
-                support muscle growth.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and dairy.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Add sources like avocados, nuts, and olive oil.
-                Monitor and Adjust:
-                Track progress and adjust intake as needed to continue gaining 
-                muscle without excessive fat gain.
-                Note:
-                Consult with a healthcare provider or nutritionist for personalized 
-                advice.'];
+                $desc = ['Caloric Intake Recommendation for a <b>Young Male Under 35 with High BMI Trying to Gain Muscle Mass</b><br>
+                <b>Caloric Surplus:</b><br>
+                Target: Consume 250-500 calories above your maintenance level to support muscle growth.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and dairy.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Add sources like avocados, nuts, and olive oil.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track progress and adjust intake as needed to continue gaining muscle without excessive fat gain.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider or nutritionist for personalized advice.'];
             }
             if($HighYoungFemaleLose) {
-                $desc = ['Caloric Intake Recommendation for a Young Female Under 35 with 
-                High BMI Trying to Lose Weight
-                Caloric Deficit:
-                Target: Consume 500-750 calories below your maintenance level to 
-                promote steady weight loss.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and legumes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Include healthy fats like avocados, nuts, and olive oil in 
-                moderation.
-                Monitor and Adjust:
-                Track weight loss progress and adjust caloric intake as needed.
-                Note:
-                Consult with a healthcare provider or nutritionist to ensure the 
-                approach is appropriate for your specific needs.'];
+                $desc = ['Caloric Intake Recommendation for a <b>Young Female Under 35 with High BMI Trying to Lose Weight</b><br>
+                <b>Caloric Deficit:</b><br>
+                Target: Consume 500-750 calories below your maintenance level to promote steady weight loss.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and legumes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Include healthy fats like avocados, nuts, and olive oil in moderation.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track weight loss progress and adjust caloric intake as needed.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider or nutritionist to ensure the approach is appropriate for your specific needs.'];
             }
             if($HighYoungFemaleGain) {
-                $desc = ['Caloric Intake Recommendation for a Young Female Under 35 with 
-                High BMI Trying to Gain Muscle Mass
-                Caloric Surplus:
-                Target: Consume 250-500 calories above your maintenance level to 
-                support muscle growth.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and protein shakes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Add sources like avocados, nuts, and olive oil.
-                Monitor and Adjust:
-                Track muscle gain and adjust caloric intake as needed to continue 
-                building muscle without excessive fat gain.
-                Note:
-                Consult with a healthcare provider or nutritionist for personalized 
-                guidance.'];
+                $desc = ['Caloric Intake Recommendation for a <b>Young Female Under 35 with High BMI Trying to Gain Muscle Mass</b><br>
+                <b>Caloric Surplus:</b><br>
+                Target: Consume 250-500 calories above your maintenance level to support muscle growth.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and protein shakes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Add sources like avocados, nuts, and olive oil.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track muscle gain and adjust caloric intake as needed to continue building muscle without excessive fat gain.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider or nutritionist for personalized guidance.'];
             }
             // -------
             if($LowYoungMaleLose) {
-                $desc = ['Caloric Intake Recommendation for a Young Male Under 35 with 
-                Low BMI Trying to Lose Weight
-                Caloric Deficit:
-                Target: Consume 250-500 calories below your maintenance level to 
-                promote weight loss without compromising overall health.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and legumes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Include healthy fats like avocados, nuts, and olive oil in 
-                moderation.
-                Monitor and Adjust:
-                Track weight loss progress and adjust caloric intake as needed.
-                Note:
-                Consult with a healthcare provider to ensure the approach is 
-                appropriate given your low BMI.'];
+                $desc = ['Caloric Intake Recommendation for a <b>Young Male Under 35 with Low BMI Trying to Lose Weight</b><br>
+                <b>Caloric Deficit:</b><br>
+                Target: Consume 250-500 calories below your maintenance level to promote weight loss without compromising overall health.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and legumes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Include healthy fats like avocados, nuts, and olive oil in moderation.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track weight loss progress and adjust caloric intake as needed.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider to ensure the approach is appropriate given your low BMI.'];
             }
             if($LowYoungMaleGain) {
-                $desc = ['Caloric Intake Recommendation for a Young Male Under 35 with 
-                Low BMI Trying to Gain Muscle Mass
-                Caloric Surplus:
-                Target: Consume 250-500 calories above your maintenance level to 
-                support muscle growth.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and protein shakes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Add sources like avocados, nuts, and olive oil.
-                Monitor and Adjust:
-                Track muscle gain progress and adjust caloric intake as needed to 
-                continue building muscle without excessive fat gain.
-                Note:
-                Consult with a healthcare provider or nutritionist for personalized 
-                guidance.'];
+                $desc = ['Caloric Intake Recommendation for a <b>Young Male Under 35 with Low BMI Trying to Gain Muscle Mass</b><br>
+                <b>Caloric Surplus:</b><br>
+                Target: Consume 250-500 calories above your maintenance level to support muscle growth.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and protein shakes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Add sources like avocados, nuts, and olive oil.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track muscle gain progress and adjust caloric intake as needed to continue building muscle without excessive fat gain.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider or nutritionist for personalized guidance.'];
             }
             if($LowYoungFemaleLose) {
-                $desc = ['Caloric Intake Recommendation for a Young Female Under 35 with Low BMI 
-                Trying to Lose Weight
-                Moderate Caloric Deficit:
-                Target: Consume 250-500 calories below your maintenance level to 
-                promote weight loss while ensuring you get enough nutrients.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and legumes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Include healthy fats like avocados, nuts, and olive oil in 
-                moderation.
-                Monitor and Adjust:
-                Track weight loss progress and adjust caloric intake as needed.
-                Note:
-                Consult with a healthcare provider to ensure the approach is 
-                safe and appropriate given your low BMI.'];
+                $desc = ['Caloric Intake Recommendation for a <b>Young Female Under 35 with Low BMI Trying to Lose Weight</b><br>
+                <b>Moderate Caloric Deficit:</b><br>
+                Target: Consume 250-500 calories below your maintenance level to promote weight loss while ensuring you get enough nutrients.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and legumes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Include healthy fats like avocados, nuts, and olive oil in moderation.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track weight loss progress and adjust caloric intake as needed.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider to ensure the approach is safe and appropriate given your low BMI.'];
             }
             if($LowYoungFemaleGain) {
-                $desc = ['Caloric Intake Recommendation for a Young Female Under 35 
-                with Low BMI Trying to Gain Muscle Mass
-                Caloric Surplus:
-                Target: Consume 250-500 calories above your maintenance level to 
-                support muscle growth.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and protein shakes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Add sources like avocados, nuts, and olive oil.
-                Monitor and Adjust:
-                Track muscle gain progress and adjust caloric intake as needed.
-                Note:
-                Consult with a healthcare provider or nutritionist for personalized 
-                guidance.'];
+                $desc = ['Caloric Intake Recommendation for a <b>Young Female Under 35 with Low BMI Trying to Gain Muscle Mass</b><br>
+                <b>Caloric Surplus:</b><br>
+                Target: Consume 250-500 calories above your maintenance level to support muscle growth.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and protein shakes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Add sources like avocados, nuts, and olive oil.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track muscle gain progress and adjust caloric intake as needed.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider or nutritionist for personalized guidance.'];
             }
             // -------
             if($HighOldMaleLose) {
-                $desc = ['Caloric Intake Recommendation for an Older Male Above 35-40 
-                with High BMI Trying to Lose Weight
-                Caloric Deficit:
-                Target: Consume 500-750 calories below your maintenance level to 
-                promote steady weight loss.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and legumes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Include healthy fats like avocados, nuts, and olive oil in 
-                moderation.
-                Monitor and Adjust:
-                Track weight loss progress and adjust caloric intake as needed.
-                Note:
-                Consult with a healthcare provider or nutritionist to ensure the 
-                approach is appropriate for your specific needs and health status.'];
+                $desc = ['Caloric Intake Recommendation for an <b>Older Male Above 35-40 with High BMI Trying to Lose Weight</b><br>
+                <b>Caloric Deficit:</b><br>
+                Target: Consume 500-750 calories below your maintenance level to promote steady weight loss.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and legumes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Include healthy fats like avocados, nuts, and olive oil in moderation.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track weight loss progress and adjust caloric intake as needed.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider or nutritionist to ensure the approach is appropriate for your specific needs and health status.'];
             }
             if($HighOldMaleGain) {
-                $desc = ['Caloric Intake Recommendation for an Older Male Above 35-40 
-                with High BMI Trying to Gain Muscle Mass
-                Caloric Surplus:
-                Target: Consume 250-500 calories above your maintenance level to 
-                support muscle growth.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and protein shakes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Add sources like avocados, nuts, and olive oil.
-                Monitor and Adjust:
-                Track muscle gain progress and adjust caloric intake as needed 
-                to ensure healthy muscle development without excessive fat gain.
-                Note:
-                Consult with a healthcare provider or nutritionist for personalized 
-                guidance.'];
+                $desc = ['Caloric Intake Recommendation for an <b>Older Male Above 35-40 with High BMI Trying to Gain Muscle Mass</b><br>
+                <b>Caloric Surplus:</b><br>
+                Target: Consume 250-500 calories above your maintenance level to support muscle growth.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and protein shakes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Add sources like avocados, nuts, and olive oil.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track muscle gain progress and adjust caloric intake as needed to ensure healthy muscle development without excessive fat gain.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider or nutritionist for personalized guidance.'];
             }
             if($HighOldFemaleLose) {
-                $desc = ['Caloric Intake Recommendation for an Older Female Above 35-40 
-                with High BMI Trying to Lose Weight
-                Caloric Deficit:
-                Target: Consume 500-750 calories below your maintenance level to 
-                promote steady weight loss.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and legumes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Include healthy fats like avocados, nuts, and olive oil in moderation.
-                Monitor and Adjust:
-                Track weight loss progress and adjust caloric intake as needed.
-                Note:
-                Consult with a healthcare provider or nutritionist to ensure the approach is 
-                appropriate for your specific needs and health status.'];
+                $desc = ['Caloric Intake Recommendation for an <b>Older Female Above 35-40 with High BMI Trying to Lose Weight</b><br>
+                <b>Caloric Deficit:</b><br>
+                Target: Consume 500-750 calories below your maintenance level to promote steady weight loss.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and legumes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Include healthy fats like avocados, nuts, and olive oil in moderation.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track weight loss progress and adjust caloric intake as needed.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider or nutritionist to ensure the approach is appropriate for your specific needs and health status.'];
             }
             if($HighOldFemaleGain) {
-                $desc = ['Caloric Intake Recommendation for an Older Female Above 35-40 
-                with High BMI Trying to Gain Muscle Mass
-                Caloric Surplus:
-                Target: Consume 250-500 calories above your maintenance level to 
-                support muscle growth.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and protein shakes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Add sources like avocados, nuts, and olive oil.
-                Monitor and Adjust:
-                Track muscle gain progress and adjust caloric intake as needed to 
-                ensure healthy muscle development without excessive fat gain.
-                Note:
+                $desc = ['Caloric Intake Recommendation for an <b>Older Female Above 35-40 with High BMI Trying to Gain Muscle Mass</b><br>
+                <b>Caloric Surplus:</b><br>
+                Target: Consume 250-500 calories above your maintenance level to support muscle growth.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and protein shakes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Add sources like avocados, nuts, and olive oil.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track muscle gain progress and adjust caloric intake as needed to ensure healthy muscle development without excessive fat gain.<br>
+                <b>Note:</b><br>
                 Consult with a healthcare provider or nutritionist for personalized guidance.'];
             }
             // -------
             if($LowOldMaleLose) {
-                $desc = ['Caloric Intake Recommendation for an Older Male Above 35-40 
-                with Low BMI Trying to Lose Weight
-                Moderate Caloric Deficit:
-                Target: Consume 250-500 calories below your maintenance level to 
-                promote weight loss while ensuring you get enough nutrients.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and legumes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Include healthy fats like avocados, nuts, and olive oil in 
-                moderation.
-                Monitor and Adjust:
-                Track weight loss progress and adjust caloric intake as needed.
-                Note:
-                Consult with a healthcare provider to ensure the approach is safe 
-                and appropriate given your low BMI.'];
+                $desc = ['Caloric Intake Recommendation for an <b>Older Male Above 35-40 with Low BMI Trying to Lose Weight</b><br>
+                <b>Moderate Caloric Deficit:</b><br>
+                Target: Consume 250-500 calories below your maintenance level to promote weight loss while ensuring you get enough nutrients.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and legumes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Include healthy fats like avocados, nuts, and olive oil in moderation.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track weight loss progress and adjust caloric intake as needed.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider to ensure the approach is safe and appropriate given your low BMI.'];
             }
             if($LowOldMaleGain) {
-                $desc = ['Caloric Intake Recommendation for an Older Male Above 35-40 
-                with Low BMI Trying to Gain Muscle Mass
-                Caloric Surplus:
-                Target: Consume 250-500 calories above your maintenance level to 
-                support muscle growth.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and protein shakes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Add sources like avocados, nuts, and olive oil.
-                Monitor and Adjust:
-                Track muscle gain progress and adjust caloric intake as needed.
-                Note:
-                Consult with a healthcare provider or nutritionist for personalized 
-                advice to ensure safe and effective muscle gain.'];
+                $desc = ['Caloric Intake Recommendation for an <b>Older Male Above 35-40 with Low BMI Trying to Gain Muscle Mass</b><br>
+                <b>Caloric Surplus:</b><br>
+                Target: Consume 250-500 calories above your maintenance level to support muscle growth.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and protein shakes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Add sources like avocados, nuts, and olive oil.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track muscle gain progress and adjust caloric intake as needed.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider or nutritionist for personalized advice to ensure safe and effective muscle gain.'];
             }
             if($LowOldFemaleLose) {
-                $desc = ['Caloric Intake Recommendation for an Older Female Above 35-40 
-                with Low BMI Trying to Lose Weight
-                Moderate Caloric Deficit:
-                Target: Consume 250-500 calories below your maintenance level to promote 
-                weight loss without compromising health.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and legumes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Include healthy fats like avocados, nuts, and olive oil in moderation.
-                Monitor and Adjust:
-                Track weight loss progress and adjust caloric intake as needed.
-                Note:
-                Consult with a healthcare provider to ensure the approach is safe given your 
-                low BMI.'];
+                $desc = ['Caloric Intake Recommendation for an <b>Older Female Above 35-40 with Low BMI Trying to Lose Weight</b><br>
+                <b>Moderate Caloric Deficit:</b><br>
+                Target: Consume 250-500 calories below your maintenance level to promote weight loss without compromising health.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and legumes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Include healthy fats like avocados, nuts, and olive oil in moderation.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track weight loss progress and adjust caloric intake as needed.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider to ensure the approach is safe given your low BMI.'];
             }
             if($LowOldFemaleGain) {
-                $desc = ['Caloric Intake Recommendation for an Older Female Above 
-                35-40 with Low BMI Trying to Gain Muscle Mass
-                Caloric Surplus:
-                Target: Consume 250-500 calories above your maintenance level to 
-                support muscle growth.
-                Focus on Nutrient-Dense Foods:
-                Proteins: Include lean meats, fish, eggs, and protein shakes.
-                Carbohydrates: Eat whole grains, fruits, and vegetables.
-                Fats: Add sources like avocados, nuts, and olive oil.
-                Monitor and Adjust:
-                Track muscle gain progress and adjust caloric intake as needed.
-                Note:
-                Consult with a healthcare provider or nutritionist for personalized 
-                advice to ensure safe and effective muscle gain.'];
+                $desc = ['Caloric Intake Recommendation for an <b>Older Female Above 35-40 with Low BMI Trying to Gain Muscle Mass</b><br>
+                <b>Caloric Surplus:</b><br>
+                Target: Consume 250-500 calories above your maintenance level to support muscle growth.<br>
+                <b>Focus on Nutrient-Dense Foods:</b><br>
+                Proteins: Include lean meats, fish, eggs, and protein shakes.<br>
+                Carbohydrates: Eat whole grains, fruits, and vegetables.<br>
+                Fats: Add sources like avocados, nuts, and olive oil.<br>
+                <b>Monitor and Adjust:</b><br>
+                Track muscle gain progress and adjust caloric intake as needed.<br>
+                <b>Note:</b><br>
+                Consult with a healthcare provider or nutritionist for personalized advice to ensure safe and effective muscle gain.'];
             }
         }
     } elseif($contextFlag == "Macro") {
@@ -1842,169 +1703,125 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             $desc = [$dbOutRow['descMacro']];
         } else { 
             if($HighYoungMaleLose) {
-                $desc = ['Macronutrient Recommendations for a Young Male Under 35 with 
-                High BMI Trying to Lose Weight
-                Protein: Aim for 25-30% of total daily calories from protein to support 
-                muscle maintenance and satiety. Sources include lean meats, fish, 
-                eggs, and legumes.
-                Fats: Target 20-35% of daily calories from healthy fats. Include 
-                avocados, nuts, seeds, and olive oil.
-                Carbohydrates: Make up the remaining 45-55% of daily calories with 
-                complex carbohydrates such as whole grains, vegetables, and fruits.
-                Note:
-                Adjust these ratios based on personal progress and dietary preferences. 
-                Consulting with a nutritionist can provide tailored guidance.'];
+                $desc = ['Macronutrient Recommendations for a <b>Young Male Under 35 with High BMI Trying to Lose Weight</b><br>
+                <b>Protein:</b> Aim for 25-30% of total daily calories from protein to support muscle maintenance and satiety. Sources include lean meats, fish, eggs, and legumes.<br>
+                <b>Fats:</b> Target 20-35% of daily calories from healthy fats. Include avocados, nuts, seeds, and olive oil.<br>
+                <b>Carbohydrates:</b> Make up the remaining 45-55% of daily calories with complex carbohydrates such as whole grains, vegetables, and fruits.<br>
+                <b>Note:</b> Adjust these ratios based on personal progress and dietary preferences. Consulting with a nutritionist can provide tailored guidance.'];
             }
             if($HighYoungMaleGain) {
-                $desc = ['Macronutrient Percentage Recommendations Including Fiber for a 
-                Young Male Under 35 with High BMI Trying to Gain Muscle Mass
-                Proteins: 25-30% of total daily calories
-                Carbohydrates: 45-55% of total daily calories
-                Fiber: Aim for 25-38 grams per day within the carbohydrate intake.
-                Fats: 20-30% of total daily calories
-                Note:
-                Adjust based on individual progress and specific needs.'];
+                $desc = ['Macronutrient Percentage Recommendations Including Fiber for a <b>Young Male Under 35 with High BMI Trying to Gain Muscle Mass</b><br>
+                <b>Proteins:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 45-55% of total daily calories<br>
+                <b>Fiber:</b> Aim for 25-38 grams per day within the carbohydrate intake<br>
+                <b>Fats:</b> 20-30% of total daily calories<br>
+                <b>Note:</b> Adjust based on individual progress and specific needs.'];
             }
             if($HighYoungFemaleLose) {
-                $desc = ['Macronutrient Percentage Recommendations Including Fiber 
-                for a Young Female Under 35 with High BMI Trying to Lose Weight
-                Proteins: 25-30% of total daily calories
-                Carbohydrates: 40-50% of total daily calories
-                Fiber: Aim for 21-25 grams per day within the carbohydrate intake.
-                Fats: 25-30% of total daily calories
-                Note:
-                Adjust based on individual progress and specific needs.'];
+                $desc = ['Macronutrient Percentage Recommendations Including Fiber for a <b>Young Female Under 35 with High BMI Trying to Lose Weight</b><br>
+                <b>Proteins:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 40-50% of total daily calories<br>
+                <b>Fiber:</b> Aim for 21-25 grams per day within the carbohydrate intake<br>
+                <b>Fats:</b> 25-30% of total daily calories<br>
+                <b>Note:</b> Adjust based on individual progress and specific needs.'];
             }
             if($HighYoungFemaleGain) {
-                $desc = ['Macronutrient Percentage Recommendations Including Fiber 
-                for a Young Female Under 35 with High BMI Trying to Gain Muscle Mass
-                Proteins: 25-30% of total daily calories
-                Carbohydrates: 45-55% of total daily calories
-                Fiber: Aim for 21-25 grams per day within the carbohydrate intake.
-                Fats: 20-30% of total daily calories
-                Note:
-                Adjust based on progress and individual needs.'];
+                $desc = ['Macronutrient Percentage Recommendations Including Fiber for a <b>Young Female Under 35 with High BMI Trying to Gain Muscle Mass</b><br>
+                <b>Proteins:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 45-55% of total daily calories<br>
+                <b>Fiber:</b> Aim for 21-25 grams per day within the carbohydrate intake<br>
+                <b>Fats:</b> 20-30% of total daily calories<br>
+                <b>Note:</b> Adjust based on progress and individual needs.'];
             }
             // -------
             if($LowYoungMaleLose) {
-                $desc = ['Macronutrient Percentage Recommendations Including Fiber 
-                for a Young Male Under 35 with Low BMI Trying to Lose Weight
-                Proteins: 30-35% of total daily calories
-                Carbohydrates: 35-45% of total daily calories
-                Fiber: Aim for 30-38 grams per day within the carbohydrate intake.
-                Fats: 25-30% of total daily calories
-                Note:
-                Adjust based on progress and individual needs.'];
+                $desc = ['Macronutrient Percentage Recommendations Including Fiber for a <b>Young Male Under 35 with Low BMI Trying to Lose Weight</b><br>
+                <b>Proteins:</b> 30-35% of total daily calories<br>
+                <b>Carbohydrates:</b> 35-45% of total daily calories<br>
+                <b>Fiber:</b> Aim for 30-38 grams per day within the carbohydrate intake<br>
+                <b>Fats:</b> 25-30% of total daily calories<br>
+                <b>Note:</b> Adjust based on progress and individual needs.'];
             }
             if($LowYoungMaleGain) {
-                $desc = ['Macronutrient Percentage Recommendations Including Fiber 
-                for a Young Male Under 35 with Low BMI Trying to Gain Weight
-                Proteins: 25-30% of total daily calories
-                Carbohydrates: 50-60% of total daily calories
-                Fiber: Aim for 30-38 grams per day within the carbohydrate intake.
-                Fats: 20-30% of total daily calories
-                Note:
-                Adjust based on progress and individual needs.'];
+                $desc = ['Macronutrient Percentage Recommendations Including Fiber for a <b>Young Male Under 35 with Low BMI Trying to Gain Weight</b><br>
+                <b>Proteins:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 50-60% of total daily calories<br>
+                <b>Fiber:</b> Aim for 30-38 grams per day within the carbohydrate intake<br>
+                <b>Fats:</b> 20-30% of total daily calories<br>
+                <b>Note:</b> Adjust based on progress and individual needs.'];
             }
             if($LowYoungFemaleLose) {
-                $desc = ['Macronutrient Percentage Recommendations Including 
-                Fiber for a Young Female Under 35 with Low BMI Trying to Lose Weight
-                Proteins: 30-35% of total daily calories
-                Carbohydrates: 40-50% of total daily calories
-                Fiber: Aim for 21-25 grams per day within the carbohydrate intake.
-                Fats: 20-30% of total daily calories
-                Note:
-                Adjust based on progress and individual needs.'];
+                $desc = ['Macronutrient Percentage Recommendations Including Fiber for a <b>Young Female Under 35 with Low BMI Trying to Lose Weight</b><br>
+                <b>Proteins:</b> 30-35% of total daily calories<br>
+                <b>Carbohydrates:</b> 40-50% of total daily calories<br>
+                <b>Fiber:</b> Aim for 21-25 grams per day within the carbohydrate intake<br>
+                <b>Fats:</b> 20-30% of total daily calories<br>
+                <b>Note:</b> Adjust based on progress and individual needs.'];
             }
             if($LowYoungFemaleGain) {
-                $desc = ['For a young female under 35 with a low BMI aiming to gain 
-                muscle mass, here are some concise macronutrient percentage recommendations, including fiber:
-                Protein: 25-30% of total daily calories
-                Carbohydrates: 45-50% of total daily calories (ensure these include complex carbs and fiber)
-                Fats: 20-25% of total daily calories
-                Fiber: Aim for 25-30 grams per day'];
+                $desc = ['For a <b>young female under 35 with a low BMI aiming to gain muscle mass</b>, here are some concise macronutrient percentage recommendations, including fiber:<br>
+                <b>Protein:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 45-50% of total daily calories (ensure these include complex carbs and fiber)<br>
+                <b>Fats:</b> 20-25% of total daily calories<br>
+                <b>Fiber:</b> Aim for 25-30 grams per day'];
             }
             // -------
             if($HighOldMaleLose) {
-                $desc = ['For an older male (over 35-40) with a high BMI aiming to 
-                lose weight, here are some concise macronutrient percentage 
-                recommendations, including fiber:
-                Protein: 25-30% of total daily calories
-                Carbohydrates: 35-40% of total daily calories (focus on high-fiber, 
-                low-glycemic carbs)
-                Fats: 30-35% of total daily calories (prioritize healthy fats)
-                Fiber: Aim for 30-35 grams per day'];
+                $desc = ['For an <b>older male (over 35-40) with a high BMI aiming to lose weight</b>, here are some concise macronutrient percentage recommendations, including fiber:<br>
+                <b>Protein:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 35-40% of total daily calories (focus on high-fiber, low-glycemic carbs)<br>
+                <b>Fats:</b> 30-35% of total daily calories (prioritize healthy fats)<br>
+                <b>Fiber:</b> Aim for 30-35 grams per day'];
             }
             if($HighOldMaleGain) {
-                $desc = ['For an older male (over 35-40) with a high BMI aiming to gain 
-                muscle mass, here are some 
-                concise macronutrient percentage recommendations, including fiber:
-                Protein: 25-30% of total daily calories
-                Carbohydrates: 40-45% of total daily calories (focus on complex carbs 
-                with adequate fiber)
-                Fats: 25-30% of total daily calories (include healthy fats)
-                Fiber: Aim for 30-35 grams per day'];
+                $desc = ['For an <b>older male (over 35-40) with a high BMI aiming to gain muscle mass</b>, here are some concise macronutrient percentage recommendations, including fiber:<br>
+                <b>Protein:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 40-45% of total daily calories (focus on complex carbs with adequate fiber)<br>
+                <b>Fats:</b> 25-30% of total daily calories (include healthy fats)<br>
+                <b>Fiber:</b> Aim for 30-35 grams per day'];
             }
             if($HighOldFemaleLose) {
-                $desc = ['For an older female (over 35-40) with a high BMI aiming 
-                to lose weight, here are some concise macronutrient percentage 
-                recommendations, including fiber:
-                Protein: 25-30% of total daily calories
-                Carbohydrates: 35-40% of total daily calories (focus on high-fiber, 
-                low-glycemic carbs)
-                Fats: 30-35% of total daily calories (prioritize healthy fats)
-                Fiber: Aim for 25-30 grams per day'];
+                $desc = ['For an <b>older female (over 35-40) with a high BMI aiming to lose weight</b>, here are some concise macronutrient percentage recommendations, including fiber:<br>
+                <b>Protein:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 35-40% of total daily calories (focus on high-fiber, low-glycemic carbs)<br>
+                <b>Fats:</b> 30-35% of total daily calories (prioritize healthy fats)<br>
+                <b>Fiber:</b> Aim for 25-30 grams per day'];
             }
             if($HighOldFemaleGain) {
-                $desc = ['For an older female (over 35-40) with a high BMI aiming 
-                to gain muscle mass, here are some concise macronutrient percentage 
-                recommendations, including fiber:
-                Protein: 25-30% of total daily calories
-                Carbohydrates: 40-45% of total daily calories (focus on complex 
-                carbs with adequate fiber)
-                Fats: 25-30% of total daily calories (include healthy fats)
-                Fiber: Aim for 25-30 grams per day'];
+                $desc = ['For an <b>older female (over 35-40) with a high BMI aiming to gain muscle mass</b>, here are some concise macronutrient percentage recommendations, including fiber:<br>
+                <b>Protein:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 40-45% of total daily calories (focus on complex carbs with adequate fiber)<br>
+                <b>Fats:</b> 25-30% of total daily calories (include healthy fats)<br>
+                <b>Fiber:</b> Aim for 25-30 grams per day'];
             }
             // -------
             if($LowOldMaleLose) {
-                $desc = ['For an older male (over 35-40) with a low BMI aiming 
-                to lose weight, here are some concise macronutrient percentage 
-                recommendations, including fiber:
-                Protein: 25-30% of total daily calories
-                Carbohydrates: 40-45% of total daily calories (focus on high-fiber, 
-                low-glycemic carbs)
-                Fats: 25-30% of total daily calories (prioritize healthy fats)
-                Fiber: Aim for 25-30 grams per day'];
+                $desc = ['For an <b>older male (over 35-40) with a low BMI aiming to lose weight</b>, here are some concise macronutrient percentage recommendations, including fiber:<br>
+                <b>Protein:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 40-45% of total daily calories (focus on high-fiber, low-glycemic carbs)<br>
+                <b>Fats:</b> 25-30% of total daily calories (prioritize healthy fats)<br>
+                <b>Fiber:</b> Aim for 25-30 grams per day'];
             }
             if($LowOldMaleGain) {
-                $desc = ['For an older male (over 35-40) with a low BMI aiming 
-                to gain muscle mass, here are some concise macronutrient 
-                percentage recommendations, including fiber:
-                Protein: 25-30% of total daily calories
-                Carbohydrates: 45-50% of total daily calories (focus on 
-                complex carbs with adequate fiber)
-                Fats: 20-25% of total daily calories (include healthy fats)
-                Fiber: Aim for 25-30 grams per day'];
+                $desc = ['For an <b>older male (over 35-40) with a low BMI aiming to gain muscle mass</b>, here are some concise macronutrient percentage recommendations, including fiber:<br>
+                <b>Protein:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 45-50% of total daily calories (focus on complex carbs with adequate fiber)<br>
+                <b>Fats:</b> 20-25% of total daily calories (include healthy fats)<br>
+                <b>Fiber:</b> Aim for 25-30 grams per day'];
             }
             if($LowOldFemaleLose) {
-                $desc = ['For an older female (over 35-40) with a low BMI aiming 
-                to lose weight, here are some concise macronutrient percentage 
-                recommendations, including fiber:
-                Protein: 25-30% of total daily calories
-                Carbohydrates: 35-40% of total daily calories (focus on high-fiber, 
-                low-glycemic carbs)
-                Fats: 30-35% of total daily calories (prioritize healthy fats)
-                Fiber: Aim for 25-30 grams per day'];
+                $desc = ['For an <b>older female (over 35-40) with a low BMI aiming to lose weight</b>, here are some concise macronutrient percentage recommendations, including fiber:<br>
+                <b>Protein:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 35-40% of total daily calories (focus on high-fiber, low-glycemic carbs)<br>
+                <b>Fats:</b> 30-35% of total daily calories (prioritize healthy fats)<br>
+                <b>Fiber:</b> Aim for 25-30 grams per day'];
             }
             if($LowOldFemaleGain) {
-                $desc = ['For an older female (over 35-40) with a low BMI aiming 
-                to gain muscle mass, here are some concise macronutrient percentage 
-                recommendations, including fiber:
-                Protein: 25-30% of total daily calories
-                Carbohydrates: 45-50% of total daily calories (focus on complex 
-                carbs with adequate fiber)
-                Fats: 20-25% of total daily calories (include healthy fats)
-                Fiber: Aim for 25-30 grams per day'];
+                $desc = ['For an <b>older female (over 35-40) with a low BMI aiming to gain muscle mass</b>, here are some concise macronutrient percentage recommendations, including fiber:<br>
+                <b>Protein:</b> 25-30% of total daily calories<br>
+                <b>Carbohydrates:</b> 45-50% of total daily calories (focus on complex carbs with adequate fiber)<br>
+                <b>Fats:</b> 20-25% of total daily calories (include healthy fats)<br>
+                <b>Fiber:</b> Aim for 25-30 grams per day'];
             }
         }
     } elseif($contextFlag == "MicroVit") {
