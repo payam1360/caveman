@@ -1829,204 +1829,165 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             $desc = [$dbOutRow['descMicroVit']];
         } else { 
             if($HighYoungMaleLose) {
-                $desc = ['Micronutrient Vitamins Recommendation for a Young Male Under 
-                35 with High BMI Trying to Lose Weight
-                Vitamin D: Supports bone health and metabolism. Sources include 
-                sunlight exposure and fortified foods or supplements.
-                Vitamin C: Important for immune function and tissue repair. Found 
-                in citrus fruits, bell peppers, and leafy greens.
-                B Vitamins: Aid in energy metabolism. Sources include whole grains, 
-                lean meats, eggs, and legumes.
-                Vitamin E: Acts as an antioxidant. Obtain from nuts, seeds, and 
-                vegetable oils.
-                Note:
-                A balanced diet should cover these vitamins, but consulting a 
-                healthcare provider can help ensure you meet your individual needs.'];
+                $desc = ['For a <b>young male under 35 with a high BMI trying to lose weight</b>, here are some concise micronutrient vitamin recommendations:<br>
+                <b>Vitamin D:</b> Supports bone health and metabolism. Sources include sunlight exposure and fortified foods or supplements.<br>
+                <b>Vitamin C:</b> Important for immune function and tissue repair. Found in citrus fruits, bell peppers, and leafy greens.<br>
+                <b>B Vitamins:</b> Aid in energy metabolism. Sources include whole grains, lean meats, eggs, and legumes.<br>
+                <b>Vitamin E:</b> Acts as an antioxidant. Obtain from nuts, seeds, and vegetable oils.<br>
+                <b>Note:</b> A balanced diet should cover these vitamins, but consulting a healthcare provider can help ensure you meet your individual needs.'];
             }
             if($HighYoungMaleGain) {
-                $desc = ['For a young male under 35 with a high BMI aiming to gain 
-                muscle mass, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
-                Vitamin C: 90 mg per day (aids in collagen formation and tissue repair)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (essential for energy metabolism and muscle 
-                growth)
-                Vitamin B6: 1.3-1.7 mg per day (involved in protein metabolism)
-                Folate (Vitamin B9): 400 mcg per day (important for cell growth and repair)
-                Ensure these vitamins are included in a balanced diet or consider 
-                supplements if necessary.'];
+                $desc = ['For a <b>young male under 35 with a high BMI aiming to gain muscle mass</b>, here are some concise micronutrient vitamin recommendations:<br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports muscle function and bone health)<br>
+                <b>Vitamin C:</b> 90 mg per day (aids in collagen formation and tissue repair)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (essential for energy metabolism and muscle growth)<br>
+                <b>Vitamin B6:</b> 1.3-1.7 mg per day (involved in protein metabolism)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (important for cell growth and repair)<br>
+                Ensure these vitamins are included in a balanced diet or consider supplements if necessary.'];
             }
             if($HighYoungFemaleLose) {
-                $desc = ['For a young female under 35 with a high BMI aiming to lose 
-                weight, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports metabolism and bone health)
-                Vitamin C: 75 mg per day (aids in tissue repair and immune function)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy metabolism)
-                Vitamin B6: 1.3-1.5 mg per day (supports protein metabolism and energy 
-                production)
-                Folate (Vitamin B9): 400 mcg per day (supports cell function and 
-                metabolism)
-                These vitamins can help support overall health and metabolic 
-                function during weight loss.'];
+                $desc = ['For a <b>young female under 35 with a high BMI aiming to lose weight</b>, here are some concise micronutrient vitamin recommendations:<br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports metabolism and bone health)<br>
+                <b>Vitamin C:</b> 75 mg per day (aids in tissue repair and immune function)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy metabolism)<br>
+                <b>Vitamin B6:</b> 1.3-1.5 mg per day (supports protein metabolism and energy production)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (supports cell function and metabolism)<br>
+                These vitamins can help support overall health and metabolic function during weight loss.'];
             }
             if($HighYoungFemaleGain) {
-                $desc = ['For a young female under 35 with a high BMI aiming to gain 
-                muscle mass, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
-                Vitamin C: 75 mg per day (aids in collagen formation and recovery)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
-                Vitamin B6: 1.3-1.5 mg per day (helps with protein metabolism)
-                Folate (Vitamin B9): 400 mcg per day (supports cell growth and repair)
+                $desc = ['For a <b>young female under 35 with a high BMI aiming to gain muscle mass</b>, here are some concise micronutrient vitamin recommendations:<br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports muscle function and bone health)<br>
+                <b>Vitamin C:</b> 75 mg per day (aids in collagen formation and recovery)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy and muscle growth)<br>
+                <b>Vitamin B6:</b> 1.3-1.5 mg per day (helps with protein metabolism)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (supports cell growth and repair)<br>
                 These vitamins can help with muscle development and overall health.'];
             }
             // -------
             if($LowYoungMaleLose) {
-                $desc = ['For a young male under 35 with a low BMI aiming to lose weight, 
-                here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports bone health and metabolism)
-                Vitamin C: 90 mg per day (aids in immune function and tissue repair)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy levels)
-                Vitamin B6: 1.3-1.7 mg per day (supports metabolism and energy production)
-                Folate (Vitamin B9): 400 mcg per day (important for cell function and 
-                repair)
-                These vitamins support overall health and metabolic function during 
-                weight loss.'];
+                $desc = ['<b>For a young male under 35 with a low BMI aiming to lose weight, here are some concise micronutrient vitamin recommendations:</b><br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports bone health and metabolism)<br>
+                <b>Vitamin C:</b> 90 mg per day (aids in immune function and tissue repair)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy levels)<br>
+                <b>Vitamin B6:</b> 1.3-1.7 mg per day (supports metabolism and energy production)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (important for cell function and repair)<br>
+                <b>These vitamins support overall health and metabolic function during weight loss.</b>'];
             }
             if($LowYoungMaleGain) {
-                $desc = ['For a young male under 35 with a low BMI aiming to gain 
-                muscle mass, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
-                Vitamin C: 90 mg per day (aids in muscle repair and immune function)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
-                Vitamin B6: 1.3-1.7 mg per day (supports protein metabolism)
-                Folate (Vitamin B9): 400 mcg per day (important for cell growth 
-                and repair)
-                These vitamins support muscle development and overall health.'];
+                $desc = ['<b>For a young male under 35 with a low BMI aiming to gain muscle mass, here are some concise micronutrient vitamin recommendations:</b><br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports muscle function and bone health)<br>
+                <b>Vitamin C:</b> 90 mg per day (aids in muscle repair and immune function)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy and muscle growth)<br>
+                <b>Vitamin B6:</b> 1.3-1.7 mg per day (supports protein metabolism)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (important for cell growth and repair)<br>
+                <b>These vitamins support muscle development and overall health.</b>'];
             }
             if($LowYoungFemaleLose) {
-                $desc = ['For a young female under 35 with a low BMI aiming to lose 
-                weight, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports bone health and metabolism)
-                Vitamin C: 75 mg per day (aids in immune function and skin health)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy and red blood cell 
-                formation)
-                Vitamin B6: 1.3-1.5 mg per day (supports metabolism and energy production)
-                Folate (Vitamin B9): 400 mcg per day (supports cell function and repair)
-                These vitamins help with overall health and metabolic function during 
-                weight loss.'];
+                $desc = ['<b>For a young female under 35 with a low BMI aiming to lose weight, here are some concise micronutrient vitamin recommendations:</b><br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports bone health and metabolism)<br>
+                <b>Vitamin C:</b> 75 mg per day (aids in immune function and skin health)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy and red blood cell formation)<br>
+                <b>Vitamin B6:</b> 1.3-1.5 mg per day (supports metabolism and energy production)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (supports cell function and repair)<br>
+                <b>These vitamins help with overall health and metabolic function during weight loss.</b>'];
             }
             if($LowYoungFemaleGain) {
-                $desc = ['For a young female under 35 with a low BMI aiming to gain 
-                muscle mass, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
-                Vitamin C: 75 mg per day (aids in muscle repair and immune function)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
-                Vitamin B6: 1.3-1.5 mg per day (supports protein metabolism)
-                Folate (Vitamin B9): 400 mcg per day (supports cell growth and repair)
-                These vitamins help with muscle development and overall health.'];
+                $desc = ['<b>For a young female under 35 with a low BMI aiming to gain muscle mass, here are some concise micronutrient vitamin recommendations:</b><br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports muscle function and bone health)<br>
+                <b>Vitamin C:</b> 75 mg per day (aids in muscle repair and immune function)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy and muscle growth)<br>
+                <b>Vitamin B6:</b> 1.3-1.5 mg per day (supports protein metabolism)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (supports cell growth and repair)<br>
+                <b>These vitamins help with muscle development and overall health.</b>'];
             }
             // ------
             if($HighOldMaleLose) {
-                $desc = ['For an older male (above 35-40) with a high BMI aiming to 
-                lose weight, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports bone health and metabolism)
-                Vitamin C: 90 mg per day (aids in immune function and skin health)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy and red blood cell 
-                formation)
-                Vitamin B6: 1.3-1.7 mg per day (supports metabolism and energy production)
-                Folate (Vitamin B9): 400 mcg per day (supports cell function and repair)
-                These vitamins support overall health and metabolic function during 
-                weight loss.'];
+                $desc = ['<b>For an older male (above 35-40) with a high BMI aiming to lose weight, here are some concise micronutrient vitamin recommendations:</b><br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports bone health and metabolism)<br>
+                <b>Vitamin C:</b> 90 mg per day (aids in immune function and skin health)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy and red blood cell formation)<br>
+                <b>Vitamin B6:</b> 1.3-1.7 mg per day (supports metabolism and energy production)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (supports cell function and repair)<br>
+                <b>These vitamins support overall health and metabolic function during weight loss.</b>'];
             }
             if($HighOldMaleGain) {
-                $desc = ['For an older male (above 35-40) with a high BMI aiming to gain 
-                muscle mass, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
-                Vitamin C: 90 mg per day (aids in muscle repair and immune function)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
-                Vitamin B6: 1.3-1.7 mg per day (supports protein metabolism)
-                Folate (Vitamin B9): 400 mcg per day (supports cell growth and repair)
-                These vitamins can help with muscle development and overall health.'];
+                $desc = ['<b>For an older male (above 35-40) with a high BMI aiming to gain muscle mass, here are some concise micronutrient vitamin recommendations:</b><br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports muscle function and bone health)<br>
+                <b>Vitamin C:</b> 90 mg per day (aids in muscle repair and immune function)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy and muscle growth)<br>
+                <b>Vitamin B6:</b> 1.3-1.7 mg per day (supports protein metabolism)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (supports cell growth and repair)<br>
+                <b>These vitamins can help with muscle development and overall health.</b>'];
             }
             if($HighOldFemaleLose) {
-                $desc = ['For an older female (above 35-40) with a high BMI aiming to 
-                lose weight, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports bone health and metabolism)
-                Vitamin C: 75 mg per day (aids in immune function and skin health)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy and red blood cell 
-                formation)
-                Vitamin B6: 1.3-1.5 mg per day (supports metabolism and energy production)
-                Folate (Vitamin B9): 400 mcg per day (supports cell function and repair)
-                These vitamins support overall health and metabolic function during 
-                weight loss.'];
+                $desc = ['<b>For an older female (above 35-40) with a high BMI aiming to lose weight, here are some concise micronutrient vitamin recommendations:</b><br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports bone health and metabolism)<br>
+                <b>Vitamin C:</b> 75 mg per day (aids in immune function and skin health)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy and red blood cell formation)<br>
+                <b>Vitamin B6:</b> 1.3-1.5 mg per day (supports metabolism and energy production)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (supports cell function and repair)<br>
+                <b>These vitamins support overall health and metabolic function during weight loss.</b>'];
             }
             if($HighOldFemaleGain) {
-                $desc = ['For an older female (above 35-40) with a high BMI aiming to gain 
-                muscle mass, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
-                Vitamin C: 75 mg per day (aids in muscle repair and immune function)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
-                Vitamin B6: 1.3-1.5 mg per day (supports protein metabolism)
-                Folate (Vitamin B9): 400 mcg per day (supports cell growth and repair)
-                These vitamins help with muscle development and overall health.'];
+                $desc = ['<b>For an older female (above 35-40) with a high BMI aiming to gain muscle mass, here are some concise micronutrient vitamin recommendations:</b><br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports muscle function and bone health)<br>
+                <b>Vitamin C:</b> 75 mg per day (aids in muscle repair and immune function)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy and muscle growth)<br>
+                <b>Vitamin B6:</b> 1.3-1.5 mg per day (supports protein metabolism)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (supports cell growth and repair)<br>
+                <b>These vitamins help with muscle development and overall health.</b>'];
             }
             // -------
             if($LowOldMaleLose) {
-                $desc = ['For an older male (above 35-40) with a low BMI aiming to lose 
-                weight, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports bone health and metabolism)
-                Vitamin C: 90 mg per day (aids in immune function and tissue repair)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy levels)
-                Vitamin B6: 1.3-1.7 mg per day (supports metabolism and energy production)
-                Folate (Vitamin B9): 400 mcg per day (supports cell function and repair)
-                These vitamins support overall health and metabolic function during 
-                weight loss.'];
+                $desc = ['<b>For an older male (above 35-40) with a low BMI aiming to lose weight, here are some concise micronutrient vitamin recommendations:</b><br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports bone health and metabolism)<br>
+                <b>Vitamin C:</b> 90 mg per day (aids in immune function and tissue repair)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy levels)<br>
+                <b>Vitamin B6:</b> 1.3-1.7 mg per day (supports metabolism and energy production)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (supports cell function and repair)<br>
+                <b>These vitamins support overall health and metabolic function during weight loss.</b>'];
             }
             if($LowOldMaleGain) {
-                $desc = ['For an older male (above 35-40) with a low BMI aiming to gain 
-                muscle mass, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
-                Vitamin C: 90 mg per day (aids in muscle repair and immune function)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
-                Vitamin B6: 1.3-1.7 mg per day (supports protein metabolism)
-                Folate (Vitamin B9): 400 mcg per day (supports cell growth and repair)
-                These vitamins can help with muscle development and overall health.'];
+                $desc = ['<b>For an older male (above 35-40) with a low BMI aiming to gain muscle mass, here are some concise micronutrient vitamin recommendations:</b><br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports muscle function and bone health)<br>
+                <b>Vitamin C:</b> 90 mg per day (aids in muscle repair and immune function)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy and muscle growth)<br>
+                <b>Vitamin B6:</b> 1.3-1.7 mg per day (supports protein metabolism)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (supports cell growth and repair)<br>
+                <b>These vitamins can help with muscle development and overall health.</b>'];
             }
             if($LowOldFemaleLose) {
-                $desc = ['For an older female (above 35-40) with a low BMI aiming to 
-                lose weight, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports bone health and metabolism)
-                Vitamin C: 75 mg per day (aids in immune function and tissue repair)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy levels and red 
-                blood cell formation)
-                Vitamin B6: 1.3-1.5 mg per day (supports metabolism and energy production)
-                Folate (Vitamin B9): 400 mcg per day (supports cell function and repair)
-                These vitamins support overall health and metabolic function during 
-                weight loss.'];
+                $desc = ['<b>For an older female (above 35-40) with a low BMI aiming to lose weight, here are some concise micronutrient vitamin recommendations:</b><br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports bone health and metabolism)<br>
+                <b>Vitamin C:</b> 75 mg per day (aids in immune function and tissue repair)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy levels and red blood cell formation)<br>
+                <b>Vitamin B6:</b> 1.3-1.5 mg per day (supports metabolism and energy production)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (supports cell function and repair)<br>
+                <b>These vitamins support overall health and metabolic function during weight loss.</b>'];
             }
             if($LowOldFemaleGain) {
-                $desc = ['For an older female (above 35-40) with a low BMI aiming to 
-                gain muscle mass, here are some concise micronutrient vitamin recommendations:
-                Vitamin D: 600-800 IU per day (supports muscle function and bone health)
-                Vitamin C: 75 mg per day (aids in muscle repair and immune function)
-                Vitamin E: 15 mg per day (acts as an antioxidant)
-                Vitamin B12: 2.4 mcg per day (important for energy and muscle growth)
-                Vitamin B6: 1.3-1.5 mg per day (supports protein metabolism)
-                Folate (Vitamin B9): 400 mcg per day (supports cell growth and repair)
-                These vitamins help with muscle development and overall health.'];
+                $desc = ['<b>For an older female (above 35-40) with a low BMI aiming to gain muscle mass, here are some concise micronutrient vitamin recommendations:</b><br>
+                <b>Vitamin D:</b> 600-800 IU per day (supports muscle function and bone health)<br>
+                <b>Vitamin C:</b> 75 mg per day (aids in muscle repair and immune function)<br>
+                <b>Vitamin E:</b> 15 mg per day (acts as an antioxidant)<br>
+                <b>Vitamin B12:</b> 2.4 mcg per day (important for energy and muscle growth)<br>
+                <b>Vitamin B6:</b> 1.3-1.5 mg per day (supports protein metabolism)<br>
+                <b>Folate (Vitamin B9):</b> 400 mcg per day (supports cell growth and repair)<br>
+                <b>These vitamins help with muscle development and overall health.</b>'];
             }
         }
     } elseif($contextFlag == "MicroTrace") {
@@ -2034,188 +1995,192 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             $desc = [$dbOutRow['descMicroTrace']];
         } else { 
             if($HighYoungMaleLose) {
-                $desc = ['Micronutrient Trace Minerals Recommendation for a Young Male 
-                Under 35 with High BMI Trying to Lose Weight
-                Iron: Essential for energy levels and metabolism. Sources include 
-                lean meats, beans, and fortified cereals.
-                Zinc: Important for immune function and metabolism. Found in meat, 
-                shellfish, and nuts.
-                Magnesium: Supports muscle function and energy production. Obtain 
-                from nuts, seeds, whole grains, and leafy greens.
-                Selenium: Contributes to antioxidant defense. Sources include nuts, 
-                seafood, and whole grains.
-                Note:
-                Ensure a balanced diet to cover these trace minerals, and consider 
+                $desc = ['<b>Micronutrient Trace Minerals Recommendation for a Young Male</b> <br>
+                <b>Under 35 with High BMI Trying to Lose Weight</b> <br>
+                <b>Iron:</b> Essential for energy levels and metabolism. Sources include <br>
+                lean meats, beans, and fortified cereals. <br>
+                <b>Zinc:</b> Important for immune function and metabolism. Found in meat, <br>
+                shellfish, and nuts. <br>
+                <b>Magnesium:</b> Supports muscle function and energy production. Obtain <br>
+                from nuts, seeds, whole grains, and leafy greens. <br>
+                <b>Selenium:</b> Contributes to antioxidant defense. Sources include nuts, <br>
+                seafood, and whole grains. <br>
+                <b>Note:</b> <br>
+                Ensure a balanced diet to cover these trace minerals, and consider <br>
                 consulting a healthcare provider for personalized advice.'];
             }
             if($HighYoungMaleGain) {
-                $desc = ['For a young male under 35 with a high BMI aiming to gain 
-                muscle mass, here are some concise trace mineral recommendations:
-                Iron: 8-11 mg per day (supports oxygen transport and energy)
-                Zinc: 11 mg per day (important for muscle growth and immune function)
-                Magnesium: 400-420 mg per day (supports muscle function and recovery)
-                Copper: 900 mcg per day (important for energy production and connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
+                $desc = ['<b>For a young male under 35 with a high BMI aiming to gain</b> <br>
+                <b>muscle mass, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 8-11 mg per day (supports oxygen transport and energy) <br>
+                <b>Zinc:</b> 11 mg per day (important for muscle growth and immune function) <br>
+                <b>Magnesium:</b> 400-420 mg per day (supports muscle function and recovery) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
                 These trace minerals are essential for muscle growth and overall health.'];
             }
             if($HighYoungFemaleLose) {
-                $desc = ['For a young female under 35 with a high BMI aiming to lose 
-                weight, here are some concise trace mineral recommendations:
-                Iron: 18 mg per day (supports oxygen transport and energy levels)
-                Zinc: 8 mg per day (important for metabolism and immune function)
-                Magnesium: 310-320 mg per day (supports metabolism and muscle function)
-                Copper: 900 mcg per day (important for energy production and connective 
-                tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals are essential for metabolic health and overall 
-                well-being during weight loss.'];
+                $desc = ['<b>For a young female under 35 with a high BMI aiming to lose</b> <br>
+                <b>weight, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 18 mg per day (supports oxygen transport and energy levels) <br>
+                <b>Zinc:</b> 8 mg per day (important for metabolism and immune function) <br>
+                <b>Magnesium:</b> 310-320 mg per day (supports metabolism and muscle function) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals are essential for metabolic health and overall <br>
+                well-being during weight loss.
+                '];
             }
             if($HighYoungFemaleGain) {
-                $desc = ['For a young female under 35 with a high BMI aiming to gain 
-                muscle mass, here are some concise trace mineral recommendations:
-                Iron: 18 mg per day (supports oxygen transport and energy)
-                Zinc: 8 mg per day (important for muscle growth and immune function)
-                Magnesium: 310-320 mg per day (supports muscle function and recovery)
-                Copper: 900 mcg per day (important for energy production and connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals support muscle development and overall health.'];
+                $desc = ['<b>For a young female under 35 with a high BMI aiming to gain</b> <br>
+                <b>muscle mass, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 18 mg per day (supports oxygen transport and energy) <br>
+                <b>Zinc:</b> 8 mg per day (important for muscle growth and immune function) <br>
+                <b>Magnesium:</b> 310-320 mg per day (supports muscle function and recovery) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals support muscle development and overall health.
+                '];
             }
             // -------
             if($LowYoungMaleLose) {
-                $desc = ['For a young male under 35 with a low BMI aiming to lose 
-                weight, here are some concise trace mineral recommendations:
-                Iron: 8-11 mg per day (supports oxygen transport and energy)
-                Zinc: 11 mg per day (important for metabolism and immune function)
-                Magnesium: 400-420 mg per day (supports muscle function and metabolism)
-                Copper: 900 mcg per day (important for energy production and connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals help maintain overall health and metabolic function 
-                during weight loss.'];
+                $desc = ['<b>For a young male under 35 with a low BMI aiming to lose</b> <br>
+                <b>weight, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 8-11 mg per day (supports oxygen transport and energy) <br>
+                <b>Zinc:</b> 11 mg per day (important for metabolism and immune function) <br>
+                <b>Magnesium:</b> 400-420 mg per day (supports muscle function and metabolism) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals help maintain overall health and metabolic function <br>
+                during weight loss.
+                '];
             }
             if($LowYoungMaleGain) {
-                $desc = ['For a young male under 35 with a low BMI aiming to gain 
-                muscle mass, here are some concise trace mineral recommendations:
-                Iron: 8-11 mg per day (supports oxygen transport and energy)
-                Zinc: 11 mg per day (important for muscle growth and immune function)
-                Magnesium: 400-420 mg per day (supports muscle function and recovery)
-                Copper: 900 mcg per day (important for energy production and connective 
-                tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals are essential for muscle development and overall 
-                health.'];
+                $desc = ['<b>For a young male under 35 with a low BMI aiming to gain</b> <br>
+                <b>muscle mass, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 8-11 mg per day (supports oxygen transport and energy) <br>
+                <b>Zinc:</b> 11 mg per day (important for muscle growth and immune function) <br>
+                <b>Magnesium:</b> 400-420 mg per day (supports muscle function and recovery) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals are essential for muscle development and overall <br>
+                health.
+                '];
             }
             if($LowYoungFemaleLose) {
-                $desc = ['For a young female under 35 with a low BMI aiming to lose 
-                weight, here are some concise trace mineral recommendations:
-                Iron: 18 mg per day (supports oxygen transport and energy)
-                Zinc: 8 mg per day (important for metabolism and immune function)
-                Magnesium: 310-320 mg per day (supports metabolism and muscle function)
-                Copper: 900 mcg per day (important for energy production and connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals support overall health and metabolic function during weight loss.'];
+                $desc = ['<b>For a young female under 35 with a low BMI aiming to lose</b> <br>
+                <b>weight, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 18 mg per day (supports oxygen transport and energy) <br>
+                <b>Zinc:</b> 8 mg per day (important for metabolism and immune function) <br>
+                <b>Magnesium:</b> 310-320 mg per day (supports metabolism and muscle function) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals support overall health and metabolic function during weight loss.
+                '];
             }
             if($LowYoungFemaleGain) {
-                $desc = ['For a young female under 35 with a low BMI aiming to gain 
-                muscle mass, here are some concise trace mineral recommendations:
-                Iron: 18 mg per day (supports oxygen transport and energy)
-                Zinc: 8 mg per day (important for muscle growth and immune function)
-                Magnesium: 310-320 mg per day (supports muscle function and recovery)
-                Copper: 900 mcg per day (important for energy production and 
-                connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals are essential for muscle development and 
-                overall health.'];
+                $desc = ['<b>For a young female under 35 with a low BMI aiming to gain</b> <br>
+                <b>muscle mass, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 18 mg per day (supports oxygen transport and energy) <br>
+                <b>Zinc:</b> 8 mg per day (important for muscle growth and immune function) <br>
+                <b>Magnesium:</b> 310-320 mg per day (supports muscle function and recovery) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals are essential for muscle development and <br>
+                overall health.
+                '];
             }
             // -------
             if($HighOldMaleLose) {
-                $desc = ['For an older male (above 35-40) with a high BMI aiming to lose 
-                weight, here are some concise trace mineral recommendations:
-                Iron: 8 mg per day (supports oxygen transport and energy)
-                Zinc: 11 mg per day (important for metabolism and immune function)
-                Magnesium: 400-420 mg per day (supports muscle function and metabolism)
-                Copper: 900 mcg per day (important for energy production and connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals support overall health and metabolic function during weight loss.'];
+                $desc = ['<b>For an older male (above 35-40) with a high BMI aiming to lose</b> <br>
+                <b>weight, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 8 mg per day (supports oxygen transport and energy) <br>
+                <b>Zinc:</b> 11 mg per day (important for metabolism and immune function) <br>
+                <b>Magnesium:</b> 400-420 mg per day (supports muscle function and metabolism) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals support overall health and metabolic function during weight loss.
+                '];
             }
             if($HighOldMaleGain) {
-                $desc = ['For an older male (above 35-40) with a high BMI aiming to 
-                gain muscle mass, here are some concise trace mineral recommendations:
-                Iron: 8 mg per day (supports oxygen transport and energy)
-                Zinc: 11 mg per day (important for muscle growth and immune function)
-                Magnesium: 400-420 mg per day (supports muscle function and recovery)
-                Copper: 900 mcg per day (important for energy production and 
-                connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals help support muscle development and overall health.'];
+                $desc = ['<b>For an older male (above 35-40) with a high BMI aiming to</b> <br>
+                <b>gain muscle mass, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 8 mg per day (supports oxygen transport and energy) <br>
+                <b>Zinc:</b> 11 mg per day (important for muscle growth and immune function) <br>
+                <b>Magnesium:</b> 400-420 mg per day (supports muscle function and recovery) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals help support muscle development and overall health.
+                '];
             }
             if($HighOldFemaleLose) {
-                $desc = ['For an older female (above 35-40) with a high BMI aiming 
-                to lose weight, here are some concise trace mineral recommendations:
-                Iron: 8 mg per day (supports oxygen transport and energy levels)
-                Zinc: 8 mg per day (important for metabolism and immune function)
-                Magnesium: 320 mg per day (supports muscle function and metabolism)
-                Copper: 900 mcg per day (important for energy production and 
-                connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals support overall health and metabolic 
-                function during weight loss.'];
+                $desc = ['<b>For an older female (above 35-40) with a high BMI aiming</b> <br>
+                <b>to lose weight, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 8 mg per day (supports oxygen transport and energy levels) <br>
+                <b>Zinc:</b> 8 mg per day (important for metabolism and immune function) <br>
+                <b>Magnesium:</b> 320 mg per day (supports muscle function and metabolism) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals support overall health and metabolic <br>
+                function during weight loss.
+                '];
             }
             if($HighOldFemaleGain) {
-                $desc = ['For an older female (above 35-40) with a high BMI aiming 
-                to gain muscle mass, here are some concise trace mineral recommendations:
-                Iron: 8 mg per day (supports oxygen transport and energy)
-                Zinc: 8 mg per day (important for muscle growth and immune function)
-                Magnesium: 320 mg per day (supports muscle function and recovery)
-                Copper: 900 mcg per day (important for energy production and 
-                connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals help support muscle development and overall health.'];
+                $desc = ['<b>For an older female (above 35-40) with a high BMI aiming</b> <br>
+                <b>to gain muscle mass, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 8 mg per day (supports oxygen transport and energy) <br>
+                <b>Zinc:</b> 8 mg per day (important for muscle growth and immune function) <br>
+                <b>Magnesium:</b> 320 mg per day (supports muscle function and recovery) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals help support muscle development and overall health.
+                '];
             }
             // -------
             if($LowOldMaleLose) {
-                $desc = ['For an older male (above 35-40) with a low BMI aiming to 
-                lose weight, here are some concise trace mineral recommendations:
-                Iron: 8 mg per day (supports oxygen transport and energy)
-                Zinc: 11 mg per day (important for metabolism and immune function)
-                Magnesium: 400-420 mg per day (supports muscle function and metabolism)
-                Copper: 900 mcg per day (important for energy production and 
-                connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals support overall health and metabolic function 
-                during weight loss.'];
+                $desc = ['<b>For an older male (above 35-40) with a low BMI aiming to</b> <br>
+                <b>lose weight, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 8 mg per day (supports oxygen transport and energy) <br>
+                <b>Zinc:</b> 11 mg per day (important for metabolism and immune function) <br>
+                <b>Magnesium:</b> 400-420 mg per day (supports muscle function and metabolism) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals support overall health and metabolic function <br>
+                during weight loss.
+                '];
             }
             if($LowOldMaleGain) {
-                $desc = ['For an older male (above 35-40) with a low BMI aiming to 
-                gain muscle mass, here are some concise trace mineral recommendations:
-                Iron: 8 mg per day (supports oxygen transport and energy)
-                Zinc: 11 mg per day (important for muscle growth and immune function)
-                Magnesium: 400-420 mg per day (supports muscle function and recovery)
-                Copper: 900 mcg per day (important for energy production and 
-                connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals help support muscle development and overall health.'];
+                $desc = ['<b>For an older male (above 35-40) with a low BMI aiming to</b> <br>
+                <b>gain muscle mass, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 8 mg per day (supports oxygen transport and energy) <br>
+                <b>Zinc:</b> 11 mg per day (important for muscle growth and immune function) <br>
+                <b>Magnesium:</b> 400-420 mg per day (supports muscle function and recovery) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals help support muscle development and overall health.
+                '];
             }
             if($LowOldFemaleLose) {
-                $desc = ['For an older female (above 35-40) with a low BMI aiming 
-                to lose weight, here are some concise trace mineral recommendations:
-                Iron: 8 mg per day (supports oxygen transport and energy levels)
-                Zinc: 8 mg per day (important for metabolism and immune function)
-                Magnesium: 320 mg per day (supports muscle function and metabolism)
-                Copper: 900 mcg per day (important for energy production and 
-                connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals support overall health and metabolic function during weight loss.'];
+                $desc = ['<b>For an older female (above 35-40) with a low BMI aiming to</b> <br>
+                <b>lose weight, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 8 mg per day (supports oxygen transport and energy levels) <br>
+                <b>Zinc:</b> 8 mg per day (important for metabolism and immune function) <br>
+                <b>Magnesium:</b> 320 mg per day (supports muscle function and metabolism) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals support overall health and metabolic function <br>
+                during weight loss.'];
             }
             if($LowOldFemaleGain) {
-                $desc = ['For an older female (above 35-40) with a low BMI aiming 
-                to gain muscle mass, here are some concise trace mineral recommendations:
-                Iron: 8 mg per day (supports oxygen transport and energy)
-                Zinc: 8 mg per day (important for muscle growth and immune function)
-                Magnesium: 320 mg per day (supports muscle function and recovery)
-                Copper: 900 mcg per day (important for energy production and 
-                connective tissue)
-                Selenium: 55 mcg per day (acts as an antioxidant and supports metabolism)
-                These trace minerals help support muscle development and overall health.'];
+                $desc = ['<b>For an older female (above 35-40) with a low BMI aiming to</b> <br>
+                <b>gain muscle mass, here are some concise trace mineral recommendations:</b> <br>
+                <b>Iron:</b> 8 mg per day (supports oxygen transport and energy) <br>
+                <b>Zinc:</b> 8 mg per day (important for muscle growth and immune function) <br>
+                <b>Magnesium:</b> 320 mg per day (supports muscle function and recovery) <br>
+                <b>Copper:</b> 900 mcg per day (important for energy production and connective tissue) <br>
+                <b>Selenium:</b> 55 mcg per day (acts as an antioxidant and supports metabolism) <br>
+                These trace minerals help support muscle development and overall health.
+                '];
             } 
         } 
     } elseif($contextFlag == "Meal") {
@@ -2223,901 +2188,917 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             $desc = [$dbOutRow['descMeal']];
         } else { 
             if($HighYoungMaleLose) {
-                $desc = ['For weight loss, especially with a high BMI, it is important 
-                    to focus on a balanced, calorie-controlled meal plan that supports 
-                    a sustainable caloric deficit while providing adequate nutrition. 
-                    Here is a sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a daily intake around 1,500-2,000 calories, 
-                    depending on your activity level and specific needs.
-                    Macronutrient Balance: Focus on a balanced intake of proteins, 
-                    healthy fats, and complex carbohydrates.
-                    Meal Timing: Consider intermittent fasting (e.g., 16:8) if it 
-                    aligns with your lifestyle. This involves eating within an 8-hour 
-                    window and fasting for 16 hours.
-                    Hydration: Drink plenty of water throughout the day—aim for at 
-                    least 2-3 liters.
-                    Sample Meal Plan:
-                    Morning (Optional for IF)
-                    Green Tea or Black Coffee: No sugar, minimal calories, helps 
-                    boost metabolism.
-                    Meal 1 (Breaking Fast - Around 12 PM)
-                    Protein-Rich Breakfast:
-                    3 scrambled eggs or a veggie omelette (spinach, tomatoes, mushrooms).
-                    1 slice of whole-grain toast.
-                    1 avocado (half or a quarter) or a handful of nuts for healthy fats.
-                    1 serving of Greek yogurt with berries.
-                    Meal 2 (Lunch - Around 3 PM)
-                    Lean Protein + Veggies:
-                    Grilled chicken breast or tofu (150-200g).
-                    Mixed salad with leafy greens, tomatoes, cucumbers, and a light 
-                    vinaigrette.
-                    Quinoa or brown rice (1/2 cup) for fiber and carbs.
-                    Steamed broccoli or roasted sweet potatoes.
-                    Snack (Optional - Around 5 PM)
-                    Healthy Snack:
-                    A small handful of almonds or walnuts.
-                    1 apple or carrot sticks with hummus.
-                    Meal 3 (Dinner - Around 7 PM)
-                    Low-Carb, High-Protein Dinner:
-                    Baked salmon or grilled lean meat (150-200g).
-                    Steamed asparagus, zucchini, or cauliflower rice.
-                    A side salad with olive oil and lemon dressing.
-                    Evening (Post-Dinner - Optional)
-                    Herbal Tea: Peppermint or chamomile to aid digestion and relaxation.
-                    Additional Tips:
-                    Exercise: Incorporate regular physical activity, including both 
-                    cardio and strength training, to boost metabolism and muscle mass.
-                    Sleep: Aim for 7-9 hours of quality sleep per night, as poor sleep 
-                    can hinder weight loss efforts.
-                    Mindful Eating: Eat slowly and pay attention to hunger and fullness 
-                    cues.'];
+                $desc = ['<b>For weight loss, especially with a high BMI, it is important</b> <br>
+                <b>to focus on a balanced, calorie-controlled meal plan that supports</b> <br>
+                <b>a sustainable caloric deficit while providing adequate nutrition.</b> <br>
+                <b>Here is a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a daily intake around 1,500-2,000 calories, <br>
+                depending on your activity level and specific needs. <br>
+                <b>Macronutrient Balance:</b> Focus on a balanced intake of proteins, <br>
+                healthy fats, and complex carbohydrates. <br>
+                <b>Meal Timing:</b> Consider intermittent fasting (e.g., 16:8) if it <br>
+                aligns with your lifestyle. This involves eating within an 8-hour <br>
+                window and fasting for 16 hours. <br>
+                <b>Hydration:</b> Drink plenty of water throughout the day—aim for at <br>
+                least 2-3 liters. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Morning (Optional for IF)</b> <br>
+                <b>Green Tea or Black Coffee:</b> No sugar, minimal calories, helps <br>
+                boost metabolism. <br>
+                <b>Meal 1 (Breaking Fast - Around 12 PM)</b> <br>
+                <b>Protein-Rich Breakfast:</b> <br>
+                3 scrambled eggs or a veggie omelette (spinach, tomatoes, mushrooms). <br>
+                1 slice of whole-grain toast. <br>
+                1 avocado (half or a quarter) or a handful of nuts for healthy fats. <br>
+                1 serving of Greek yogurt with berries. <br>
+                <b>Meal 2 (Lunch - Around 3 PM)</b> <br>
+                <b>Lean Protein + Veggies:</b> <br>
+                Grilled chicken breast or tofu (150-200g). <br>
+                Mixed salad with leafy greens, tomatoes, cucumbers, and a light <br>
+                vinaigrette. <br>
+                Quinoa or brown rice (1/2 cup) for fiber and carbs. <br>
+                Steamed broccoli or roasted sweet potatoes. <br>
+                <b>Snack (Optional - Around 5 PM)</b> <br>
+                <b>Healthy Snack:</b> <br>
+                A small handful of almonds or walnuts. <br>
+                1 apple or carrot sticks with hummus. <br>
+                <b>Meal 3 (Dinner - Around 7 PM)</b> <br>
+                <b>Low-Carb, High-Protein Dinner:</b> <br>
+                Baked salmon or grilled lean meat (150-200g). <br>
+                Steamed asparagus, zucchini, or cauliflower rice. <br>
+                A side salad with olive oil and lemon dressing. <br>
+                <b>Evening (Post-Dinner - Optional)</b> <br>
+                <b>Herbal Tea:</b> Peppermint or chamomile to aid digestion and relaxation. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Exercise:</b> Incorporate regular physical activity, including both <br>
+                cardio and strength training, to boost metabolism and muscle mass. <br>
+                <b>Sleep:</b> Aim for 7-9 hours of quality sleep per night, as poor sleep <br>
+                can hinder weight loss efforts. <br>
+                <b>Mindful Eating:</b> Eat slowly and pay attention to hunger and fullness <br>
+                cues.
+                '];
             }
             if($HighYoungMaleGain) {
-                $desc = ['For gaining muscle mass, especially with a high BMI, it is 
-                    crucial to focus on a high-protein, calorie-controlled diet that 
-                    supports muscle growth while minimizing fat gain. Here is a sample 
-                    meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a slight caloric surplus, around 
-                    2,500-3,000 calories daily, depending on your activity level and 
-                    metabolism.
-                    Macronutrient Balance: Prioritize protein intake (1.2-2.2 grams 
-                    per kg of body weight) along with complex carbs and healthy fats.
-                    Meal Frequency: Eat 4-6 meals throughout the day to ensure a 
-                    steady supply of nutrients for muscle growth.
-                    Hydration: Drink plenty of water—aim for at least 3-4 liters 
-                    daily, especially around workouts.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    High-Protein Breakfast:
-                    5 egg whites + 2 whole eggs scrambled with spinach and 
-                    bell peppers.
-                    1 cup of oatmeal topped with a tablespoon of peanut butter 
-                    or mixed berries.
-                    1 banana or apple.
-                    1 glass of low-fat milk or a protein shake.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Protein and Carbs:
-                    1 cup of Greek yogurt with honey and granola.
-                    A handful of almonds or a protein bar.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Complex Carbs:
-                    Grilled chicken breast, turkey, or lean beef (200-250g).
-                    1 cup of brown rice, quinoa, or whole-grain pasta.
-                    Steamed broccoli, green beans, or a mixed vegetable stir-fry.
-                    A small salad with olive oil dressing.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Muscle-Building Snack:
-                    Cottage cheese with a handful of mixed nuts.
-                    Whole-grain toast with avocado slices or a smoothie with 
-                    protein powder, spinach, and a banana.
-                    Meal 5 (Dinner - 7 PM)
-                    Protein and Veggies:
-                    Grilled salmon, tuna, or chicken (200-250g).
-                    1 large sweet potato or mashed potatoes.
-                    Roasted asparagus, Brussels sprouts, or a side of sautéed greens.
-                    1 cup of mixed berries or a small fruit salad.
-                    Meal 6 (Evening Snack - 9 PM)
-                    Slow-Digesting Protein:
-                    Casein protein shake or a serving of cottage cheese.
-                    A small handful of walnuts or chia seeds.
-                    Additional Tips:
-                    Workout: Incorporate resistance training at least 4-5 times 
-                    a week, focusing on compound exercises like squats, deadlifts, 
-                    bench presses, and rows.
-                    Recovery: Ensure adequate rest between workouts and prioritize 
-                    sleep to support muscle recovery.
-                    Supplements: Consider using whey protein, creatine, and 
-                    branched-chain amino acids (BCAAs) to enhance muscle growth, 
-                    but consult with a healthcare professional first.'];
+                $desc = ['<b>For gaining muscle mass, especially with a high BMI, it is</b> <br>
+                <b>crucial to focus on a high-protein, calorie-controlled diet that</b> <br>
+                <b>supports muscle growth while minimizing fat gain. Here is a sample</b> <br>
+                <b>meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a slight caloric surplus, around <br>
+                2,500-3,000 calories daily, depending on your activity level and <br>
+                metabolism. <br>
+                <b>Macronutrient Balance:</b> Prioritize protein intake (1.2-2.2 grams <br>
+                per kg of body weight) along with complex carbs and healthy fats. <br>
+                <b>Meal Frequency:</b> Eat 4-6 meals throughout the day to ensure a <br>
+                steady supply of nutrients for muscle growth. <br>
+                <b>Hydration:</b> Drink plenty of water—aim for at least 3-4 liters <br>
+                daily, especially around workouts. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>High-Protein Breakfast:</b> <br>
+                5 egg whites + 2 whole eggs scrambled with spinach and <br>
+                bell peppers. <br>
+                1 cup of oatmeal topped with a tablespoon of peanut butter <br>
+                or mixed berries. <br>
+                1 banana or apple. <br>
+                1 glass of low-fat milk or a protein shake. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Protein and Carbs:</b> <br>
+                1 cup of Greek yogurt with honey and granola. <br>
+                A handful of almonds or a protein bar. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Complex Carbs:</b> <br>
+                Grilled chicken breast, turkey, or lean beef (200-250g). <br>
+                1 cup of brown rice, quinoa, or whole-grain pasta. <br>
+                Steamed broccoli, green beans, or a mixed vegetable stir-fry. <br>
+                A small salad with olive oil dressing. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Muscle-Building Snack:</b> <br>
+                Cottage cheese with a handful of mixed nuts. <br>
+                Whole-grain toast with avocado slices or a smoothie with <br>
+                protein powder, spinach, and a banana. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Protein and Veggies:</b> <br>
+                Grilled salmon, tuna, or chicken (200-250g). <br>
+                1 large sweet potato or mashed potatoes. <br>
+                Roasted asparagus, Brussels sprouts, or a side of sautéed greens. <br>
+                1 cup of mixed berries or a small fruit salad. <br>
+                <b>Meal 6 (Evening Snack - 9 PM)</b> <br>
+                <b>Slow-Digesting Protein:</b> <br>
+                Casein protein shake or a serving of cottage cheese. <br>
+                A small handful of walnuts or chia seeds. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Workout:</b> Incorporate resistance training at least 4-5 times <br>
+                a week, focusing on compound exercises like squats, deadlifts, <br>
+                bench presses, and rows. <br>
+                <b>Recovery:</b> Ensure adequate rest between workouts and prioritize <br>
+                sleep to support muscle recovery. <br>
+                <b>Supplements:</b> Consider using whey protein, creatine, and <br>
+                branched-chain amino acids (BCAAs) to enhance muscle growth, <br>
+                but consult with a healthcare professional first.
+                '];
             }
             if($HighYoungFemaleLose) {
-                $desc = ['For weight loss in a high BMI young female under 35 years old, 
-                    the goal is to create a balanced, calorie-controlled meal plan 
-                    that promotes fat loss while maintaining muscle mass and overall 
-                    health. Here is a sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a daily intake of 1,200-1,600 calories, 
-                    depending on activity level and metabolism.
-                    Macronutrient Balance: Focus on lean proteins, healthy fats, 
-                    and complex carbohydrates.
-                    Meal Timing: Consider eating smaller, balanced meals throughout 
-                    the day to keep metabolism active.
-                    Hydration: Drink plenty of water—2-3 liters per day.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - Around 7 AM)
-                    Protein and Fiber-Rich Breakfast:
-                    2 boiled eggs or a veggie omelette (with spinach, mushrooms, 
-                    and tomatoes).
-                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a 
-                    sprinkle of flaxseeds.
-                    1 piece of fruit (apple, orange, or berries).
-                    Herbal tea or black coffee.
-                    Meal 2 (Mid-Morning Snack - Around 10 AM)
-                    Light Snack:
-                    1 small handful of almonds or walnuts.
-                    1 cup of Greek yogurt or a small piece of fruit.
-                    Meal 3 (Lunch - Around 1 PM)
-                    Lean Protein + Veggies:
-                    Grilled chicken breast, tofu, or fish (100-150g).
-                    Mixed salad with leafy greens, cucumbers, cherry tomatoes, 
-                    and a light vinaigrette.
-                    1/2 cup of quinoa, brown rice, or a small sweet potato.
-                    Steamed broccoli or green beans.
-                    Meal 4 (Afternoon Snack - Around 4 PM)
-                    Healthy Snack:
-                    Carrot sticks or cucumber slices with hummus.
-                    A small handful of berries or a low-fat string cheese.
-                    Meal 5 (Dinner - Around 7 PM)
-                    Low-Carb, High-Protein Dinner:
-                    Grilled salmon, turkey, or chicken (100-150g).
-                    Stir-fried or steamed vegetables (zucchini, bell peppers, spinach).
-                    A side salad with olive oil and lemon dressing.
-                    Meal 6 (Evening Snack - Optional)
-                    Light Snack (If Needed):
-                    A small serving of cottage cheese or a casein protein shake.
-                    Herbal tea, such as chamomile or peppermint.
-                    Additional Tips:
-                    Exercise: Incorporate a mix of cardio (e.g., brisk walking, 
-                    cycling) and strength training to enhance fat loss and muscle tone.
-                    Sleep: Ensure 7-8 hours of sleep per night to support weight loss 
-                    efforts.
-                    Mindful Eating: Focus on eating slowly and recognizing hunger 
-                    and fullness cues to prevent overeating.'];
+                $desc = ['<b>For weight loss in a high BMI young female under 35 years old,</b> <br>
+                <b>the goal is to create a balanced, calorie-controlled meal plan</b> <br>
+                <b>that promotes fat loss while maintaining muscle mass and overall</b> <br>
+                <b>health. Here is a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a daily intake of 1,200-1,600 calories, <br>
+                depending on activity level and metabolism. <br>
+                <b>Macronutrient Balance:</b> Focus on lean proteins, healthy fats, <br>
+                and complex carbohydrates. <br>
+                <b>Meal Timing:</b> Consider eating smaller, balanced meals throughout <br>
+                the day to keep metabolism active. <br>
+                <b>Hydration:</b> Drink plenty of water—2-3 liters per day. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - Around 7 AM)</b> <br>
+                <b>Protein and Fiber-Rich Breakfast:</b> <br>
+                2 boiled eggs or a veggie omelette (with spinach, mushrooms, <br>
+                and tomatoes). <br>
+                1 slice of whole-grain toast or 1/2 cup of oatmeal with a <br>
+                sprinkle of flaxseeds. <br>
+                1 piece of fruit (apple, orange, or berries). <br>
+                Herbal tea or black coffee. <br>
+                <b>Meal 2 (Mid-Morning Snack - Around 10 AM)</b> <br>
+                <b>Light Snack:</b> <br>
+                1 small handful of almonds or walnuts. <br>
+                1 cup of Greek yogurt or a small piece of fruit. <br>
+                <b>Meal 3 (Lunch - Around 1 PM)</b> <br>
+                <b>Lean Protein + Veggies:</b> <br>
+                Grilled chicken breast, tofu, or fish (100-150g). <br>
+                Mixed salad with leafy greens, cucumbers, cherry tomatoes, <br>
+                and a light vinaigrette. <br>
+                1/2 cup of quinoa, brown rice, or a small sweet potato. <br>
+                Steamed broccoli or green beans. <br>
+                <b>Meal 4 (Afternoon Snack - Around 4 PM)</b> <br>
+                <b>Healthy Snack:</b> <br>
+                Carrot sticks or cucumber slices with hummus. <br>
+                A small handful of berries or a low-fat string cheese. <br>
+                <b>Meal 5 (Dinner - Around 7 PM)</b> <br>
+                <b>Low-Carb, High-Protein Dinner:</b> <br>
+                Grilled salmon, turkey, or chicken (100-150g). <br>
+                Stir-fried or steamed vegetables (zucchini, bell peppers, spinach). <br>
+                A side salad with olive oil and lemon dressing. <br>
+                <b>Meal 6 (Evening Snack - Optional)</b> <br>
+                <b>Light Snack (If Needed):</b> <br>
+                A small serving of cottage cheese or a casein protein shake. <br>
+                Herbal tea, such as chamomile or peppermint. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Exercise:</b> Incorporate a mix of cardio (e.g., brisk walking, <br>
+                cycling) and strength training to enhance fat loss and muscle tone. <br>
+                <b>Sleep:</b> Ensure 7-8 hours of sleep per night to support weight loss <br>
+                efforts. <br>
+                <b>Mindful Eating:</b> Focus on eating slowly and recognizing hunger <br>
+                and fullness cues to prevent overeating.
+                '];
             }
             if($HighYoungFemaleGain) {
-                $desc = ['To gain muscle mass, especially for a high BMI young female 
-                    under 35, the focus should be on a high-protein, balanced diet 
-                    that supports muscle growth while avoiding excessive fat gain. 
-                    Here is a sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a slight caloric surplus, around 2,000-2,500
-                    calories daily, depending on your activity level and metabolism.
-                    Macronutrient Balance: Prioritize protein (1.2-2.0 grams per kg 
-                    of body weight) along with complex carbohydrates and healthy fats.
-                    Meal Frequency: Eat 4-6 meals throughout the day to keep a steady 
-                    supply of nutrients for muscle building.
-                    Hydration: Drink at least 3-4 liters of water daily, especially 
-                    around workouts.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    Protein-Packed Breakfast:
-                    3 egg whites + 1 whole egg scrambled with spinach and bell peppers.
-                    1 cup of oatmeal with a tablespoon of almond butter or a 
-                    handful of nuts.
-                    1 banana or mixed berries.
-                    1 glass of low-fat milk or a protein shake.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Protein and Healthy Fats:
-                    1 cup of Greek yogurt with honey and a sprinkle of granola.
-                    A small handful of almonds or a slice of whole-grain toast 
-                    with avocado.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Complex Carbs:
-                    Grilled chicken breast, turkey, or tofu (150-200g).
-                    1 cup of brown rice, quinoa, or whole-grain pasta.
-                    A large mixed salad with leafy greens, cucumbers, cherry 
-                    tomatoes, and a light vinaigrette.
-                    Steamed vegetables like broccoli or green beans.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Muscle-Building Snack:
-                    Cottage cheese with a handful of mixed nuts.
-                    A protein smoothie with spinach, a banana, and a scoop of 
-                    protein powder.
-                    Meal 5 (Dinner - 7 PM)
-                    Protein and Veggies:
-                    Grilled salmon, chicken, or lean beef (150-200g).
-                    1 large sweet potato or mashed potatoes.
-                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
-                    A small side of brown rice or quinoa if needed.
-                    Meal 6 (Evening Snack - 9 PM)
-                    Slow-Digesting Protein:
-                    Casein protein shake or a serving of cottage cheese.
-                    A small handful of walnuts or a tablespoon of chia seeds.
-                    Additional Tips:
-                    Workout: Engage in strength training 4-5 times a week, 
-                    focusing on compound movements like squats, deadlifts, and 
-                    bench presses.
-                    Recovery: Ensure adequate rest and recovery between workouts, 
-                    including 7-8 hours of sleep per night.
-                    Supplements: Consider using whey protein, creatine, and 
-                    branched-chain amino acids (BCAAs) to support muscle growth, 
-                    but consult with a healthcare professional before starting 
-                    any new supplement.'];
+                $desc = ['<b>To gain muscle mass, especially for a high BMI young female</b> <br>
+                <b>under 35, the focus should be on a high-protein, balanced diet</b> <br>
+                <b>that supports muscle growth while avoiding excessive fat gain.</b> <br>
+                <b>Here is a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a slight caloric surplus, around 2,000-2,500 <br>
+                calories daily, depending on your activity level and metabolism. <br>
+                <b>Macronutrient Balance:</b> Prioritize protein (1.2-2.0 grams per kg <br>
+                of body weight) along with complex carbohydrates and healthy fats. <br>
+                <b>Meal Frequency:</b> Eat 4-6 meals throughout the day to keep a steady <br>
+                supply of nutrients for muscle building. <br>
+                <b>Hydration:</b> Drink at least 3-4 liters of water daily, especially <br>
+                around workouts. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>Protein-Packed Breakfast:</b> <br>
+                3 egg whites + 1 whole egg scrambled with spinach and bell peppers. <br>
+                1 cup of oatmeal with a tablespoon of almond butter or a <br>
+                handful of nuts. <br>
+                1 banana or mixed berries. <br>
+                1 glass of low-fat milk or a protein shake. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Protein and Healthy Fats:</b> <br>
+                1 cup of Greek yogurt with honey and a sprinkle of granola. <br>
+                A small handful of almonds or a slice of whole-grain toast <br>
+                with avocado. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Complex Carbs:</b> <br>
+                Grilled chicken breast, turkey, or tofu (150-200g). <br>
+                1 cup of brown rice, quinoa, or whole-grain pasta. <br>
+                A large mixed salad with leafy greens, cucumbers, cherry <br>
+                tomatoes, and a light vinaigrette. <br>
+                Steamed vegetables like broccoli or green beans. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Muscle-Building Snack:</b> <br>
+                Cottage cheese with a handful of mixed nuts. <br>
+                A protein smoothie with spinach, a banana, and a scoop of <br>
+                protein powder. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Protein and Veggies:</b> <br>
+                Grilled salmon, chicken, or lean beef (150-200g). <br>
+                1 large sweet potato or mashed potatoes. <br>
+                Roasted vegetables like asparagus, Brussels sprouts, or zucchini. <br>
+                A small side of brown rice or quinoa if needed. <br>
+                <b>Meal 6 (Evening Snack - 9 PM)</b> <br>
+                <b>Slow-Digesting Protein:</b> <br>
+                Casein protein shake or a serving of cottage cheese. <br>
+                A small handful of walnuts or a tablespoon of chia seeds. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Workout:</b> Engage in strength training 4-5 times a week, <br>
+                focusing on compound movements like squats, deadlifts, and <br>
+                bench presses. <br>
+                <b>Recovery:</b> Ensure adequate rest and recovery between workouts, <br>
+                including 7-8 hours of sleep per night. <br>
+                <b>Supplements:</b> Consider using whey protein, creatine, and <br>
+                branched-chain amino acids (BCAAs) to support muscle growth, <br>
+                but consult with a healthcare professional before starting <br>
+                any new supplement.
+                '];
             }
             // -------
             if($LowYoungMaleLose) {
-                $desc = ['For a young male under 35 years old with a low BMI trying 
-                    to lose weight, the focus should be on creating a balanced diet 
-                    that ensures you maintain muscle mass while losing fat. Since a 
-                    low BMI indicates a leaner body type, it is essential to avoid 
-                    excessive calorie restriction to prevent muscle loss. Here is a 
-                    sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a slight caloric deficit, around 1,500-2,000 
-                    calories daily, depending on your activity level and goals.
-                    Macronutrient Balance: Prioritize lean proteins, complex carbohydrates, and healthy fats.
-                    Meal Timing: Eat 3-5 small, balanced meals throughout the day to 
-                    maintain energy levels.
-                    Hydration: Drink plenty of water—at least 2-3 liters per day.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    Balanced Breakfast:
-                    2 whole eggs or an omelette with veggies like spinach, tomatoes, 
-                    and mushrooms.
-                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a 
-                    sprinkle of chia seeds.
-                    1 small piece of fruit (apple, orange, or berries).
-                    Herbal tea or black coffee.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Light Snack:
-                    1 cup of Greek yogurt with a small handful of mixed nuts or seeds.
-                    1 small piece of fruit like a banana or pear.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Complex Carbs:
-                    Grilled chicken breast, turkey, or tofu (100-150g).
-                    1/2 cup of quinoa, brown rice, or sweet potato.
-                    Steamed vegetables such as broccoli, green beans, or carrots.
-                    A small side salad with leafy greens and a light vinaigrette.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Healthy Snack:
-                    Carrot sticks or cucumber slices with hummus.
-                    A small handful of almonds or walnuts.
-                    Meal 5 (Dinner - 7 PM)
-                    Low-Carb, High-Protein Dinner:
-                    Grilled fish (such as salmon or tilapia) or lean meat (100-150g).
-                    Stir-fried or steamed vegetables like zucchini, asparagus, or spinach.
-                    A side salad with olive oil and lemon dressing.
-                    Meal 6 (Evening Snack - Optional)
-                    Light Snack (If Needed):
-                    A small serving of cottage cheese or a casein protein shake.
-                    Herbal tea, such as chamomile or peppermint.
-                    Additional Tips:
-                    Exercise: Focus on a combination of light resistance training 
-                    to maintain muscle mass and moderate cardio for fat loss.
-                    Sleep: Ensure 7-8 hours of quality sleep each night to support 
-                    recovery and weight loss.
-                    Mindful Eating: Eat slowly, paying attention to hunger and 
-                    fullness cues, to avoid overeating.'];
+                $desc = ['<b>For a young male under 35 years old with a low BMI trying</b> <br>
+                <b>to lose weight, the focus should be on creating a balanced diet</b> <br>
+                <b>that ensures you maintain muscle mass while losing fat.</b> <br>
+                <b>Since a low BMI indicates a leaner body type, it is essential to avoid</b> <br>
+                <b>excessive calorie restriction to prevent muscle loss.</b> <br>
+                <b>Here is a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a slight caloric deficit, around 1,500-2,000 <br>
+                calories daily, depending on your activity level and goals. <br>
+                <b>Macronutrient Balance:</b> Prioritize lean proteins, complex carbohydrates, and healthy fats. <br>
+                <b>Meal Timing:</b> Eat 3-5 small, balanced meals throughout the day to <br>
+                maintain energy levels. <br>
+                <b>Hydration:</b> Drink plenty of water—at least 2-3 liters per day. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>Balanced Breakfast:</b> <br>
+                2 whole eggs or an omelette with veggies like spinach, tomatoes, <br>
+                and mushrooms. <br>
+                1 slice of whole-grain toast or 1/2 cup of oatmeal with a <br>
+                sprinkle of chia seeds. <br>
+                1 small piece of fruit (apple, orange, or berries). <br>
+                Herbal tea or black coffee. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Light Snack:</b> <br>
+                1 cup of Greek yogurt with a small handful of mixed nuts or seeds. <br>
+                1 small piece of fruit like a banana or pear. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Complex Carbs:</b> <br>
+                Grilled chicken breast, turkey, or tofu (100-150g). <br>
+                1/2 cup of quinoa, brown rice, or sweet potato. <br>
+                Steamed vegetables such as broccoli, green beans, or carrots. <br>
+                A small side salad with leafy greens and a light vinaigrette. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Healthy Snack:</b> <br>
+                Carrot sticks or cucumber slices with hummus. <br>
+                A small handful of almonds or walnuts. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Low-Carb, High-Protein Dinner:</b> <br>
+                Grilled fish (such as salmon or tilapia) or lean meat (100-150g). <br>
+                Stir-fried or steamed vegetables like zucchini, asparagus, or spinach. <br>
+                A side salad with olive oil and lemon dressing. <br>
+                <b>Meal 6 (Evening Snack - Optional)</b> <br>
+                <b>Light Snack (If Needed):</b> <br>
+                A small serving of cottage cheese or a casein protein shake. <br>
+                Herbal tea, such as chamomile or peppermint. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Exercise:</b> Focus on a combination of light resistance training <br>
+                to maintain muscle mass and moderate cardio for fat loss. <br>
+                <b>Sleep:</b> Ensure 7-8 hours of quality sleep each night to support <br>
+                recovery and weight loss. <br>
+                <b>Mindful Eating:</b> Eat slowly, paying attention to hunger and <br>
+                fullness cues, to avoid overeating.
+                '];
             }
             if($LowYoungMaleGain) {
-                $desc = ['For a young male under 35 years old with a low BMI aiming 
-                    to gain muscle mass, the focus should be on a high-calorie, 
-                    protein-rich diet to support muscle growth. Here is a sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a caloric surplus, around 2,500-3,000 
-                    calories daily, depending on your metabolism and activity level.
-                    Macronutrient Balance: Prioritize protein intake (1.5-2.0 grams per 
-                    kg of body weight), along with healthy fats and complex carbohydrates.
-                    Meal Frequency: Eat 5-6 meals throughout the day to ensure a steady s
-                    upply of nutrients.
-                    Hydration: Drink at least 3-4 liters of water daily, especially 
-                    around workouts.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    High-Calorie Breakfast:
-                    3 whole eggs scrambled with spinach, bell peppers, and onions.
-                    1 cup of oatmeal with a tablespoon of almond butter or peanut butter.
-                    1 banana or a handful of mixed berries.
-                    1 glass of whole milk or a protein shake.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Protein and Healthy Fats:
-                    1 cup of Greek yogurt with honey and granola.
-                    A handful of mixed nuts or a protein bar.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Complex Carbs:
-                    Grilled chicken breast, turkey, or lean beef (200-250g).
-                    1 cup of brown rice, quinoa, or whole-grain pasta.
-                    A large salad with leafy greens, cucumbers, tomatoes, and a 
-                    light vinaigrette.
-                    Steamed vegetables like broccoli or green beans.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Muscle-Building Snack:
-                    Cottage cheese with a handful of mixed nuts.
-                    A protein smoothie with spinach, a banana, and a scoop of protein powder.
-                    Meal 5 (Dinner - 7 PM)
-                    Protein and Veggies:
-                    Grilled salmon, chicken, or lean beef (200-250g).
-                    1 large sweet potato or mashed potatoes.
-                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
-                    A small side of brown rice or quinoa if needed.
-                    Meal 6 (Evening Snack - 9 PM)
-                    Slow-Digesting Protein:
-                    Casein protein shake or a serving of cottage cheese.
-                    A small handful of walnuts or a tablespoon of chia seeds.
-                    Additional Tips:
-                    Workout: Engage in strength training 4-5 times a week, focusing 
-                    on compound movements like squats, deadlifts, and bench presses.
-                    Recovery: Ensure adequate rest and recovery between workouts, 
-                    including 7-8 hours of sleep per night.
-                    Supplements: Consider using whey protein, creatine, and 
-                    branched-chain amino acids (BCAAs) to support muscle growth, 
-                    but consult with a healthcare professional before starting any 
-                    new supplement.'];
+                $desc = ['<b>For a young male under 35 years old with a low BMI aiming</b> <br>
+                <b>to gain muscle mass, the focus should be on a high-calorie,</b> <br>
+                <b>protein-rich diet to support muscle growth.</b> <br>
+                <b>Here is a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a caloric surplus, around 2,500-3,000 <br>
+                calories daily, depending on your metabolism and activity level. <br>
+                <b>Macronutrient Balance:</b> Prioritize protein intake (1.5-2.0 grams per <br>
+                kg of body weight), along with healthy fats and complex carbohydrates. <br>
+                <b>Meal Frequency:</b> Eat 5-6 meals throughout the day to ensure a steady <br>
+                supply of nutrients. <br>
+                <b>Hydration:</b> Drink at least 3-4 liters of water daily, especially <br>
+                around workouts. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>High-Calorie Breakfast:</b> <br>
+                3 whole eggs scrambled with spinach, bell peppers, and onions. <br>
+                1 cup of oatmeal with a tablespoon of almond butter or peanut butter. <br>
+                1 banana or a handful of mixed berries. <br>
+                1 glass of whole milk or a protein shake. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Protein and Healthy Fats:</b> <br>
+                1 cup of Greek yogurt with honey and granola. <br>
+                A handful of mixed nuts or a protein bar. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Complex Carbs:</b> <br>
+                Grilled chicken breast, turkey, or lean beef (200-250g). <br>
+                1 cup of brown rice, quinoa, or whole-grain pasta. <br>
+                A large salad with leafy greens, cucumbers, tomatoes, and a <br>
+                light vinaigrette. <br>
+                Steamed vegetables like broccoli or green beans. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Muscle-Building Snack:</b> <br>
+                Cottage cheese with a handful of mixed nuts. <br>
+                A protein smoothie with spinach, a banana, and a scoop of protein powder. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Protein and Veggies:</b> <br>
+                Grilled salmon, chicken, or lean beef (200-250g). <br>
+                1 large sweet potato or mashed potatoes. <br>
+                Roasted vegetables like asparagus, Brussels sprouts, or zucchini. <br>
+                A small side of brown rice or quinoa if needed. <br>
+                <b>Meal 6 (Evening Snack - 9 PM)</b> <br>
+                <b>Slow-Digesting Protein:</b> <br>
+                Casein protein shake or a serving of cottage cheese. <br>
+                A small handful of walnuts or a tablespoon of chia seeds. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Workout:</b> Engage in strength training 4-5 times a week, focusing <br>
+                on compound movements like squats, deadlifts, and bench presses. <br>
+                <b>Recovery:</b> Ensure adequate rest and recovery between workouts, <br>
+                including 7-8 hours of sleep per night. <br>
+                <b>Supplements:</b> Consider using whey protein, creatine, and <br>
+                branched-chain amino acids (BCAAs) to support muscle growth, <br>
+                but consult with a healthcare professional before starting any <br>
+                new supplement.
+                '];
             }
             if($LowYoungFemaleLose) {
-                $desc = ['For a low BMI young female under 35 years old trying to 
-                    lose weight, the focus should be on a balanced, nutrient-dense 
-                    diet that supports fat loss while preserving lean muscle mass. 
-                    Here is a sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a slight caloric deficit, around 1,200-1,500 
-                    calories daily, depending on activity level.
-                    Macronutrient Balance: Emphasize lean proteins, healthy fats, and 
-                    complex carbohydrates.
-                    Meal Timing: Eat 3-5 small, balanced meals throughout the day to 
-                    keep metabolism active.
-                    Hydration: Drink plenty of water—2-3 liters per day.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    Protein and Fiber-Rich Breakfast:
-                    2 whole eggs or an omelette with veggies like spinach, tomatoes, 
-                    and mushrooms.
-                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle 
-                    of flaxseeds.
-                    1 piece of fruit (apple, orange, or berries).
-                    Herbal tea or black coffee.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Light Snack:
-                    1 cup of Greek yogurt with a small handful of almonds or walnuts.
-                    1 small piece of fruit like a banana or a few berries.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Complex Carbs:
-                    Grilled chicken breast, tofu, or fish (100-150g).
-                    1/2 cup of quinoa, brown rice, or sweet potato.
-                    Steamed vegetables such as broccoli, green beans, or carrots.
-                    A small side salad with leafy greens and a light vinaigrette.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Healthy Snack:
-                    Carrot sticks or cucumber slices with hummus.
-                    A small handful of mixed nuts or a low-fat string cheese.
-                    Meal 5 (Dinner - 7 PM)
-                    Low-Carb, High-Protein Dinner:
-                    Grilled fish (such as salmon or tilapia) or lean meat (100-150g).
-                    Stir-fried or steamed vegetables like zucchini, asparagus, or spinach.
-                    A side salad with olive oil and lemon dressing.
-                    Meal 6 (Evening Snack - Optional)
-                    Light Snack (If Needed):
-                    A small serving of cottage cheese or a casein protein shake.
-                    Herbal tea, such as chamomile or peppermint.
-                    Additional Tips:
-                    Exercise: Focus on a combination of light resistance training 
-                    to maintain muscle mass and moderate cardio for fat loss.
-                    Sleep: Ensure 7-8 hours of quality sleep each night to support 
-                    recovery and weight loss.
-                    Mindful Eating: Eat slowly, paying attention to hunger and 
-                    fullness cues, to avoid overeating.'];
+                $desc = ['<b>For a low BMI young female under 35 years old trying to</b> <br>
+                <b>lose weight, the focus should be on a balanced, nutrient-dense</b> <br>
+                <b>diet that supports fat loss while preserving lean muscle mass.</b> <br>
+                <b>Here is a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a slight caloric deficit, around 1,200-1,500 <br>
+                calories daily, depending on activity level. <br>
+                <b>Macronutrient Balance:</b> Emphasize lean proteins, healthy fats, and <br>
+                complex carbohydrates. <br>
+                <b>Meal Timing:</b> Eat 3-5 small, balanced meals throughout the day to <br>
+                keep metabolism active. <br>
+                <b>Hydration:</b> Drink plenty of water—2-3 liters per day. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>Protein and Fiber-Rich Breakfast:</b> <br>
+                2 whole eggs or an omelette with veggies like spinach, tomatoes, <br>
+                and mushrooms. <br>
+                1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle <br>
+                of flaxseeds. <br>
+                1 piece of fruit (apple, orange, or berries). <br>
+                Herbal tea or black coffee. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Light Snack:</b> <br>
+                1 cup of Greek yogurt with a small handful of almonds or walnuts. <br>
+                1 small piece of fruit like a banana or a few berries. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Complex Carbs:</b> <br>
+                Grilled chicken breast, tofu, or fish (100-150g). <br>
+                1/2 cup of quinoa, brown rice, or sweet potato. <br>
+                Steamed vegetables such as broccoli, green beans, or carrots. <br>
+                A small side salad with leafy greens and a light vinaigrette. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Healthy Snack:</b> <br>
+                Carrot sticks or cucumber slices with hummus. <br>
+                A small handful of mixed nuts or a low-fat string cheese. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Low-Carb, High-Protein Dinner:</b> <br>
+                Grilled fish (such as salmon or tilapia) or lean meat (100-150g). <br>
+                Stir-fried or steamed vegetables like zucchini, asparagus, or spinach. <br>
+                A side salad with olive oil and lemon dressing. <br>
+                <b>Meal 6 (Evening Snack - Optional)</b> <br>
+                <b>Light Snack (If Needed):</b> <br>
+                A small serving of cottage cheese or a casein protein shake. <br>
+                Herbal tea, such as chamomile or peppermint. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Exercise:</b> Focus on a combination of light resistance training <br>
+                to maintain muscle mass and moderate cardio for fat loss. <br>
+                <b>Sleep:</b> Ensure 7-8 hours of quality sleep each night to support <br>
+                recovery and weight loss. <br>
+                <b>Mindful Eating:</b> Eat slowly, paying attention to hunger and <br>
+                fullness cues, to avoid overeating.
+                '];
             }
             if($LowYoungFemaleGain) {
-                $desc = ['For a young female under 35 years old with a low BMI aiming 
-                    to gain muscle mass, the focus should be on a high-calorie, protein-rich 
-                    diet that supports muscle growth. Here is a sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a caloric surplus, around 2,000-2,500 
-                    calories daily, depending on your activity level.
-                    Macronutrient Balance: Prioritize protein intake (1.5-2.0 grams per 
-                    kg of body weight) along with healthy fats and complex carbohydrates.
-                    Meal Frequency: Eat 5-6 meals throughout the day to ensure a steady 
-                    supply of nutrients for muscle growth.
-                    Hydration: Drink at least 3-4 liters of water daily, especially 
-                    around workouts.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    Protein-Packed Breakfast:
-                    2 whole eggs scrambled with spinach, tomatoes, and mushrooms.
-                    1 cup of oatmeal with a tablespoon of almond butter or peanut butter.
-                    1 banana or a handful of mixed berries.
-                    1 glass of whole milk or a protein shake.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Protein and Healthy Fats:
-                    1 cup of Greek yogurt with honey and granola.
-                    A handful of mixed nuts or a slice of whole-grain toast with avocado.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Complex Carbs:
-                    Grilled chicken breast, turkey, or tofu (150-200g).
-                    1 cup of brown rice, quinoa, or whole-grain pasta.
-                    A large salad with leafy greens, cucumbers, cherry tomatoes, and a light vinaigrette.
-                    Steamed vegetables like broccoli or green beans.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Muscle-Building Snack:
-                    Cottage cheese with a handful of mixed nuts.
-                    A protein smoothie with spinach, a banana, and a scoop of protein powder.
-                    Meal 5 (Dinner - 7 PM)
-                    Protein and Veggies:
-                    Grilled salmon, chicken, or lean beef (150-200g).
-                    1 large sweet potato or mashed potatoes.
-                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
-                    A small side of brown rice or quinoa if needed.
-                    Meal 6 (Evening Snack - 9 PM)
-                    Slow-Digesting Protein:
-                    Casein protein shake or a serving of cottage cheese.
-                    A small handful of walnuts or a tablespoon of chia seeds.
-                    Additional Tips:
-                    Workout: Engage in strength training 4-5 times a week, focusing 
-                    on compound movements like squats, deadlifts, and bench presses.
-                    Recovery: Ensure adequate rest and recovery between workouts, 
-                    including 7-8 hours of sleep per night.
-                    Supplements: Consider using whey protein, creatine, and branched-chain 
-                    amino acids (BCAAs) to support muscle growth, but consult with a 
-                    healthcare professional before starting any new supplement.'];
+                $desc = ['<b>For a young female under 35 years old with a low BMI aiming</b> <br>
+                <b>to gain muscle mass, the focus should be on a high-calorie, protein-rich</b> <br>
+                <b>diet that supports muscle growth. Here is a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a caloric surplus, around 2,000-2,500 <br>
+                calories daily, depending on your activity level. <br>
+                <b>Macronutrient Balance:</b> Prioritize protein intake (1.5-2.0 grams per <br>
+                kg of body weight) along with healthy fats and complex carbohydrates. <br>
+                <b>Meal Frequency:</b> Eat 5-6 meals throughout the day to ensure a steady <br>
+                supply of nutrients for muscle growth. <br>
+                <b>Hydration:</b> Drink at least 3-4 liters of water daily, especially <br>
+                around workouts. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>Protein-Packed Breakfast:</b> <br>
+                2 whole eggs scrambled with spinach, tomatoes, and mushrooms. <br>
+                1 cup of oatmeal with a tablespoon of almond butter or peanut butter. <br>
+                1 banana or a handful of mixed berries. <br>
+                1 glass of whole milk or a protein shake. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Protein and Healthy Fats:</b> <br>
+                1 cup of Greek yogurt with honey and granola. <br>
+                A handful of mixed nuts or a slice of whole-grain toast with avocado. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Complex Carbs:</b> <br>
+                Grilled chicken breast, turkey, or tofu (150-200g). <br>
+                1 cup of brown rice, quinoa, or whole-grain pasta. <br>
+                A large salad with leafy greens, cucumbers, cherry tomatoes, and a light vinaigrette. <br>
+                Steamed vegetables like broccoli or green beans. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Muscle-Building Snack:</b> <br>
+                Cottage cheese with a handful of mixed nuts. <br>
+                A protein smoothie with spinach, a banana, and a scoop of protein powder. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Protein and Veggies:</b> <br>
+                Grilled salmon, chicken, or lean beef (150-200g). <br>
+                1 large sweet potato or mashed potatoes. <br>
+                Roasted vegetables like asparagus, Brussels sprouts, or zucchini. <br>
+                A small side of brown rice or quinoa if needed. <br>
+                <b>Meal 6 (Evening Snack - 9 PM)</b> <br>
+                <b>Slow-Digesting Protein:</b> <br>
+                Casein protein shake or a serving of cottage cheese. <br>
+                A small handful of walnuts or a tablespoon of chia seeds. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Workout:</b> Engage in strength training 4-5 times a week, focusing <br>
+                on compound movements like squats, deadlifts, and bench presses. <br>
+                <b>Recovery:</b> Ensure adequate rest and recovery between workouts, <br>
+                including 7-8 hours of sleep per night. <br>
+                <b>Supplements:</b> Consider using whey protein, creatine, and branched-chain <br>
+                amino acids (BCAAs) to support muscle growth, but consult with a <br>
+                healthcare professional before starting any new supplement.
+                '];
             }
             // -------
             if($HighOldMaleLose) {
-                $desc = ['For a high BMI older male above 35-40 years old trying to 
-                    lose weight, the focus should be on a balanced, calorie-controlled
-                    diet that promotes fat loss while maintaining muscle mass. Here is 
-                    a sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a daily intake of 1,500-2,000 calories, 
-                    depending on activity level and metabolism.
-                    Macronutrient Balance: Focus on lean proteins, healthy fats, 
-                    and complex carbohydrates.
-                    Meal Timing: Eat 3-5 small, balanced meals throughout the day 
-                    to keep metabolism active.
-                    Hydration: Drink plenty of water—2-3 liters per day.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    Balanced Breakfast:
-                    3 egg whites and 1 whole egg scrambled with spinach, tomatoes, 
-                    and onions.
-                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle 
-                    of flaxseeds.
-                    1 piece of fruit (apple, orange, or berries).
-                    Black coffee or green tea.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Light Snack:
-                    1 small handful of almonds or walnuts.
-                    1 cup of Greek yogurt with a small amount of honey or berries.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Vegetables:
-                    Grilled chicken breast, turkey, or fish (150g).
-                    Mixed salad with leafy greens, cucumbers, cherry tomatoes, and 
-                    a light vinaigrette.
-                    1/2 cup of quinoa, brown rice, or a small sweet potato.
-                    Steamed broccoli or green beans.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Healthy Snack:
-                    Carrot sticks or cucumber slices with hummus.
-                    A small apple or a few slices of cheese.
-                    Meal 5 (Dinner - 7 PM)
-                    Low-Carb, High-Protein Dinner:
-                    Grilled salmon, chicken, or lean beef (150g).
-                    Stir-fried or steamed vegetables like zucchini, asparagus, or spinach.
-                    A side salad with olive oil and lemon dressing.
-                    Meal 6 (Evening Snack - Optional)
-                    Light Snack (If Needed):
-                    A small serving of cottage cheese or a casein protein shake.
-                    Herbal tea, such as chamomile or peppermint.
-                    Additional Tips:
-                    Exercise: Incorporate a mix of moderate cardio (e.g., walking, 
-                    cycling) and strength training to support fat loss and muscle 
-                    preservation.
-                    Sleep: Ensure 7-8 hours of sleep per night to support weight 
-                    loss and overall health.
-                    Mindful Eating: Focus on eating slowly and recognizing hunger 
-                    and fullness cues to prevent overeating.'];
+                $desc = ['<b>For a high BMI older male above 35-40 years old trying to</b> <br>
+                <b>lose weight, the focus should be on a balanced, calorie-controlled</b> <br>
+                <b>diet that promotes fat loss while maintaining muscle mass. Here is</b> <br>
+                <b>a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a daily intake of 1,500-2,000 calories, <br>
+                depending on activity level and metabolism. <br>
+                <b>Macronutrient Balance:</b> Focus on lean proteins, healthy fats, <br>
+                and complex carbohydrates. <br>
+                <b>Meal Timing:</b> Eat 3-5 small, balanced meals throughout the day <br>
+                to keep metabolism active. <br>
+                <b>Hydration:</b> Drink plenty of water—2-3 liters per day. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>Balanced Breakfast:</b> <br>
+                3 egg whites and 1 whole egg scrambled with spinach, tomatoes, <br>
+                and onions. <br>
+                1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle <br>
+                of flaxseeds. <br>
+                1 piece of fruit (apple, orange, or berries). <br>
+                Black coffee or green tea. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Light Snack:</b> <br>
+                1 small handful of almonds or walnuts. <br>
+                1 cup of Greek yogurt with a small amount of honey or berries. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Vegetables:</b> <br>
+                Grilled chicken breast, turkey, or fish (150g). <br>
+                Mixed salad with leafy greens, cucumbers, cherry tomatoes, and <br>
+                a light vinaigrette. <br>
+                1/2 cup of quinoa, brown rice, or a small sweet potato. <br>
+                Steamed broccoli or green beans. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Healthy Snack:</b> <br>
+                Carrot sticks or cucumber slices with hummus. <br>
+                A small apple or a few slices of cheese. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Low-Carb, High-Protein Dinner:</b> <br>
+                Grilled salmon, chicken, or lean beef (150g). <br>
+                Stir-fried or steamed vegetables like zucchini, asparagus, or spinach. <br>
+                A side salad with olive oil and lemon dressing. <br>
+                <b>Meal 6 (Evening Snack - Optional)</b> <br>
+                <b>Light Snack (If Needed):</b> <br>
+                A small serving of cottage cheese or a casein protein shake. <br>
+                Herbal tea, such as chamomile or peppermint. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Exercise:</b> Incorporate a mix of moderate cardio (e.g., walking, <br>
+                cycling) and strength training to support fat loss and muscle <br>
+                preservation. <br>
+                <b>Sleep:</b> Ensure 7-8 hours of sleep per night to support weight <br>
+                loss and overall health. <br>
+                <b>Mindful Eating:</b> Focus on eating slowly and recognizing hunger <br>
+                and fullness cues to prevent overeating.
+                '];
             }
             if($HighOldMaleGain) {
-                $desc = ['For a high BMI older male above 35-40 years old trying to
-                    gain muscle mass, the focus should be on a nutrient-dense, 
-                    protein-rich diet that supports muscle growth while managing body 
-                    fat. Here is a sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a moderate caloric surplus, around 
-                    2,200-2,800 calories daily, depending on your activity level.
-                    Macronutrient Balance: Prioritize protein intake (1.2-1.6 grams 
-                    per kg of body weight), along with healthy fats and complex 
-                    carbohydrates.
-                    Meal Frequency: Eat 4-5 meals throughout the day to ensure a steady 
-                    supply of nutrients for muscle growth.
-                    Hydration: Drink at least 3-4 liters of water daily, especially 
-                    around workouts.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    Protein and Fiber-Rich Breakfast:
-                    3 whole eggs scrambled with spinach, tomatoes, and onions.
-                    1 cup of oatmeal with a tablespoon of almond butter or peanut butter.
-                    1 banana or a handful of mixed berries.
-                    1 glass of low-fat milk or a protein shake.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Protein and Healthy Fats:
-                    1 cup of Greek yogurt with honey and a sprinkle of granola.
-                    A handful of mixed nuts or a slice of whole-grain toast with avocado.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Complex Carbs:
-                    Grilled chicken breast, turkey, or lean beef (200g).
-                    1 cup of brown rice, quinoa, or whole-grain pasta.
-                    A large mixed salad with leafy greens, cucumbers, cherry tomatoes, 
-                    and a light vinaigrette.
-                    Steamed vegetables like broccoli, cauliflower, or green beans.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Muscle-Building Snack:
-                    Cottage cheese with a handful of mixed nuts.
-                    A protein smoothie with spinach, a banana, and a scoop of protein 
-                    powder.
-                    Meal 5 (Dinner - 7 PM)
-                    Protein and Veggies:
-                    Grilled salmon, chicken, or lean beef (200g).
-                    1 large sweet potato or mashed potatoes.
-                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
-                    A small side of brown rice or quinoa if needed.
-                    Meal 6 (Evening Snack - 9 PM)
-                    
-                    Slow-Digesting Protein:
-                    Casein protein shake or a serving of cottage cheese.
-                    A small handful of walnuts or a tablespoon of chia seeds.
-                    Additional Tips:
-                    Exercise: Engage in strength training 3-5 times a week, focusing 
-                    on compound movements like squats, deadlifts, and bench presses. 
-                    Incorporate moderate cardio to support cardiovascular health.
-                    Recovery: Prioritize rest and recovery, including 7-8 hours of 
-                    sleep per night.
-                    Supplements: Consider using whey protein, creatine, and 
-                    branched-chain amino acids (BCAAs) to support muscle growth, 
-                    but consult with a healthcare professional before starting any 
-                    new supplement.'];
+                $desc = ['<b>For a high BMI older male above 35-40 years old trying to</b> <br>
+                <b>gain muscle mass, the focus should be on a nutrient-dense,</b> <br>
+                <b>protein-rich diet that supports muscle growth while managing body</b> <br>
+                <b>fat. Here is a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a moderate caloric surplus, around <br>
+                2,200-2,800 calories daily, depending on your activity level. <br>
+                <b>Macronutrient Balance:</b> Prioritize protein intake (1.2-1.6 grams <br>
+                per kg of body weight), along with healthy fats and complex <br>
+                carbohydrates. <br>
+                <b>Meal Frequency:</b> Eat 4-5 meals throughout the day to ensure a steady <br>
+                supply of nutrients for muscle growth. <br>
+                <b>Hydration:</b> Drink at least 3-4 liters of water daily, especially <br>
+                around workouts. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>Protein and Fiber-Rich Breakfast:</b> <br>
+                3 whole eggs scrambled with spinach, tomatoes, and onions. <br>
+                1 cup of oatmeal with a tablespoon of almond butter or peanut butter. <br>
+                1 banana or a handful of mixed berries. <br>
+                1 glass of low-fat milk or a protein shake. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Protein and Healthy Fats:</b> <br>
+                1 cup of Greek yogurt with honey and a sprinkle of granola. <br>
+                A handful of mixed nuts or a slice of whole-grain toast with avocado. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Complex Carbs:</b> <br>
+                Grilled chicken breast, turkey, or lean beef (200g). <br>
+                1 cup of brown rice, quinoa, or whole-grain pasta. <br>
+                A large mixed salad with leafy greens, cucumbers, cherry tomatoes, <br>
+                and a light vinaigrette. <br>
+                Steamed vegetables like broccoli, cauliflower, or green beans. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Muscle-Building Snack:</b> <br>
+                Cottage cheese with a handful of mixed nuts. <br>
+                A protein smoothie with spinach, a banana, and a scoop of protein <br>
+                powder. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Protein and Veggies:</b> <br>
+                Grilled salmon, chicken, or lean beef (200g). <br>
+                1 large sweet potato or mashed potatoes. <br>
+                Roasted vegetables like asparagus, Brussels sprouts, or zucchini. <br>
+                A small side of brown rice or quinoa if needed. <br>
+                <b>Meal 6 (Evening Snack - 9 PM)</b> <br>
+                <b>Slow-Digesting Protein:</b> <br>
+                Casein protein shake or a serving of cottage cheese. <br>
+                A small handful of walnuts or a tablespoon of chia seeds. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Exercise:</b> Engage in strength training 3-5 times a week, focusing <br>
+                on compound movements like squats, deadlifts, and bench presses. <br>
+                Incorporate moderate cardio to support cardiovascular health. <br>
+                <b>Recovery:</b> Prioritize rest and recovery, including 7-8 hours of <br>
+                sleep per night. <br>
+                <b>Supplements:</b> Consider using whey protein, creatine, and <br>
+                branched-chain amino acids (BCAAs) to support muscle growth, <br>
+                but consult with a healthcare professional before starting any <br>
+                new supplement.
+                '];
             }
             if($HighOldFemaleLose) {
-                $desc = ['For a high BMI older female above 35-40 years old trying 
-                    to lose weight, the focus should be on a balanced, calorie-controlled 
-                    diet that promotes fat loss while maintaining muscle mass and overall 
-                    health. Here is a sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a daily intake of 1,200-1,600 calories, 
-                    depending on activity level.
-                    Macronutrient Balance: Emphasize lean proteins, healthy fats, 
-                    and complex carbohydrates with a focus on nutrient-dense foods.
-                    Meal Timing: Eat 3-5 small, balanced meals throughout the day to
-                    maintain energy levels and prevent overeating.
-                    Hydration: Drink at least 2-3 liters of water daily.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    Protein and Fiber-Rich Breakfast:
-                    2 scrambled eggs or an omelette with spinach, tomatoes, and onions.
-                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle 
-                    of chia seeds.
-                    1 small piece of fruit (apple, orange, or berries).
-                    Herbal tea or black coffee.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Light Snack:
-                    1 small handful of almonds or walnuts.
-                    1 cup of Greek yogurt with a few berries.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Vegetables:
-                    Grilled chicken breast, turkey, or fish (100-150g).
-                    Mixed salad with leafy greens, cucumbers, cherry tomatoes, and 
-                    a light vinaigrette.
-                    1/2 cup of quinoa, brown rice, or a small sweet potato.
-                    Steamed vegetables like broccoli, green beans, or zucchini.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Healthy Snack:
-                    Carrot sticks or cucumber slices with hummus.
-                    A small apple or a low-fat string cheese.
-                    Meal 5 (Dinner - 7 PM)
-                    Low-Carb, High-Protein Dinner:
-                    Grilled salmon, chicken, or lean beef (100-150g).
-                    Stir-fried or steamed vegetables like zucchini, asparagus, 
-                    or spinach.
-                    A side salad with olive oil and lemon dressing.
-                    Meal 6 (Evening Snack - Optional)
-                    Light Snack (If Needed):
-                    A small serving of cottage cheese or a casein protein shake.
-                    Herbal tea, such as chamomile or peppermint.
-                    Additional Tips:
-                    Exercise: Incorporate a mix of moderate cardio (e.g., walking, 
-                    cycling) and strength training to support fat loss and muscle 
-                    preservation.
-                    Sleep: Ensure 7-8 hours of quality sleep each night to support 
-                    weight loss and overall health.
-                    Mindful Eating: Focus on eating slowly and recognizing hunger and 
-                    fullness cues to avoid overeating.'];
+                $desc = ['<b>For a high BMI older female above 35-40 years old trying</b> <br>
+                <b>to lose weight, the focus should be on a balanced, calorie-controlled</b> <br>
+                <b>diet that promotes fat loss while maintaining muscle mass and overall</b> <br>
+                <b>health. Here is a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a daily intake of 1,200-1,600 calories, <br>
+                depending on activity level. <br>
+                <b>Macronutrient Balance:</b> Emphasize lean proteins, healthy fats, <br>
+                and complex carbohydrates with a focus on nutrient-dense foods. <br>
+                <b>Meal Timing:</b> Eat 3-5 small, balanced meals throughout the day to <br>
+                maintain energy levels and prevent overeating. <br>
+                <b>Hydration:</b> Drink at least 2-3 liters of water daily. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>Protein and Fiber-Rich Breakfast:</b> <br>
+                2 scrambled eggs or an omelette with spinach, tomatoes, and onions. <br>
+                1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle <br>
+                of chia seeds. <br>
+                1 small piece of fruit (apple, orange, or berries). <br>
+                Herbal tea or black coffee. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Light Snack:</b> <br>
+                1 small handful of almonds or walnuts. <br>
+                1 cup of Greek yogurt with a few berries. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Vegetables:</b> <br>
+                Grilled chicken breast, turkey, or fish (100-150g). <br>
+                Mixed salad with leafy greens, cucumbers, cherry tomatoes, and <br>
+                a light vinaigrette. <br>
+                1/2 cup of quinoa, brown rice, or a small sweet potato. <br>
+                Steamed vegetables like broccoli, green beans, or zucchini. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Healthy Snack:</b> <br>
+                Carrot sticks or cucumber slices with hummus. <br>
+                A small apple or a low-fat string cheese. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Low-Carb, High-Protein Dinner:</b> <br>
+                Grilled salmon, chicken, or lean beef (100-150g). <br>
+                Stir-fried or steamed vegetables like zucchini, asparagus, <br>
+                or spinach. <br>
+                A side salad with olive oil and lemon dressing. <br>
+                <b>Meal 6 (Evening Snack - Optional)</b> <br>
+                <b>Light Snack (If Needed):</b> <br>
+                A small serving of cottage cheese or a casein protein shake. <br>
+                Herbal tea, such as chamomile or peppermint. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Exercise:</b> Incorporate a mix of moderate cardio (e.g., walking, <br>
+                cycling) and strength training to support fat loss and muscle <br>
+                preservation. <br>
+                <b>Sleep:</b> Ensure 7-8 hours of quality sleep each night to support <br>
+                weight loss and overall health. <br>
+                <b>Mindful Eating:</b> Focus on eating slowly and recognizing hunger and <br>
+                fullness cues to avoid overeating.
+                '];
             }
             if($HighOldFemaleGain) {
-                $desc = ['For a high BMI older female above 35-40 years old trying to 
-                    gain muscle mass, the focus should be on a nutrient-dense, 
-                    protein-rich diet that supports muscle growth while managing 
-                    body composition. Here is a sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a moderate caloric surplus, around 
-                    1,800-2,200 calories daily, depending on your activity level.
-                    Macronutrient Balance: Prioritize protein intake (1.2-1.6 grams 
-                    per kg of body weight), along with healthy fats and complex 
-                    carbohydrates.
-                    Meal Frequency: Eat 4-5 meals throughout the day to ensure a 
-                    steady supply of nutrients for muscle growth.
-                    Hydration: Drink at least 2.5-3 liters of water daily, especially 
-                    around workouts.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    Protein and Complex Carbs:
-                    3 scrambled egg whites and 1 whole egg with spinach, tomatoes, 
-                    and onions.
-                    1/2 cup of oatmeal with a tablespoon of almond butter or peanut 
-                    butter.
-                    1 small banana or a handful of mixed berries.
-                    1 glass of low-fat milk or a protein shake.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Protein and Healthy Fats:
-                    1 cup of Greek yogurt with honey and a sprinkle of granola.
-                    A handful of mixed nuts or a slice of whole-grain toast with avocado.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Complex Carbs:
-                    Grilled chicken breast, turkey, or lean beef (150g).
-                    1 cup of brown rice, quinoa, or whole-grain pasta.
-                    A large mixed salad with leafy greens, cucumbers, cherry tomatoes, 
-                    and a light vinaigrette.
-                    Steamed vegetables like broccoli, cauliflower, or green beans.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Muscle-Building Snack:
-                    Cottage cheese with a handful of mixed nuts.
-                    A protein smoothie with spinach, a banana, and a scoop of protein 
-                    powder.
-                    Meal 5 (Dinner - 7 PM)
-                    Protein and Veggies:
-                    Grilled salmon, chicken, or lean beef (150g).
-                    1 large sweet potato or mashed potatoes.
-                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
-                    A small side of brown rice or quinoa if needed.
-                    Meal 6 (Evening Snack - 9 PM)
-                    Slow-Digesting Protein:
-                    Casein protein shake or a serving of cottage cheese.
-                    A small handful of walnuts or a tablespoon of chia seeds.
-                    Additional Tips:
-                    Exercise: Engage in strength training 3-5 times a week, focusing 
-                    on compound movements like squats, deadlifts, and bench presses. 
-                    Incorporate moderate cardio to support cardiovascular health.
-                    Recovery: Prioritize rest and recovery, including 7-8 hours of 
-                    sleep per night.
-                    Supplements: Consider using whey protein, creatine, and 
-                    branched-chain amino acids (BCAAs) to support muscle growth, but 
-                    consult with a healthcare professional before starting any new 
-                    supplement.'];
+                $desc = ['<b>For a high BMI older female above 35-40 years old trying to</b> <br>
+                <b>gain muscle mass, the focus should be on a nutrient-dense, protein-rich</b> <br>
+                <b>diet that supports muscle growth while managing body composition. Here is</b> <br>
+                <b>a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a moderate caloric surplus, around <br>
+                1,800-2,200 calories daily, depending on your activity level. <br>
+                <b>Macronutrient Balance:</b> Prioritize protein intake (1.2-1.6 grams <br>
+                per kg of body weight), along with healthy fats and complex <br>
+                carbohydrates. <br>
+                <b>Meal Frequency:</b> Eat 4-5 meals throughout the day to ensure a <br>
+                steady supply of nutrients for muscle growth. <br>
+                <b>Hydration:</b> Drink at least 2.5-3 liters of water daily, especially <br>
+                around workouts. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>Protein and Complex Carbs:</b> <br>
+                3 scrambled egg whites and 1 whole egg with spinach, tomatoes, <br>
+                and onions. <br>
+                1/2 cup of oatmeal with a tablespoon of almond butter or peanut <br>
+                butter. <br>
+                1 small banana or a handful of mixed berries. <br>
+                1 glass of low-fat milk or a protein shake. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Protein and Healthy Fats:</b> <br>
+                1 cup of Greek yogurt with honey and a sprinkle of granola. <br>
+                A handful of mixed nuts or a slice of whole-grain toast with avocado. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Complex Carbs:</b> <br>
+                Grilled chicken breast, turkey, or lean beef (150g). <br>
+                1 cup of brown rice, quinoa, or whole-grain pasta. <br>
+                A large mixed salad with leafy greens, cucumbers, cherry tomatoes, <br>
+                and a light vinaigrette. <br>
+                Steamed vegetables like broccoli, cauliflower, or green beans. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Muscle-Building Snack:</b> <br>
+                Cottage cheese with a handful of mixed nuts. <br>
+                A protein smoothie with spinach, a banana, and a scoop of protein <br>
+                powder. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Protein and Veggies:</b> <br>
+                Grilled salmon, chicken, or lean beef (150g). <br>
+                1 large sweet potato or mashed potatoes. <br>
+                Roasted vegetables like asparagus, Brussels sprouts, or zucchini. <br>
+                A small side of brown rice or quinoa if needed. <br>
+                <b>Meal 6 (Evening Snack - 9 PM)</b> <br>
+                <b>Slow-Digesting Protein:</b> <br>
+                Casein protein shake or a serving of cottage cheese. <br>
+                A small handful of walnuts or a tablespoon of chia seeds. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Exercise:</b> Engage in strength training 3-5 times a week, focusing <br>
+                on compound movements like squats, deadlifts, and bench presses. <br>
+                Incorporate moderate cardio to support cardiovascular health. <br>
+                <b>Recovery:</b> Prioritize rest and recovery, including 7-8 hours of <br>
+                sleep per night. <br>
+                <b>Supplements:</b> Consider using whey protein, creatine, and <br>
+                branched-chain amino acids (BCAAs) to support muscle growth, but <br>
+                consult with a healthcare professional before starting any new <br>
+                supplement.
+                '];
             }
             // -------
             if($LowOldMaleLose) {
-                $desc = ['For a low BMI older male above 35-40 years old trying to 
-                    lose weight, the focus should be on a balanced diet that promotes 
-                    fat loss while maintaining or even slightly increasing muscle mass. 
-                    This approach ensures that weight loss comes from fat rather than 
-                    muscle, which is crucial for maintaining overall health and strength.
-                    General Guidelines:
-                    Caloric Intake: Aim for a slight caloric deficit, around 1,500-1,800 
-                    calories daily, depending on activity level.
-                    Macronutrient Balance: Emphasize lean proteins, healthy fats, and 
-                    complex carbohydrates with a focus on nutrient-dense foods.
-                    Meal Timing: Eat 3-4 small, balanced meals throughout the day to 
-                    maintain energy levels.
-                    Hydration: Drink at least 2.5-3 liters of water daily.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    Protein and Fiber-Rich Breakfast:
-                    3 egg whites and 1 whole egg scrambled with spinach, tomatoes, 
-                    and onions.
-                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle 
-                    of flaxseeds.
-                    1 piece of fruit (apple, orange, or berries).
-                    Green tea or black coffee.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Light Snack:
-                    1 small handful of almonds or walnuts.
-                    1 cup of Greek yogurt with a small amount of honey or berries.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Vegetables:
-                    Grilled chicken breast, turkey, or fish (150g).
-                    Mixed salad with leafy greens, cucumbers, cherry tomatoes, and 
-                    a light vinaigrette.
-                    1/2 cup of quinoa, brown rice, or a small sweet potato.
-                    Steamed vegetables like broccoli, green beans, or zucchini.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Healthy Snack:
-                    Carrot sticks or cucumber slices with hummus.
-                    A small apple or a low-fat string cheese.
-                    Meal 5 (Dinner - 7 PM)
-                    Low-Carb, High-Protein Dinner:
-                    Grilled salmon, chicken, or lean beef (150g).
-                    Stir-fried or steamed vegetables like zucchini, asparagus, or spinach.
-                    A side salad with olive oil and lemon dressing.
-                    Meal 6 (Evening Snack - Optional)
-                    Light Snack (If Needed):
-                    A small serving of cottage cheese or a casein protein shake.
-                    Herbal tea, such as chamomile or peppermint.
-                    Additional Tips:
-                    Exercise: Incorporate a mix of moderate cardio (e.g., walking, 
-                    cycling) and strength training to support fat loss and muscle 
-                    preservation.
-                    Sleep: Ensure 7-8 hours of quality sleep each night to support 
-                    weight loss and overall health.
-                    Mindful Eating: Focus on eating slowly and recognizing hunger and 
-                    fullness cues to avoid overeating.'];
+                $desc = ['<b>For a low BMI older male above 35-40 years old trying to</b> <br>
+                <b>lose weight, the focus should be on a balanced diet that promotes</b> <br>
+                <b>fat loss while maintaining or even slightly increasing muscle mass.</b> <br>
+                <b>This approach ensures that weight loss comes from fat rather than</b> <br>
+                <b>muscle, which is crucial for maintaining overall health and strength.</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a slight caloric deficit, around 1,500-1,800 <br>
+                calories daily, depending on activity level. <br>
+                <b>Macronutrient Balance:</b> Emphasize lean proteins, healthy fats, and <br>
+                complex carbohydrates with a focus on nutrient-dense foods. <br>
+                <b>Meal Timing:</b> Eat 3-4 small, balanced meals throughout the day to <br>
+                maintain energy levels. <br>
+                <b>Hydration:</b> Drink at least 2.5-3 liters of water daily. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>Protein and Fiber-Rich Breakfast:</b> <br>
+                3 egg whites and 1 whole egg scrambled with spinach, tomatoes, <br>
+                and onions. <br>
+                1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle <br>
+                of flaxseeds. <br>
+                1 piece of fruit (apple, orange, or berries). <br>
+                Green tea or black coffee. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Light Snack:</b> <br>
+                1 small handful of almonds or walnuts. <br>
+                1 cup of Greek yogurt with a small amount of honey or berries. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Vegetables:</b> <br>
+                Grilled chicken breast, turkey, or fish (150g). <br>
+                Mixed salad with leafy greens, cucumbers, cherry tomatoes, and <br>
+                a light vinaigrette. <br>
+                1/2 cup of quinoa, brown rice, or a small sweet potato. <br>
+                Steamed vegetables like broccoli, green beans, or zucchini. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Healthy Snack:</b> <br>
+                Carrot sticks or cucumber slices with hummus. <br>
+                A small apple or a low-fat string cheese. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Low-Carb, High-Protein Dinner:</b> <br>
+                Grilled salmon, chicken, or lean beef (150g). <br>
+                Stir-fried or steamed vegetables like zucchini, asparagus, or spinach. <br>
+                A side salad with olive oil and lemon dressing. <br>
+                <b>Meal 6 (Evening Snack - Optional)</b> <br>
+                <b>Light Snack (If Needed):</b> <br>
+                A small serving of cottage cheese or a casein protein shake. <br>
+                Herbal tea, such as chamomile or peppermint. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Exercise:</b> Incorporate a mix of moderate cardio (e.g., walking, <br>
+                cycling) and strength training to support fat loss and muscle <br>
+                preservation. <br>
+                <b>Sleep:</b> Ensure 7-8 hours of quality sleep each night to support <br>
+                weight loss and overall health. <br>
+                <b>Mindful Eating:</b> Focus on eating slowly and recognizing hunger and <br>
+                fullness cues to avoid overeating.
+                '];
             }
             if($LowOldMaleGain) {
-                $desc = ['For a low BMI older male above 35-40 years old trying to gain 
-                    muscle mass, the focus should be on a calorie-rich, protein-dense 
-                    diet that supports muscle growth while maintaining overall health. 
-                    Here is a sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a moderate caloric surplus, around 2,200-2,800 
-                    calories daily, depending on activity level.
-                    Macronutrient Balance: Prioritize protein intake (1.2-1.6 grams per 
-                    kg of body weight), along with healthy fats and complex carbohydrates.
-                    Meal Frequency: Eat 4-5 meals throughout the day to ensure a steady 
-                    supply of nutrients for muscle growth.
-                    Hydration: Drink at least 3-4 liters of water daily, especially 
-                    around workouts.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    Protein and Complex Carbs:
-                    3 whole eggs scrambled with spinach, tomatoes, and onions.
-                    1 cup of oatmeal with a tablespoon of almond butter or peanut butter.
-                    1 banana or a handful of mixed berries.
-                    1 glass of low-fat milk or a protein shake.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Protein and Healthy Fats:
-                    1 cup of Greek yogurt with honey and a sprinkle of granola.
-                    A handful of mixed nuts or a slice of whole-grain toast with avocado.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Complex Carbs:
-                    Grilled chicken breast, turkey, or lean beef (200g).
-                    1 cup of brown rice, quinoa, or whole-grain pasta.
-                    A large mixed salad with leafy greens, cucumbers, cherry tomatoes, 
-                    and a light vinaigrette.
-                    Steamed vegetables like broccoli, cauliflower, or green beans.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Muscle-Building Snack:
-                    Cottage cheese with a handful of mixed nuts.
-                    A protein smoothie with spinach, a banana, and a scoop of protein 
-                    powder.
-                    Meal 5 (Dinner - 7 PM)
-                    Protein and Veggies:
-                    Grilled salmon, chicken, or lean beef (200g).
-                    1 large sweet potato or mashed potatoes.
-                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
-                    A small side of brown rice or quinoa if needed.
-                    Meal 6 (Evening Snack - 9 PM)
-                    Slow-Digesting Protein:
-                    Casein protein shake or a serving of cottage cheese.
-                    A small handful of walnuts or a tablespoon of chia seeds.
-                    Additional Tips:
-                    Exercise: Engage in strength training 3-5 times a week, focusing 
-                    on compound movements like squats, deadlifts, and bench presses. 
-                    Incorporate moderate cardio to support cardiovascular health.
-                    Recovery: Prioritize rest and recovery, including 7-8 hours of 
-                    sleep per night.
-                    Supplements: Consider using whey protein, creatine, and 
-                    branched-chain amino acids (BCAAs) to support muscle growth, 
-                    but consult with a healthcare professional before starting any 
-                    new supplement.'];
+                $desc = ['<b>For a low BMI older male above 35-40 years old trying to gain</b> <br>
+                <b>muscle mass, the focus should be on a calorie-rich, protein-dense</b> <br>
+                <b>diet that supports muscle growth while maintaining overall health.</b> <br>
+                <b>Here is a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a moderate caloric surplus, around 2,200-2,800 <br>
+                calories daily, depending on activity level. <br>
+                <b>Macronutrient Balance:</b> Prioritize protein intake (1.2-1.6 grams per <br>
+                kg of body weight), along with healthy fats and complex carbohydrates. <br>
+                <b>Meal Frequency:</b> Eat 4-5 meals throughout the day to ensure a steady <br>
+                supply of nutrients for muscle growth. <br>
+                <b>Hydration:</b> Drink at least 3-4 liters of water daily, especially <br>
+                around workouts. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>Protein and Complex Carbs:</b> <br>
+                3 whole eggs scrambled with spinach, tomatoes, and onions. <br>
+                1 cup of oatmeal with a tablespoon of almond butter or peanut butter. <br>
+                1 banana or a handful of mixed berries. <br>
+                1 glass of low-fat milk or a protein shake. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Protein and Healthy Fats:</b> <br>
+                1 cup of Greek yogurt with honey and a sprinkle of granola. <br>
+                A handful of mixed nuts or a slice of whole-grain toast with avocado. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Complex Carbs:</b> <br>
+                Grilled chicken breast, turkey, or lean beef (200g). <br>
+                1 cup of brown rice, quinoa, or whole-grain pasta. <br>
+                A large mixed salad with leafy greens, cucumbers, cherry tomatoes, <br>
+                and a light vinaigrette. <br>
+                Steamed vegetables like broccoli, cauliflower, or green beans. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Muscle-Building Snack:</b> <br>
+                Cottage cheese with a handful of mixed nuts. <br>
+                A protein smoothie with spinach, a banana, and a scoop of protein <br>
+                powder. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Protein and Veggies:</b> <br>
+                Grilled salmon, chicken, or lean beef (200g). <br>
+                1 large sweet potato or mashed potatoes. <br>
+                Roasted vegetables like asparagus, Brussels sprouts, or zucchini. <br>
+                A small side of brown rice or quinoa if needed. <br>
+                <b>Meal 6 (Evening Snack - 9 PM)</b> <br>
+                <b>Slow-Digesting Protein:</b> <br>
+                Casein protein shake or a serving of cottage cheese. <br>
+                A small handful of walnuts or a tablespoon of chia seeds. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Exercise:</b> Engage in strength training 3-5 times a week, focusing <br>
+                on compound movements like squats, deadlifts, and bench presses. <br>
+                Incorporate moderate cardio to support cardiovascular health. <br>
+                <b>Recovery:</b> Prioritize rest and recovery, including 7-8 hours of <br>
+                sleep per night. <br>
+                <b>Supplements:</b> Consider using whey protein, creatine, and <br>
+                branched-chain amino acids (BCAAs) to support muscle growth, but <br>
+                consult with a healthcare professional before starting any new <br>
+                supplement.
+                '];
             }
             if($LowOldFemaleLose) {
-                $desc = ['For a low BMI older female above 35-40 years old trying to 
-                    lose weight, the focus should be on a nutrient-dense diet that 
-                    promotes fat loss while maintaining lean muscle mass. Here is a 
-                    sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a slight caloric deficit, around 1,200-1,500 
-                    calories daily, depending on activity level.
-                    Macronutrient Balance: Emphasize lean proteins, healthy fats, 
-                    and complex carbohydrates with plenty of fiber.
-                    Meal Timing: Eat 3-4 small, balanced meals throughout the day to 
-                    maintain energy levels and prevent muscle loss.
-                    Hydration: Drink at least 2-3 liters of water daily.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    Protein and Fiber-Rich Breakfast:
-                    2 scrambled eggs with spinach and tomatoes.
-                    1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle 
-                    of chia seeds.
-                    1 small piece of fruit (apple, orange, or berries).
-                    Green tea or black coffee.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Light Snack:
-                    1 small handful of almonds or walnuts.
-                    1 cup of Greek yogurt with a few berries or a drizzle of honey.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Vegetables:
-                    Grilled chicken breast, turkey, or fish (100-150g).
-                    Mixed salad with leafy greens, cucumbers, cherry tomatoes, and a 
-                    light vinaigrette.
-                    1/2 cup of quinoa, brown rice, or a small sweet potato.
-                    Steamed vegetables like broccoli, green beans, or zucchini.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Healthy Snack:
-                    Carrot sticks or cucumber slices with hummus.
-                    A small apple or a low-fat string cheese.
-                    Meal 5 (Dinner - 7 PM)
-                    Low-Carb, High-Protein Dinner:
-                    Grilled salmon, chicken, or lean beef (100-150g).
-                    Stir-fried or steamed vegetables like zucchini, asparagus, or spinach.
-                    A side salad with olive oil and lemon dressing.
-                    Meal 6 (Evening Snack - Optional)
-                    Light Snack (If Needed):
-                    A small serving of cottage cheese or a casein protein shake.
-                    Herbal tea, such as chamomile or peppermint.
-                    Additional Tips:
-                    Exercise: Incorporate a mix of moderate cardio (e.g., walking, cycling) and strength training to preserve muscle while losing fat.
-                    Sleep: Ensure 7-8 hours of quality sleep each night to support weight 
-                    loss and overall health.
-                    Mindful Eating: Focus on eating slowly and recognizing hunger and 
-                    fullness cues to avoid overeating.'];
+                $desc = ['<b>For a low BMI older female above 35-40 years old trying to</b> <br>
+                <b>lose weight, the focus should be on a nutrient-dense diet that</b> <br>
+                <b>promotes fat loss while maintaining lean muscle mass.</b> <br>
+                <b>Here is a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a slight caloric deficit, around 1,200-1,500 <br>
+                calories daily, depending on activity level. <br>
+                <b>Macronutrient Balance:</b> Emphasize lean proteins, healthy fats, <br>
+                and complex carbohydrates with plenty of fiber. <br>
+                <b>Meal Timing:</b> Eat 3-4 small, balanced meals throughout the day to <br>
+                maintain energy levels and prevent muscle loss. <br>
+                <b>Hydration:</b> Drink at least 2-3 liters of water daily. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>Protein and Fiber-Rich Breakfast:</b> <br>
+                2 scrambled eggs with spinach and tomatoes. <br>
+                1 slice of whole-grain toast or 1/2 cup of oatmeal with a sprinkle <br>
+                of chia seeds. <br>
+                1 small piece of fruit (apple, orange, or berries). <br>
+                Green tea or black coffee. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Light Snack:</b> <br>
+                1 small handful of almonds or walnuts. <br>
+                1 cup of Greek yogurt with a few berries or a drizzle of honey. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Vegetables:</b> <br>
+                Grilled chicken breast, turkey, or fish (100-150g). <br>
+                Mixed salad with leafy greens, cucumbers, cherry tomatoes, and a <br>
+                light vinaigrette. <br>
+                1/2 cup of quinoa, brown rice, or a small sweet potato. <br>
+                Steamed vegetables like broccoli, green beans, or zucchini. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Healthy Snack:</b> <br>
+                Carrot sticks or cucumber slices with hummus. <br>
+                A small apple or a low-fat string cheese. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Low-Carb, High-Protein Dinner:</b> <br>
+                Grilled salmon, chicken, or lean beef (100-150g). <br>
+                Stir-fried or steamed vegetables like zucchini, asparagus, or spinach. <br>
+                A side salad with olive oil and lemon dressing. <br>
+                <b>Meal 6 (Evening Snack - Optional)</b> <br>
+                <b>Light Snack (If Needed):</b> <br>
+                A small serving of cottage cheese or a casein protein shake. <br>
+                Herbal tea, such as chamomile or peppermint. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Exercise:</b> Incorporate a mix of moderate cardio (e.g., walking, cycling) and strength training to preserve muscle while losing fat. <br>
+                <b>Sleep:</b> Ensure 7-8 hours of quality sleep each night to support weight <br>
+                loss and overall health. <br>
+                <b>Mindful Eating:</b> Focus on eating slowly and recognizing hunger and <br>
+                fullness cues to avoid overeating.
+                '];
             }
             if($LowOldFemaleGain) {
-                $desc = ['For a low BMI older female above 35-40 years old trying to 
-                    gain muscle mass, the focus should be on a nutrient-rich, 
-                    calorie-dense diet that supports muscle growth while maintaining 
-                    overall health. Here is a sample meal plan:
-                    General Guidelines:
-                    Caloric Intake: Aim for a moderate caloric surplus, around 1,800-2,200 
-                    calories daily, depending on activity level.
-                    Macronutrient Balance: Prioritize protein intake (1.2-1.6 grams per 
-                    kg of body weight), along with healthy fats and complex carbohydrates.
-                    Meal Frequency: Eat 4-5 meals throughout the day to ensure a steady 
-                    supply of nutrients for muscle growth.
-                    Hydration: Drink at least 2.5-3 liters of water daily, especially 
-                    around workouts.
-                    Sample Meal Plan:
-                    Meal 1 (Breakfast - 7 AM)
-                    Protein and Complex Carbs:
-                    2 whole eggs and 2 egg whites scrambled with spinach, tomatoes, 
-                    and onions.
-                    1 cup of oatmeal with a tablespoon of almond butter or peanut butter.
-                    1 small banana or a handful of mixed berries.
-                    1 glass of low-fat milk or a protein shake.
-                    Meal 2 (Mid-Morning Snack - 10 AM)
-                    Protein and Healthy Fats:
-                    1 cup of Greek yogurt with honey and a sprinkle of granola.
-                    A handful of mixed nuts or a slice of whole-grain toast with avocado.
-                    Meal 3 (Lunch - 1 PM)
-                    Lean Protein + Complex Carbs:
-                    Grilled chicken breast, turkey, or lean beef (150g).
-                    1 cup of brown rice, quinoa, or whole-grain pasta.
-                    A large mixed salad with leafy greens, cucumbers, cherry tomatoes, 
-                    and a light vinaigrette.
-                    Steamed vegetables like broccoli, cauliflower, or green beans.
-                    Meal 4 (Afternoon Snack - 4 PM)
-                    Muscle-Building Snack:
-                    Cottage cheese with a handful of mixed nuts.
-                    A protein smoothie with spinach, a banana, and a scoop of protein 
-                    powder.
-                    Meal 5 (Dinner - 7 PM)
-                    Protein and Veggies:
-                    Grilled salmon, chicken, or lean beef (150g).
-                    1 large sweet potato or mashed potatoes.
-                    Roasted vegetables like asparagus, Brussels sprouts, or zucchini.
-                    A small side of brown rice or quinoa if needed.
-                    Meal 6 (Evening Snack - 9 PM)
-                    Slow-Digesting Protein:
-                    Casein protein shake or a serving of cottage cheese.
-                    A small handful of walnuts or a tablespoon of chia seeds.
-                    Additional Tips:
-                    Exercise: Engage in strength training 3-5 times a week, focusing on 
-                    compound movements like squats, deadlifts, and bench presses. 
-                    Incorporate moderate cardio to support cardiovascular health.
-                    Recovery: Prioritize rest and recovery, including 7-8 hours of 
-                    sleep per night.
-                    Supplements: Consider using whey protein, creatine, and branched-chain 
-                    amino acids (BCAAs) to support muscle growth, but consult with a 
-                    healthcare professional before starting any new supplement.'];
+                $desc = ['<b>For a low BMI older female above 35-40 years old trying to</b> <br>
+                <b>gain muscle mass, the focus should be on a nutrient-rich,</b> <br>
+                <b>calorie-dense diet that supports muscle growth while maintaining</b> <br>
+                <b>overall health. Here is a sample meal plan:</b> <br>
+                <b>General Guidelines:</b> <br>
+                <b>Caloric Intake:</b> Aim for a moderate caloric surplus, around 1,800-2,200 <br>
+                calories daily, depending on activity level. <br>
+                <b>Macronutrient Balance:</b> Prioritize protein intake (1.2-1.6 grams per <br>
+                kg of body weight), along with healthy fats and complex carbohydrates. <br>
+                <b>Meal Frequency:</b> Eat 4-5 meals throughout the day to ensure a steady <br>
+                supply of nutrients for muscle growth. <br>
+                <b>Hydration:</b> Drink at least 2.5-3 liters of water daily, especially <br>
+                around workouts. <br>
+                <b>Sample Meal Plan:</b> <br>
+                <b>Meal 1 (Breakfast - 7 AM)</b> <br>
+                <b>Protein and Complex Carbs:</b> <br>
+                2 whole eggs and 2 egg whites scrambled with spinach, tomatoes, <br>
+                and onions. <br>
+                1 cup of oatmeal with a tablespoon of almond butter or peanut butter. <br>
+                1 small banana or a handful of mixed berries. <br>
+                1 glass of low-fat milk or a protein shake. <br>
+                <b>Meal 2 (Mid-Morning Snack - 10 AM)</b> <br>
+                <b>Protein and Healthy Fats:</b> <br>
+                1 cup of Greek yogurt with honey and a sprinkle of granola. <br>
+                A handful of mixed nuts or a slice of whole-grain toast with avocado. <br>
+                <b>Meal 3 (Lunch - 1 PM)</b> <br>
+                <b>Lean Protein + Complex Carbs:</b> <br>
+                Grilled chicken breast, turkey, or lean beef (150g). <br>
+                1 cup of brown rice, quinoa, or whole-grain pasta. <br>
+                A large mixed salad with leafy greens, cucumbers, cherry tomatoes, <br>
+                and a light vinaigrette. <br>
+                Steamed vegetables like broccoli, cauliflower, or green beans. <br>
+                <b>Meal 4 (Afternoon Snack - 4 PM)</b> <br>
+                <b>Muscle-Building Snack:</b> <br>
+                Cottage cheese with a handful of mixed nuts. <br>
+                A protein smoothie with spinach, a banana, and a scoop of protein <br>
+                powder. <br>
+                <b>Meal 5 (Dinner - 7 PM)</b> <br>
+                <b>Protein and Veggies:</b> <br>
+                Grilled salmon, chicken, or lean beef (150g). <br>
+                1 large sweet potato or mashed potatoes. <br>
+                Roasted vegetables like asparagus, Brussels sprouts, or zucchini. <br>
+                A small side of brown rice or quinoa if needed. <br>
+                <b>Meal 6 (Evening Snack - 9 PM)</b> <br>
+                <b>Slow-Digesting Protein:</b> <br>
+                Casein protein shake or a serving of cottage cheese. <br>
+                A small handful of walnuts or a tablespoon of chia seeds. <br>
+                <b>Additional Tips:</b> <br>
+                <b>Exercise:</b> Engage in strength training 3-5 times a week, focusing on <br>
+                compound movements like squats, deadlifts, and bench presses. <br>
+                Incorporate moderate cardio to support cardiovascular health. <br>
+                <b>Recovery:</b> Prioritize rest and recovery, including 7-8 hours of <br>
+                sleep per night. <br>
+                <b>Supplements:</b> Consider using whey protein, creatine, and branched-chain <br>
+                amino acids (BCAAs) to support muscle growth, but consult with a <br>
+                healthcare professional before starting any new supplement.
+                '];
             }         
         }
     }

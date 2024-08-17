@@ -88,13 +88,18 @@ function extractUserInfo($userId) {
                 array_push($goals, 'No response');
             }
         }
-        if(isset($updatedEmail) && ($updatedEmail != $database_row['cEmail']) && $database_row['cEmail'] == ''){
-            array_push($emails, $updatedEmail);
-            unset($updatedEmail);
+        if(isset($updatedEmail)){
+            if($updatedEmail != '' && ($updatedEmail != $database_row['cEmail']) && $database_row['cEmail'] == ''){
+                array_push($emails, $updatedEmail);
+                unset($updatedEmail);
+            } else {
+                array_push($emails, 'No response');
+            }
         } else {
-            array_push($emails, 'No response');
+            if($database_row['cEmail'] == ''){
+                array_push($emails, 'No response');
+            }           
         }
-
         array_push($campaignids, $database_row['campaignIdSource']);
         array_push($campaigntime, $database_row['campaignTimeStamp']);
         array_push($campaignidAssigned, $database_row['campaignId']);

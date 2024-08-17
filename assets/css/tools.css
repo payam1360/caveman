@@ -289,8 +289,8 @@
 
 .admin-dashbord {
     background-color: white;
-    border-radius: 5px;
-    border: 1px solid lightgray;
+    border-radius: 2%;
+    border: 5px solid lightblue;
     height: 200px;
     margin: 30px;
     padding: 0px;

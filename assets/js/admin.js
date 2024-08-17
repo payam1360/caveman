@@ -27,6 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.assign('adminQ.html');
             } else if(kk == 1) {
                 window.location.assign('clients.html');
+            } else if(kk == 2) {
+                window.location.assign('finances.html');
+            } else if(kk == 3) {
+                window.location.assign('phoneMessages.html');
             }
         });
     }

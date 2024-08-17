@@ -74,6 +74,11 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             counter++;
             //
             // submit the users data here
+            if(counter == MAX_cnt - 1 && page == 'questions') {
+                let moveleft = document.querySelector('.form-go-left');
+                moveleft.disabled = true;
+                moveleft.style.opacity = 0;
+            }
             if(counter == MAX_cnt - 1 && page != 'questions') {
                 let resultBtn = document.querySelector('.results-btn');
                 moveright.disabled = true;
@@ -1568,7 +1573,6 @@ function callAd(adTxt = 0){
     adDiv.style.display = 'block';
     adTextDiv.style.display = 'block';
     adTextDiv.style.margin = '20px';
-    adTextDiv.style
 }
 
 

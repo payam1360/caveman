@@ -20,11 +20,11 @@ function addClient($userId, $Data) {
     $conn         = new mysqli($servername, $loginname, $password, $dbname);
     // check if the client exists.
     $sql          = "UPDATE $tablename SET name = '$name', 
+                                           cEmail  = '$cEmail',
                                            gender = '$gender', 
                                            goal = '$goal', 
                                            nutritionEng = '$nutritionEng', 
-                                           mealEng = '$mealEng',
-                                           cEmail  = '$cEmail' 
+                                           mealEng = '$mealEng' 
                                            WHERE 
                                            userId = '$userId' 
                                            AND 
