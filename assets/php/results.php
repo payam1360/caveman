@@ -30,7 +30,7 @@ function extractUserInfo($userId) {
     $mealEng      = array();
     $nutritionEng = array();
     $campaignidAssigned = array();
-
+    $clientIdx = 0;
     while($database_row = $database_out->fetch_assoc()) {
         // filling out info briefs
         array_push($names, $database_row['name']);
@@ -89,11 +89,20 @@ function extractUserInfo($userId) {
             }
         }
         if(isset($updatedEmail)){
-            if($updatedEmail != '' && ($updatedEmail != $database_row['cEmail']) && $database_row['cEmail'] == ''){
-                array_push($emails, $updatedEmail);
-                unset($updatedEmail);
-            } else {
-                array_push($emails, 'No response');
+            if($updatedEmail != '') {
+                if($updatedEmail != $database_row['cEmail']){
+                    // replace the entry
+                    $emails[$clientIdx] = $updatedEmail;
+                    unset($updatedEmail);
+                } 
+                elseif($updatedEmail == $database_row['cEmail']){
+                }
+            } elseif($updatedEmail == '') {
+                if($updatedEmail != $database_row['cEmail']){
+                }   
+                elseif($updatedEmail == $database_row['cEmail']){
+                    array_push($emails, 'No response');
+                }
             }
         } else {
             if($database_row['cEmail'] == ''){
@@ -103,6 +112,7 @@ function extractUserInfo($userId) {
         array_push($campaignids, $database_row['campaignIdSource']);
         array_push($campaigntime, $database_row['campaignTimeStamp']);
         array_push($campaignidAssigned, $database_row['campaignId']);
+        $clientIdx++;
     }
     
     $userInfo['names']          = $names;

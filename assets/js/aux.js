@@ -2076,7 +2076,27 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         let mealPstyle = document.createElement('span');
         let nutritionText = document.createElement('p');
         let nutritionPstyle = document.createElement('span');
-        
+        let stressP = document.createElement('p');
+        let stressPstyle = document.createElement('span');
+        let sleepP = document.createElement('p');
+        let sleepPstyle = document.createElement('span');
+        let waterP = document.createElement('p');
+        let waterPstyle = document.createElement('span');
+        let ageP = document.createElement('p');
+        let agePstyle = document.createElement('span');
+        let emailP = document.createElement('p');
+        let emailPstyle = document.createElement('span');
+        let weightP = document.createElement('p');
+        let weightPstyle = document.createElement('span');
+        let heightP = document.createElement('p');
+        let heightPstyle = document.createElement('span');
+        let sugarP = document.createElement('p');
+        let sugarPstyle = document.createElement('span');
+        let alcoholP = document.createElement('p');
+        let alcoholPstyle = document.createElement('span');
+        let workoutP = document.createElement('p');
+        let workoutPstyle = document.createElement('span');
+
         nameP.innerHTML = "Client's name: ";
         nameP.style.marginTop = '100px';
         namesTemp = results.names[cidx].charAt(0).toUpperCase() + results.names[cidx].slice(1);
@@ -2141,6 +2161,187 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
             nutritionText.appendChild(nutritionPstyle);
             nutritionText.innerHTML =  nutritionText.innerHTML + ' for nutritional analysis for ' + results.names[cidx];
         }
+
+        // Adding more info about some of client's responses to questions that aren't
+        // directly being used to generate key results.
+        keyToFind = 'stress';
+        stress = inputBlob.find(obj => obj.qKey[0] === keyToFind);
+        if(stress){
+            stress = stress.optionsText[0][stress.qAnswer];
+        }
+
+        keyToFind = 'sleep';
+        sleep = inputBlob.find(obj => obj.qKey[0] === keyToFind);
+        if(sleep){
+            sleep = sleep.optionsText[0][sleep.qAnswer];
+        }
+
+        keyToFind = 'water';
+        water = inputBlob.find(obj => obj.qKey[0] === keyToFind);
+        if(water){
+            water = water.optionsText[0][water.qAnswer];
+        }
+
+        keyToFind = 'age';
+        age = inputBlob.find(obj => obj.qKey[0] === keyToFind);
+        if(age){
+            age = age.qAnswer;
+        }
+        keyToFind = 'email';
+        email = inputBlob.find(obj => obj.qKey[0] === keyToFind);
+        if(email){
+            email = email.qAnswer;
+        }
+        keyToFind = 'weight';
+        weight = inputBlob.find(obj => obj.qKey[0] === keyToFind);
+        if(weight){
+            weight = weight.qAnswer;
+        }
+        keyToFind = 'height';
+        height = inputBlob.find(obj => obj.qKey[0] === keyToFind);
+        if(height){
+            height = height.qAnswer;
+        }
+        keyToFind = 'sugar';
+        sugar = inputBlob.find(obj => obj.qKey[0] === keyToFind);
+        if(sugar){
+            sugar = sugar.optionsText[0][sugar.qAnswer];
+        }
+        keyToFind = 'alcohol';
+        alcohol = inputBlob.find(obj => obj.qKey[0] === keyToFind);
+        if(alcohol){
+            alcohol = alcohol.optionsText[0][alcohol.qAnswer];
+        }
+        keyToFind = 'workout';
+        workout = inputBlob.find(obj => obj.qKey[0] === keyToFind);
+        if(workout){
+            workout = workout.optionsText[0][workout.qAnswer];
+        }
+
+
+        stressP.innerHTML = "Stress level: ";
+        let stressTemp = stress.charAt(0).toUpperCase() + stress.slice(1);
+        stressPstyle.innerHTML = stressTemp;
+        stressPstyle.style.fontSize = '40px';
+        stressPstyle.style.color = 'brown';
+        stressPstyle.setAttribute('id', 'mDivpStress');
+        stressP.appendChild(stressPstyle);
+
+        
+        sleepP.innerHTML = "Sleep quality: ";
+        let sleepTemp = sleep.charAt(0).toUpperCase() + sleep.slice(1);
+        sleepPstyle.innerHTML = sleepTemp;
+        sleepPstyle.style.fontSize = '40px';
+        sleepPstyle.style.color = 'seagreen';
+        sleepPstyle.setAttribute('id', 'mDivpSleep');
+        sleepP.appendChild(sleepPstyle);
+
+
+        waterP.innerHTML = "Water intake: ";
+        if(water){
+            waterTemp = water.charAt(0).toUpperCase() + water.slice(1);
+        } else {
+            waterTemp = '';
+        }
+        waterPstyle.innerHTML = waterTemp;
+        waterPstyle.style.fontSize = '40px';
+        waterPstyle.style.color = '#9df9ef';
+        waterPstyle.setAttribute('id', 'mDivpWater');
+        waterP.appendChild(waterPstyle);
+
+
+        ageP.innerHTML = "Age: ";
+        if(age){
+            ageTemp = age.charAt(0).toUpperCase() + age.slice(1);
+        } else {
+            ageTemp = '';
+        }
+        agePstyle.innerHTML = ageTemp;
+        agePstyle.style.fontSize = '40px';
+        agePstyle.style.color = '#51e2f5';
+        agePstyle.setAttribute('id', 'mDivpAge');
+        ageP.appendChild(agePstyle);
+
+        emailP.innerHTML = "Email: ";
+        if(email){
+            emailTemp = email.charAt(0).toUpperCase() + email.slice(1);
+        } else {
+            emailTemp = '';
+        }
+        emailPstyle.innerHTML = emailTemp;
+        emailPstyle.style.fontSize = '40px';
+        emailPstyle.style.color = '#e1b382';
+        emailPstyle.setAttribute('id', 'mDivpEmail');
+        emailP.appendChild(emailPstyle);
+
+
+        weightP.innerHTML = "Weight: ";
+        if(weight){
+            weightTemp = weight + ' lb';
+        } else {
+            weightTemp = '';
+        }
+        weightPstyle.innerHTML = weightTemp;
+        weightPstyle.style.fontSize = '40px';
+        weightPstyle.style.color = '#bd8c7d';
+        weightPstyle.setAttribute('id', 'mDivpWeight');
+        weightP.appendChild(weightPstyle);
+
+
+
+        heightP.innerHTML = "Height: ";
+        if(height){
+            heightTemp = height + ' ft';
+        } else {
+            heightTemp = '';
+        }
+        heightPstyle.innerHTML = heightTemp;
+        heightPstyle.style.fontSize = '40px';
+        heightPstyle.style.color = ' #bf4aa8';
+        heightPstyle.setAttribute('id', 'mDivpHeight');
+        heightP.appendChild(heightPstyle);
+
+
+        sugarP.innerHTML = "Sugar intake: ";
+        if(sugar){
+            sugarTemp = sugar.charAt(0).toUpperCase() + sugar.slice(1);
+        } else {
+            sugarTemp = '';
+        }
+        sugarPstyle.innerHTML = sugarTemp;
+        sugarPstyle.style.fontSize = '40px';
+        sugarPstyle.style.color = '#6B7A8F';
+        sugarPstyle.setAttribute('id', 'mDivpSugar');
+        sugarP.appendChild(sugarPstyle);
+
+
+        alcoholP.innerHTML = "Alcohol consumption: ";
+        if(alcohol){
+            alcoholTemp = alcohol.charAt(0).toUpperCase() + alcohol.slice(1);
+        } else {
+            alcoholTemp = '';
+        }
+        alcoholPstyle.innerHTML = alcoholTemp;
+        alcoholPstyle.style.fontSize = '40px';
+        alcoholPstyle.style.color = '#a4893d';
+        alcoholPstyle.setAttribute('id', 'mDivpAlcohol');
+        alcoholP.appendChild(alcoholPstyle);
+
+
+        workoutP.innerHTML = "Workout duration: ";
+        if(workout){
+            workoutTemp = workout.charAt(0).toUpperCase() + workout.slice(1);
+        } else {
+            workoutTemp = '';
+        }
+        workoutPstyle.innerHTML = workoutTemp;
+        workoutPstyle.style.fontSize = '40px';
+        workoutPstyle.style.color = '#bd8c7d';
+        workoutPstyle.setAttribute('id', 'mDivpWorkout');
+        workoutP.appendChild(workoutPstyle);
+
+
+
 
         let link = '/userPages/' + userid + results.ids[cidx] + results.campaignidAssigned[cidx] + '.html'
         campaignP.innerHTML = 'Link to ' + results.names[cidx] + '\'s survey <a href="' + link + '"> page</a>';
@@ -2489,7 +2690,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         mealBtn.setAttribute('class', 'btn btn-outline-primary');
         mealBtn.innerHTML = 'Edit';
         mealBtn.addEventListener('click', function(){
-            addUsersuggestionContent(clientData.meal, mealDesc, mealBtn, 'desc');
+            addUsersuggestionContent(clientData.meal, mealDesc, mealBtn, 'desc', 1);
             if(mealBtn.innerHTML == 'Edit') {
                 saveUserCommentstoDb(clientData.meal['desc'], userid, clientid, 'Meal');
             }
@@ -2506,12 +2707,22 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
             mDiv.appendChild(emailBtn);
         }
         mDiv.appendChild(nameP);
+        mDiv.appendChild(emailP);
         mDiv.appendChild(genderP);
         mDiv.appendChild(goalP);
         mDiv.appendChild(idP);
         mDiv.appendChild(campaignP);
         mDiv.appendChild(mealText);
         mDiv.appendChild(nutritionText);
+        mDiv.appendChild(stressP);
+        mDiv.appendChild(sleepP);
+        mDiv.appendChild(waterP);
+        mDiv.appendChild(ageP);
+        mDiv.appendChild(weightP);
+        mDiv.appendChild(heightP);
+        mDiv.appendChild(sugarP);
+        mDiv.appendChild(workoutP);
+        mDiv.appendChild(alcoholP);
 
         mDiv.appendChild(divider1);
         mDiv.appendChild(bmrSuggestion);
@@ -2790,7 +3001,7 @@ function sendEmail(parentNode, clientData, userid, clientid) {
 }
 
 
-function addUsersuggestionContent(data, desc, Btn, descField) {
+function addUsersuggestionContent(data, desc, Btn, descField, mealFlag = 0) {
     
     if(Btn.innerHTML == 'Edit'){
         let userIn = document.createElement('textarea');
@@ -2798,7 +3009,12 @@ function addUsersuggestionContent(data, desc, Btn, descField) {
         savedText.style.position = 'absolute';
         savedText.style.opacity = 0;
         userIn.innerHTML = desc.innerHTML;
-        userIn.setAttribute('rows', '10');
+        if(mealFlag) {
+            userIn.setAttribute('rows', '80');
+        }
+        else {
+            userIn.setAttribute('rows', '40');
+        }
         userIn.setAttribute('cols', '35');
         userIn.style.margin = '20px';
         userIn.style.overflow = 'scroll';
@@ -2819,8 +3035,11 @@ function addUsersuggestionContent(data, desc, Btn, descField) {
 }
 
 function saveUserCommentstoDb(clientText, userid, clientid, topic) {
+
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        }
     };
     // sending the request
     xmlhttp.open("POST", "assets/php/saveUserComments.php", true);

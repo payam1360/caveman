@@ -1017,7 +1017,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             // -------
             if($LowYoungMaleLose) {
                 $desc = ['<b>Body Mass Index (BMI)</b> is a measure that uses height and 
-                weight to estimate body fat. It is calculated by dividing a person’s 
+                weight to estimate body fat. It is calculated by dividing a persons 
                 weight in kilograms by the square of their height in meters (kg/m²).<br>
                 The <b>BMI categories are:</b><br>
                 <b>Underweight:</b> BMI less than 18.5<br>
@@ -1035,13 +1035,13 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             if($LowYoungMaleGain) {
                 $desc = ['<b>BMI Description and Definition</b><br>
                 Body Mass Index (BMI) is a measure that uses height and weight to 
-                estimate body fat. It is calculated by dividing a person’s 
-                weight in kilograms by the square of their height in meters (kg/m²).<br>
+                estimate body fat. It is calculated by dividing a persons 
+                weight in kilograms by the square of their height in meters (kg/m^2).<br>
                 The <b>BMI categories are:</b><br>
                 <b>Underweight:</b> BMI less than 18.5<br>
                 <b>Normal weight:</b> BMI 18.5-24.9<br>
                 <b>Overweight:</b> BMI 25-29.9<br>
-                <b>Obesity:</b> BMI ≥ 30<br>
+                <b>Obesity:</b> BMI >= 30<br>
                 For a young male under 35 with a low BMI (below 18.5), gaining muscle 
                 mass involves a strategic approach. This individual is likely 
                 underweight and should aim to increase both caloric intake and protein 
@@ -1054,7 +1054,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             if($LowYoungFemaleLose) {
                 $desc = ['<b>Body Mass Index (BMI)</b> is a measure that uses height 
                 and weight to estimate body fat. It is calculated by dividing a 
-                person’s weight in kilograms by the square of their height in meters 
+                persons weight in kilograms by the square of their height in meters 
                 (kg/m²).<br>
                 The <b>BMI categories are:</b><br>
                 <b>Underweight:</b> BMI less than 18.5<br>
@@ -1074,7 +1074,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
                 $desc = ['<b>BMI Description for a Young Female Under 35 with Low BMI 
                 Trying to Gain Muscle Mass</b><br>
                 Body Mass Index (BMI) is a measure that uses height and weight to 
-                estimate body fat. It is calculated by dividing a person’s weight 
+                estimate body fat. It is calculated by dividing a persons weight 
                 in kilograms by the square of their height in meters (kg/m²). 
                 The <b>BMI categories are:</b><br>
                 <b>Underweight:</b> BMI less than 18.5<br>
@@ -1201,7 +1201,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             Basal Metabolic Rate (BMR) is the number of calories your body needs to maintain basic physiological functions while at rest. These functions include breathing, circulation, cell production, nutrient processing, and temperature regulation.<br>
             <b>Key Points About BMR:</b><br>
             <b>Basic Function Maintenance:</b> BMR represents the energy required for essential bodily functions, not including physical activities or digestion.<br>
-            <b>Measurement Conditions:</b> BMR is typically measured under very specific conditions: after a full night’s sleep, in a fasted state, and in a thermoneutral environment to ensure the body is at rest and not expending extra energy for digestion or temperature regulation.<br>
+            <b>Measurement Conditions:</b> BMR is typically measured under very specific conditions: after a full nights sleep, in a fasted state, and in a thermoneutral environment to ensure the body is at rest and not expending extra energy for digestion or temperature regulation.<br>
             <b>Influencing Factors:</b> Several factors influence BMR, including:<br>
             <b>Age:</b> BMR generally decreases with age.<br>
             <b>Sex:</b> Males typically have a higher BMR than females due to a greater muscle mass.<br>
@@ -1305,20 +1305,19 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
                 A cautious approach is crucial to avoid further reducing an already low BMI.'];
             }
             if($LowYoungMaleGain) {
-                $desc = ['<b>Intermittent Fasting Recommendation for a Young Male Under 35 with Low BMI Trying to Gain Muscle Mass</b><br>
-                <b>14/10 Method:</b><br>
-                <b>Fasting Window:</b> 14 hours.<br>
-                <b>Eating Window:</b> 10 hours (e.g., 10 AM to 8 PM).<br>
-                <b>High-Calorie, Nutrient-Dense Meals:</b><br>
-                <b>Protein:</b> Include lean meats, fish, eggs, and protein shakes.<br>
-                <b>Healthy Fats:</b> Add avocados, nuts, and olive oil.<br>
-                <b>Complex Carbs:</b> Eat whole grains, fruits, and vegetables.<br>
-                <b>Pre- and Post-Workout:</b><br>
+                $desc = ['<b>Intermittent Fasting Recommendation for a Young Male Under 35 with 
+                Low BMI Trying to Gain Muscle Mass</b><br>
+                <b>14/10 Method:</b><br><b>Fasting Window:</b> 14 hours.<br><b>Eating Window:</b> 
+                10 hours (e.g., 10 AM to 8 PM).<br>
+                <b>High-Calorie, Nutrient-Dense Meals:</b><br><b>Protein:</b> Include lean meats, 
+                fish, eggs, and protein shakes.<br>
+                <b>Healthy Fats:</b> Add avocados, nuts, and olive oil.<br><b>Complex Carbs:</b> 
+                Eat whole grains, fruits, and vegetables.
+                <br><b>Pre- and Post-Workout:</b><br>
                 Ensure adequate meals or snacks around workouts for energy and recovery.<br>
-                <b>Hydrate:</b><br>
-                Drink water, and consider black coffee or tea during fasting.<br>
-                <b>Note:</b><br>
-                Consult a healthcare provider to tailor the approach to your needs and avoid further reducing BMI.'];
+                <b>Hydrate:</b><br>Drink water, and consider black coffee or tea during fasting.<br>
+                <b>Note:</b><br>Consult a healthcare provider to tailor the approach to your needs 
+                and avoid further reducing BMI.'];
             }
             if($LowYoungFemaleLose) {
                 $desc = ['<b>Intermittent Fasting Recommendation for a Young Female Under 35 with Low BMI Trying to Lose Weight</b><br>
