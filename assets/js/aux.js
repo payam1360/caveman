@@ -2101,6 +2101,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
         nameP.innerHTML = "Client's name: ";
         nameP.style.marginTop = '100px';
+        nameP.style.fontSize = '20px';
         namesTemp = results.names[cidx].charAt(0).toUpperCase() + results.names[cidx].slice(1);
         namePstyle.innerHTML = namesTemp;
         namePstyle.style.fontSize = '40px';
@@ -2109,6 +2110,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         nameP.appendChild(namePstyle);
 
         idP.innerHTML = "Client's ID: ";
+        idP.style.fontSize = '20px';
         idPstyle.innerHTML = results.ids[cidx];
         idPstyle.style.fontSize = '40px';
         idPstyle.style.color = 'green';
@@ -2116,6 +2118,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         idP.appendChild(idPstyle);    
 
         genderP.innerHTML = "Client's gender: ";
+        genderP.style.fontSize = '20px';
         genderTemp = results.genders[cidx].charAt(0).toUpperCase() + results.genders[cidx].slice(1);
         genderPstyle.innerHTML = genderTemp;
         genderPstyle.style.fontSize = '40px';
@@ -2125,6 +2128,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
 
         goalP.innerHTML = "Client's goal: ";
+        goalP.style.fontSize = '20px';
         goalsTemp = results.goals[cidx].charAt(0).toUpperCase() + results.goals[cidx].slice(1);
         goalPstyle.innerHTML = goalsTemp;
         goalPstyle.style.fontSize = '40px';
@@ -2134,6 +2138,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
         if(results.mealEng[cidx] == 0){
             mealText.innerHTML = 'You have selected ';
+            mealText.style.fontSize = '20px';
             mealPstyle.innerHTML = 'AI';
             mealPstyle.style.fontSize = '24px';
             mealPstyle.style.color = '#DB4437';
@@ -2141,6 +2146,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
             mealText.innerHTML =  mealText.innerHTML + ' for meal planning for ' + results.names[cidx];
         } else if(results.mealEng[cidx] == 1){
             mealText.innerHTML = 'You have selected ';
+            mealText.style.fontSize = '20px';
             mealPstyle.innerHTML = 'nutritionist';
             mealPstyle.style.fontSize = '24px';
             mealPstyle.style.color = '#DB4437';
@@ -2150,6 +2156,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
         if(results.nutritionEng[cidx] == 0){
             nutritionText.innerHTML = 'You have selected ';
+            nutritionText.style.fontSize = '20px';
             nutritionPstyle.innerHTML = 'AI';
             nutritionPstyle.style.fontSize = '24px';
             nutritionPstyle.style.color = '#DB4437';
@@ -2157,6 +2164,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
             nutritionText.innerHTML =  nutritionText.innerHTML + ' for nutritional analysis for ' + results.names[cidx];
         } else if(results.nutritionEng[cidx] == 1){
             nutritionText.innerHTML = 'You have selected ';
+            nutritionText.style.fontSize = '20px';
             nutritionPstyle.innerHTML = 'nutritionist';
             nutritionPstyle.style.fontSize = '24px';
             nutritionPstyle.style.color = '#DB4437';
@@ -2222,6 +2230,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
 
         stressP.innerHTML = "Stress level: ";
+        stressP.style.fontSize = '20px';
         let stressTemp = stress.charAt(0).toUpperCase() + stress.slice(1);
         stressPstyle.innerHTML = stressTemp;
         stressPstyle.style.fontSize = '40px';
@@ -2231,6 +2240,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
         
         sleepP.innerHTML = "Sleep quality: ";
+        sleepP.style.fontSize = '20px';
         let sleepTemp = sleep.charAt(0).toUpperCase() + sleep.slice(1);
         sleepPstyle.innerHTML = sleepTemp;
         sleepPstyle.style.fontSize = '40px';
@@ -2240,6 +2250,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
 
         waterP.innerHTML = "Water intake: ";
+        waterP.style.fontSize = '20px';
         if(water){
             waterTemp = water.charAt(0).toUpperCase() + water.slice(1);
         } else {
@@ -2253,6 +2264,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
 
         ageP.innerHTML = "Age: ";
+        ageP.style.fontSize = '20px';
         if(age){
             ageTemp = age.charAt(0).toUpperCase() + age.slice(1);
         } else {
@@ -2265,6 +2277,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         ageP.appendChild(agePstyle);
 
         emailP.innerHTML = "Email: ";
+        emailP.style.fontSize = '20px';
         if(email){
             emailTemp = email.charAt(0).toUpperCase() + email.slice(1);
         } else {
@@ -2278,6 +2291,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
 
         weightP.innerHTML = "Weight: ";
+        weightP.style.fontSize = '20px';
         if(weight){
             weightTemp = weight + ' lb';
         } else {
@@ -2292,6 +2306,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
 
         heightP.innerHTML = "Height: ";
+        heightP.style.fontSize = '20px';
         if(height){
             heightTemp = height + ' ft';
         } else {
@@ -2305,6 +2320,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
 
         sugarP.innerHTML = "Sugar intake: ";
+        sugarP.style.fontSize = '20px';
         if(sugar){
             sugarTemp = sugar.charAt(0).toUpperCase() + sugar.slice(1);
         } else {
@@ -2318,6 +2334,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
 
         alcoholP.innerHTML = "Alcohol consumption: ";
+        alcoholP.style.fontSize = '20px';
         if(alcohol){
             alcoholTemp = alcohol.charAt(0).toUpperCase() + alcohol.slice(1);
         } else {
@@ -2331,6 +2348,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
 
         workoutP.innerHTML = "Workout duration: ";
+        workoutP.style.fontSize = '20px';
         if(workout){
             workoutTemp = workout.charAt(0).toUpperCase() + workout.slice(1);
         } else {
@@ -2343,11 +2361,11 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         workoutP.appendChild(workoutPstyle);
 
 
-
-
         let link = '/userPages/' + userid + results.ids[cidx] + results.campaignidAssigned[cidx] + '.html'
         campaignP.innerHTML = 'Link to ' + results.names[cidx] + '\'s survey <a href="' + link + '"> page</a>';
-        
+        campaignP.style.fontSize = '20px';
+
+
         let divider1 = document.createElement('div');
         divider1.style.height = '2px';
         divider1.style.width = '80%';
@@ -2390,6 +2408,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         bmiDiv.setAttribute('id', 'Bmi');
         bmiTxt.setAttribute('class', 'BMI_text');
         bmiDesc.setAttribute('class', 'BMI_text_description');
+        bmiDesc.style.fontSize = '20px';
         div1.appendChild(bmiTxt);
         div2.appendChild(bmiDiv);
         div3.appendChild(bmiDesc);
@@ -2439,6 +2458,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         microDiv.setAttribute('id', 'Micro');
         microTxt.setAttribute('class', 'MICRO_text');
         microDesc.setAttribute('class', 'MICRO_text_description');
+        microDesc.style.fontSize = '20px';
         div1.appendChild(microTxt);
         div2.appendChild(microDiv);
         div3.appendChild(microDesc);
@@ -2488,6 +2508,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         microVitDiv.setAttribute('id', 'Micro_vit');
         microVitTxt.setAttribute('class', 'MICRO_vit_text');
         microVitDesc.setAttribute('class', 'MICRO_vit_text_description');
+        microVitDesc.style.fontSize = '20px';
         div1.appendChild(microVitTxt);
         div2.appendChild(microVitDiv);
         div3.appendChild(microVitDesc);
@@ -2536,6 +2557,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         macroDiv.setAttribute('id', 'Macro');
         macroTxt.setAttribute('class', 'MACRO_text');
         macroDesc.setAttribute('class', 'MACRO_text_description');
+        macroDesc.style.fontSize = '20px';
         div1.appendChild(macroTxt);
         div2.appendChild(macroDiv);
         div3.appendChild(macroDesc);
@@ -2584,6 +2606,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         ifDiv.setAttribute('id', 'IntermittentFasting');
         ifTxt.setAttribute('class', 'IF_text');
         ifDesc.setAttribute('class', 'IF_text_description');
+        ifDesc.style.fontSize = '20px';
         div1.appendChild(ifTxt);
         div2.appendChild(ifDiv);
         div3.appendChild(ifDesc);
@@ -2634,6 +2657,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         calDiv.setAttribute('id', 'Calories');
         calTxt.setAttribute('class', 'Cal_text');
         calDesc.setAttribute('class', 'Cal_description');
+        calDesc.style.fontSize = '20px';
         div1.appendChild(calTxt);
         div2.appendChild(calDiv);
         div3.appendChild(calDesc);
@@ -2679,6 +2703,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         div1 = document.createElement('div');
         let mealDesc = document.createElement('p');
         mealDesc.setAttribute('class', 'meal_text');
+        mealDesc.style.fontSize = '20px';
         div1.appendChild(mealDesc);
         Meal.appendChild(div1);
     
@@ -2840,67 +2865,74 @@ function parseHTMLText(text) {
 
 // Function to draw text with maxWidth and handle line breaks
 function drawText(doc, segments, settings) {
-    let x = settings.x;
-    let y = settings.y;
-    let maxWidth = settings.maxWidth; 
-    let lineHeight = settings.lineHeight;
-    let currentY = y;
-    let currentX = x;
-    let nextLine = false;
-    let line = '';
-    let testLine = '';
-    let testWidth = 0;
-    segments.forEach(segment => {
-        const words = segment.text.split(' ');
-        line = '';
-        testLine = '';
-        
-        words.forEach(word => {
-            if(word != ''){
-                testLine  = line + word + ' ';
-            } 
-            // Set font based on the segment bold flag
-            if (segment.bold) {
-                doc.setFont('helvetica', 'bold');
-            } else {
-                doc.setFont('helvetica', 'normal');
-            }
-            testWidth = doc.getTextWidth(testLine);
-            if (testWidth > maxWidth) {
-                // Draw the current line and move to the next line
+    
+    let maxWidth    = settings.maxWidth; 
+    let lineHeight  = settings.lineHeight;
+    let currentY    = settings.y;
+    let currentX    = settings.x;
+    let line        = '';
+    let segmentLine = '';
+    let newLine     = false;
+ 
+    for(kk = 0; kk < segments.length; kk++) {
+        // check if this is just empty text
+        if(segments[kk].text == ''){
+            continue;
+        }
+        // check if segment is just a new line
+        if(segments[kk].text === '\n'){
+            // flush
+            doc.text(segmentLine, currentX, currentY);
+            segmentLine = '';
+            line = '';
+            currentX  = settings.x;
+            currentY += lineHeight;
+            continue;
+        }
+        // search \n inside a segment and remove it.
+        if(segments[kk].text.search(/\n/)) {
+            segments[kk].text.replace('\n', '');
+        }
+        // Set font based on the segment bold flag
+        if (segments[kk].bold) {
+            doc.setFont('helvetica', 'bold');
+        } else {
+            doc.setFont('helvetica', 'normal');
+        }
+        // handling the total line width
+        segmentLine = segments[kk].text;
+        if(doc.getTextWidth(segmentLine) + currentX > maxWidth ) {
+            while(doc.getTextWidth(segmentLine) + currentX > maxWidth) {
+                r = Math.round(maxWidth / (doc.getTextWidth(segmentLine) + currentX) * 
+                                                            segmentLine.length); 
+                r = segmentLine.substring(0, r).lastIndexOf(' ') + 1;                                           
+                line = segmentLine.substring(0, r);
                 doc.text(line, currentX, currentY);
-                currentX = x;
+                segmentLine = segmentLine.substring(r);
+                currentX  = settings.x;
                 currentY += lineHeight;
-                line = word + ' ';
-                nextLine = true;
-            } else {
-                line = testLine;
-                nextLine = false;
             }
-            // Handle line breaks
-            if (word === '\n') {
-                currentX = x;
-                line = '';
-                testLine = ''; 
-                currentY += lineHeight;
-                nextLine = true;
-            } 
-        });
+            newLine = true;
+            line = segmentLine;
+        } else {
+            line = segmentLine;
+            newLine = false;
+        }
 
+        doc.text(line, currentX, currentY);
+        if(newLine){
+            line = '';
+        } else {
+            currentX  += doc.getTextWidth(line) + 1;
+            line = '';
+            segmentLine = '';
+        }
         if(currentY > 500){
             doc.addPage();
-            currentY = 50;
-            currentX = x;
+            currentX  = settings.x;
+            currentY  = 50;
         }
-        // Draw the remaining text
-        doc.text(line, currentX, currentY);
-        
-        if(nextLine == false){
-            currentY += lineHeight;
-        }
-        currentX = x;
-    });
-
+    };
 }
 
 
@@ -3004,8 +3036,8 @@ function createPdf(data) {
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    let drawTextSetting = {x: 50, y: 350, maxWidth: 350, lineHeight: 15};
-    let segments = parseHTMLText(data.bmr['desc'][0]);
+    drawTextSetting = {x: 50, y: 350, maxWidth: 350, lineHeight: 15};
+    segments = parseHTMLText(data.bmr['desc'][0]);
     drawText(pdf, segments, drawTextSetting);
 
     pdf.addPage();

@@ -68,20 +68,46 @@ function getClientEmail($userId, $clientId) {
 }
 
 function resizeImage($sourceImagePath, $destinationImagePath, $newWidth) {
+    // Get original image dimensions and type
+    list($originalWidth, $originalHeight, $imageType) = getimagesize($sourceImagePath);
+    if ($originalWidth === false || $originalHeight === false) {
+        die("Unable to get image dimensions.");
+    }
+
+    // Determine aspect ratio and new dimensions
+    $aspectRatio = $originalWidth / $originalHeight;
+    $newHeight = round($newWidth / $aspectRatio);
+
     // Create an image resource from the source file
-    $sourceImage = imagecreatefromstring(file_get_contents($sourceImagePath));
+    switch ($imageType) {
+        case IMAGETYPE_JPEG:
+            $sourceImage = imagecreatefromjpeg($sourceImagePath);
+            break;
+        case IMAGETYPE_PNG:
+            $sourceImage = imagecreatefrompng($sourceImagePath);
+            break;
+        case IMAGETYPE_GIF:
+            $sourceImage = imagecreatefromgif($sourceImagePath);
+            break;
+        default:
+            die("Unsupported image type.");
+    }
+
     if (!$sourceImage) {
         die("Unable to create image resource from source.");
     }
 
-    // Get original image dimensions
-    list($originalWidth, $originalHeight) = getimagesize($sourceImagePath);
-    // Calculate the new height to maintain aspect ratio
-    $aspectRatio = $originalWidth / $originalHeight;
-    $newHeight   = round(floor($newWidth / $aspectRatio * 1000) / 1000);
-
     // Create a new true color image with the new dimensions
     $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+
+    // Handle transparency for PNG and GIF images
+    if ($imageType == IMAGETYPE_PNG || $imageType == IMAGETYPE_GIF) {
+        // Preserve transparency
+        imagealphablending($resizedImage, false);
+        imagesavealpha($resizedImage, true);
+        $transparent = imagecolorallocatealpha($resizedImage, 0, 0, 0, 127);
+        imagefill($resizedImage, 0, 0, $transparent);
+    }
 
     // Resize the source image and copy it into the resized image
     imagecopyresampled(
@@ -92,12 +118,24 @@ function resizeImage($sourceImagePath, $destinationImagePath, $newWidth) {
     );
 
     // Save the resized image to the destination path
-    imagepng($resizedImage, $destinationImagePath);
+    switch ($imageType) {
+        case IMAGETYPE_JPEG:
+            imagejpeg($resizedImage, $destinationImagePath);
+            break;
+        case IMAGETYPE_PNG:
+            imagepng($resizedImage, $destinationImagePath);
+            break;
+        case IMAGETYPE_GIF:
+            imagegif($resizedImage, $destinationImagePath);
+            break;
+    }
 
     // Free up memory
     imagedestroy($sourceImage);
     imagedestroy($resizedImage);
 }
+
+
 
 function prepareBody($userdata) {
 
@@ -112,7 +150,7 @@ function prepareBody($userdata) {
 
         $sourceImagePath = '../../clientEmails/' . $userdata->userId . $userdata->clientId . $ImageNames[$kk] . 'File.png';
         $destinationImagePath = '../../clientEmails/resized' . $userdata->userId . $userdata->clientId . $ImageIds[$kk] . 'File.png';
-        $newWidth = 500; // Desired width in pixels
+        $newWidth = 512; // Desired width in pixels
         resizeImage($sourceImagePath, $destinationImagePath, $newWidth);
         // process $userdata->parentNode outerHTML for canvas and replace with src img  
         // Regular expression to find <canvas> tags
@@ -148,10 +186,10 @@ function prepareBody($userdata) {
                 <h1>NutriAi Progress report</h1>
             </div>
             <div class="content">
-                <p>Hello,</p>
-                <p>Here is the report for your progress this past month.</p>' . 
+                <p style="font-size: 20px">Hello,</p>
+                <p style="font-size: 20px">Here is the report for your progress this past month.</p>' . 
                 $outerHTML 
-                . '<p>Best regards,<br>NutriAi team</p>
+                . '<p style="font-size: 20px">Best regards,<br>NutriAi team</p>
             </div>
             <div class="footer">
                 <p>NutriAi | Carlsbad, Ca 92008 | 6129785987</p>
