@@ -1196,7 +1196,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
         if(!empty($dbOutRow['descBmr'])) { // use the entry by the user
             $desc = [$dbOutRow['descBmr']];
         } else { 
-            $desc = ['<b>Basal Metabolic Rate (BMR) Definition and Description</b><br>
+            $desc = ['<b>Basal Metabolic Rate (BMR) Definition and Description:</b><br>
             <b>What is BMR?</b><br>
             Basal Metabolic Rate (BMR) is the number of calories your body needs to maintain basic physiological functions while at rest. These functions include breathing, circulation, cell production, nutrient processing, and temperature regulation.<br>
             <b>Key Points About BMR:</b><br>
@@ -1214,10 +1214,10 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             <b>Caloric Needs:</b> BMR forms the baseline for calculating Total Daily Energy Expenditure (TDEE), which includes additional calories burned through physical activity and digestion.<br>
             <b>Example Calculation (Using Mifflin-St Jeor Equation):</b><br>
             For a 30-year-old woman, 65 kg, 165 cm tall:<br>
-            BMR = (10 * weight in kg) + (6.25 * height in cm) - (5 * age in years) - 161<br>
-            BMR = (10 * 65) + (6.25 * 165) - (5 * 30) - 161<br>
+            BMR = (10 x weight in kg) + (6.25 x height in cm) - (5 x age in years) - 161<br>
+            BMR = (10 x 65) + (6.25 x 165) - (5 x 30) - 161<br>
             BMR = 650 + 1031.25 - 150 - 161<br>
-            BMR ≈ 1370 kcal/day<br>
+            BMR ~ 1370 kcal/day<br>
             This means she needs approximately 1370 calories per day to maintain basic bodily functions at rest.<br>'];
         }
     } elseif($contextFlag == "If") {

@@ -1407,7 +1407,7 @@ function plotMicro(micro, microDiv = 0, microTxt = 0, microDesc = 0){
     microDesc.innerHTML = micro['descTrace'];
     eventSourceQueue['MicroTrace'] = true;
     tColors = ['coral','lightblue','limegreen','cyan','blue','green','orange',
-               'magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod',
+               'magenta','black','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod',
                'Peru','Sienna'];
     const microData = {
         labels: micro['val'].tNames,
@@ -1480,7 +1480,9 @@ function plotMicroVit(micro, microDiv = 0, microTxt = 0, microDesc = 0){
 
     eventSourceQueue['MicroVit'] = true;
     microDesc.innerHTML = micro['descVit'];
-    vColors = ['coral','lightblue','limegreen','cyan','blue','green','orange','magenta','Aqua','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod','Peru','Sienna'];
+    vColors = ['coral','lightblue','limegreen','cyan','blue','green','orange',
+    'magenta','black','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod',
+    'Peru','Sienna'];
     const microData = {
         labels: micro['val'].vNames,
         datasets: [{
@@ -2049,7 +2051,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         spn.style.fontSize = '50px';
         pdfBtn.appendChild(spn);
         pdfBtn.addEventListener('click', function(){
-            createPdf(parentNode, clientData);
+            createPdf(clientData);
         });
 
         let emailBtn = document.createElement('button');
@@ -2165,13 +2167,13 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         // Adding more info about some of client's responses to questions that aren't
         // directly being used to generate key results.
         keyToFind = 'stress';
-        stress = inputBlob.find(obj => obj.qKey[0] === keyToFind);
+        let stress = inputBlob.find(obj => obj.qKey[0] === keyToFind);
         if(stress){
             stress = stress.optionsText[0][stress.qAnswer];
         }
 
         keyToFind = 'sleep';
-        sleep = inputBlob.find(obj => obj.qKey[0] === keyToFind);
+        let sleep = inputBlob.find(obj => obj.qKey[0] === keyToFind);
         if(sleep){
             sleep = sleep.optionsText[0][sleep.qAnswer];
         }
@@ -2790,7 +2792,138 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
     }
 }
 
-function createPdf(node, data) {
+
+
+function parseHTMLText(text) {
+
+    const segments   = [];
+    let currentIndex = 0;
+    const regex = /<b>([\s\S]*?)<\/b>|<br>/gi;
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+        if (match.index > currentIndex) {
+            // Add regular text before the tag
+            segments.push({
+                text: text.substring(currentIndex, match.index).trim(),
+                bold: false
+            });
+        }
+
+        if (match[0].startsWith('<b>')) {
+            // Add bold text
+            segments.push({
+                text: match[1].trim(),
+                bold: true
+            });
+        } else if (match[0] === '<br>') {
+            // Add line break
+            segments.push({
+                text: '\n',
+                bold: false
+            });
+        }
+
+        currentIndex = match.index + match[0].length;
+    }
+
+    // Add remaining text after the last tag
+    if (currentIndex < text.length) {
+        segments.push({
+            text: text.substring(currentIndex).trim(),
+            bold: false
+        });
+    }
+
+    return segments;
+}
+
+// Function to draw text with maxWidth and handle line breaks
+function drawText(doc, segments, settings) {
+    let x = settings.x;
+    let y = settings.y;
+    let maxWidth = settings.maxWidth; 
+    let lineHeight = settings.lineHeight;
+    let currentY = y;
+    let currentX = x;
+    let nextLine = false;
+    let line = '';
+    let testLine = '';
+    let testWidth = 0;
+    segments.forEach(segment => {
+        const words = segment.text.split(' ');
+        line = '';
+        testLine = '';
+        
+        words.forEach(word => {
+            if(word != ''){
+                testLine  = line + word + ' ';
+            } 
+            // Set font based on the segment bold flag
+            if (segment.bold) {
+                doc.setFont('helvetica', 'bold');
+            } else {
+                doc.setFont('helvetica', 'normal');
+            }
+            testWidth = doc.getTextWidth(testLine);
+            if (testWidth > maxWidth) {
+                // Draw the current line and move to the next line
+                doc.text(line, currentX, currentY);
+                currentX = x;
+                currentY += lineHeight;
+                line = word + ' ';
+                nextLine = true;
+            } else {
+                line = testLine;
+                nextLine = false;
+            }
+            // Handle line breaks
+            if (word === '\n') {
+                currentX = x;
+                line = '';
+                testLine = ''; 
+                currentY += lineHeight;
+                nextLine = true;
+            } 
+        });
+
+        if(currentY > 500){
+            doc.addPage();
+            currentY = 50;
+            currentX = x;
+        }
+        // Draw the remaining text
+        doc.text(line, currentX, currentY);
+        
+        if(nextLine == false){
+            currentY += lineHeight;
+        }
+        currentX = x;
+    });
+
+}
+
+
+function printInitialInfo(doc, text2write, element, x, y){
+                      
+    if(element == ''){
+        doc.setFontSize(22); // assume it is a title
+    } else {
+        doc.setFontSize(10);
+    }
+    doc.setTextColor('#000000');
+    doc.text(text2write, x, y); 
+    textWidth = Math.ceil(x + doc.getTextWidth(text2write));                     
+    
+    if(element != '') {
+        doc.setFontSize(20);
+        doc.setTextColor(element.style.color);
+        doc.text(element.innerHTML, textWidth, y); 
+    }
+}
+
+
+function createPdf(data) {
 
     const { jsPDF } = window.jspdf;
     
@@ -2800,9 +2933,19 @@ function createPdf(node, data) {
     const canvasImgMacro      = document.getElementById('Macro').toDataURL('image/png', 1.0);
     const canvasImgIf         = document.getElementById('IntermittentFasting').toDataURL('image/png', 1.0);
     const canvasImgCal        = document.getElementById('Calories').toDataURL('image/png', 1.0);
-    const nameP               = document.getElementById('mDivpName');
-    const goalP               = document.getElementById('mDivpGoal');
-    const idP                 = document.getElementById('mDivpId');
+    let nameP                 = document.getElementById('mDivpName');
+    let goalP                 = document.getElementById('mDivpGoal');
+    let idP                   = document.getElementById('mDivpId');
+    let stressP               = document.getElementById('mDivpStress');
+    let sleepP                = document.getElementById('mDivpSleep');
+    let ageP                  = document.getElementById('mDivpAge');
+    let sugarP                = document.getElementById('mDivpSugar');
+    let alcoholP              = document.getElementById('mDivpAlcohol');
+    let workoutP              = document.getElementById('mDivpWorkout');
+    let weightP               = document.getElementById('mDivpWeight');
+    let heightP               = document.getElementById('mDivpHeight');
+    let emailP                = document.getElementById('mDivpEmail');
+    let waterP                = document.getElementById('mDivpWater');
 
 
     var pdf = new jsPDF({
@@ -2811,141 +2954,230 @@ function createPdf(node, data) {
                          format: 'letter',
                          putOnlyUsedFonts:true
                          });
-    pdf.setFontSize(10);
-    pdf.setTextColor('#000000');
-    pdf.text('Hey there, ', 50, 50); 
 
-    pdf.setFontSize(20);
-    pdf.setTextColor('#4285F4');
-    pdf.text(nameP.innerHTML, 85, 50); 
-
-    pdf.setFontSize(10);
-    pdf.setTextColor('#000000'); 
-    pdf.text('Your goal: ', 50, 70);  
-
-    pdf.setFontSize(20);
-    pdf.setTextColor('#F4B400');
-    pdf.text(goalP.innerHTML, 85, 70); 
-
-    pdf.setFontSize(10);
-    pdf.setTextColor('#000000'); 
-    pdf.text('Your ID: ', 50, 90);  
-
-    pdf.setFontSize(20);
-    pdf.setTextColor('#964B00');
-    pdf.text(idP.innerHTML, 85, 90); 
-
-    pdf.line(50, 100, 400, 100, 'S');
-
-    pdf.setFontSize(10);
-    pdf.setTextColor('#000000');
-    pdf.text('Your basal metabolic rate (BMR) kcal / day: ', 50, 120); 
-
-    pdf.setFontSize(20);
-    pdf.setTextColor('#FFA500');
-    pdf.text(String(Math.floor(data.bmr['val']*100)/100), 200, 120); 
-
-    pdf.setFontSize(10);
-    pdf.setTextColor('#000000');
-    pdf.text(data.bmr['desc'], 50, 140, {maxWidth:370}); 
-
-    pdf.setFontSize(10);
-    pdf.setTextColor('#000000');
-    pdf.text('Your body mass index: ', 50, 180); 
-
-    pdf.setFontSize(20);
-    pdf.setTextColor('#2E8B57');
-    pdf.text(String(Math.floor(data.bmi['val']*100)/100), 130, 180); 
-
-    pdf.setFontSize(22);
-    pdf.setTextColor('#000000');
-    pdf.text('BMI plot', 50, 220);
-
-    pdf.addImage(canvasImgBmi, 'JPEG', 80, 240, 300, 220, 'alias1', 'NONE');
+    // name 
+    text2write = 'Hey there, ';
+    printInitialInfo(pdf, text2write, nameP, 50, 50);
+    // goal
+    text2write = 'Your goal: ';
+    printInitialInfo(pdf, text2write, goalP, 50, 70);
+    // ID
+    text2write = 'Your ID: ';
+    printInitialInfo(pdf, text2write, idP, 50, 90);
+    // Email
+    text2write = 'Your email: ';
+    printInitialInfo(pdf, text2write, emailP, 50, 110);
+    // weight
+    text2write = 'Your Weight: ';
+    printInitialInfo(pdf, text2write, weightP, 50, 130);
+    // height
+    text2write = 'Your Height: ';
+    printInitialInfo(pdf, text2write, heightP, 50, 150);
+    // age
+    text2write = 'Your Age: ';
+    printInitialInfo(pdf, text2write, ageP, 50, 170);
+    // stress
+    text2write = 'Your stress level: ';
+    printInitialInfo(pdf, text2write, stressP, 50, 190);
+    // sleep
+    text2write = 'Your sleep: ';
+    printInitialInfo(pdf, text2write, sleepP, 50, 210); 
+    // sugar
+    text2write = 'Your sugar intake: ';
+    printInitialInfo(pdf, text2write, sugarP, 50, 230); 
+    // water
+    text2write = 'Your water intake: ';
+    printInitialInfo(pdf, text2write, waterP, 50, 250); 
+    // workout
+    text2write = 'Your workout duration: ';
+    printInitialInfo(pdf, text2write, workoutP, 50, 270); 
+    // alcohol
+    text2write = 'Your alcohol consumption: ';
+    printInitialInfo(pdf, text2write, alcoholP, 50, 290); 
+    // seperator
+    pdf.line(50, 310, 400, 310, 'S');
+    // BMR value
+    text2write = 'Your basal metabolic rate (BMR) kcal / day: ';
+    bmrElement = {innerHTML: String(Math.floor(data.bmr['val']*100)/100), 
+                                        style: {color: '#FFA500'}};
+    printInitialInfo(pdf, text2write, bmrElement, 50, 330); 
 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.bmi['desc'] , 50, 480, {maxWidth:370}); 
-    
-    // page reset
+    let drawTextSetting = {x: 50, y: 350, maxWidth: 350, lineHeight: 15};
+    let segments = parseHTMLText(data.bmr['desc'][0]);
+    drawText(pdf, segments, drawTextSetting);
+
     pdf.addPage();
 
-    pdf.setFontSize(22);
+    // BMI title / plot / description
+    text2write = 'BMI';
+    printInitialInfo(pdf, text2write, '', 50, 50); 
+    // BMI value
+    text2write = 'Your body mass index (BMI): ';
+    bmiElement = {innerHTML: String(Math.floor(data.bmi['val']*100)/100), 
+                                            style: {color: '#2E8B57'}};
+    printInitialInfo(pdf, text2write, bmiElement, 50, 70); 
+    
+    pdf.addImage(canvasImgBmi, 'JPEG', 80, 90, 300, 220, 'alias1', 'NONE');
+    pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text('Intermittent fasting recommendation', 50, 50);
+    drawTextSetting = {x: 50, y: 330, maxWidth: 350, lineHeight: 15};
+    segments = parseHTMLText(data.bmi['desc'][0]);
+    drawText(pdf, segments, drawTextSetting);
 
+    // page reset
+    pdf.addPage();
+    // IF title / plot / description
+    text2write = 'Intermittent fasting recommendation';
+    printInitialInfo(pdf, text2write, '', 50, 50); 
     pdf.addImage(canvasImgIf, 'JPEG', 80, 70, 300, 160, 'alias2', 'NONE');
 
+    text2write = 'Fasting window: ';
+    proteinP = {innerHTML: String(Math.floor(data.if['val'][0][0]*100)/100) + 'hr', 
+    style: {color: 'dodgerblue'}};
+    printInitialInfo(pdf, text2write, proteinP, 50, 280); 
+
+    text2write = 'Eating window: ';
+    fiberP = {innerHTML: String(Math.floor(data.if['val'][1][0]*100)/100) + 'hr', 
+    style: {color: 'mediumseagreen'}};
+    printInitialInfo(pdf, text2write, fiberP, 50, 300); 
+
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.if['desc'] , 50, 280, {maxWidth:370});
+    drawTextSetting = {x: 50, y: 320, maxWidth: 350, lineHeight: 15};
+    segments = parseHTMLText(data.if['desc'][0]);
+    drawText(pdf, segments, drawTextSetting);
+   
 
     // page reset
     pdf.addPage();
-
-    pdf.setFontSize(22);
-    pdf.setTextColor('#000000');
-    pdf.text('Macro nutrients recommendation', 50, 50);
-
+    // MacroNutrient title / plot / description
+    text2write = 'Macro nutrients recommendations ';
+    printInitialInfo(pdf, text2write, '', 50, 50); 
     pdf.addImage(canvasImgMacro, 'JPEG', 80, 70, 300, 220, 'alias3', 'NONE');
-
-    pdf.setFontSize(10);
-    pdf.setTextColor('#000000');
-    pdf.text(data.macro['desc'] , 50, 320, {maxWidth:370});
-
-    // page reset
-    pdf.addPage();
-
-    pdf.setFontSize(22);
-    pdf.setTextColor('#000000');
-    pdf.text('Micro Trace mineral recommendation', 50, 50);
-
-    pdf.addImage(canvasImgMicroTrace, 'JPEG', 80, 70, 300, 220, 'alias4', 'NONE');
     
+    text2write = 'Fat: ';
+    fatP = {innerHTML: String(Math.floor(data.macro['val'][0]*100)/100) + 'gr', 
+    style: {color: 'coral'}};
+    printInitialInfo(pdf, text2write, fatP, 50, 320); 
+
+    text2write = 'Carbs: ';
+    carbP = {innerHTML: String(Math.floor(data.macro['val'][1]*100)/100) + 'gr', 
+    style: {color: 'lightblue'}};
+    printInitialInfo(pdf, text2write, carbP, 50, 340); 
+
+    text2write = 'Protein: ';
+    proteinP = {innerHTML: String(Math.floor(data.macro['val'][2]*100)/100)+ 'gr', 
+    style: {color: 'limegreen'}};
+    printInitialInfo(pdf, text2write, proteinP, 50, 360); 
+
+    text2write = 'Fiber: ';
+    fiberP = {innerHTML: String(Math.floor(data.macro['val'][3]*100)/100)+ 'gr', 
+    style: {color: 'cyan'}};
+    printInitialInfo(pdf, text2write, fiberP, 50, 380); 
+
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.micro['descTrace'] , 50, 320, {maxWidth:370});
+    drawTextSetting = {x: 50, y: 420, maxWidth: 350, lineHeight: 15};
+    segments = parseHTMLText(data.macro['desc'][0]);
+    drawText(pdf, segments, drawTextSetting);
+
 
     // page reset
     pdf.addPage();
+    // MicroNutrient title / plot / description
+    tColors = ['coral','lightblue','limegreen','cyan','blue','green','orange',
+    'magenta','black','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod',
+    'Peru','Sienna'];
+    text2write = 'Micronutrients (Trace minerals) recommendation ';
+    printInitialInfo(pdf, text2write, '', 50, 50); 
+    pdf.addImage(canvasImgMicroTrace, 'JPEG', 80, 70, 300, 220, 'alias4', 'NONE');
+    cc = 0;
+    for(kk = 0; kk < data.micro['val'].tValues.length; kk++) {
+        if(320 + 20*kk > 500){
+            XIndex = 250;
+            YIndex = 320 + 20*cc;
+            cc++;
+        } else {
+            XIndex = 50;
+            YIndex = 320 + 20*kk;
+        }
+        text2write = data.micro['val'].tNames[kk] + ': ';
+        elementM = {innerHTML: String(Math.floor(data.micro['val'].tValues[kk] * 
+                data.micro['val'].tScale[kk]*100)/100) + data.micro['val'].tUnits[kk], 
+                style: {color: tColors[kk]}};
+        printInitialInfo(pdf, text2write, elementM, XIndex, YIndex);
+    } 
 
-    pdf.setFontSize(22);
+    pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text('Micro Vitamins recommendation', 50, 50);
+    drawTextSetting = {x: 50, y: 320 + 20*kk, maxWidth: 350, lineHeight: 15};
+    segments = parseHTMLText(data.micro['descTrace'][0]);
+    drawText(pdf, segments, drawTextSetting);
 
+ 
+    // page reset
+    pdf.addPage();
+    // MicroNutrient vitamins title / plot / description
+    vColors = ['coral','lightblue','limegreen','cyan','blue','green','orange',
+    'magenta','black','DeepSkyBlue','MediumPurple','MistyRose','PaleGoldenRod',
+    'Peru','Sienna'];
+    text2write = 'Micronutrients (Vitamins) recommendation ';
+    printInitialInfo(pdf, text2write, '', 50, 50); 
     pdf.addImage(canvasImgMicroVit, 'JPEG', 80, 70, 300, 220, 'alias5', 'NONE');
-        
+    cc = 0;
+    for(kk = 0; kk < data.micro['val'].vValues.length; kk++) {
+       if(320 + 20*kk > 500){
+           XIndex = 250;
+           YIndex = 320 + 20*cc;
+           cc++;
+       } else {
+           XIndex = 50;
+           YIndex = 320 + 20*kk;
+       }
+       text2write = data.micro['val'].vNames[kk] + ': ';
+       elementM = {innerHTML: String(Math.floor(data.micro['val'].vValues[kk] * 
+               data.micro['val'].vScale[kk]*100)/100) + data.micro['val'].vUnits[kk], 
+               style: {color: vColors[kk]}};
+       printInitialInfo(pdf, text2write, elementM, XIndex, YIndex);
+   } 
+
+    pdf.addPage();
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.micro['descVit'] , 50, 320, {maxWidth:370});
+    drawTextSetting = {x: 50, y: 50, maxWidth: 350, lineHeight: 15};
+    segments = parseHTMLText(data.micro['descVit'][0]);
+    drawText(pdf, segments, drawTextSetting);
 
     // page reset
     pdf.addPage();
-
-    pdf.setFontSize(22);
-    pdf.setTextColor('#000000');
-    pdf.text('Calories intake recommendation', 50, 50);
-
+    // MicroNutrient title / plot / description
+    text2write = 'Calories intake recommendation';
+    printInitialInfo(pdf, text2write, '', 50, 50); 
     pdf.addImage(canvasImgCal, 'JPEG', 80, 70, 300, 170, 'alias6', 'NONE');
-       
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.cal['desc'] , 50, 280, {maxWidth:370});
+    drawTextSetting = {x: 50, y: 280, maxWidth: 350, lineHeight: 15};
+    segments = parseHTMLText(data.cal['desc'][0]);
+    drawText(pdf, segments, drawTextSetting);
+
    
     // page reset
+    // meal plan
     pdf.addPage();
-    pdf.setFontSize(22);
-    pdf.setTextColor('#000000');
-    pdf.text('Meal plan', 50, 50);
-      
+    text2write = 'Meal plan';
+    printInitialInfo(pdf, text2write, '', 50, 50); 
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
-    pdf.text(data.meal['desc'] , 50, 70, {maxWidth:370});
+    drawTextSetting = {x: 50, y: 70, maxWidth: 350, lineHeight: 15};
+    segments = parseHTMLText(data.meal['desc'][0]);
+    drawText(pdf, segments, drawTextSetting);
 
 
-    let idNumber = idP.innerHTML;
     const currentDate = new Date().toDateString();
-    pdf.save('progress report ' + currentDate + ' clientId ' + idNumber + '.pdf');
+    pdf.save('progress report for ' + nameP.innerHTML + ' clientId ' + 
+                                    idP.innerHTML + ' ' + currentDate + '.pdf');
 }
 
 function cleanClientDiv(mDiv) {
