@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const moveright = document.querySelector('.form-go-right');
     moveRight(moveright, input, header, headerTxt, Questions, 'questions');
     
-    const moveleft = document.querySelector('.form-go-left', 'questions');
-    moveLeft(moveleft, input, header, headerTxt, Questions);
+    const moveleft = document.querySelector('.form-go-left');
+    moveLeft(moveleft, input, header, headerTxt, Questions, 'questions');
     
 });
 

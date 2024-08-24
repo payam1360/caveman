@@ -1,26 +1,15 @@
 <?php
 
-$supportedIcons = ["fa-solid fa-dumbbell","fa-solid fa-heart-pulse", 
-                    "fa-regular fa-face-angry","fa-regular fa-face-meh","fa-regular fa-face-smile", 
-                    "fa-regular fa-moon","fa-regular fa-face-tired", "fa-solid fa-mars","fa-solid fa-venus", 
-                    "fa-regular fa-circle-check", "fa-solid fa-xmark", 
-                    "fa-solid fa-signature", "fa-regular fa-registered", "fa-solid fa-user-tie", 
-                    "fa-solid fa-not-equal", "fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", 
-                    "fa-solid fa-envelope", "fa-solid fa-gears", "fa-regular fa-hand-point-right", 'fa-regular fa-thumbs-up',
-                    "fa-regular fa-thumbs-down", "fa-solid fa-weight-scale", "fa-solid fa-text-height", "fa-solid fa-person-cane", 
-                    "fa-solid fa-water", "fa-solid fa-droplet", "fa-solid fa-droplet-slash", "fa-solid fa-arrow-up-right-dots", 
-                    "fa-solid fa-brain", "fa-brands fa-nutritionix", "fa-solid fa-hand-fist", "fa-solid fa-question", 
-                    "fa-solid fa-person-running", "fa-solid fa-person-walking", "fa-solid fa-bowl-food",
-                    "fa-solid fa-martini-glass-citrus", "fa-solid fa-fish", "fa-solid fa-cubes-stacked"];
+$supportedIcons = [ 
+    "fa-solid fa-water","fa-solid fa-droplet","fa-solid fa-droplet-slash", // water
+    "fa-solid fa-leaf", "fa-solid fa-candy-cane", "fa-solid fa-cubes-stacked", // sugar
+    "fa-solid fa-wine-glass-empty", "fa-solid fa-beer-mug-empty", "fa-solid fa-wine-bottle" // alcohol
+];
 
-$supportedText = [  "gain muscle", "increase heart rate","high stress", "medium stress", "low stress",
-                    "well rested", "get less sleep", "male", "female", "great", "bad", 
-                    "sign up", "register", "new user", "not equal", "list", "text", 
-                    "multiple choice", "email", "work process", "proceed", "ok", "not ok",
-                    "lose weight", "height", "age",  "drink lot of water", "drink enough water", 
-                    "drink less water", "increase testosterone", "ai", "nutritionist", "intense workout",
-                    "do not know", "cardio", "walking", "enough calories", "alcohol", "omega 3", "sugar"];
-
+$supportedText = [
+  "drink lot of water", "drink enough water", "drink less water",
+  "less sugar", "some sugar", "lots of sugar",
+  "no alcohol", "sometimes", "regularly"];
 
 $supportedAge = [  '18','19','20','21','22','23','24','25', '26','27','28','29','30','31',
                    '32','33','34','35','36','37','38','39','40','41','42','43','44','45', 
@@ -48,6 +37,11 @@ $supportedWeight =  [  '<80','81','82','83','84','85','86','87', '88','89','90',
 $supportedHeight =  [   "<5", "5", "5-1", "5-2", "5-3", "5-4", "5-5", "5-6", "5-7", 
                         "5-8", "5-9", "5-10", "5-11", "6", "6-1", "6-2", "6-3", "6-4", "6-5", 
                         "6-6", "6-6", "6-7", "6-8", "6-9", "6-10", "6-11", "7>"];     
+$supportedCalories = ['1000'];
+for($cCounter = 1100; $cCounter < 3100; $cCounter += 100){
+    array_push($supportedCalories, strval($cCounter)); 
+}
+$supportedWorkout =  [  'never', '1hr a week', '3hrs a week', '5hrs a week', '7hrs a week'];
 
 // this is to make campaign raw page only.
 // the landing page to clients will be a copy/paste of this page with clientId attached.
@@ -177,11 +171,11 @@ function setCampaignStartComplete($campaignIdSource, $userId) {
 
 function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
        
-    global $supportedAge;
-    global $supportedHeight;
+    global $supportedCalories;
+    global $supportedWorkout;
     global $supportedIcons;
     global $supportedText;
-    global $supportedWeight;
+    
 
     $servername  = "127.0.0.1";
     $loginname   = "root";
@@ -204,10 +198,10 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
     } else if($Questions[1]->qAnswer == 2) {
         $qType = "button";
     } 
-    // get question content:
-    $qContent = $Questions[4]->qAnswer;
     // Keyword of the question
-    $qKey = $Questions[5]->qAnswer;
+    $qKey = $Questions[4]->qAnswer;
+    // get question content:
+    $qContent = $Questions[5]->qAnswer;
     // get the campaignId
     $campaignIdSource  = $Questions[0]->campaignId;    
     // visited field
@@ -232,13 +226,10 @@ function saveUserDataIntoDB($Questions, $qIdx, $complete, $userId, $ip) {
         $optionsText = "";
         switch($optionsEntry[0]) {
             case 0:
-                $options = $supportedWeight;
+                $options = $supportedCalories;
                 break;
             case 1:
-                $options = $supportedHeight;
-                break;
-            case 2:
-                $options = $supportedAge;
+                $options = $supportedWorkout;
                 break;
             default:
                 // something else .. must go here

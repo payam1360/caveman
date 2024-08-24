@@ -1,24 +1,16 @@
 <?php
 
-$supportedIcons = ["fa-solid fa-dumbbell","fa-solid fa-heart-pulse", 
-"fa-regular fa-face-angry","fa-regular fa-face-meh","fa-regular fa-face-smile", 
-"fa-regular fa-moon","fa-regular fa-face-tired", "fa-solid fa-mars","fa-solid fa-venus", 
-"fa-regular fa-circle-check", "fa-solid fa-xmark", 
-"fa-solid fa-signature", "fa-regular fa-registered", "fa-solid fa-user-tie", "fa-solid fa-not-equal", 
-"fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer", "fa-solid fa-envelope", 
-"fa-solid fa-gears", "fa-regular fa-hand-point-right", "fa-regular fa-thumbs-up",'fa-regular fa-thumbs-down',
-"fa-solid fa-weight-scale", "fa-solid fa-text-height", "fa-solid fa-person-cane", "fa-solid fa-water", "fa-solid fa-droplet",
-"fa-solid fa-droplet-slash", "fa-solid fa-arrow-up-right-dots", "fa-solid fa-brain", "fa-brands fa-nutritionix", 
-"fa-solid fa-hand-fist", "fa-solid fa-question", "fa-solid fa-person-running", "fa-solid fa-person-walking", "fa-solid fa-bowl-food",
-"fa-solid fa-martini-glass-citrus", "fa-solid fa-fish", "fa-solid fa-cubes-stacked"];
 
-$supportedText = ["gain muscle", "increase heart rate","high stress", "medium stress", "low stress",
-                  "well rested", "get less sleep", "male", "female", "great", "bad", 
-                  "sign up", "register", "new user", "not equal", "list", "text", 
-                  "multiple choice", "email", "work process", "proceed", "ok", "not ok",
-                  "lose weight", "height", "age",  "drink lot of water", "drink enough water", 
-                  "drink less water", "increase testosterone", "ai", "nutritionist", "intense workout",
-                  "do not know", "cardio", "walking", "enough calories", "alcohol", "omega 3", "sugar"];
+$supportedIcons = [ 
+                    "fa-solid fa-water","fa-solid fa-droplet","fa-solid fa-droplet-slash", // water
+                    "fa-solid fa-leaf", "fa-solid fa-candy-cane", "fa-solid fa-cubes-stacked", // sugar
+                    "fa-solid fa-wine-glass-empty", "fa-solid fa-beer-mug-empty", "fa-solid fa-wine-bottle" // alcohol
+                ];
+
+$supportedText = [
+                  "drink lot of water", "drink enough water", "drink less water",
+                  "less sugar", "some sugar", "lots of sugar",
+                  "no alcohol", "sometimes", "regularly"];
 
 $supportedAge = [  '18','19','20','21','22','23','24','25', '26','27','28','29','30','31',
                    '32','33','34','35','36','37','38','39','40','41','42','43','44','45', 
@@ -26,8 +18,6 @@ $supportedAge = [  '18','19','20','21','22','23','24','25', '26','27','28','29',
                    '60','61','62','63','64','65','66','67','68','69','70','71','72','73',
                    '74','75', '76','77','78','79','80','81','82','83','84','85', '86','87',
                    '88','89','90>'];
-
-$supportedAgeDemo = ['18, 19, ...'];
 
 
 
@@ -47,13 +37,20 @@ $supportedWeight =  [  '<80','81','82','83','84','85','86','87', '88','89','90',
                        '226','227','228','229','230','231','232','233','234','235','236',
                        '237','238','239','240', '240>'];
 
-$supportedWeightDemo =  ['80, 81, ...'];
 
 $supportedHeight =  [   "<5", "5", "5-1", "5-2", "5-3", "5-4", "5-5", "5-6", "5-7", 
                         "5-8", "5-9", "5-10", "5-11", "6", "6-1", "6-2", "6-3", "6-4", "6-5", 
                         "6-6", "6-6", "6-7", "6-8", "6-9", "6-10", "6-11", "7>"];                                      
 
-$supportedHeightDemo =  ['5, 5-1 ...'];                                      
+
+$supportedCalories = ['1000'];
+for($cCounter = 1100; $cCounter < 3100; $cCounter += 100){
+    array_push($supportedCalories, strval($cCounter)); 
+}
+$supportedCaloriesDemo = ['1kcal,...'];
+$supportedWorkout =  [  'never', '1hr a week', '3hrs a week', '5hrs a week', '7hrs a week'];
+$supportedWorkoutDemo =  ['workout 1hr a week,  ...'];
+
 
 function getPublicForm() {
     global $supportedHeight;
@@ -235,18 +232,18 @@ function QuestionBackendForm() {
         
     global $supportedIcons;
     global $supportedText;
-    global $supportedAgeDemo;
-    global $supportedWeightDemo;
-    global $supportedHeightDemo;
+    global $supportedCaloriesDemo;
+    global $supportedWorkoutDemo;
 
     $data['qContent'] = [
-                            ["Your form is created with default questions necessary to be answered by your clients include height, weight, age etc. Do you want to add customised questions to this campaign form?"],
+                            ["Your form will be created with default items including name, email, height, weight, age, gender, stress and sleep. 
+                             Do you want to add customised questions to this form?"],
                             ["", "1. what is the TYPE of question you want to ask your client?"],
                             ["", ""],
                             ["2. is this question REQUIRED to be answered by the client?"],
-                            ["3. are you done?","3. type the body of the question?"],
-                            ["", "4. what is the PURPOSE of your question?"],
-                            ["5. are you done?", "5. select your list topic!", "5. Multi-select your button options!"],
+                            ["", "3. what is the PURPOSE of your question?"],
+                            ["4. are you done?","4. type the body of the question for #dynomicContent topic:"], 
+                            ["5. are you done?", "5. select your list topic for #dynomicContent topic:", "5. multi-select your button options for #dynomicContent topic:"],
                             ["", "6. are you done?"],
                             [""]
                         ];
@@ -255,8 +252,8 @@ function QuestionBackendForm() {
                         ["message", "button"],
                         ["message", "message"],
                         ["button"],
-                        ["button","text"],
                         ["message", "list"],
+                        ["button","text"],
                         ["button", "multiButton", "multiButton"],
                         ["message", "button"],
                         ["message"]
@@ -269,9 +266,9 @@ function QuestionBackendForm() {
                             [['fa-regular fa-circle-check'], ["fa-solid fa-list-ul", "fa-solid fa-comment-dots", "fa-solid fa-hand-pointer"]],
                             [['fa-regular fa-circle-check'], ["fa-solid fa-gears", "fa-regular fa-hand-point-right"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
+                            [['fa-regular fa-circle-check'], ["water", "calories", "workout", "sugar", "alcohol"]],
                             [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], [""]],
-                            [['fa-regular fa-circle-check'], ["name", "water", "calories", "weight", "height", "age", "gender", "goal", "macros", "micros", "sleep", "workout", "stress", "sugar", "other"]],
-                            [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ["fa-solid fa-weight-scale", "fa-solid fa-text-height", "fa-solid fa-person-cane"],
+                            [['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down'], ["fa-solid fa-burger", "fa-solid fa-dumbbell"],
                              $supportedIcons],
                             [['fa-regular fa-circle-check'], ['fa-regular fa-thumbs-up','fa-regular fa-thumbs-down']],
                             [['fa-regular fa-circle-check']],
@@ -282,9 +279,9 @@ function QuestionBackendForm() {
                                 [["Your campaign is added to your account."], ["list options", "write text", "multiple choice"]],
                                 [["Your campaign is added to your account."], ["your form is being built ... please continue!", "please answer the prevous question"]],
                                 [["YES", "NO"]],
-                                [["YES", "NO"], [""]],
                                 [["Your campaign is added to your account."], [""]],
-                                [["YES", "NO"], [$supportedWeightDemo, $supportedHeightDemo, $supportedAgeDemo], $supportedText],
+                                [["YES", "NO"], [""]],
+                                [["YES", "NO"], [$supportedCaloriesDemo, $supportedWorkoutDemo], $supportedText],
                                 [["Your campaign is added to your account."], ["YES", "NO"]],
                                 [["Your campaign is added to your account."]]
                            ];

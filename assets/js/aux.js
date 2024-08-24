@@ -107,8 +107,12 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                     moveleft.disabled = false;
                 }
             }
-            dynamicQcontent('name');
-            
+
+            if(page == 'questions'){
+                dynamicQcontent(Questions[4].qAnswer);
+            } else {
+                dynamicQcontent('name');
+            }
             if(counter == MAX_cnt - 1 && page == 'login') {
                 callLoginUser(header, headerTxt, input, Questions);
             }
@@ -146,14 +150,19 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
     }
 }
 
-function transition2Right(header, headerTxt, input, Questions, serverStruct = 0, serverStructOption = 0) {
+function transition2Right(header, headerTxt, input, Questions, serverStruct = 0, serverStructOption = 0, page = '') {
     
     headerTxt[0].innerHTML = Questions[counter].qContent[serverStruct];
     // set form 0 type
     choiceTracker[0].push(serverStruct);
     choiceTracker[1].push(serverStructOption);
     resetFormType(input[0]);
-    setFormType(input[0], Questions[counter], serverStruct, serverStructOption);
+    if(page == 'questions' && Questions[counter].qType[serverStruct] == 'list'){
+        QuestionsChoice = 'list';
+    } else {
+        QuestionsChoice = '';
+    }
+    setFormType(input[0], Questions[counter], serverStruct, serverStructOption, QuestionsChoice);
     let gap = [];
     gap[0] = input[1].getBoundingClientRect().left-input[0].getBoundingClientRect().left;
     gap[1] = input[2].getBoundingClientRect().left-input[1].getBoundingClientRect().left;
@@ -185,7 +194,11 @@ function moveLeft(moveleft, input, header, headerTxt, Questions, page){
                 moveright.disabled = false;
             }
             counter--;
-            resetDynamicQcontent('name');
+            if(page == 'questions'){
+                resetDynamicQcontent(Questions[4].qAnswer);
+            } else {
+                resetDynamicQcontent('name');
+            }
             transition2Left(header, headerTxt, input, Questions);
         });
     }
@@ -247,9 +260,9 @@ function callsubmitUserData(page){
 }
 
 // function to set the form type
-function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOption = 0){
+function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOption = 0, QuestionsChoice = ''){
     let newIn = [];
-    
+
     switch(userStruct.qType[serverStruct]) {
         case 'message':
             mDiv = document.createElement('p');
@@ -309,6 +322,22 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
             userStruct.options[serverStruct].forEach(function(item){
                 let Option = document.createElement('option');
                 Option.value = item;
+                // this part is for handling items in Questions page
+                if(QuestionsChoice == 'list'){
+                    if(Questions[1].qAnswer == 0) { // 
+                        if(item == 'sugar' || item == 'water' || item == 'alcohol'){
+                            Option.style.color = 'grey';
+                            Option.disabled = true;
+                        }
+                    } else if(Questions[1].qAnswer == 2) {
+                        if(item == 'workout' || item == 'calories'){
+                            Option.style.color = 'grey';
+                            Option.disabled = true;
+                        }
+                    } else {
+                        
+                    }
+                }
                 Option.innerHTML = item;
                 newInList.appendChild(Option);
             });
@@ -500,26 +529,46 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
 
 
 function dynamicQcontent(context) {
-    
-    if(Questions[counter].qContent[0].includes('#dynomicContent')){
-        for(kk = 0; kk < counter; kk++){
-            if(Questions[kk].qKey == context){
-                let dyno = Questions[counter].qContent[0].replace('#dynomicContent', Questions[kk].qAnswer + '!!');
-                Questions[counter].qContent[0] = dyno;
+    // handle Questions page also
+    done = false;
+    for(serverStructCounter = 0; serverStructCounter < Questions[counter].qContent.length; serverStructCounter++){
+        if(Questions[counter].qContent[serverStructCounter].includes('#dynomicContent')){
+            for(kk = 0; kk < counter; kk++){
+                if(Questions[kk].qKey[0] == context){
+                    let dyno = Questions[counter].qContent[serverStructCounter].replace('#dynomicContent', Questions[kk].qAnswer + '!!');
+                    Questions[counter].qContent[serverStructCounter] = dyno;
+                    done = true;
+                }
             }
-        }
-    } 
+            if(done == false){
+                let dyno = Questions[counter].qContent[serverStructCounter].replace('#dynomicContent', context + '!!');
+                Questions[counter].qContent[serverStructCounter] = dyno;
+            }
+        } 
+    }
 }
 
 function resetDynamicQcontent(context) {
-    if(Questions[counter + 1].qContent[0].includes('!!')){
-        for(kk = 0; kk < counter + 1; kk++){
-            if(Questions[kk].qKey == context){
-                let dyno = Questions[counter + 1].qContent[0].replace(Questions[kk].qAnswer, '#dynomicContent');
-                Questions[counter + 1].qContent[0] = dyno;
+    done = false;
+    for(serverStructCounter = 0; serverStructCounter < Questions[counter + 1].qContent.length; serverStructCounter++){
+        if(Questions[counter + 1].qContent[serverStructCounter].includes('!!')){
+            for(kk = 0; kk < counter + 1; kk++){
+                if(Questions[kk].qKey[0] == context){
+                    let dyno = Questions[counter + 1].qContent[serverStructCounter].replace(Questions[kk].qAnswer, '#dynomicContent');
+                    Questions[counter + 1].qContent[serverStructCounter] = dyno;
+                    done = true;
+                }
             }
-        }
-    } 
+            if(done == false){
+                for(kk = 0; kk < counter + 1; kk++){
+                    if(Questions[kk].qAnswer == context){
+                        let dyno = Questions[counter + 1].qContent[serverStructCounter].replace(Questions[kk].qAnswer, '#dynomicContent');
+                        Questions[counter + 1].qContent[serverStructCounter] = dyno;
+                    }
+                }
+            }
+        } 
+    }
 }
 
 function getUserButtonSelection(alt){
@@ -655,7 +704,12 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
     });
     input[1].addEventListener('transitionend', function(event) {
         resetFormType(event.target);
-        setFormType(event.target, Questions[counter], event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'));
+        if(page == 'questions' && Questions[counter].qType[event.target.getAttribute('serverStruct')] == 'list'){
+            QuestionsChoice = 'list';
+        } else {
+            QuestionsChoice = '';
+        }
+        setFormType(event.target, Questions[counter], event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'), QuestionsChoice);
         ChangeForm(event.target, '0s', '0', 1, '50%');
         restorePrevAnswer(event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'));
         if(spinner != null && spinner.style.opacity != 0){
@@ -908,49 +962,49 @@ function submitQuestionBackEndData(header, headerTxt, querySelIn, inputDataBlob)
             let data = JSON.parse(this.response);
             MAX_cnt = data.MAX_cnt;
             if(data.status == 0) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0, 'questions');
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
                 moveright.disabled = true;
             } else if(data.status == 1) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0); 
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0, 'questions'); 
                 globalQidx = 9;   
             } else if(data.status == 100) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);       
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0, 'questions');       
             } else if(data.status == 3) { 
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);    
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0, 'questions');    
             } else if(data.status == 4) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0, 'questions');
             } else if(data.status == 5) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0, 'questions');
             } else if(data.status == 6) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0, 'questions');
             } else if(data.status == 7) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0, 'questions');
             } else if(data.status == 14) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 0, 'questions');
             } else if(data.status == 15) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1, 'questions');
             } else if(data.status == 16) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0, 'questions');
             } else if(data.status == 34) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0, 'questions');
             } else if(data.status == 35) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0, 'questions');
             } else if(data.status == 24) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1, 'questions');
             } else if(data.status == 25) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1, 'questions');
             } else if(data.status == 26) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 2, 2);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 2, 2, 'questions');
             } else if(data.status == 27) {
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 1, 1, 'questions');
             } else if(data.status == 11) { // reset form for next question 
                 resetStart(querySelIn, header, headerTxt, 'questions', 1);
                 globalQidx++;
             }
             else if(data.status == 12) { // end the form 
-                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0);
+                transition2Right(header, headerTxt, querySelIn, inputDataBlob, 0, 0, 'questions');
                 let moveright = document.querySelector('.form-go-right');
                 moveright.style.opacity = 0;
                 moveright.disabled = true;
