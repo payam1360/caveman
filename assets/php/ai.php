@@ -71,27 +71,35 @@ if(isset($_GET['type']) && $_SESSION[$_GET['type']]['type'] == $_GET['type']) {
 switch ($eventType) {
    case 'If':
        $content = "write an intermittent fasting weekly program for a ";
+       $newTokenSize = '100';
        break;
    case 'Cal':
        $content = "write a short paragraph about consistent weekly calories intake change to increase or decrease weight ";
+       $newTokenSize = '100';
        break;
    case 'MicroVit':
        $content = "write a short paragraph about vitamins required by a ";
+       $newTokenSize = '100';
        break;
    case 'MicroTrace':
        $content = "write a short paragraph about trace minerals required by a ";
+       $newTokenSize = '100';
        break;    
    case 'Macro':
        $content = "write a short paragraph macros required by a ";
+       $newTokenSize = '100';
        break;    
    case 'Bmr':
        $content = "write a short paragraph about Basal Metabolic Rate for a ";
+       $newTokenSize = '100';
        break;    
    case 'Bmi':
        $content = "write a short paragraph about body mass index for a ";
+       $newTokenSize = '100';
        break; 
    case 'Meal':
        $content = "create a meal plan for a ";
+       $newTokenSize = '500';
        break;  
    default:
        $content = '';
@@ -119,11 +127,12 @@ if((json_decode($loc->meal) == '' && $eventType == 'Meal' && !empty($loc->height
       ]
    ]; 
    $jsonInput = json_encode($message_list); 
-   $command = "python3 " . $pythonScript . " '" . $jsonInput . "'";
+   $command = "python3 " . $pythonScript . " '" . $jsonInput . "'" . " " . $newTokenSize;
 
    $process = shell_exec($command);
+   //$process = $command . " DONE";
    if($eventType == 'Meal') {
-      db_call($process, $loc, 'w');
+     db_call($process, $loc, 'w');
    }
    $process = explode(' ', $process); 
 
@@ -131,7 +140,7 @@ if((json_decode($loc->meal) == '' && $eventType == 'Meal' && !empty($loc->height
    $process = db_call($loc->meal, $loc, 'r');
    $process = explode(' ', $process);
 } else {
-   $process = ['Please add your comments here. DONE'];
+   $process = ['please send the form to your client and collect their information. DONE'];
 }
 
 $i = 0;

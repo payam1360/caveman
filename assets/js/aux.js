@@ -335,7 +335,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
                             Option.disabled = true;
                         }
                     } else {
-                        
+
                     }
                 }
                 Option.innerHTML = item;
@@ -500,6 +500,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
                 rules: {
                     '.Input': {
                       border: '1px solid coral',
+                      height: '100px',
                     },
                     '.Label': {
                         opacity: 0,
@@ -1637,6 +1638,7 @@ function handleAi(inPut) {
     userPage     = inPut[0];
     nutritionEng = inPut[1];
     mealEng      = inPut[2];
+    let spinner  = document.getElementsByClassName('spinner-ai'); 
     contextSet   = ['Bmi', 'If', 'Macro', 'MicroTrace', 'MicroVit', 'Cal', 'Meal'];
     // creating the server side update event source
     if(mealEng == 1 && nutritionEng == 1) {
@@ -1702,6 +1704,7 @@ function handleAi(inPut) {
             break;
         }
     }
+    spinner[activeSSE].style.opacity = 1;
     if(allowNewAiStream == true && (mealEng == 0 || nutritionEng == 0)) {
         if(userPage == 0){
             eventSource = new EventSource("assets/php/ai.php?type=" + typeEventSource);
@@ -1719,6 +1722,7 @@ function handleAi(inPut) {
                 allowNewAiStream = true;
             } else {
                 // styling the text as it comes through
+                spinner[activeSSE].style.opacity = 0;
                 aiText = aiText.replace(/NewLine/g, '<br>');
                 if(aiText.includes('AI:') || aiText.includes('Trainer:') || aiText.includes('Q:')) {
                     s = document.createElement('span');
@@ -2253,9 +2257,14 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         }
         keyToFind = 'email';
         email = inputBlob.find(obj => obj.qKey[0] === keyToFind);
-        if(email){
+        if(email.qAnswer != ''){
             email = email.qAnswer;
+        } else if(results.emails[cidx] != '') {
+            email = results.emails[cidx];
+        } else {
+            email = '';
         }
+
         keyToFind = 'weight';
         weight = inputBlob.find(obj => obj.qKey[0] === keyToFind);
         if(weight){
@@ -2285,7 +2294,11 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
 
         stressP.innerHTML = "Stress level: ";
         stressP.style.fontSize = '20px';
-        let stressTemp = stress.charAt(0).toUpperCase() + stress.slice(1);
+        if(stress){
+            stressTemp = stress.charAt(0).toUpperCase() + stress.slice(1);
+        } else {
+            stressTemp = '';
+        }
         stressPstyle.innerHTML = stressTemp;
         stressPstyle.style.fontSize = '40px';
         stressPstyle.style.color = 'brown';
@@ -2295,7 +2308,11 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         
         sleepP.innerHTML = "Sleep quality: ";
         sleepP.style.fontSize = '20px';
-        let sleepTemp = sleep.charAt(0).toUpperCase() + sleep.slice(1);
+        if(sleep){
+            sleepTemp = sleep.charAt(0).toUpperCase() + sleep.slice(1);
+        } else {
+            sleepTemp = '';
+        }
         sleepPstyle.innerHTML = sleepTemp;
         sleepPstyle.style.fontSize = '40px';
         sleepPstyle.style.color = 'seagreen';
@@ -2469,6 +2486,9 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         bmi.appendChild(div1);
         bmi.appendChild(div2);
         bmi.appendChild(div3);
+        let bmiSpinner = document.createElement('div');
+        bmiSpinner.setAttribute('class', 'spinner-ai');
+        bmi.appendChild(bmiSpinner);
         // ------------------------------------
         // edit button for BMI description. User can add his comments here.
         // content of clientData.bmi['desc'] must be modified.
@@ -2519,7 +2539,9 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         micro.appendChild(div1);
         micro.appendChild(div2);
         micro.appendChild(div3);
-
+        let microSpinner = document.createElement('div');
+        microSpinner.setAttribute('class', 'spinner-ai');
+        micro.appendChild(microSpinner);
         // ------------------------------------
         // edit button for mico description. User can add his comments here.
         // content of clientData.bmi['desc'] must be modified.
@@ -2569,6 +2591,9 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         microVit.appendChild(div1);
         microVit.appendChild(div2);
         microVit.appendChild(div3);
+        let microVitSpinner = document.createElement('div');
+        microVitSpinner.setAttribute('class', 'spinner-ai');
+        microVit.appendChild(microVitSpinner);
         // ------------------------------------
         // edit button for mico description. User can add his comments here.
         // content of clientData.bmi['desc'] must be modified.
@@ -2618,6 +2643,9 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         macro.appendChild(div1);
         macro.appendChild(div2);
         macro.appendChild(div3);
+        let macroSpinner = document.createElement('div');
+        macroSpinner.setAttribute('class', 'spinner-ai');
+        macro.appendChild(macroSpinner);
         // ------------------------------------
         // edit button for macro description. User can add his comments here.
         // content of clientData.bmi['desc'] must be modified.
@@ -2667,6 +2695,9 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         If.appendChild(div1);
         If.appendChild(div2);
         If.appendChild(div3);
+        let ifSpinner = document.createElement('div');
+        ifSpinner.setAttribute('class', 'spinner-ai');
+        If.appendChild(ifSpinner);
         // ------------------------------------
         // edit button for Intermittent fasting description. User can add his comments here.
         // content of clientData.bmi['desc'] must be modified.
@@ -2718,6 +2749,9 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         Cal.appendChild(div1);
         Cal.appendChild(div2);
         Cal.appendChild(div3);
+        let calSpinner = document.createElement('div');
+        calSpinner.setAttribute('class', 'spinner-ai');
+        Cal.appendChild(calSpinner);
         // ------------------------------------
         // edit button for Intermittent fasting description. User can add his comments here.
         // content of clientData.bmi['desc'] must be modified.
@@ -2760,7 +2794,9 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         mealDesc.style.fontSize = '20px';
         div1.appendChild(mealDesc);
         Meal.appendChild(div1);
-    
+        let mealSpinner = document.createElement('div');
+        mealSpinner.setAttribute('class', 'spinner-ai');
+        Meal.appendChild(mealSpinner);
         // ------------------------------------
         // edit button for Intermittent fasting description. User can add his comments here.
         // content of clientData.bmi['desc'] must be modified.

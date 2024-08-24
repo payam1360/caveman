@@ -312,3 +312,25 @@
 .spinner-js {
     opacity: 0;
 }
+
+
+/* Styling for the spinner */
+.spinner-ai {
+    position: relative; /* Position it relative to the container */
+    margin: auto;
+    transform: translate(-50%, -50%); /* Center the spinner */
+    border: 8px solid rgba(0, 0, 0, 0.1); /* Light border */
+    border-left: 8px solid #3498db; /* Colored border */
+    border-radius: 50%; /* Circular spinner */
+    width: 100px;
+    height: 100px;
+    animation: spin 1s linear infinite; /* Spinner animation */
+    z-index: 10; /* Ensure spinner is on top */
+    opacity: 0;
+}
+
+/* Keyframes for spinner rotation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
