@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>ManHub - Admin</title>
+        <link  href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/css/admin.css" rel="stylesheet">
+        <link href="assets/css/tools.css" rel="stylesheet">
+        <script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://js.stripe.com/v3/"></script>
+              <link rel="shortcut icon" href="#">
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="admin.html"></a>
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Home</div>
+                            <a class="nav-link" href="admin.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Dashboard
+                            </a>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Clients
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminQ.html">
+                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-person-circle-question"></i></div>
+                                        Manage Campaigns
+                                    </a>
+                                    <a class="nav-link" href="clients.html">
+                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear"></i></div>
+                                        Manage Clients
+                                    </a>
+                                    <a class="nav-link" href="finances.html">
+                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-person-circle-question"></i></div>
+                                        Manage Finances
+                                    </a>
+                                    <a class="nav-link" href="phoneMessages.html">
+                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear"></i></div>
+                                        Contact Clients
+                                    </a>
+                                </nav>
+                            </div>
+                            <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                                Log Out
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        <div class="user-text"></div>
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <div class="blur">
+                <!-- start of the My clients page -->
+                <!-- Page header -->
+                <div class="container">
+                    <div class="d-flex row">
+                        <div>
+                            <a href="admin.html">
+                                <img src="assets/img/nutrition4guys.png" width="150" height="150">
+                            </a>
+                        </div>
+                        <div class="client-page">
+                            <p class="header-clients-text">Manage Finances</p>
+                        </div>
+                    </div>
+                </div>
+                <!--log in button-->
+                <div class="container">
+                    <div class="row">
+                        <div class="d-flex justify-content-end" style="margin-top: 24px;">
+                            <button type="button" id="connectStripeButton" class="btn btn-outline-primary">Connect your Stripe</button>
+                        </div>
+                    </div>
+                    <!-- Popup Modal -->
+                    <div id="stripeModal" class="modal">
+                        <div class="modal-content">
+                            <p style="color: grey; font-size: 20px;">Connect Your Stripe Account</pp>
+                            <p>You will now be redirected to stripe connect ...</p>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="d-flex justify-content-end" style="margin-top: 20px;">
+                                        <button class="connect-button btn btn-outline-primary" id="connectStripe" style="margin-right: 10px;">Connect</button>
+                                        <button class="close-button btn btn-outline-primary" id="closeButton">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <section>
+                    <!-- Revenue plot --> 
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm col-lg-5 Revenue">
+                                <div>
+                                    <p class= "RevenueText">Your Revenue</p>
+                                </div>
+                                <div>
+                                    <canvas id="Revenue"></canvas>
+                                </div>
+                            </div>
+                            <!-- payment / invoice status -->
+                            <div class="col-sm col-lg-5 InvoicePayment">
+                                <div>
+                                    <p class="InvoicePaymentText">Invoice Payment Status</p>
+                                </div>
+                                <div>
+                                    <canvas id="InvoicePayment"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <div class="financeTab">
+                    <div id="createInvoiceTab" class="active-tab" onclick="FinanceOpenTab('createInvoice')">Create Invoice</div>
+                    <div id="trackInvoiceTab" onclick="FinanceOpenTab('trackInvoice')">Track Invoices</div>
+                </div>
+                
+                <div id="createInvoice" class="tabcontent active">
+
+                    <p class= "RevenueText">Create Invoice</p>
+                    <!-- Add your form elements here -->
+                    <div class="mainFormDiv">
+                        <form class= "form-class">
+                            <!-- form navigation buttons -->
+                            <div class= "d-flex form-class">
+                                <!-- left swipe -->
+                                <div class ="d-flex">
+                                    <button type="button" class="form-go-left"><span style="font-size:26px; margin: 15px;">Back</span></button>
+                                </div>
+                                <!-- right swipe -->
+                                <div class ="d-flex">
+                                    <button type="button" class="form-go-right"><span style="font-size:26px; margin: 15px;">Next</span></button>
+                                </div>
+                            </div>                    
+                            <!-- Form header question -->
+                            <div class="d-flex form-header-parent">
+                                <div class="form-header">
+                                    <p class="form-header-style" ></p>
+                                </div>
+                                <div class="form-header">
+                                    <p class="form-header-style" ></p>
+                                </div>
+                                <div class="form-header">
+                                    <p class="form-header-style" ></p>
+                                </div>
+                            </div>
+                            
+                            <!-- Form input -->
+                            <div class="d-flex form-input-parent">
+                                <div class="form-input">
+                                    <input type="text" class= "form-input-style">
+                                </div>
+                                <div class="form-input">
+                                    <input type="text" class= "form-input-style">
+                                </div>
+                                <div class="form-input">
+                                    <input type="text" class= "form-input-style">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- This div is set up for displaying the invoice -->
+                    <div class="invoiceOutput">
+                        <h1>Invoice</h1>
+                        <div class="invoice-details">
+                            <div class="detail">
+                                <strong>Due:</strong>
+                                <span id="invoiceDue"></span>
+                            </div>
+                            <div class="detail">
+                                <strong>Client Name:</strong>
+                                <span id="invoiceClientName"></span>
+                            </div>
+                            <div class="detail">
+                                <strong>Client ID:</strong>
+                                <span id="invoiceClientID"></span>
+                            </div>
+                            <div class="detail">
+                                <strong>Invoice Number:</strong>
+                                <span id="invoiceNum"></span>
+                            </div>
+                            <div class="detail">
+                                <strong>Service Fee per Hour:</strong>
+                                <span id="invoiceFee"></span>
+                            </div>
+                            <div class="detail">
+                                <strong>Number of Service Hours:</strong>
+                                <span id="invoiceHr"></span>
+                            </div>
+                            <div class="detail">
+                                <strong>Service Start Date:</strong>
+                                <span id="invoiceStart"></span>
+                            </div>
+                            <div class="detail">
+                                <strong>Service End Date:</strong>
+                                <span id="invoiceEnd"></span>
+                            </div>
+                            <div class="detail">
+                                <strong>Total Charges:</strong>
+                                <span id="invoiceTotal"></span>
+                            </div>
+                        </div>
+                        <!-- Buttons at the bottom -->
+                        <div class="container">
+                            <!-- List of clients read from the server -->
+                            <div class="row">
+                            
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-primary invoice-create" alt="0" style="margin-right: 10px;">create</button>
+                                    <button type="button" class="btn btn-primary invoice-send" alt="0">send</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <div id="trackInvoice" class="tabcontent">
+                    
+                    <p class= "RevenueText"> Track and search invoices</p>
+                    <!-- Add your tracking features here -->
+                    <div class="insertForm">
+
+                    <div class="container mt-4">
+                        <div id="card-container" class="d-flex flex-wrap justify-content-center"></div>
+                    </div>
+
+                </div>
+                <!-- End search bar -->
+                
+                <!-- List of clients start here -->
+                <br><br><br>
+                
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; ManHub 2023</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://js.stripe.com/v3/"></script>
+        <script src="assets/js/aux.js"></script>
+        <script src="assets/js/finances.js"></script>
+    </body>
+</html>

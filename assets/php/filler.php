@@ -382,6 +382,96 @@ function clientsSearchForm() {
 }
 
 
+function InvoiceSearchForm() {
+    $data['qContent'] = [
+                            ["1. search invoices by:"],
+                            ["2. enter invoice info:"]
+                        ];
+
+    $data['qType']    = [
+                            ["button"],
+                            ["text"]
+                        ];
+
+    $data['qIdx'] = [0, 1];
+
+    $data['options']  = [
+                            [["fa-solid fa-fingerprint", "fa-regular fa-envelope", "fa-solid fa-signature"]],
+                            [[""]]
+                        ];
+
+    $data['optionsText'] = [
+                                [["Client's ID", "Invoice's ID", "Client's name"]],
+                                [[""]]
+                           ];
+
+    $data['qRequired'] = [1, 1];
+
+    $data['qKey'] = [
+                        [''],
+                        ['']
+                    ];
+
+    $data['MAX_cnt'] = 2;
+
+    return $data;
+}
+
+
+function clientsInvoiceForm() {
+    $data['qContent'] = [
+                            ["1. Enter your client's ID:"],
+                            ["2. Enter your hourly fee ($):"],
+                            ["3. Enter the number of hours you provided service:"],
+                            ["4. Enter payment due date:"],
+                            ["4. Enter the service start date: (optional)"],
+                            ["5. Enter the service end date: (optional)"],
+                            [""]
+                        ];
+
+    $data['qType'] = [
+                        ["text"],
+                        ["text"],
+                        ["text"],
+                        ["text"],
+                        ["text"],
+                        ["text"],
+                        ["message"]
+                    ];
+
+    $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6];
+
+    $data['options'] = [
+                        [[""]],
+                        [[""]],
+                        [[""]],
+                        [[""]],
+                        [[""]],
+                        [[""]],
+                        [["fa-solid fa-file-invoice-dollar"]]
+                        ];
+    $data['optionsText'] = [
+                            [["e. g. 12345"]],
+                            [["e. g. 10$ or 10.5"]],
+                            [["e. g. 5hr or 5:30"]],
+                            [["MM/DD/YY"]],
+                            [["MM/DD/YY"]],
+                            [["MM/DD/YY"]],
+                            [["Click create to review Invoice!"]]
+        ];
+    $data['qRequired'] = [1, 1, 1, 1, 0, 0, 1];
+    $data['qKey'] = [
+                        ['invoiceClientID'],
+                        ['invoiceFee'],
+                        ['invoiceHr'],
+                        ['invoiceDue'],
+                        ['invoiceStart'],
+                        ['invoiceEnd'],
+                        ['']
+    ];
+    $data['MAX_cnt'] = 7;
+    return $data;
+}
 
 
 function clientPageLoad($page) {
@@ -491,6 +581,10 @@ if($page == 'login') {
     $data      = addClients();
 } elseif($page == 'clients') {
     $data      = clientsSearchForm();
+} elseif($page == 'finances') {
+    $data      = clientsInvoiceForm();
+} elseif($page == 'financesSearch') {
+    $data      = InvoiceSearchForm();
 } else {
     $data      = clientPageLoad($page);
 }

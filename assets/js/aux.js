@@ -16,9 +16,11 @@ let eventSourceQueue = {Bmi:false, If:false, Macro:false, MicroTrace:false, Micr
 let allowNewAiStream = true;
 let intervalID = [];
 let multiTextSelect = [];
-let stripe = Stripe('pk_test_51Odb1JGvkwgMtml81N0ajd4C9xKKHD9DhnMhcfyBegjRS8eatgXQdBj1o2fnlpwCcEHOZrJJ7Sd7D0UJqXipzRmQ00CPr9wDNl');
+let stripeApi = [];
+let stripe;
 let stripeElements;
 let gSearchClients = [];
+let gSearchInvoices = [];
 // user <-> client class definition
 class question {
     constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired, qKey, clientId, campaignId){
@@ -133,6 +135,43 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             }else {
                 transition2Right(header, headerTxt, input, Questions, 0, 0);
             }
+            // handling invoice and finance page
+            if(page == 'finances') {
+                for(idxFound = 0; idxFound < Questions.length; idxFound++){
+                    
+                    if(Questions[idxFound].qKey[0] == 'invoiceClientID'){
+                        invoiceClientID = document.getElementById('invoiceClientID');
+                        invoiceClientID.innerHTML = Questions[idxFound].qAnswer;
+                    }
+                    if(Questions[idxFound].qKey[0] == 'invoiceDue'){
+                        invoiceDue = document.getElementById('invoiceDue');
+                        invoiceDue.innerHTML = Questions[idxFound].qAnswer;
+                    }
+
+                    if(Questions[idxFound].qKey[0] == 'invoiceFee'){
+                        invoiceFee = document.getElementById('invoiceFee');
+                        invoiceFee.innerHTML = Questions[idxFound].qAnswer;
+                    }
+                    if(Questions[idxFound].qKey[0] == 'invoiceHr'){
+                        invoiceHr = document.getElementById('invoiceHr');
+                        invoiceHr.innerHTML = Questions[idxFound].qAnswer;
+                    }
+                    if(Questions[idxFound].qKey[0] == 'invoiceStart'){
+                        invoiceStart = document.getElementById('invoiceStart');
+                        invoiceStart.innerHTML = Questions[idxFound].qAnswer;
+                    }
+                    if(Questions[idxFound].qKey[0] == 'invoiceEnd'){
+                        invoiceEnd = document.getElementById('invoiceEnd');
+                        invoiceEnd.innerHTML = Questions[idxFound].qAnswer;
+                    }
+                }
+                if(counter == MAX_cnt - 1) {
+                    InvoiceCreate = document.getElementsByClassName('invoice-create');
+                    InvoiceCreate[0].disabled = false;
+                }
+                
+            }
+
             // updating the progress
             if(page == 'main' || page == 'questions' || page == 'register' || page == 'login' || page == 'addClients') {
                 let p = (prog / (MAX_cnt - 1));
@@ -149,6 +188,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
         });
     }
 }
+
 
 function transition2Right(header, headerTxt, input, Questions, serverStruct = 0, serverStructOption = 0, page = '') {
     
@@ -285,6 +325,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
             newIn.setAttribute('pattern', '[A-Za-z0-9 _.,!#@"\'/$\\s\\?;-]{1,}');
             newIn.setAttribute('required', userStruct.qRequired);
             newIn.setAttribute('type', userStruct.qType[serverStruct]);
+            newIn.setAttribute('placeholder', userStruct.optionsText[0][0]);
             querySelIn.appendChild(newIn);
             querySelIn.style.borderBottom = '2px solid coral';
             break;
@@ -668,6 +709,8 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
     }else {
         counter = 0;
     }
+    //reset the Question form
+    Questions = [];
     questionCreate(headerTxt[1], header[1], input[1], page, userPage);
 
     // initialize the input based on form Type
@@ -723,7 +766,10 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
            s.preventDefault();
         }
     });
-
+    input[2].addEventListener('transitionend', function(event) {
+        ChangeForm(event.target, '0.0s', '0', 0, '0%');
+        resetFormType(event.target);
+    });
     // dynamic search clients
     // enter keypress also works for navigation
     if(page == 'clients') {
@@ -742,11 +788,6 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
         });
     }
 
-    input[2].addEventListener('transitionend', function(event) {
-        ChangeForm(event.target, '0.0s', '0', 0, '0%');
-        resetFormType(event.target);
-    });
-    
     // log in button handle
     const login = document.querySelector('.login');
     if (login) {
@@ -759,8 +800,8 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
     if (register) {
         register.addEventListener('click', function(event) {
             window.location.assign('register.html');
-            stripe = Stripe('pk_test_51Odb1JGvkwgMtml81N0ajd4C9xKKHD9DhnMhcfyBegjRS8eatgXQdBj1o2fnlpwCcEHOZrJJ7Sd7D0UJqXipzRmQ00CPr9wDNl');
-        })
+        });
+        
     }
 
     prog = 0;
@@ -799,6 +840,30 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
             progChart = new Chart(ctx, config);
         }
     }
+    if(page == 'finances' || page == 'financesSearch'){
+        plotPaymentsInvoices();
+        plotRevenue();
+        InvoiceSend = document.getElementsByClassName('invoice-send');
+        InvoiceSend[0].disabled = true;
+        InvoiceCreate = document.getElementsByClassName('invoice-create');
+        InvoiceCreate[0].disabled = true;
+        let connectStripe = document.getElementById('connectStripeButton');
+        connectStripe.addEventListener('click', function(s) {
+            connectUserToStripe();
+        });
+        InvoiceCreate = document.getElementsByClassName('invoice-create');
+        if(InvoiceCreate) {
+            InvoiceCreate[0].addEventListener('click', function(s) {
+                if(InvoiceCreate[0].innerHTML == 'create') {
+                    createInvoice(Questions);
+                } else if(InvoiceCreate[0].innerHTML == 'remove') {
+                    removeInvoice(Questions[0].userId, Questions[0].qAnswer, document.getElementById('invoiceNum').innerHTML, 0);
+                    InvoiceCreate[0].innerHTML = 'create';
+                }
+            });
+        }
+    }
+
     if(page == 'main'){
         bmiDiv = document.querySelector('.Bmi');
         bmiDiv.style.display = 'none';
@@ -817,15 +882,368 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
         adDiv = document.querySelector('.Advertisement');
         adDiv.style.display = 'none';       
     }
-
-
 }
+
+function connectUserToStripe() {
+    
+    document.getElementById('stripeModal').style.display = 'block';
+    document.getElementById('connectStripe').addEventListener('click', function() {
+        // Redirect to Stripe OAuth2 authorization                                                                                      
+        window.location.href = "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_Qmt1Xt64gBsUCBgpCr9lTdagfE0vQiv8&scope=read_write&redirect_uri=http://localhost/assets/php/stripeRedirect.php";
+    });
+    document.getElementById('closeButton').addEventListener('click', function() {
+        document.getElementById('stripeModal').style.display = 'none';
+    });  
+}
+
+function addUserStripeInfo(uId) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let connectStripe = document.getElementById('connectStripeButton');
+            connectStripe.disabled = true;
+            connectStripe.style.opacity = 0;
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/finances.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let inputData = {'flag': 'addStripe', 'userId': uId};
+    let request = "userInfo="+JSON.stringify(inputData);
+    xmlhttp.send(request);  
+}
+
+function confirmStripeConnection(uId) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let stripeConnection  = JSON.parse(this.response);
+            if(stripeConnection) {
+                let connectStripe = document.getElementById('connectStripeButton');
+                connectStripe.disabled = true;
+                connectStripe.style.opacity = 0;
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/finances.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let inputData = {'flag': 'checkStripe', 'userId': uId};
+    let request = "userInfo="+JSON.stringify(inputData);
+    xmlhttp.send(request);  
+}
+
+
+window.onload = function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('addUserStripeInfo') === 'true') {
+        addUserStripeInfo(Questions[0].userId);
+    } 
+};
 
 
 function searchClients(searchStruct) {
     fetchClients(searchStruct);
 }
 
+function searchInvoices(searchInvStruct, uId) {
+    fetchInvoices(searchInvStruct, uId);
+}
+
+function removeInvoice(uId, cId, iId, alt) {
+
+    document.getElementById('invoiceClientID').innerHTML = '';
+    document.getElementById('invoiceFee').innerHTML = '';
+    document.getElementById('invoiceHr').innerHTML = '';
+    document.getElementById('invoiceStart').innerHTML = '';
+    document.getElementById('invoiceEnd').innerHTML = ''; 
+    document.getElementById('invoiceDue').innerHTML = ''; 
+    document.getElementById('invoiceTotal').innerHTML = ''; 
+    document.getElementById('invoiceClientName').innerHTML = '';
+    document.getElementById('invoiceNum').innerHTML = ''; 
+    // remove the db entry
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            InvoiceCreate = document.getElementsByClassName('invoice-create');
+            InvoiceCreate[alt].disabled = true;
+            InvoiceSend = document.getElementsByClassName('invoice-send');
+            InvoiceSend[alt].disabled = true;
+            window.alert('Invoice deleted');
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/finances.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let inputData = {'flag': 'remove', 'userId': uId, 'clientId': cId, 'invoiceNum': iId};
+    let request = "userInfo="+JSON.stringify(inputData);
+    xmlhttp.send(request);
+}
+
+
+function getPublicStripeKey(){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            stripeApi = JSON.parse(this.response);
+            stripe = Stripe(stripeApi);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/getStripePublicKey.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let inputData = {'userId': ''};
+    let request = "userInfo="+JSON.stringify(inputData);
+    xmlhttp.send(request);
+}
+
+
+function sendInvoices(uId, cardData, alt) {
+    var invoiceClientID = '';
+    var invoiceClientName = '';
+    var invoiceFee = '';
+    var invoiceHr = '';
+    var invoiceStart = '';
+    var invoiceEnd = '';
+    var invoiceDue = '';
+    var invoiceTotal = '';
+    var invoiceNum = '';
+
+    if(cardData != '') {
+        invoiceClientID = cardData.clientId;
+        invoiceClientName = cardData.clientName;
+        invoiceFee = cardData.fee;
+        invoiceHr = cardData.numHour;
+        invoiceStart = cardData.serviceStart;
+        invoiceEnd = cardData.serviceEnd;
+        invoiceDue = cardData.dueDate;
+        invoiceTotal = cardData.fee * cardData.numHour;
+        invoiceNum = cardData.invoiceNum;
+        
+    } else {
+        invoiceClientID = document.getElementById('invoiceClientID').innerHTML;
+        invoiceClientName = document.getElementById('invoiceClientName').innerHTML;    
+        invoiceFee = document.getElementById('invoiceFee').innerHTML;
+        invoiceHr = document.getElementById('invoiceHr').innerHTML;
+        invoiceStart = document.getElementById('invoiceStart').innerHTML;
+        invoiceEnd = document.getElementById('invoiceEnd').innerHTML;
+        invoiceDue = document.getElementById('invoiceDue').innerHTML;  
+        invoiceTotal = document.getElementById('invoiceTotal').innerHTML; 
+        invoiceNum = document.getElementById('invoiceNum').innerHTML; 
+    }
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let InvoiceCreate = document.getElementsByClassName('invoice-create');
+            InvoiceCreate[alt].disabled = true;
+            let InvoiceSend = document.getElementsByClassName('invoice-send');
+            InvoiceSend[alt].disabled = true;
+            window.alert('Invoice sent');
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/finances.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let inputData = {'flag': 'send', 'userId': uId, 
+                     'clientId': invoiceClientID, 'clientName': invoiceClientName,
+                     'fee': invoiceFee, 'invoiceHr': invoiceHr, 'invoiceDue': invoiceDue,
+                     'serviceStart': invoiceStart, 'serviceEnd': invoiceEnd, 
+                     'invoiceNum': invoiceNum, 'invoiceTotal': invoiceTotal};
+    let request = "userInfo="+JSON.stringify(inputData);
+    xmlhttp.send(request);
+
+}
+
+function fetchInvoices(searchInvStruct, uId) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let invoiceInfo = JSON.parse(this.response);
+            constructInvoices(invoiceInfo, searchInvStruct, uId);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/finances.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let inputData = {'flag': 'get', 'userId': uId};
+    let request = "userInfo="+JSON.stringify(inputData);
+    xmlhttp.send(request);
+}
+
+
+function constructInvoices(invoiceInfo, searchInvStruct, uId) {
+    
+    
+    const container = document.getElementById('card-container');
+    container.innerHTML = ''; // Clear any existing cards
+    var i = 1;
+    invoiceInfo.forEach(cardData => {
+        // search function
+        // only display matching search strings
+        if(typeof(searchInvStruct) == 'undefined' || searchInvStruct == '') {
+        } else if(typeof(searchInvStruct) !== 'undefined' ) {
+            if(searchInvStruct.searchStr.length == 0) {
+            } else {
+                if(searchInvStruct.key == 0) { // search client ID
+                    if(cardData.clientId.slice(0, searchInvStruct.searchStr.length) != searchInvStruct.searchStr){
+                        return;
+                    }
+                } else if(searchInvStruct.key == 2) { // search client name
+                    if(cardData.clientName.slice(0, searchInvStruct.searchStr.length) != searchInvStruct.searchStr){
+                        return;
+                    }
+                } else if(searchInvStruct.key == 1) { // search invoice ID
+                    let invoiceID = cardData.invoiceNum.toLowerCase();
+                    if(invoiceID.slice(0, searchInvStruct.searchStr.length) != searchInvStruct.searchStr.toLowerCase()){
+                        return;
+                    }
+                }
+            }
+        } 
+        // Create card container
+        const card = document.createElement('div');
+        card.className = 'card col-md-4'; // Bootstrap class for responsive column
+        
+        // Create card header with status
+        const invoiceStatusElem = document.createElement('p');
+        let invoiceStatus = [];
+        let cardColor = [];
+        let buttonCaption = [];
+        if(cardData.invoiceStatus == 0){
+            invoiceStatus = 'paid';
+            cardColor = '#90EE90';
+            buttonCaption = [];
+        } else if(cardData.invoiceStatus == 1) {
+            invoiceStatus = 'pending';
+            cardColor = '#FFD580';
+            buttonCaption = [];
+        } else if(cardData.invoiceStatus == 2) {
+            invoiceStatus = 'overdue';
+            cardColor = '#FF474C';
+            buttonCaption = ['Remind'];
+        } else if(cardData.invoiceStatus == 3) {
+            invoiceStatus = 'Not yet sent';
+            cardColor = 'lightblue';
+            buttonCaption = ['Delete', 'Send'];
+        } else {
+            invoiceStatus = 'No status';
+            cardColor = 'lightgrey';
+            buttonCaption = [];
+        }
+        invoiceStatusElem.innerHTML = `<span style="padding-top: 5px; font-weight: bold; font-size: 20px; text-align: left"> ${invoiceStatus} </span>`;
+        const cardHeader = document.createElement('div');
+        cardHeader.className = 'card-header';
+        cardHeader.style.backgroundColor = cardColor;
+        cardHeader.appendChild(invoiceStatusElem);
+        card.appendChild(cardHeader);
+
+        // Create card body with information
+        const cardBody = document.createElement('div');
+        cardBody.className = 'card-body';
+        
+        const clientNameElem = document.createElement('p');
+        clientNameElem.innerHTML = `<span class="label">Client Name:</span> ${cardData.clientName}`;
+        cardBody.appendChild(clientNameElem);
+
+        const clientIDElem = document.createElement('p');
+        clientIDElem.innerHTML = `<span class="label">Client ID:</span> ${cardData.clientId}`;
+        cardBody.appendChild(clientIDElem);
+
+        const invoiceIDElem = document.createElement('p');
+        invoiceIDElem.innerHTML = `<span class="label">Invoice ID:</span> ${cardData.invoiceNum}`;
+        cardBody.appendChild(invoiceIDElem);
+
+        const invoiceAmountElem = document.createElement('p');
+        let totalAmount = parseInt(cardData.numHour) * parseInt(cardData.fee)
+        invoiceAmountElem.innerHTML = `<span class="label">Invoice Amount:</span> ${totalAmount.toString()}`;
+        cardBody.appendChild(invoiceAmountElem);
+
+        const dueDateElem = document.createElement('p');
+        dueDateElem.innerHTML = `<span class="label">Due Date:</span> ${cardData.dueDate}`;
+        cardBody.appendChild(dueDateElem);
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'container';
+        const buttonRow = document.createElement('div');
+        buttonRow.className = 'row';
+        const buttonDiv = document.createElement('div');
+        buttonDiv.className = 'd-flex justify-content-end';
+        for(kk = 0; kk < buttonCaption.length; kk++){
+            const buttonElem = document.createElement('button');
+            buttonElem.style.marginRight = '5px';
+            buttonElem.innerHTML = buttonCaption[kk];
+            buttonElem.setAttribute('alt', i);
+            if(buttonCaption[kk] == 'Send' || buttonCaption[kk] == 'Remind') {
+                buttonElem.className = 'btn btn-outline-primary invoice-send';
+            } else {
+                buttonElem.className = 'btn btn-outline-primary invoice-create';
+            }
+            
+            buttonElem.addEventListener('click', function(s) {
+                alt = s.target.getAttribute('alt');
+                if(buttonElem.innerHTML == 'Send' || buttonElem.innerHTML == 'Remind') {
+                    sendInvoices(uId, cardData, alt);
+                    buttonElem.disabled = true;
+                    buttonElem.style.backgroundColor = 'lightgrey';
+                } else if(buttonElem.innerHTML == 'Delete') {
+                    removeInvoice(uId, cardData.clientId, cardData.invoiceNum, alt);
+                    buttonElem.disabled = true;
+                    buttonElem.style.backgroundColor = 'lightgrey';
+                }
+            });
+            buttonDiv.appendChild(buttonElem);
+        }
+        buttonRow.appendChild(buttonDiv);
+        buttonContainer.appendChild(buttonRow);
+        cardBody.appendChild(dueDateElem);
+        cardBody.appendChild(buttonContainer);
+
+
+        card.appendChild(cardBody);
+        // Append card to the container
+        container.appendChild(card);
+        i++;
+    });
+
+}
+
+
+function createInvoice(Questions) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let invoiceInfo = JSON.parse(this.response);
+            if(invoiceInfo == false){
+                window.alert('Wrong Client ID.');
+            } else {
+                let invoiceClientName = document.getElementById('invoiceClientName');
+                invoiceClientName.innerHTML = invoiceInfo.clientName;
+                let invoiceNum = document.getElementById('invoiceNum');
+                invoiceNum.innerHTML = invoiceInfo.invoiceNum;
+                // get send button and activate it
+                let invoiceTot = document.getElementById('invoiceTotal');
+                invoiceTot.innerHTML = invoiceInfo.invoiceTot;
+                InvoiceSend = document.getElementsByClassName('invoice-send');
+                InvoiceSend[0].disabled = false;
+                InvoiceSend[0].addEventListener('click', function(s) {
+                    sendInvoices(Questions[0].userId, '', 0);
+                });
+                InvoiceCreate = document.getElementsByClassName('invoice-create');
+                InvoiceCreate[0].innerHTML = 'remove';
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/finances.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let inputData = {'flag': 'create', 'userId': Questions[0].userId, 
+                     'clientId': Questions[0].qAnswer, 'clientName': '',
+                     'fee': Questions[1].qAnswer, 'numHour': Questions[2].qAnswer, 
+                     'invoiceDue': Questions[3].qAnswer, 
+                     'serviceStart': Questions[4].qAnswer, 'serviceEnd': Questions[5].qAnswer};
+    let request = "userInfo="+JSON.stringify(inputData);
+    xmlhttp.send(request);
+}
 
 function restorePrevAnswer(serverStruct = 0, serverStructOption = 0) {
     
@@ -1157,6 +1575,105 @@ function questionCreate(headerTxt, header, input, page, userPage){
     }
     xmlhttp.send(request);
 }
+
+// function to plot IF data returned by the server for the given user
+function plotPaymentsInvoices(PaymentsInvoices){
+    
+    let payElement  = document.querySelector('#InvoicePayment');
+    PaymentsInvoices = {data: [5, 8, 3]};
+    const payData = {
+      labels: ['Paid','Pending','Overdue'],
+      datasets: [
+        {
+            label: 'status',
+            data: PaymentsInvoices.data,
+            backgroundColor: ['#90EE90', '#FFD580', '#FF474C'],
+            borderColor: 'white',
+            borderRadius: '5px',
+            borderWidth: 3,
+            fontSize: '16px',
+        },
+    ]
+    };
+    const config = {
+      type: 'bar',
+      data: payData,
+      options: {
+        indexAxis: 'x',
+        responsive: true,
+        devicePixelRatio: 2,
+        scales: {
+            x: {
+              stacked: true,
+            },
+            y: {
+              stacked: true
+            }
+        }
+      }
+    };
+    if(typeof payChart !== 'undefined'){
+        payChart.destroy(); 
+    }
+    payChart = new Chart(
+      payElement,
+      config
+    );
+}
+
+
+// function to plot Revenue data returned by the server for the given user
+function plotRevenue(revenue){
+    // Canvas element section
+    let revElement = document.querySelector('#Revenue');
+    let vector = [];
+    let xAxis = [];
+    for (let i = 0; i < 30; i++) {
+        // Generate a random number between min (inclusive) and max (exclusive)
+        let randomValue = Math.exp(i/10) * Math.random();
+        vector.push(randomValue);
+        xAxis.push(i);  
+    }
+    // Config section
+    revenue = {data: vector};
+    
+    const revData = {
+      labels: xAxis,
+      datasets: [{
+        label: 'Revenue',
+        fill: false,
+        data: revenue.data,
+        borderColor: 'lightskyblue',
+      }]
+    };
+    const revConfig = {
+      type: 'line',
+      data: revData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        devicePixelRatio: 2,
+        aspectRatio: 1,
+        scales: {
+            y: {
+              title: {
+                display: true,
+                text: '$'
+              }
+            }
+          }     },
+    };
+
+    if(typeof revChart !== 'undefined'){
+        revChart.destroy(); 
+    }
+    revChart = new Chart(
+      revElement,
+      revConfig,
+    );
+}
+
+
 
 
 // function to plot BMI data returned by the server for the given user
@@ -3417,3 +3934,187 @@ function chargeUser() {
     var userdata = "userInfo="+JSON.stringify(info);
     xmlhttp.send(userdata);
 }
+
+function FinanceOpenTab(tabName) {
+    var i, tabcontent, tablinks;
+    // Hide all tab content
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+    }
+
+    // Remove active class from all tabs
+    tablinks = document.getElementsByClassName("financeTab")[0].children;
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active-tab");
+    }
+    // Show the current tab content and set the active tab
+    document.getElementById(tabName).classList.add("active");
+    document.getElementById(tabName + 'Tab').classList.add("active-tab");
+    document.getElementById(tabName + 'Tab').style.borderRadius = '30px';
+    document.getElementsByClassName('mainFormDiv')[0].remove();
+    // dynamic search invoices
+    // enter keypress also works for navigation
+    counter = 0; // reset the counter
+    Questions = [];
+    createFormDiv(tabName);
+    let input = document.querySelectorAll('.form-input');
+    let header = document.querySelectorAll('.form-header');
+    let headerTxt = document.querySelectorAll('.form-header-style');
+    let userTxt = document.querySelector('.user-text');
+    let welcomeTxt = document.querySelector('.navbar-brand');
+    getUserInfo(userTxt, welcomeTxt);
+    if(tabName == 'trackInvoice') {
+        questionCreate(headerTxt[1], header[1], input[1], 'financesSearch', userPage);
+        const moveright = document.querySelector('.form-go-right');
+        moveRight(moveright, input, header, headerTxt, Questions, 'financesSearch');
+        const moveleft = document.querySelector('.form-go-left');
+        moveLeft(moveleft, input, header, headerTxt, Questions, 'financesSearch');
+        input[1].addEventListener('keydown', function(s) {
+            if(s.key == 'Backspace'){
+                if(gSearchInvoices.length > 0) {
+                    gSearchInvoices = gSearchInvoices.slice(0, gSearchInvoices.length - 1);
+                } else if(gSearchInvoices.length == 0) {
+                    gSearchInvoices = gSearchInvoices;
+                }
+            } else {
+                gSearchInvoices += s.key; 
+            }
+            let searchInvStruct = {'searchStr': gSearchInvoices, 'key': Questions[0].qAnswer};
+            searchInvoices(searchInvStruct, Questions[0].userId);
+        });
+        setTimeout(function() {searchInvoices([], Questions[0].userId);}, 500);
+    } else if(tabName == 'createInvoice') {
+        questionCreate(headerTxt[1], header[1], input[1], 'finances', userPage);
+        const moveright = document.querySelector('.form-go-right');
+        moveRight(moveright, input, header, headerTxt, Questions, 'finances');
+        const moveleft = document.querySelector('.form-go-left');
+        moveLeft(moveleft, input, header, headerTxt, Questions, 'finances');
+    } 
+}
+
+function createFormDiv(tab) {
+    // Create the main div
+    parentNode = document.getElementById(tab);
+    const mainDiv = document.createElement('div');
+    mainDiv.className = 'mainFormDiv';
+    // Create the form
+    const form = document.createElement('form');
+    form.className = 'form-class';
+
+    // Create the navigation buttons container
+    const navButtonsDiv = document.createElement('div');
+    navButtonsDiv.className = 'd-flex form-class';
+
+    // Create the left swipe button
+    const leftButtonDiv = document.createElement('div');
+    leftButtonDiv.className = 'd-flex';
+    const leftButton = document.createElement('button');
+    leftButton.type = 'button';
+    leftButton.className = 'form-go-left';
+    leftButton.disabled = true;
+    leftButton.style.opacity = 0;
+    const leftButtonText = document.createElement('span');
+    leftButtonText.style.fontSize = '26px';
+    leftButtonText.style.margin = '15px';
+    leftButtonText.textContent = 'Back';
+    leftButton.appendChild(leftButtonText);
+    leftButtonDiv.appendChild(leftButton);
+
+    // Create the right swipe button
+    const rightButtonDiv = document.createElement('div');
+    rightButtonDiv.className = 'd-flex';
+    const rightButton = document.createElement('button');
+    rightButton.type = 'button';
+    rightButton.className = 'form-go-right';
+    rightButton.disabled = false;
+    rightButton.style.opacity = 1; 
+    const rightButtonText = document.createElement('span');
+    rightButtonText.style.fontSize = '26px';
+    rightButtonText.style.margin = '15px';
+    rightButtonText.textContent = 'Next';
+    rightButton.appendChild(rightButtonText);
+    rightButtonDiv.appendChild(rightButton);
+
+    // Append buttons to the nav buttons container
+    navButtonsDiv.appendChild(leftButtonDiv);
+    navButtonsDiv.appendChild(rightButtonDiv);
+
+    // Create the form header section
+    const formHeaderDiv = document.createElement('div');
+    formHeaderDiv.className = 'd-flex form-header-parent';
+
+    for (let i = 0; i < 3; i++) {
+        const headerP = document.createElement('p');
+        headerP.className = 'form-header-style';
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'form-header';
+        headerDiv.setAttribute('serverStruct', 0);
+        if(i == 1){
+            headerDiv.style.opacity = 1;
+            headerDiv.addEventListener('transitionend', function(event) {
+                headerP.innerHTML = Questions[counter].qContent[event.target.getAttribute('serverStruct')];
+                ChangeForm(event.target, '0.0s', '0', 1, '50%');
+            });
+        } else {
+            headerDiv.style.width = '0%';
+            headerDiv.addEventListener('transitionend', function(event) {
+                ChangeForm(event.target, '0.0s', '0', 0, '0%');
+            });
+        }
+        headerDiv.appendChild(headerP);
+        formHeaderDiv.appendChild(headerDiv);
+    }
+
+    // Create the form input section
+    const formInputDiv = document.createElement('div');
+    formInputDiv.className = 'd-flex form-input-parent';
+
+    for (let i = 0; i < 3; i++) {
+        const inputDiv = document.createElement('div');
+        inputDiv.className = 'form-input';
+        inputDiv.setAttribute('serverStruct', 0);
+        inputDiv.setAttribute('serverStructOption', 0);
+        if(i == 1) {
+            inputDiv.style.opacity = 1;
+            inputDiv.addEventListener('transitionend', function(event) {
+                resetFormType(event.target);
+                setFormType(event.target, Questions[counter], event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'), '');
+                ChangeForm(event.target, '0s', '0', 1, '50%');
+                restorePrevAnswer(event.target.getAttribute('serverStruct'), event.target.getAttribute('serverStructOption'));
+            });
+            // enter keypress also works for navigation
+            inputDiv.addEventListener('keypress', function(s) {
+                if (s.key == "Enter") {
+                   s.preventDefault();
+                }
+            });
+        } else {
+            inputDiv.addEventListener('transitionend', function(event) {
+                ChangeForm(event.target, '0.0s', '0', 0, '0%');
+                resetFormType(event.target);
+            });
+            inputDiv.style.width = '0%';
+        }
+        formInputDiv.appendChild(inputDiv);
+    }
+
+    // Append all sections to the form
+    form.appendChild(navButtonsDiv);
+    form.appendChild(formHeaderDiv);
+    form.appendChild(formInputDiv);
+
+    // Append the form to the main div
+    mainDiv.appendChild(form);
+
+    // Optionally, append the main div to the body or another container
+    if(tab == 'trackInvoice'){
+        referenceNode = document.getElementsByClassName('insertForm');
+    } else {
+        referenceNode = document.getElementsByClassName('invoiceOutput');
+    }
+    parentNode.insertBefore(mainDiv, referenceNode[0]);
+
+}
+
+

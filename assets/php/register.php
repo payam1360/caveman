@@ -184,7 +184,7 @@ function saveVerificationAndEmail($verification_code, $email, $name) {
     $tablename   = "authentication";
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
     $userId      = mt_rand(100000, 999999);
-    $sql         = "INSERT INTO " . $tablename . " (userId, name, email, password, verification, accountType, emailVer, passVer, payVer) VALUES('" . $userId . "','" . $name . "','" .  $email . "','" . "','" . $verification_code . "', '', '0', '0', '0');";
+    $sql         = "INSERT INTO " . $tablename . " (userId, name, email, password, verification, accountType, emailVer, passVer, payVer, userStripeId, userStripeToken) VALUES('" . $userId . "','" . $name . "','" .  $email . "','" . "','" . $verification_code . "', '', '0', '0', '0', '', '');";
     $conn->query($sql);
     $conn->close();
 }

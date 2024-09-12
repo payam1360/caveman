@@ -313,7 +313,25 @@
     opacity: 0;
 }
 
+.RevenueText,
+.InvoicePaymentText {
+    width: 100%;
+    height: 60px;
+    border: none;
+    background-color: transparent;
+    font-family: 'Lucida Casual', 'Comic Sans MS', 'Font Awesome';
+    font-size: 24px;
+    color:  rgba(40, 180, 99, 0.8);
+}
 
+.Revenue,
+.InvoicePayment {
+    background-color: white;
+    border: 2px solid lightskyblue;
+    border-radius: 2%;
+    margin: 20px;
+    margin-top: 70px;
+}
 /* Styling for the spinner */
 .spinner-ai {
     position: relative; /* Position it relative to the container */
@@ -334,3 +352,126 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Basic styling */
+.financeTab {
+    display: flex;
+    cursor: pointer;
+    background-color: lightgrey;
+    padding: 1px;
+    margin: 40px auto;
+    justify-content: center;
+    width: 50%;
+    border-radius: 30px;
+}
+
+.financeTab div {
+    padding: 10px;
+    flex: 1;
+    text-align: center;
+    justify-content: space-around;
+    border-radius: 30px;
+}
+
+.financeTab div:hover {
+    background-color: lightgrey;
+}
+
+.tabcontent {
+    display: none;
+    margin: 40px;
+}
+
+.active {
+    display: block;
+}
+
+.financeTab div.active-tab {
+    background-color: lightskyblue;
+}
+
+
+.invoiceOutput {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.invoiceOutput h1 {
+    margin-top: 0;
+    font-size: 24px;
+    text-align: center;
+}
+
+.invoice-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.detail strong {
+    font-weight: bold;
+}
+
+.detail span {
+    margin-left: 10px;
+}
+.invoice-send:disabled, 
+.invoice-create:disabled {
+    background-color: gray;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.card-header {
+    text-align: left;
+}
+
+.card-body p {
+    margin: 4px 0;
+}
+.card-body .label {
+    font-weight: bold;
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+

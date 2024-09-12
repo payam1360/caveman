@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // initialize header
     // initialize the first question and init the load page
     resetStart(input, header, headerTxt, 'register');
-
+    getPublicStripeKey();
     const moveright = document.querySelector('.form-go-right');
     moveRight(moveright, input, header, headerTxt, Questions, 'register');
     
