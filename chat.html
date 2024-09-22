@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>ManHub - Admin</title>
+        <link href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/css/admin.css" rel="stylesheet">
+        <link href="assets/css/tools.css" rel="stylesheet">
+        <script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://js.stripe.com/v3/"></script>
+        <link rel="shortcut icon" href="#">
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="admin.html"></a>
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Home</div>
+                            <a class="nav-link" href="admin.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Dashboard
+                            </a>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Clients
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adminQ.html">
+                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-person-circle-question"></i></div>
+                                        Manage Campaigns
+                                    </a>
+                                    <a class="nav-link" href="clients.html">
+                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear"></i></div>
+                                        Manage Clients
+                                    </a>
+                                    <a class="nav-link" href="finances.html">
+                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-person-circle-question"></i></div>
+                                        Manage Finances
+                                    </a>
+                                    <a class="nav-link" href="phoneMessages.html">
+                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear"></i></div>
+                                        Contact Clients
+                                    </a>
+                                </nav>
+                            </div>
+                            <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                                Log Out
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        <div class="user-text"></div>
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <div class="container">
+                    <div class="d-flex row">
+                        <div>
+                            <a href="admin.html">
+                                <img src="assets/img/nutrition4guys.png" width="150" height="150">
+                            </a>
+                        </div>
+                        <div class="client-page">
+                            <p class="header-clients-text">Contact Clients</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+
+                    <div class="chat-body">
+                        <div class="user-slider-container">
+                            <div class="user-slider">
+                                <!-- Add  user circles dynamically as needed -->
+                            </div>
+                        </div>
+                        <!-- Popup PhoneNumber -->
+                        <div id="phoneModal" class="phoneModal">
+                            <div class="phoneModal-content">
+                                <div class="container">
+                                    <div class="row">
+                                        <p style="color: grey; font-size: 20px;">Add your client's contact info ...</p>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="d-flex justify-content-start" style="margin-top: 20px;">
+                                            <p style="color: black">Telegram</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="d-flex justify-content-space-in-between">
+                                            <input type="text" placeholder="Telegram ID: Settings -> My Profile" class="telegramInput">
+                                            <button class="connectTelegramUserName btn btn-outline-primary" id="connectTelegramUserName" style="margin-right: 10px;">Add</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="d-flex justify-content-start" style="margin-top: 20px;">
+                                            <p style="color: black">Zalo</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="d-flex justify-content-start">
+                                            <input type="text" placeholder="zalo #: +84(55)555-5555" class="phoneInput">
+                                            <button class="connectPhone btn btn-outline-primary" id="connectPhone" style="margin-right: 10px;">Add</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="d-flex justify-content-start" style="margin-top: 15px;">
+                                            <button class="closeButton btn btn-outline-primary" id="closeButton">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-container">
+                            <div class="tabs">
+                                <button class="tab" alt="0">Telegram</button>
+                                <button class="tab" alt="1">Zalo</button>
+                            </div>
+                            <div class="chat-content" id="chat-content">
+                                <!-- Chat messages will be dynamically loaded here -->
+                            </div>
+                        </div>
+                    
+                        <div class="message-input-container">
+                            <textarea class="message-input" placeholder="Type your message here..."></textarea>
+                            <button type="button" class="send-button"><i class="fas fa-arrow-up fa-lg"></i></button>
+                        </div> 
+                    </div>                    
+                    
+                </div>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; ManHub 2023</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="assets/js/aux.js"></script>
+        <script src="assets/js/chat.js"></script>
+    </body>
+</html>

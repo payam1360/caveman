@@ -21,6 +21,9 @@ let stripe;
 let stripeElements;
 let gSearchClients = [];
 let gSearchInvoices = [];
+let selectedPhoneNumber = [];
+let clientTelegramUserName = [];
+let chatArea = ''; 
 // user <-> client class definition
 class question {
     constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired, qKey, clientId, campaignId){
@@ -4117,4 +4120,285 @@ function createFormDiv(tab) {
 
 }
 
+// chat page
+function chatPageSetup(){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            user = JSON.parse(this.response);
+            //let username = user.username;
+            let userid = user.userid;
+            chatButton = document.querySelector('.send-button');
+            if(chatButton) {
+                chatButton.addEventListener('click', function() {
+                    // Get the message from the text area
+                    sendChatContent(userid, chatArea);
+                    renderInTheChatBox(chatArea);
+                });
+            }
+            let chatText = document.querySelector('.message-input');
+            if(chatText){
+                chatText.addEventListener('input', function(){
+                    this.style.height = 'auto';
+                    // Set the height according to the scrollHeight of the content
+                    this.style.height = (this.scrollHeight) + 'px';
+                })
+            }
+            generateClientCircles(userid);
+            let chatEnv = document.getElementsByClassName('tab');
+            if(chatEnv) {
+                for(kk = 0; kk < chatEnv.length; kk++) {
+                    chatEnv[kk].addEventListener('click', function(e) {
+                        for(kx = 0; kx < chatEnv.length; kx++){
+                            chatEnv[kx].style.backgroundColor = '#f1f1f1';
+                            chatEnv[kx].style.fontWeight = 'normal';
+                            chatEnv[kx].style.color = 'black';
+                        }
+                        e.target.style.backgroundColor = '#6ca0f3';
+                        e.target.style.color = 'white';
+                        e.target.style.fontWeight = 'bold';
+                        chatArea = e.target.attributes.alt.value;
+                        generateClientCircles(userid);
+                    });
+                    chatEnv[kk].addEventListener('mouseenter', function(e) {
+                        e.target.style.color = '#6ca0f3';
+                        e.target.style.fontWeight = 'bold';
+                    });
+                    chatEnv[kk].addEventListener('mouseleave', function(e) {
+                        e.target.style.color = 'black';
+                        e.target.style.fontWeight = 'normal';
+                    });
+                }
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/admin.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let address = '';
+    let request = 'address=' + address;
+    xmlhttp.send(request);
+}
 
+function sendChatContent(uId, chatArea) {
+    
+    const message = document.querySelector('.message-input').value;
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            data = JSON.parse(this.response);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/chat.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'flag': 'send', 'userId': uId, 'clientPhoneNumber': selectedPhoneNumber, 'clientTelegramUserName': clientTelegramUserName, 'chatArea': chatArea, 'message': message};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+}
+
+function renderInTheChatBox(chatEnv){
+
+    if(chatEnv == ''){
+        window.alert('please choose you chat environment.');
+    } else {
+        const message = document.querySelector('.message-input').value;
+        const chatContent = document.querySelector('.chat-content');
+        const messageBox = document.createElement('div');
+        messageBox.classList.add('message-box-NutriAi');
+        // Set the message text
+        messageBox.textContent = message;
+        messageBox.style.width = message.length * 20 * 0.7 + 'px';
+        // Append the messageBox as a child to the chat-content div
+        chatContent.appendChild(messageBox);
+        // Scroll to the bottom automatically when a new message is added
+        chatContent.scrollTop = chatContent.scrollHeight;
+        // flush the input text
+        document.querySelector('.message-input').value = '';
+    }
+}
+
+function generateClientCircles(uId) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let clients = JSON.parse(this.response);
+            let userSlider = document.querySelector('.user-slider');
+            for(kk = 0; kk < clients.names.length; kk++){
+                if(clients.names[kk] == ''){
+                    continue;
+                } else {
+                    let userCir  = document.createElement('div');
+                    let upperTxt = document.createElement('p');
+                    let lowerTxt = document.createElement('p');
+                    let image    = document.createElement('img');
+                    lowerTxt.setAttribute('alt', kk);
+                    upperTxt.setAttribute('alt', kk);
+                    image.setAttribute('alt', kk);
+                    userCir.setAttribute('alt', kk);
+                    if(clients.genders[kk] == '1') {
+                        image.setAttribute('src', 'assets/img/woman.png');
+                    } else {
+                        image.setAttribute('src', 'assets/img/man.png');
+                    }
+                    userCir.classList.add('user-circle');
+                    if(clients.telegramNewChats[kk] == '1') {
+                        userCir.style.border = '5px solid purple';
+                        userCir.style.boxShadow =  '0 0 10px rgba(0, 0, 0, 0.2)';  
+                        userCir.style.animation = 'changeColor 2s infinite';
+                    } 
+                    
+                    userCir.addEventListener('mouseenter',function(e) {
+                        userCir.style.boxShadow = '0 5px 5px rgba(0, 0, 0, 0.5)';
+                    });
+                    userCir.addEventListener('mouseleave',function(e) {
+                        userCir.style.boxShadow = '';
+                    });
+                    userCir.addEventListener('click',function(e) {
+                        if(chatArea == ''){
+                            window.alert('please select the chat App: Telegram or Zalo.');
+                        } else {
+                            allCir = document.getElementsByClassName('user-circle');
+                            for(kx = 0; kx < allCir.length; kx++){
+                                allCir[kx].style.border = '';
+                            }
+                            userCir.style.boxShadow = '';
+                            userCir.style.border = 'solid 3px lightblue';
+                            if(clients.phoneNumbers[e.target.attributes.alt.value] == '' && clients.telegramUserNames[e.target.attributes.alt.value] == '') {
+                                createChatPopUp(uId, clients.ids[e.target.attributes.alt.value]);
+                            } else if(clients.phoneNumbers[e.target.attributes.alt.value] == '' && chatArea == '1') {
+                                createChatPopUp(uId, clients.ids[e.target.attributes.alt.value]);
+                            } else if(clients.telegramUserNames[e.target.attributes.alt.value] == '' && chatArea == '0') {
+                                createChatPopUp(uId, clients.ids[e.target.attributes.alt.value]);
+                            } else if(chatArea == '0') {
+                                clientTelegramUserName = clients.telegramUserNames[e.target.attributes.alt.value];
+                                pullTelegramChatContent(uId, clientTelegramUserName);
+                            } else if(chatArea == '1') {
+                                selectedPhoneNumber = clients.phoneNumbers[e.target.attributes.alt.value];
+                                pullZaloChatContent(uId, selectedPhoneNumber);
+                            } 
+                        }
+                    });
+                    
+                    upperTxt.classList.add('top-text');
+                    upperTxt.innerHTML = clients.names[kk];
+                    lowerTxt.classList.add('bottom-text');
+                    lowerTxt.innerHTML = clients.ids[kk];
+                    userCir.appendChild(upperTxt);
+                    userCir.appendChild(image);
+                    userCir.appendChild(lowerTxt);
+                    userSlider.appendChild(userCir);
+                }
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/chat.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'flag': 'getClients', 'userId': uId};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+}
+
+
+function pullTelegramChatContent(uId, telegramUserName) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            //let chatContent = JSON.parse(this.response);
+            let chatContent = this.response;
+            const pattern = /(NutriAi:.*?)(?=\\n|$)|(user:.*?)(?=\\n|$)/g;
+            // Use the pattern to match segments and return them as an array
+            const segments = chatContent.match(pattern) || [];
+            let message = '';
+            let boxClass = '';
+            // Process segments and categorize them
+            segments.forEach(segment => {
+                const trimmedSegment = segment.trim();
+                if (trimmedSegment.startsWith("NutriAi:")) {
+                    message = trimmedSegment.replace(/^NutriAi:\s*/, '').replace(/\\/, '');
+                    boxClass = 'message-box-NutriAi';
+                } else if (trimmedSegment.startsWith("user:")) {
+                    message = trimmedSegment.replace(/^user:\s*/, '').replace(/\\/, '');
+                    boxClass = 'message-box-user';
+                }
+                const chatContent = document.querySelector('.chat-content');
+                const messageBox = document.createElement('div');
+                messageBox.classList.add(boxClass);
+                // Set the message text
+                messageBox.textContent = message;
+                messageBox.style.width = message.length * 20 * 0.7 + 'px';
+                // Append the messageBox as a child to the chat-content div
+                chatContent.appendChild(messageBox);
+                // Scroll to the bottom automatically when a new message is added
+                chatContent.scrollTop = chatContent.scrollHeight;
+            });
+            
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/chat.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'flag': 'getChatFile', 'userId': uId, 'telegramUserName': telegramUserName};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+}
+
+
+function createChatPopUp(uId, cId){
+    document.getElementById('phoneModal').style.display = 'block';
+    document.getElementById('connectPhone').disabled = false;
+    document.getElementById('connectPhone').addEventListener('click', function() {
+        cPhone = document.getElementsByClassName('phoneInput')[0].value;
+        selectedPhoneNumber = cPhone;
+        addClientPhoneNumber(uId, cId, cPhone);
+    });
+    document.getElementById('connectTelegramUserName').disabled = false;
+    document.getElementById('connectTelegramUserName').addEventListener('click', function() {
+        tUserName = document.getElementsByClassName('telegramInput')[0].value;
+        clientTelegramUserName = tUserName;
+        addClientsTelegramUserName(uId, cId, tUserName);
+    });
+    document.getElementById('closeButton').addEventListener('click', function() {
+        document.getElementById('phoneModal').style.display = 'none';
+    });  
+}
+
+
+function addClientPhoneNumber(uId, cId, cPhone){
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if(JSON.parse(this.response) == true) {
+                window.alert('Phone number added successfully.');
+                document.getElementById('connectPhone').disabled = true;
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/chat.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'flag': 'addClientsNumber', 'userId': uId, 'clientId': cId, 'phoneNumber': cPhone};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+}
+
+function addClientsTelegramUserName(uId, cId, telegramUserName){
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if(JSON.parse(this.response) == true) {
+                window.alert('Telegram username added successfully.');
+                document.getElementById('connectTelegramUserName').disabled = true;
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/chat.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'flag': 'addClientsTelegramUserName', 'userId': uId, 'clientId': cId, 'telegramUserName': telegramUserName};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+}

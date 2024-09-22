@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if(kk == 2) {
                 window.location.assign('finances.html');
             } else if(kk == 3) {
-                window.location.assign('phoneMessages.html');
+                window.location.assign('chat.html');
             }
         });
     }

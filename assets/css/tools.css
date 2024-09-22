@@ -475,3 +475,232 @@
 }
 
 
+/* chat and contact users */
+
+.chat-body {
+    font-family: Arial, sans-serif;
+    margin: 100px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-slider-container {
+    width: 60%;
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    flex-direction: row;
+}
+
+.user-slider {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    padding: 20px;
+}
+
+.user-circle {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #f1f1f1;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    flex: 0 0 auto;
+    margin: 0; /* Ensure no unexpected margins are affecting positioning */
+    padding: 0; /* Ensure no unexpected padding is affecting layout */
+}
+
+.user-circle img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.user-circle .top-text,
+.user-circle .bottom-text {
+    font-size: 10px;
+    margin: 2px 0;
+}
+
+@keyframes changeColor {
+    50% {border-color: coral;}
+}
+
+.chat-container {
+    width: 100%;
+    max-width: 800px;
+    height: 300px;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+}
+
+.tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    background-color: #f1f1f1;
+    font-size: 16px;
+}
+
+
+.chat-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #fafafa;
+}
+
+.message-input-container {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    margin-top: 10px;
+}
+
+.message-input {
+    flex-grow: 1;
+    height: 50px;
+    padding-left: 60px;
+    padding-top: 10px;
+    width: 100%;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 25px 25px 25px 25px;
+}
+.message-box-NutriAi {
+    position: relative;
+    align-self: flex-start; /* Aligns to the left */
+    padding: 10px;
+    max-width: 80%;
+    margin: 10px;
+    background-color: #1F8AFF;
+    border-radius: 10px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
+    font-family: sans-serif;
+    font-size: 20px;
+    color: white;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+}
+
+/* Arrow on the message box */
+.message-box-NutriAi::after {
+    content: '';
+    position: absolute;
+    bottom: -10px; /* Adjusted to position the arrow below the bubble */
+    left: -20px; /* Position the tail to the left side of the bubble */
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent; /* Left side of the triangle */
+    border-right: 20px solid transparent; /* Right side of the triangle */
+    border-top: 0; /* Triangle color */
+    border-bottom: 20px solid #1F8AFF; /* Color of the arrow */
+    clip-path: ellipse(20px 15px at 20% 1%);
+}
+
+.message-box-user {
+    align-self: flex-end; /* Aligns to the right */
+    position: relative;
+    padding: 10px;
+    max-width: 80%;
+    margin: 10px;
+    background-color: #aabfd5; 
+    border-radius: 10px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
+    font-family: sans-serif;
+    font-size: 20px;
+    color: white;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+}
+
+/* Arrow on the message box */
+.message-box-user::after {
+    content: '';
+    position: absolute;
+    bottom: -10px; /* Position below the bubble */
+    right: -20px; /* Position the tail to the left */
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent; /* Left side of the triangle */
+    border-right: 20px solid transparent; /* Right side of the triangle */
+    border-top: 0; /* Triangle color */
+    border-bottom: 20px solid #aabfd5;
+    clip-path: ellipse(20px 15px at 20% 1%); /* Positioning the tail at the bottom center */
+    transform: scaleX(-1);
+}
+
+.send-button {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: #4285F4;
+    color: white;
+    border-radius: 50%;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.send-button:hover {
+    background-color: #6ca0f3;
+}
+
+.phoneModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.phoneModal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    border-radius: 8px;
+    text-align: center;
+    flex-direction: column;
+}
+.phoneInput, .telegramInput {
+    margin-right: 5px;
+    border: 2px solid lightblue;
+    border-radius: 5px;
+    width: 400px;
+}
+
+.connectPhone:disabled, 
+.connectTelegramUserName:disabled {
+    background-color: gray;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
