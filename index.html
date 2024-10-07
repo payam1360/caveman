@@ -4,228 +4,940 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>ManHub</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+  <title>NutriAi.</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
 
   <!-- Favicons -->
-  <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-  <link rel="shortcut icon" href="#"> 
-      
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link  href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="https://js.stripe.com/v3/"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-  <link href="assets/css/variables-orange.css" rel="stylesheet">
-  <!-- Template Main CSS File -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/css/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/aos.css" rel="stylesheet">
+  <link href="assets/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/css/swiper-bundle.min.css" rel="stylesheet">
+  <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
   <link href="assets/css/tools.css" rel="stylesheet">
-  <!-- =======================================================
-  * Template Name: HeroBiz - v2.3.1
-  * Template URL: https://bootstrapmade.com/herobiz-bootstrap-business-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  <link href="assets/css/variables.css" rel="stylesheet">
+  <link href="assets/css/variables-orange.css" rel="stylesheet">
 </head>
 
-<header></header>
+<body class="index-page">
 
-<body>
-    
-    <div class="container">
-        <div class="d-flex row">
-            <div>
-                <a href="index.html"><img src="assets/img/nutrition4guys.png" width="150" height="150"></a>
-            </div>
-            <div class="client-page">
-                <p class="header-clients-text">main form</p>
-            </div>
-        </div>
-    </div>
-<!--log in button-->
-<div class="container">
-    <div class="row">
-        <div class="d-flex justify-content-end" style="margin-top: 20px;">
-            <button type="button" class="login btn btn-outline-primary">Log in</button>
-            <button type="button" class="register btn btn-link">Register</button>
-        </div>
-    </div>
-</div>
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
 
-<section>
-    <!--progress circular indicator-->
-    <div class="relative">
-        <div class="d-flex progress-pie" >
-            <canvas id="ProgressCircle"></canvas>
-        </div>
-        <div class="absolute-center text-center">
-            <p class="progress-percent" style= "color: coral; margin-top: -58px;">0%</p>
-        </div>
-    </div>
-    <!--end of progress circular indicator-->
-    <!-- Start form -->
-    <form class= "form-class">
-        <!-- form navigation buttons -->
-        <div class= "d-flex form-class">
-            <!-- left swipe -->
-            <div class ="d-flex">
-                <button type="button" class="form-go-left"><span style="font-size:26px; margin: 15px;">Back</span></button>
-            </div>
-            <!-- right swipe -->
-            <div class ="d-flex">
-                <button type="button" class="form-go-right"><span style="font-size:26px; margin: 15px;">Next</span></button>
-            </div>
-        </div>
-        <!-- Form header question -->
-        <div class="d-flex form-header-parent">
-            <div class="form-header">
-                <p class="form-header-style" ></p>
-            </div>
-            <div class="form-header">
-                <p class="form-header-style" ></p>
-            </div>
-            <div class="form-header">
-                <p class="form-header-style" ></p>
-            </div>
-        </div>
-        
-        <!-- Form input -->
-        <div class="d-flex form-input-parent">
-            <div class="form-input">
-                <input type="text" class= "form-input-style">
-            </div>
-            <div class="form-input">
-                <input type="text" class= "form-input-style">
-            </div>
-            <div class="form-input">
-                <input type="text" class= "form-input-style">
-            </div>
-        </div>
-        <!-- form OK buttons after things done-->
-        <div class= "d-flex form-class">
-            <!-- ok-->
-            <div class = " d-flex">
-                <button type="button" class="results-btn btn btn-outline-primary">Show results</button>
-            </div>
-        </div>
-    </form>
-</section><!-- End Features Section -->
-<!-- Beginning of result Section -->
-<section>
-    <!-- BMI and intermittent fasting sections -->
-    <div class="container">
-        <div class="row">
-            <div class="col-sm col-lg-5 Bmi">
-                <div>
-                    <p class= "BMI_text">BMI</p>
-                </div>
-                <div>
-                    <canvas id="Bmi"></canvas>
-                </div>
-                <div>
-                    <p class= "BMI_text_description"></p>
-                </div>
-            </div>
-            <div class="col-sm col-lg-5 IntermittentFasting">
-                <div>
-                    <p class="IF_text">Intermittent fasting</p>
-                </div>
-                <div>
-                    <canvas id="IntermittentFasting"></canvas>
-                </div>
-                <div>
-                    <p class= "IF_text_description"></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Macro and Micro sections -->
-    <div class="container">
-        <div class="row">
-            <div class="col-sm col-lg-5 Macro">
-                <div>
-                    <p class= "MACRO_text">Macronutrients</p>
-                </div>
-                <div>
-                    <canvas id="Macro"></canvas>
-                </div>
-                <div>
-                    <p class= "MACRO_text_description"></p>
-                </div>
-            </div>
-            <div class="col-sm col-lg-5 Micro">
-                <div>
-                    <p class="MICRO_text">Micronutrients: Trace Minerals</p>
-                </div>
-                <div>
-                    <canvas id="Micro"></canvas>
-                </div>
-                <div>
-                    <p class= "MICRO_text_description"></p>
-                </div>
-            </div>
-        </div>
-    </div>
-        <!-- Macro and Micro sections -->
-        <div class="container">
-            <div class="row">
-                <div class="col-sm col-lg-5 Micro_vit">
-                    <div>
-                        <p class="MICRO_vit_text">Micronutrients: Vitamins</p>
-                    </div>
-                    <div>
-                        <canvas id="Micro_vit"></canvas>
-                    </div>
-                    <div>
-                        <p class= "MICRO_vit_text_description"></p>
-                    </div>
-                </div>
-                <div class="col-sm col-lg-5 Calories">
-                    <div>
-                        <p class="Cal_text">Calorie Intake Projection</p>
-                    </div>
-                    <div>
-                        <canvas id="Calories"></canvas>
-                    </div>
-                    <div>
-                        <p class= "Cal_description"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-            <!-- Meal plan section -->
-    <div class="container">
-        <div class="row">
-            <div class="col-sm col-lg-5 meal_plan">
-                <div>
-                    <p class="Meal_title">Meal plan</p>
-                </div>
-                <p class= "meal_text"></p>
-            </div>
-            <div class="col-sm col-lg-5 Advertisement">
-                <div style="margin: auto; justify-content: center; text-align: center;">
-                    <img class="AD_img" style="margin: auto; justify-content: center; text-align: center;" src="assets/img/ad.jpeg">
-                </div>
-                <div>
-                    <p class="AD_text" style="text-align: center;">Your AD here</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End of plot Section -->
+      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1 class="sitename">Nutri<span>Ai.</span></h1>
+      </a>
 
-<!-- Template Main JS File -->
-<script src="assets/js/main.js"></script>
-<script src="assets/js/aux.js"></script>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html" class="active">Home<br></a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li class="dropdown"><a href="#"><span>Users</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="login.html">Log in</a></li>
+              <li><a href="register.html">Register</a></li>
+            </ul>
+          </li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <a class="btn-getstarted" href="index.html#about">Get Started</a>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section">
+
+      <div class="container d-flex flex-column justify-content-center align-items-center 
+                  text-center position-relative" data-aos="zoom-out">
+        <img src="assets/img/NutriAi.jpg" class="img-fluid" style="margin-bottom: 60px;" alt="">
+        <h1>Welcome to Nutri<span>Ai.</span></h1>
+        <p> At the intersection of nutritional science and AI technology.</p>
+        <div class="d-flex">
+        </div>
+      </div>
+
+    </section><!-- /Hero Section -->
+
+    <!-- Featured Services Section -->
+    <section id="featured-services" class="featured-services section">
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-item position-relative">
+              <div class="icon"><i class="bi bi-activity icon"></i></div>
+              <h4><a class="stretched-link">Highly personalized</a></h4>
+              <p>AI-powered and customized by a real nutritionist</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-item position-relative">
+              <div class="icon"><i class="bi bi-bounding-box-circles icon"></i></div>
+              <h4><a class="stretched-link">Smart Meal Planning with AI</a></h4>
+              <p>Tailored meal suggestions designed for your health goals.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-item position-relative">
+              <div class="icon"><i class="bi bi-code-slash icon"></i></div>
+              <h4><a class="stretched-link">All in One Software</a></h4>
+              <p>Software that allows you to communicate, send invoice,
+                 send custom forms to clients and more.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="400">
+            <div class="service-item position-relative">
+              <div class="icon"><i class="bi bi-broadcast icon"></i></div>
+              <h4><a class="stretched-link">Streamlined Client Communication</a></h4>
+              <p>Our platform simplifies the way nutritionists communicate with their clients, 
+                offering seamless interaction and information sharing</p>
+            </div>
+          </div><!-- End Service Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Featured Services Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>About</h2>
+        <p>I am an AI engineer with passion in personal training and nutrition.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up">
+
+        <div class="row g-4 g-lg-5" data-aos="fade-up" data-aos-delay="200">
+
+          <div class="col-lg-5">
+            <div class="about-img">
+              <img src="assets/img/about-portrait.jpg" class="img-fluid" alt="">
+            </div>
+          </div>
+
+          <div class="col-lg-7">
+            <h3 class="pt-0 pt-lg-5">My Passion and Dream</h3>
+
+            <!-- Tabs -->
+            <ul class="nav nav-pills mb-3">
+              <li><a class="nav-link active" data-bs-toggle="pill" href="#about-tab1">AI Technology</a></li>
+              <li><a class="nav-link" data-bs-toggle="pill" href="#about-tab2">Nutrition & Human Connection</a></li>
+              <li><a class="nav-link" data-bs-toggle="pill" href="#about-tab3">The Roadmap</a></li>
+            </ul><!-- End Tabs -->
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+
+              <div class="tab-pane fade show active" id="about-tab1">
+
+                <div class="d-flex align-items-center mt-4">
+                  <i class="bi bi-check2"></i>
+                  <h4>Innovative AI Solutions:</h4>
+                </div>
+                <p>Nutri<span style="color: coral;">Ai.</span> software leverages advanced machine learning algorithms to generate 
+                  personalized, data-driven meal plans and automate key administrative tasks.</p>
+
+                <div class="d-flex align-items-center mt-4">
+                  <i class="bi bi-check2"></i>
+                  <h4>Seamless Integration:</h4>
+                </div>
+                <p>I build intuitive tools that integrate smoothly into your workflow, 
+                  from client management to invoicing and communication, all backed by powerful AI.</p>
+
+                <div class="d-flex align-items-center mt-4">
+                  <i class="bi bi-check2"></i>
+                  <h4>Constant Improvement:</h4>
+                </div>
+                <p>I am continuously refining the software to ensure 
+                  the most accurate recommendations and efficient automation for nutritionists.</p>
+
+              </div><!-- End Tab 1 Content -->
+
+              <div class="tab-pane fade" id="about-tab2">
+
+                <div class="d-flex align-items-center mt-4">
+                  <i class="bi bi-check2"></i>
+                  <h4>Personalized Nutrition Plans:</h4>
+                </div>
+                <p>Combining AI with the expertise of nutritionists, The software helps craft 
+                  tailored meal plans that meet each client's specific dietary needs and 
+                  preferences.</p>
+                <div class="d-flex align-items-center mt-4">
+                  <i class="bi bi-check2"></i>
+                  <h4>Fostering Meaningful Client Relationships:</h4>
+                </div>
+                <p>Nutri<span style="color: coral;">Ai.</span> platform enhances the human connection by making client communication 
+                  easier, ensuring nutritionists stay in touch with their clients more effectively.</p>
+
+                <div class="d-flex align-items-center mt-4">
+                  <i class="bi bi-check2"></i>
+                  <h4>Empowering Health Professionals:</h4>
+                </div>
+                <p>My aim is to give nutritionists the tools to spend 
+                  less time on paperwork and more time focusing on their clients' well-being.</p>
+
+              </div><!-- End Tab 2 Content -->
+
+              <div class="tab-pane fade" id="about-tab3">
+
+
+                <div class="d-flex align-items-center mt-4">
+                  <i class="bi bi-check2"></i>
+                  <h4>Transforming the Future of Nutrition:</h4>
+                </div>
+                <p>My mission is to revolutionize the nutrition industry by making 
+                  advanced AI tools accessible to health professionals worldwide.</p>
+
+                <div class="d-flex align-items-center mt-4">
+                  <i class="bi bi-check2"></i>
+                  <h4>Simplifying Nutritionist Workflows:</h4>
+                </div>
+                <p>I envision a future where nutritionists can automate the most time-consuming tasks, 
+                  allowing them to focus on delivering high-quality care.</p>
+
+                <div class="d-flex align-items-center mt-4">
+                  <i class="bi bi-check2"></i>
+                  <h4>Long-Term Impact on Health:</h4>
+                </div>
+                <p>By merging technology and nutrition, I aim to create lasting positive 
+                  impacts on health outcomes for clients and communities around the globe.</p>
+
+              </div><!-- End Tab 3 Content -->
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+    <!-- Services Section -->
+    <section id="services" class="services section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Services</h2>
+        <p>Get things done fast and effortless with the all-in-one Nutri<span style="color: coral;">Ai.</span> software solution.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-5">
+
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-1.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="bi bi-cpu"></i>
+                </div>
+                <a class="stretched-link">
+                  <h3>AI-Driven Meal Planning and food processing</h3>
+                </a>
+                <p>Generate personalized meal plans for clients using advanced AI technology, 
+                  tailored to their dietary needs and preferences.</p>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-2.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="bi bi-chat-dots"></i>
+                </div>
+                <a class="stretched-link">
+                  <h3>Client Communication Hub</h3>
+                </a>
+                <p>Facilitate seamless communication between nutritionists and their clients with 
+                  integrated messaging tools and automated updates.</p>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-3.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="bi bi-ui-checks"></i>
+                </div>
+                <a class="stretched-link">
+                  <h3>Custom Form Creation & Management</h3>
+                </a>
+                <p>Create and send personalized forms to clients to gather essential information and 
+                  manage client profiles effectively.</p>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="500">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-4.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="bi bi-receipt"></i>
+                </div>
+                <a class="stretched-link">
+                  <h3>Automated Invoicing & Payment Tracking</h3>
+                </a>
+                <p>Easily generate invoices, track payments, and manage financial records, reducing 
+                  administrative workload.</p>
+                <a class="stretched-link"></a>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="600">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-5.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <a class="stretched-link">
+                  <h3>Client Progress & Data Tracking</h3>
+                </a>
+                <p>Monitor client progress over time with data-driven insights, 
+                  allowing for informed adjustments to meal plans and client strategies.</p>
+                <a class="stretched-link"></a>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="700">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-6.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="bi bi-people"></i>
+                </div>
+                <a  class="stretched-link">
+                  <h3>Create Social Media Posts</h3>
+                </a>
+                <p>Create AI-driven posts instanly, based on your nutrition philosophy, edit 
+                  them and post them on the platform and share them in other social media platforms, 
+                  creating leads for your business.
+                </p>
+                <a  class="stretched-link"></a>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Services Section -->
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials section dark-background">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Testimonials</h2>
+        <p>Don't take my words for it. This is what my users have 
+           to say about the software service.</p>
+      </div><!-- End Section Title -->
+
+      <img src="assets/img/testimonials-bg.jpg" class="testimonials-bg" alt="">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="swiper init-swiper">
+          <script type="application/json" class="swiper-config">
+            {
+              "loop": true,
+              "speed": 600,
+              "autoplay": {
+                "delay": 5000
+              },
+              "slidesPerView": "auto",
+              "pagination": {
+                "el": ".swiper-pagination",
+                "type": "bullets",
+                "clickable": true
+              }
+            }
+          </script>
+          <div class="swiper-wrapper">
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <h3>Sarah Mitchell</h3>
+                <h4>Certified Nutritionist &amp; Founder</h4>
+                <div class="stars">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p>
+                  <i class="bi bi-quote quote-icon-left"></i>
+                  <span>This AI software has completely transformed the way I manage my clients. 
+                    The personalized meal planning feature saves me so much time, and the custom 
+                    forms make gathering client information a breeze. I can't imagine going back 
+                    to my old system!</span>
+                  <i class="bi bi-quote quote-icon-right"></i>
+                </p>
+              </div>
+            </div><!-- End testimonial item -->
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <h3>Dr. James Patel</h3>
+                <h4>Sports Nutrition Specialist</h4>
+                <div class="stars">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p>
+                  <i class="bi bi-quote quote-icon-left"></i>
+                  <span>As someone who works with athletes, having accurate, data-driven meal 
+                    plans is essential. The AI technology is cutting-edge, and the client 
+                    communication tools make it easier than ever to stay connected. Highly 
+                    recommend!</span>
+                  <i class="bi bi-quote quote-icon-right"></i>
+                </p>
+              </div>
+            </div><!-- End testimonial item -->
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <h3>Emily Nguyen</h3>
+                <h4>Personal Trainer & Wellness Coach</h4>
+                <div class="stars">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p>
+                  <i class="bi bi-quote quote-icon-left"></i>
+                  <span>Managing client invoices and tracking payments used to take up so much of 
+                    my time. This software has automated all of that, and I can now focus more 
+                    on my clients' progress. It's been a game changer for my business!</span>
+                  <i class="bi bi-quote quote-icon-right"></i>
+                </p>
+              </div>
+            </div><!-- End testimonial item -->
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <h3>Maria Lopez</h3>
+                <h4>Holistic Nutritionist</h4>
+                <div class="stars">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p>
+                  <i class="bi bi-quote quote-icon-left"></i>
+                  <span>The AI meal planning feature has allowed me to provide more personalized 
+                    recommendations to my clients. The platform is user-friendly, and the customer 
+                    support is fantastic. My clients love the improved communication, 
+                    and so do I!</span>
+                  <i class="bi bi-quote quote-icon-right"></i>
+                </p>
+              </div>
+            </div><!-- End testimonial item -->
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <h3>Daniel Evans</h3>
+                <h4>Fitness Coach & Nutrition Consultant</h4>
+                <div class="stars">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+                <p>
+                  <i class="bi bi-quote quote-icon-left"></i>
+                  <span>I've been able to grow my client base without feeling overwhelmed, 
+                    thanks to the client management system. The software's ability to track 
+                    client progress with data insights helps me make better decisions for their 
+                    health plans. Worth every penny!</span>
+                  <i class="bi bi-quote quote-icon-right"></i>
+                </p>
+              </div>
+            </div><!-- End testimonial item -->
+
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+      </div>
+
+    </section><!-- /Testimonials Section -->
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Pricing</h2>
+        <p>The best part is, I offer this for free.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
+            <div class="pricing-item">
+
+              <div class="pricing-header">
+                <h3>Plan 1&ThickSpace;<i class="bi bi-cup-hot"></i></h3>
+                <h4><sup>$</sup>0<span> / month</span></h4>
+              </div>
+
+              <ul>
+                <li><i class="bi bi-dot"></i> <span>up to 20 clients</span></li>
+                <li><i class="bi bi-dot"></i> <span>up to 2 custom forms</span></li>
+                <li><i class="bi bi-dot"></i> <span>perform customized AI-driven food processing and meal planning</span></li>
+                <li><i class="bi bi-dot"></i> <span>create social media AI-powered posts</span></li>
+                <li><i class="bi bi-dot"></i> <span>chat with clients in-app</span></li>
+                <li><i class="bi bi-dot"></i> <span>create, send and track invoices.</span></li>
+                <!--<li class="na"><i class="bi bi-x"></i> <span>Pharetra massa massa ultricies</span></li>
+                <li class="na"><i class="bi bi-x"></i> <span>Massa ultricies mi quis hendrerit</span></li> -->
+              </ul>
+
+              <div class="text-center mt-auto">
+                <a href="register.html" class="buy-btn">Buy me 1 cup of coffee</a>
+              </div>
+
+            </div>
+          </div><!-- End Pricing Item -->
+
+
+          <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="400">
+            <div class="pricing-item featured">
+
+              <div class="pricing-header">
+                <h3>Plan 2 &ThickSpace;<i class="bi bi-cup-hot"></i><i class="bi bi-cup-hot"></i></h3>
+                <h4><sup>$</sup>0<span> / month</span></h4>
+              </div>
+
+              <ul>
+                <li><i class="bi bi-dot"></i> <span>up to 50 clients</span></li>
+                <li><i class="bi bi-dot"></i> <span>up to 5 custom forms</span></li>
+                <li><i class="bi bi-dot"></i> <span>perform customized AI-driven food processing and meal planning</span></li>
+                <li><i class="bi bi-dot"></i> <span>create social media AI-powered posts</span></li>
+                <li><i class="bi bi-dot"></i> <span>chat with clients in-app</span></li>
+                <li><i class="bi bi-dot"></i> <span>create, send and track invoices.</span></li>
+              </ul>
+
+              <div class="text-center mt-auto">
+                <a href="register.html" class="buy-btn">Buy me 2 cups of coffee</a>
+              </div>
+
+            </div>
+          </div> <!-- End Pricing Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Pricing Section -->
+
+    <!-- Faq Section -->
+    <section id="faq" class="faq section">
+
+      <div class="container-fluid">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-7 d-flex flex-column justify-content-center order-2 order-lg-1">
+
+            <div class="content px-xl-5" data-aos="fade-up" data-aos-delay="100">
+              <h3><span>Frequently Asked </span><strong>Questions</strong></h3>
+              <p>
+                few common questions and answers.
+              </p>
+            </div>
+
+            <div class="faq-container px-xl-5" data-aos="fade-up" data-aos-delay="200">
+
+              <div class="faq-item faq-active">
+                <i class="faq-icon bi bi-question-circle"></i>
+                <h3>How do I make money with your platform?</h3>
+                <div class="faq-content">
+                  <p>Our platform is designed to help nutritionists generate revenue by 
+                    streamlining how they offer services, engage with clients, and expand their 
+                    reach. Here's how you can make money using our platform: 
+                    <br><br> 
+                    <strong>1. Client Management & Communication:</strong>  <br>
+                    You can manage all 
+                    client interactions through the platform. Easily communicate with your 
+                    clients via integrated messaging, offer personalized nutritional services, 
+                    and provide ongoing support. The ability to chat with clients in real-time 
+                    ensures better engagement and higher client satisfaction, making it easier 
+                    to retain clients long-term.
+                    <br> 
+                    <strong>2. Customized AI-Driven Nutritional Services: </strong>  <br>
+                    The platform allows you to deliver tailored, AI-powered meal plans and nutrition 
+                    guidance to your clients. Whether you're offering Keto, vegetarian, or other diet 
+                    plans, our software helps you craft personalized plans based on each client's 
+                    needs. This not only enhances the value of your service but also justifies premium 
+                    pricing for personalized care.
+                    <br> 
+                    <strong>3. Automated Invoicing & Payment Processing:</strong>  <br>
+                    Once you've delivered your services, you can create and send professional 
+                    invoices directly from the platform. Payments are tracked automatically, and 
+                    clients can be charged for your consultations, meal plans, and any additional 
+                    services provided. This seamless invoicing and payment process helps you focus 
+                    on delivering quality service while getting paid efficiently.
+                    <br> 
+                    <strong>4. Client Retention & Long-Term Engagement:</strong>  <br>
+                    By maintaining regular communication, providing personalized services, 
+                    and delivering educational content, you'll be able to foster strong 
+                    relationships with your clients. This ensures they continue using your 
+                    services for the long term, ultimately increasing your revenue.
+                  </p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+              <div class="faq-item">
+                <i class="faq-icon bi bi-question-circle"></i>
+                <h3>How does your software work?</h3>
+                <div class="faq-content">
+                  <p>
+                    <strong>1. Register and Log in to the backend Nutri<span style="color: coral;">Ai.</span> software:</strong>  <br>
+                    By creating your account, you will be able to create customized forms and send to your 
+                    clients. Also you will be able to add clients to your account. 
+                    <br>
+                    <strong>2. Collecting clients data and processing: </strong> <br>
+                    After clients respond to your forms, the software will compile their 
+                    responses and generates micro, macro and more essential information in a 
+                    nicely presentable graphs which can be emailed to clients as well. PDF reports 
+                    can also be generated and sent to the client. You can choose to edit AI-generated 
+                    texts and guidelines to make them more personalized for your clients.
+                    <br>
+                    <strong>3. Generate posts for social media exposure: </strong> <br>
+                    Whatever your philosophy is for nutrition, Keto, vegetarian, Carnivore, etc. 
+                    you can generate AI posts instantly on different topics using our integrated 
+                    AI engine. Posting on our platform and share the link on social media to create
+                    exposure and retain more clients.
+                  </p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+              <div class="faq-item">
+                <i class="faq-icon bi bi-question-circle"></i>
+                <h3>How do I generate more leads and actively paying clients with your platform?</h3>
+                <div class="faq-content">
+                  <p>
+                    <strong>1. AI-Assisted Blog Content Creation: </strong>  <br>
+                    Our platform also provides you with tools to generate AI-assisted blog posts 
+                    on trending or niche nutrition topics like Keto, vegetarian diets, weight loss 
+                    strategies, and more. By creating high-quality content, you can establish 
+                    yourself as an authority in the field, attract leads, and grow your online 
+                    presence.
+                    <br> 
+                    <strong>2. Lead Generation & Social Media Visibility:</strong>  <br>
+                    Once you've created valuable content, you can share your blog posts on social 
+                    media to drive visibility and generate new leads. The more value you provide, 
+                    the more likely potential clients are to follow and trust your expertise. This 
+                    approach not only helps you build an audience but also retains existing clients 
+                    who appreciate your knowledge.
+                  </p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+            </div>
+
+          </div>
+
+          <div class="col-lg-5 order-1 order-lg-2">
+            <img src="assets/img/faq.jpg" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="100">
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Faq Section -->
+
+
+    <!-- Recent Posts Section -->
+    <section id="recent-posts" class="recent-posts section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Recent Blog Posts</h2>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <article>
+              <div class="post-img">
+                <img src="assets/img/blog/blog-1.jpg" alt="" class="img-fluid">
+              </div>
+              <p class="post-category">Intermittent fasting</p>
+              <h2 class="title">
+                <a href="blog-details.html">How intermittent fasting can increase your Growth Hormone</a>
+              </h2>
+              <div class="d-flex align-items-center">
+                <div class="post-meta">
+                  <p class="post-author">David Kafka</p>
+                  <p class="post-date">
+                    <time datetime="2024-12-01">Jan 12, 2024</time>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div><!-- End post list item -->
+
+          <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <article>
+              <div class="post-img">
+                <img src="assets/img/blog/blog-2.jpg" alt="" class="img-fluid">
+              </div>
+              <p class="post-category">Micronutrients</p>
+              <h2 class="title">
+                <a href="blog-details.html">Copper: The Overlooked Micronutrient for Optimal Wellness</a>
+              </h2>
+              <div class="d-flex align-items-center">
+                <div class="post-meta">
+                  <p class="post-author">Allisa Mayer</p>
+                  <p class="post-date">
+                    <time datetime="2023-05-06">Jun 5, 2023</time>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div><!-- End post list item -->
+
+
+          <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <article>
+              <div class="post-img">
+                <img src="assets/img/blog/blog-3.jpg" alt="" class="img-fluid">
+              </div>
+              <p class="post-category">Carnivore Diet</p>
+              <h2 class="title">
+                <a href="blog-details.html">Going Carnivore: Is the All-Meat Diet Right for You?</a>
+              </h2>
+              <div class="d-flex align-items-center">
+                <div class="post-meta">
+                  <p class="post-author">Mark Dower</p>
+                  <p class="post-date">
+                    <time datetime="2024-08-15">Aug 15, 2024</time>
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div><!-- End post list item -->
+
+        </div><!-- End recent posts list -->
+
+      </div>
+
+    </section><!-- /Recent Posts Section -->
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Contact</h2>
+        <p>Any questions? Contact us!</p>
+      </div><!-- End Section Title -->
+
+      <div class="mb-5">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3377.5690470095477!2d-117.24188158484008!3d33.09296428088353!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80dc74ba9f6c0ebf%3A0xdf481fe9110db278!2s7918%20Avenida%20Diestro%2C%20Carlsbad%2C%20CA%2092009%2C%20USA!5e0!3m2!1sen!2s!4v1695631107815!5m2!1sen!2s" frameborder="0" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div><!-- End Google Maps -->
+
+      <div class="container" data-aos="fade">
+
+        <div class="row gy-5 gx-lg-5">
+
+          <div class="col-lg-4">   <!-- Chase pass: @Vietnam1360 -->
+
+            <div class="info">
+              <h3>Get in touch</h3>
+              <p>Our contact information is listed here. Contact us today!</p>
+              <div class="info-item d-flex">
+                <i class="bi bi-geo-alt flex-shrink-0"></i>
+                <div>
+                  <h4>Location:</h4>
+                  <p>7918 Avenida Diestro, Carlsbad, CA 92009</p>
+                </div>
+              </div><!-- End Info Item -->
+              <div class="info-item d-flex">
+                <i class="bi bi-envelope flex-shrink-0"></i>
+                <div>
+                  <h4>Email:</h4>
+                  <p>info@nutriai.store</p>
+                </div>
+              </div><!-- End Info Item -->
+              <div class="info-item d-flex">
+                <i class="bi bi-phone flex-shrink-0"></i>
+                <div>
+                  <h4>Call:</h4>
+                  <p>+1 (970) 888-4508</p>
+                </div>
+              </div><!-- End Info Item -->
+            </div>
+          </div>
+
+          <div class="col-lg-8">
+            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required="">
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required="">
+                </div>
+              </div>
+              <div class="form-group mt-3">
+                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required="">
+              </div>
+              <div class="form-group mt-3">
+                <textarea class="form-control" name="message" placeholder="Message" required=""></textarea>
+              </div>
+              <div class="my-3">
+                <div class="loading">Loading</div>
+                <div class="error-message"></div>
+                <div class="sent-message">Your message has been sent. Thank you!</div>
+              </div>
+              <div class="text-center"><button type="submit">Send Message</button></div>
+            </form>
+          </div><!-- End Contact Form -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Contact Section -->
+
+  </main>
+
+  <footer id="footer" class="footer dark-background">
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-4 col-md-6 footer-about">
+            <a href="index.html" class="logo d-flex align-items-center">
+              <span class="sitename">Nutri</span><span style="color: coral;">Ai.</span>
+            </a>
+            <div class="footer-contact pt-3">
+              <p>7918 Avenida Diestro</p>
+              <p>Carlsbad, CA 92009</p>
+              <p class="mt-3"><strong>Phone:</strong> <span>+1 (970) 888-4508</span></p>
+              <p><strong>Email:</strong> <span>info@nutriai.store</span></p>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="blog.html">Blog</a></li>
+              <li><a href="tool.html">Tool</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>legal</h4>
+            <ul>
+              <li><a href="termsofservice.html">Terms of service</a></li>
+              <li><a href="privacypolicy.html">Privacy policy</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="copyright text-center">
+      <div class="container d-flex flex-column flex-lg-row justify-content-center justify-content-lg-between align-items-center">
+
+        <div class="d-flex flex-column align-items-center align-items-lg-start">
+          <div>
+            © Copyright <strong><span>Nutri</span><span style="color: coral;">Ai.</span></strong>. All Rights Reserved
+          </div>
+          <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/herobiz-bootstrap-business-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+          </div>
+        </div>
+
+        <div class="social-links order-first order-lg-last mb-3 mb-lg-0">
+          <a href=""><i class="bi bi-twitter-x"></i></a>
+          <a href=""><i class="bi bi-facebook"></i></a>
+          <a href=""><i class="bi bi-instagram"></i></a>
+          <a href=""><i class="bi bi-linkedin"></i></a>
+        </div>
+
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+    <!-- Vendor JS Files -->
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/validate.js"></script>
+    <script src="assets/js/aos.js"></script>
+    <script src="assets/js/glightbox.min.js"></script>
+    <script src="assets/js/swiper-bundle.min.js"></script>
+    <script src="assets/js/imagesloaded.pkgd.min.js"></script>
+    <script src="assets/js/isotope.pkgd.min.js"></script>
+  
+    <!-- Main JS File -->
+    <script src="assets/js/index.js"></script>
+
 </body>
 
 </html>

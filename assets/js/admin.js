@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.assign('finances.html');
             } else if(kk == 3) {
                 window.location.assign('chat.html');
+            } else if(kk == 4) {
+                window.location.assign('post.html');
             }
         });
     }

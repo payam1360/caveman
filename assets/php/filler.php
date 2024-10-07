@@ -474,6 +474,55 @@ function clientsInvoiceForm() {
 }
 
 
+function PostForm() {
+    $data['qContent'] = [
+                            ["1. What topic is in your mind ?"],
+                            ["2. What is your nutritional philosophy?"],
+                            ["3. Choose the content category:"],
+                            ["4. describe the picture you have in mind for your post:"],
+                            [""]
+                        ];
+
+    $data['qType'] = [
+                        ["text"],
+                        ["list"],
+                        ["list"],
+                        ["text"],
+                        ["message"]
+                    ];
+
+    $data['qIdx'] = [0, 1, 2, 3, 4];
+
+    $data['options'] = [
+                        [[""]],
+                        [["keto diet", "carnivore diet", "vegan diet", "vegetarian diet", "balanced diet", "high protein diet", "high carbs diet"]],
+                        [["health", "beauty", "nutrition", "weight loss", "fitness", "performance"]],
+                        [[""]],
+                        [["fa-solid fa-feather-pointed"]]
+                        ];
+    $data['optionsText'] = [
+                            [["e. g. benefits of red meat, adding plant-based proteins into meals."]],
+                            [[""]],
+                            [[""]],
+                            [["e. g. cooked steak on a dining table, lentils."]],
+                            [["Generating your post!"]]
+        ];
+    $data['qRequired'] = [1, 1, 1, 1, 1];
+    $data['qKey'] = [
+                        [''],
+                        [''],
+                        [''],
+                        [''],
+                        ['']
+    ];
+    $data['MAX_cnt'] = 5;
+    return $data;
+}
+
+
+
+
+
 function clientPageLoad($page) {
     global $supportedIcons;
     global $supportedText;
@@ -585,7 +634,9 @@ if($page == 'login') {
     $data      = clientsInvoiceForm();
 } elseif($page == 'financesSearch') {
     $data      = InvoiceSearchForm();
-} else {
+} elseif($page == 'post') {
+    $data      = PostForm();
+}else {
     $data      = clientPageLoad($page);
 }
 

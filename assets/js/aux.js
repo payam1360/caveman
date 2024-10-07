@@ -24,6 +24,8 @@ let gSearchInvoices = [];
 let selectedPhoneNumber = [];
 let clientTelegramUserName = [];
 let chatArea = ''; 
+let blogOffset = 0; // To keep track of the number of posts loaded
+let blogLoading = false; // To avoid multiple requests at once
 // user <-> client class definition
 class question {
     constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired, qKey, clientId, campaignId){
@@ -88,7 +90,7 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 let resultBtn = document.querySelector('.results-btn');
                 moveright.disabled = true;
                 moveright.style.opacity = 0;
-                if(page == 'register' || page == 'main' || page == 'addClients') {
+                if(page == 'register' || page == 'main' || page == 'addClients' || page == 'post') {
                     let moveleft = document.querySelector('.form-go-left');
                     moveleft.disabled = true;
                     moveleft.style.opacity = 0;
@@ -99,6 +101,9 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                         callsubmitUserData('main');
                     });
                 }
+            }
+            if(counter == MAX_cnt - 1 && page == 'post') {
+                callGeneratePostTitle(Questions);
             }
             if(page == 'register' && counter == 3) {
                 let spinner   = document.querySelector('.spinner-js');
@@ -120,22 +125,19 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
             }
             if(counter == MAX_cnt - 1 && page == 'login') {
                 callLoginUser(header, headerTxt, input, Questions);
-            }
-            else if(page == 'register') {
+            } else if(page == 'register') {
                 if(counter == MAX_cnt - 1 && MAX_cnt == 10) { // confirm payment here
                     confirmStripePayment();
                     transition2Right(header, headerTxt, input, Questions, 0, 0);
                 } else {
                     callRegister(header, headerTxt, input, Questions);
                 }
-            }
-            else if(page == 'questions') {
+            } else if(page == 'questions') {
                 submitQuestionBackEndData(header, headerTxt, input, Questions);
-            }
-            else if(counter == MAX_cnt - 1 && page == 'addClients') {
+            } else if(counter == MAX_cnt - 1 && page == 'addClients') {
                 transition2Right(header, headerTxt, input, Questions, 0, 0);
                 submitaddClients(header, headerTxt, input, Questions);
-            }else {
+            } else {
                 transition2Right(header, headerTxt, input, Questions, 0, 0);
             }
             // handling invoice and finance page
@@ -1298,6 +1300,387 @@ function validate_input(valid, type, required, value){
 }
 
 
+function callGeneratePostTitle(inputData){
+
+    const date = new Date();
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    let postDate = document.querySelector('.postDate');
+    postDate.innerHTML = formattedDate;
+
+    
+    eventSource = new EventSource("assets/php/post.php?topic=" + inputData[0].qAnswer + "&category=" + inputData[2].qAnswer + "&EventType=title");
+    txt_var = document.querySelector('.post-header h5');
+    blogSpinner = document.querySelector('.blogSpinner');
+    blogSpinner.style.display = 'block';
+    txt_var.innerHTML = '';
+    eventSource.onmessage = function (e) {
+        aiText = e.data;
+        if(aiText.includes("DONE")) {
+            eventSource.close();
+            blogSpinner.style.display = 'none';
+            callGeneratePostImage(inputData);
+        } else {
+            // styling the text as it comes through
+            aiText = aiText.replace(/NewLine/g, '<br>');
+            if(aiText.includes('AI:') || aiText.includes('Trainer:') || aiText.includes('Q:')) {
+            } else if(parseFloat(aiText) && aiText.includes('.')) {
+            } else {
+                txt_var.innerHTML += aiText + ' ';
+            }
+        }
+    };
+}
+
+function callGeneratePostImage(inputData){
+    eventSource = new EventSource("assets/php/post.php?image=" + inputData[3].qAnswer + "&EventType=image");
+    txt_var = '';
+    blogSpinner = document.querySelector('.blogSpinner');
+    postImage = document.querySelector('.postImage');
+    blogSpinner.style.display = 'block';
+    eventSource.onmessage = function (e) {
+        aiText = e.data;
+        if(aiText.includes("DONE")) {
+            eventSource.close();
+            blogSpinner.style.display = 'none';
+            postImage.setAttribute('src', txt_var);
+            callGeneratePost(inputData);
+        } else {
+            // styling the text as it comes through
+            aiText = aiText.replace(/NewLine/g, '<br>');
+            if(aiText.includes('AI:') || aiText.includes('Trainer:') || aiText.includes('Q:')) {
+            } else if(parseFloat(aiText) && aiText.includes('.')) {
+            } else {
+                txt_var += aiText + ' ';
+            }
+        }
+    };
+}
+
+function callGeneratePost(inputData){
+    
+    eventSource = new EventSource("assets/php/post.php?topic=" + inputData[0].qAnswer + "&philosophy=" + inputData[1].qAnswer + "&EventType=content");
+    txt_var = document.querySelector('.post-body-text');
+    blogSpinner = document.querySelector('.blogSpinner');
+    blogSpinner.style.display = 'block';
+    txt_var.innerHTML = '';
+    eventSource.onmessage = function (e) {
+        aiText = e.data;
+        if(aiText.includes("DONE")) {
+            eventSource.close();
+            blogSpinner.style.display = 'none';
+            let postBtn = document.querySelector('.blogPost');
+            let editBtn = document.querySelector('.blogEdit');
+            postBtn.style.display = 'block';
+            editBtn.style.display = 'block';
+            postBtn.addEventListener('click', function(){
+                sendPostToBlogPage(inputData[0].userId);
+                postBtn.style.backgroundColor = 'lightgrey';
+                postBtn.disabled = true;
+                editBtn.style.backgroundColor = 'lightgrey';
+                editBtn.disabled = true;
+            });  
+            editBtn.addEventListener('click', function(){
+                if(editBtn.innerHTML == 'Edit') {
+                    editPost(txt_var.innerHTML);
+                    editBtn.innerHTML = 'Save';
+                    postBtn.style.backgroundColor = 'lightgrey';
+                    postBtn.disabled = true;
+                } else if (editBtn.innerHTML == 'Save') {
+                    donePost();
+                    editBtn.innerHTML = 'Edit';
+                    postBtn.style.removeProperty('background-color');
+                    postBtn.disabled = false;
+                }
+            }); 
+        } else {
+            // styling the text as it comes through
+            aiText = aiText.replace(/NewLine/g, '<br>');
+            if(aiText.includes('AI:') || aiText.includes('Trainer:') || aiText.includes('Q:')) {
+                s = document.createElement('span');
+                s.innerHTML = aiText;
+                s.style.fontSize = "16px";
+                s.style.color = 'seagreen';
+                txt_var.appendChild(s);
+            } else if(parseFloat(aiText) && aiText.includes('.')) {
+                s = document.createElement('span');
+                s.innerHTML = '<br>&nbsp;' + aiText + ' ';
+                s.style.fontSize = "16px";
+                s.style.color = 'brown';
+                txt_var.appendChild(s);
+            } else {
+                txt_var.innerHTML += aiText + ' ';
+            }
+        }
+    };
+
+}
+
+
+function editPost() {
+    let userIn = document.createElement('textarea');
+    let currText = document.querySelector('.post-body-text');
+    let postBody = document.querySelector('.post-body');
+    let imageContainer = document.querySelector('.imageContainer');
+    currText.style.opacity = 0;
+    currText.style.position = 'absolute';
+    userIn.innerHTML = currText.innerHTML;
+    userIn.setAttribute('class', 'postEditText');
+    imageContainer.addEventListener('mouseenter', setOverLay);
+    imageContainer.addEventListener('mouseleave', resetOverLay);
+    userIn.setAttribute('rows', '10');
+    userIn.setAttribute('cols', '60');
+    userIn.style.overflow = 'scroll';
+    userIn.style.scrollBehavior = 'smooth';
+    userIn.style.position = 'relative';
+    postBody.appendChild(userIn);
+}
+
+function donePost() {
+    let currText = document.querySelector('.post-body-text');
+    let userIn = document.querySelector('.postEditText');
+    let overlay = document.querySelector('.uploadOverlay');
+    let imageContainer = document.querySelector('.imageContainer');
+    let postBody = document.querySelector('.post-body');
+    currText.innerHTML = userIn.value;
+    currText.style.opacity = 1;
+    currText.style.position = 'relative';
+    currText.style.textAlign = 'justify';
+    postBody.removeChild(userIn);
+    overlay.style.display = 'none';
+    imageContainer.removeEventListener('mouseenter', setOverLay);
+    imageContainer.removeEventListener('mouseleave', resetOverLay);
+}
+
+function setOverLay(){
+    let overlay = document.querySelector('.uploadOverlay');
+    overlay.style.display = 'flex';
+    document.getElementById('file-upload').addEventListener('change', function() {
+        const file = this.files[0];
+        if(file) {
+            const reader = new FileReader();
+            let postImage = document.querySelector('.postImage');
+            reader.onload = function(e) {
+                // Replace the src of the current image with the uploaded image
+                postImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file); // Read the file as a Data URL to set it as the image src
+        }
+    });
+};
+function resetOverLay(){
+    let overlay = document.querySelector('.uploadOverlay');
+    overlay.style.display = 'none';
+};
+
+function sendPostToBlogPage(userId) {
+
+    let blogText = document.querySelector('.post-body-text').innerHTML;
+    let blogTitle = document.querySelector('.post-header h5').innerHTML;
+    let blogImage = document.querySelector('.postImage').src;
+    let blogCategory = Questions[2].qAnswer;
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let data = JSON.parse(this.response);
+            if(data.status) {
+                window.alert('Your blog post is live!');
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/blog.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request = {'flag': 'save', 'userId': userId, 'blogImage': encodeURIComponent(blogImage), 'blogTitle' : blogTitle, 'blogText': blogText, 'blogCategory' : blogCategory};
+    var userdata = "userInfo="+JSON.stringify(request);
+    xmlhttp.send(userdata);
+}
+
+// Function to detect when the user scrolls to the bottom
+function handleBlogScroll() {
+    const scrollableHeight = document.documentElement.scrollHeight;
+    const currentScroll = window.innerHeight + window.scrollY;
+
+    // Load more posts when the user is near the bottom of the page
+    if (currentScroll >= scrollableHeight - 100) {
+        loadMoreBlogPosts();
+    }
+}
+
+// Function to send XMLHttpRequest to PHP to get postData
+function loadMoreBlogPosts() {
+    if (blogLoading) {
+        return
+    }; // Prevent multiple simultaneous requests
+    blogLoading = true;
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+           
+            const postDataArray =  JSON.parse(this.response);
+            // If no posts returned, we stop further requests
+            
+            if (postDataArray.length === 0) {
+                window.removeEventListener('scroll', handleBlogScroll); // No more posts to load
+                return;
+            }
+            // Loop through each post and create elements using the existing function
+            postDataArray.forEach(postData => {
+                createAndAppendPost(postData);
+            });
+            // Update the offset for the next request
+            blogOffset += postDataArray.length;
+            // Reset the loading state
+            blogLoading = false;
+            
+        }
+    };
+
+    xmlhttp.onerror = function () {
+        blogLoading = false; // Allow reattempting the request if there's an error
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/blog.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request = {'flag': 'load', 'offset': blogOffset, 'limit': '5'};
+    var userdata = "userInfo="+JSON.stringify(request);
+    xmlhttp.send(userdata);
+}
+
+
+
+function createAndAppendPost(postData) {
+    // Create the main post div
+    const postDiv = document.createElement('div');
+    postDiv.classList.add('post');
+    postDiv.setAttribute('data-aos', 'fade-up');
+    postDiv.style.justifyContent = 'center';
+
+    // Create the post header
+    const postHeader = document.createElement('div');
+    postHeader.classList.add('post-header');
+    
+    const title = document.createElement('h5');
+    title.textContent = postData.blogTitle;
+    
+    const small = document.createElement('small');
+
+    // "Posted by " text
+    small.appendChild(document.createTextNode('Posted by '));
+    
+    // Author span
+    const authorSpan = document.createElement('span');
+    authorSpan.classList.add('postCreator');
+    authorSpan.textContent = postData.blogAuthor;
+    small.appendChild(authorSpan);
+    
+    // " on " text
+    small.appendChild(document.createTextNode(' on '));
+    
+    // Date span
+    const dateSpan = document.createElement('span');
+    dateSpan.classList.add('postDate');
+    dateSpan.textContent = postData.blogDate;
+    small.appendChild(dateSpan);
+    
+    // " | " text
+    small.appendChild(document.createTextNode(' | '));
+    
+    // Number of user ratings span
+    const numUserRatesSpan = document.createElement('span');
+    numUserRatesSpan.classList.add('numUserRates');
+    numUserRatesSpan.textContent = postData.blogNumLikes;
+    small.appendChild(numUserRatesSpan);
+    
+    // " users rated | " text
+    small.appendChild(document.createTextNode(' users rated | '));
+    
+    // Star rating (calling a separate function to generate the stars)
+    const starRating = generateStarRating(postData.blogRate);
+    small.appendChild(starRating);  // Assume this returns a document fragment or element
+    
+    // " rating" text with rating number
+    const ratingSpan = document.createElement('span');
+    ratingSpan.classList.add('postRating');
+    ratingSpan.textContent = postData.blogRate;
+    small.appendChild(ratingSpan);
+    
+    // " rating" text
+    small.appendChild(document.createTextNode(' rating'));   
+
+
+    postHeader.appendChild(title);
+    postHeader.appendChild(small);
+    postDiv.appendChild(postHeader);
+
+    // Post body
+    const postBody = document.createElement('div');
+    postBody.classList.add('post-body');
+
+    // Image container
+    const imageContainer = document.createElement('div');
+    imageContainer.classList.add('imageContainer');
+    imageContainer.setAttribute('data-aos', 'zoom-in');
+    imageContainer.setAttribute('data-aos-delay', '100');
+
+    const postImage = document.createElement('img');
+    postImage.src = postData.blogImage;
+    postImage.classList.add('postImage');
+
+
+    imageContainer.appendChild(postImage);
+    postBody.appendChild(imageContainer);
+
+    // Post content text
+    const postContent = document.createElement('p');
+    postContent.classList.add('post-body-text');
+    postContent.textContent = postData.blogContent;
+    postBody.appendChild(postContent);
+
+    postDiv.appendChild(postBody);
+
+    // Find the parent div and append the post
+    const parentDiv = document.querySelector('.posts-container');
+    parentDiv.appendChild(postDiv);
+}
+
+// Helper function to generate star rating HTML
+function generateStarRating(rating) {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+    const emptyStars = 5 - fullStars - halfStar;
+    // Create a container for the stars
+    const container = document.createElement('div');
+    // Add full stars
+    for (let i = 0; i < fullStars; i++) {
+        const fullStar = document.createElement('i');
+        fullStar.className = 'bi bi-star-fill';
+        fullStar.style.color = '#F4B400';
+        container.appendChild(fullStar);
+    }
+
+    // Add half star if applicable
+    if (halfStar) {
+        const halfStarElem = document.createElement('i');
+        halfStarElem.className = 'bi bi-star-half';
+        halfStarElem.style.color = '#F4B400';
+        container.appendChild(halfStarElem);
+    }
+
+    // Add empty stars
+    for (let i = 0; i < emptyStars; i++) {
+        const emptyStar = document.createElement('i');
+        emptyStar.className = 'bi bi-star';
+        emptyStar.style.color = '#F4B400';
+        container.appendChild(emptyStar);
+    }
+
+    return container;
+}
+
+
+
 function callLoginUser(header, headerTxt, querySelIn, inputDataBlob){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
@@ -1522,7 +1905,11 @@ function getUserInfo(userTxt, welcomeTxt){
                 window.location.assign('login.html');
             } else {
                 userTxt.innerHTML = user.username;
-                welcomeTxt.innerHTML = 'What\'s up ' + user.username;
+                welcomeTxt.innerHTML = 'Hello ' + user.username + '!';
+                let postCreator = document.querySelector('.postCreator');
+                if(postCreator) {
+                    postCreator.innerHTML = user.username;
+                }
                 for(let kk = 0; kk < Questions.length; kk++) {
                     Questions[kk].clientId = user.clientId;
                     Questions[kk].campaignId = user.campaignId;

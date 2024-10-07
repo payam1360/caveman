@@ -6,19 +6,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>ManHub - Admin</title>
-        <link href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <title>NutriAi</title>
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-icons.css" rel="stylesheet">
+        <link href="assets/css/main.css" rel="stylesheet">
         <link href="assets/css/admin.css" rel="stylesheet">
         <link href="assets/css/tools.css" rel="stylesheet">
-        <script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-        <script src="https://js.stripe.com/v3/"></script>
         <link rel="shortcut icon" href="#">
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <nav class="sb-topnav navbar navbar-expand navbar-light bg-light">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="admin.html"></a>
             <!-- Navbar-->
@@ -27,10 +25,10 @@
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Home</div>
+                            <div class="sb-sidenav-menu-heading">Nutri<span style="color: coral;">Ai.</span></div>
                             <a class="nav-link" href="admin.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
@@ -54,9 +52,13 @@
                                         <div class="sb-nav-link-icon"><i class="fa-solid fa-person-circle-question"></i></div>
                                         Manage Finances
                                     </a>
-                                    <a class="nav-link" href="phoneMessages.html">
-                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear"></i></div>
+                                    <a class="nav-link" href="chat.html">
+                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-brands fa-whatsapp"></i></div>
                                         Contact Clients
+                                    </a>
+                                    <a class="nav-link" href="post.html">
+                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-brands fa-facebook"></i></div>
+                                        Create Post
                                     </a>
                                 </nav>
                             </div>
@@ -76,9 +78,8 @@
                 <div class="container">
                     <div class="d-flex row">
                         <div>
-                            <a href="admin.html">
-                                <img src="assets/img/nutrition4guys.png" width="150" height="150">
-                            </a>
+                            <p style="font-size: 30px; font-weight: 200; font-family: sans-serif;">
+                                Nutri<span style="color: coral; font-weight: 500;">Ai.</span></p>
                         </div>
                         <div class="client-page">
                             <p class="header-clients-text">Dashboard</p>
@@ -103,6 +104,11 @@
                             <p class="admin-dash-text">Contact Clients</p>
                             <div class="admin-dash-icon"><i class="fa-brands fa-whatsapp fa-4x"></i></div>
                         </div>
+                        <div class="col-sm-6 col-md-3 col-lg-3 admin-dashbord">
+                            <p class="admin-dash-text">Create Post</p>
+                            <div class="admin-dash-icon"><i class="fa-brands fa-facebook fa-4x"></i></div>
+                        </div>
+                        
                     </div>
                 </div>
                 <footer class="py-4 bg-light mt-auto">
@@ -110,9 +116,9 @@
                         <div class="d-flex align-items-center justify-content-between small">
                             <div class="text-muted">Copyright &copy; ManHub 2023</div>
                             <div>
-                                <a href="#">Privacy Policy</a>
+                                <a href="privacypolicy.html">Privacy Policy</a>
                                 &middot;
-                                <a href="#">Terms &amp; Conditions</a>
+                                <a href="termsofservice.html">Terms &amp; Conditions</a>
                             </div>
                         </div>
                     </div>
@@ -121,5 +127,6 @@
         </div>
         <script src="assets/js/aux.js"></script>
         <script src="assets/js/admin.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

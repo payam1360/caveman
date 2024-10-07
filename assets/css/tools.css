@@ -704,3 +704,156 @@
     cursor: not-allowed;
     opacity: 0.6;
 }
+
+/* Navbar Links in Google Colors */
+.tool-link {
+    color: #4285F4; /* Google Blue */
+}
+
+.login-link {
+    color: #34A853; /* Google Green */
+}
+
+.register-link {
+    color: #FF6F61; /* Coral/Red */
+}
+
+.search-block {
+    background-color: #f9f9f9;
+    border: 1px solid lightblue;
+    border-radius: 3px;
+    margin-top: 100px;
+    padding: 20px 10px;
+}
+
+.posts-container {
+    margin-top: 50px;
+}
+
+.post {
+    background-color: #fff;
+    margin-bottom: 20px;
+    border: 1px solid lightblue;
+    border-radius: 3px;
+    padding: 50px 30px;
+    transition: all ease-in-out 0.4s;
+    height: 100%;
+    position: relative;
+    min-height: 100px;
+}
+
+.post:hover { 
+    transform: translateY(-10px);
+    background-color: var(--surface-color);
+    box-shadow: 0px 5px 90px 0px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    margin-bottom: 10px;
+}
+.post-header h5 {
+    font-weight: 200;
+    font-size: 30px;
+}
+.imageContainer {
+    position: relative;
+    float: right; 
+    width: 500px;
+    margin-left: 20px;
+}
+.imageContainer img {
+    width: 500px;
+    height: auto;
+    object-fit: cover;
+}
+.uploadImg {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 50px;
+    padding: 10px;
+    cursor: pointer;
+}
+.uploadImg:hover {
+    background-color: lightgrey;
+  }
+input[type="file"] {
+    display: none;
+}
+
+.post-body {
+    overflow: hidden;
+}
+.post-body-text {
+    text-align: justify;
+}
+.postEditText{
+    position: relative;
+}
+.uploadOverlay {
+    position: absolute; /* Position overlay absolutely */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    right: 0; /* Stretch to the right */
+    bottom: 0; /* Stretch to the bottom */
+    display: none; /* Center the button */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white; /* Text color */
+    float: right; 
+    width: 500px;
+    object-fit: cover;
+}
+
+/* Infinite Scroll */
+
+.post-comments {
+    margin-top: 10px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+
+.blogSpinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 8px solid rgba(0, 0, 0, 0.1); /* Lighter color for outer ring */
+    border-left-color: #6b4f2a; /* Dark brownish for a vintage feel */
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    width: 150px; /* Bigger size */
+    height: 150px;
+    animation: spin 1.5s linear infinite;
+    z-index: 999;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.blogSpinner::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 80%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid transparent; /* Transparent base */
+    border-top-color: #6b4f2a; /* Dark brown teeth */
+    border-right-color: #6b4f2a;
+    box-sizing: border-box;
+    animation: spin-clock 1s linear infinite;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes spin-clock {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
