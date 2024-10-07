@@ -1,1 +1,0 @@
-NutriAi: hello, did you get the file i sent you ?\nuser: Yes i did thank you\nuser: Gggg\n
