@@ -9,6 +9,91 @@ require '../../vendor/phpmailer/phpmailer/src/SMTP.php';
 require '../../vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require '../../vendor/phpmailer/phpmailer/src/Exception.php';
 
+
+function sendEmailForm($emailAddr, $link) {
+    $mail = new PHPMailer(true);
+    $emailAddr = 'rabiei.p@gmail.com';
+    // app password: azqb ochq lfot btnc
+    // Server settings
+    $mail->SMTPDebug = 0;                         //Enable verbose debug output
+    $mail->isSMTP();                              // Set mailer to use SMTP
+    $mail->Host       = 'smtp.gmail.com';         // Specify main and backup SMTP servers
+    $mail->SMTPAuth   = true;                     // Enable SMTP authentication
+    $mail->Username   = 'rabiei.p@gmail.com';     // SMTP username
+    $mail->Password   = 'azqb ochq lfot btnc';    // SMTP password
+    $mail->SMTPSecure = 'ssl';                    // Enable TLS encryption, `ssl` also accepted
+    $mail->Port       = 465;                      // TCP port to connect to
+    // Sender info
+    $mail->setFrom('rabiei.p@gmail.com', 'Payam Rabiei');
+    // Add a recipient
+    $mail->addAddress($emailAddr);
+    // Set email format to HTML
+    $mail->isHTML(true);
+    // Mail subject
+    $mail->Subject = 'NutriAi Campaign Form';
+    // Mail body content
+    $form_page     = $link;
+    $bodyContent   = '<!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body { font-family: Arial, sans-serif; }
+            .container { width: 80%; margin: auto; }
+            .header { background-color: #f4f4f4; padding: 10px; text-align: center; }
+            .content { margin: 20px 0; }
+            .link-button {
+                display: flex;
+                margin: auto;
+                justify-content: center;
+                text-align: center;
+                padding-top: 20px;
+            }
+            .link-page {
+                display: flex;
+                background-color: dodgerblue;
+                color: white;
+                text-align: center;
+                font-size: 16px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                padding: 12px 24px;
+            }   
+            .footer { background-color: #f4f4f4; padding: 10px; text-align: center; }
+        </style>
+              
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>NutriAi Link to Campaign Form</h1>
+            </div>
+            <div class="content">
+                <p style="font-size: 20px">Hello,</p>
+                <p style="font-size: 20px">Here is the link to your form. please Answer few questions.</p>' .
+                '<div class="link-button">
+                    <a href="' . $form_page . '" class="link-page" target="_blank">Open</a>
+                </div>'
+                . '<p style="font-size: 20px">Best regards,<br>NutriAi team</p>
+            </div>
+            <div class="footer">
+                <p>NutriAi | Carlsbad, Ca 92008 | 6129785987</p>
+            </div>
+        </div>
+    </body>
+    </html>';
+    $mail->Body    = $bodyContent;
+    // Send email
+    if(!$mail->send()) {
+        echo 'Message could not be sent. Mailer Error: '.$mail->ErrorInfo;
+        $data['status']    = -1;
+    } else {
+        $data['status']    = 0;
+    }
+    return $data;
+}
+
+
 function sendEmail($emailAddr, $bodyContent) {
     $mail = new PHPMailer(true);
     $emailAddr = 'rabiei.p@gmail.com';
@@ -239,13 +324,19 @@ function cleanup(){
 /// main routin starts here.
 /// -------------------------
 $userData    = json_decode($_POST['userInfo']);
-$success     = saveImagesOnServer($userData);
-if($success){
+if($userData->flag == 'sendReport'){
+    $success     = saveImagesOnServer($userData);
+    if($success){
+        $clientEmail = getClientEmail($userData->userId, $userData->clientId);
+        $bodyContent = prepareBody($userData);
+        $data        = sendEmail($clientEmail, $bodyContent);
+    }
+    // clean the clientEmail directory.
+    cleanup();
+} elseif($userData->flag == 'sendForm'){
     $clientEmail = getClientEmail($userData->userId, $userData->clientId);
-    $bodyContent = prepareBody($userData);
-    $data        = sendEmail($clientEmail, $bodyContent);
+    $link        = 'http://localhost/userPages/' . $userData->userId . $userData->clientId . $userData->campaignId . '.html';
+    $data        = sendEmailForm($clientEmail, $link);
 }
-// clean the clientEmail directory.
-cleanup();
 echo json_encode($data);
 ?>

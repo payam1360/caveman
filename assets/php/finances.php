@@ -501,7 +501,7 @@ function checkUserStripeConnection($conn, $userInfo) {
     $sql         = "SELECT userStripeId FROM $tablename WHERE userId = '$userId';";
     $dbOut       = $conn->query($sql);
     $dbOut       = $dbOut->fetch_assoc();
-    if(isset($dbOut['userStripeId'])){
+    if($dbOut['userStripeId'] != ''){
         return true;
     } else {
         return false;

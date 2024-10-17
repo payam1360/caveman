@@ -2,71 +2,50 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>NutriAi.</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+  
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap" rel="stylesheet">
+  
+    <!-- Vendor CSS Files -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/css/aos.css" rel="stylesheet">
+    <link href="../assets/css/glightbox.min.css" rel="stylesheet">
+    <link href="../assets/css/swiper-bundle.min.css" rel="stylesheet">
+    <!-- Main CSS File -->
+    <link href="../assets/css/main.css" rel="stylesheet">
+    <link href="../assets/css/tools.css" rel="stylesheet">
+    <link href="../assets/css/variables.css" rel="stylesheet">
+    <link href="../assets/css/variables-orange.css" rel="stylesheet">
+  </head>
 
-  <title>ManHub</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-  <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-  <link rel="shortcut icon" href="#"> 
-      
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link  href="../vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="../vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-  <script src="https://js.stripe.com/v3/"></script>
-
-  <link href="../assets/css/variables-orange.css" rel="stylesheet">
-  <!-- Template Main CSS File -->
-  <link href="../assets/css/main.css" rel="stylesheet">
-  <link href="../assets/css/tools.css" rel="stylesheet">
-  <!-- =======================================================
-  * Template Name: HeroBiz - v2.3.1
-  * Template URL: https://bootstrapmade.com/herobiz-bootstrap-business-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
-</head>
-
-<header></header>
+<header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
+      <a href="../index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <h1 class="sitename">Nutri<span>Ai.</span></h1>
+      </a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="../index.html" class="active">Home<br></a></li>
+          <li><a href="../blog.html">Blog</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+</header>
 
 <body>
-    <div class="container">
-        <div class="d-flex row">
-            <div>
-                <a href="index.html"><img src="../assets/img/nutrition4guys.png" width="150" height="150"></a>
-            </div>
-            <div class="client-page">
-                <p class="header-clients-text">Client's form</p>
-            </div>
-        </div>
-    </div>
-<!--log in button-->
-<div class="container">
-    <div class="row">
-        <div class="d-flex justify-content-end" style="margin-top: 20px;">
-            <button type="button" class="login btn btn-outline-primary">Log in</button>
-            <button type="button" class="register btn btn-link">Register</button>
-        </div>
-    </div>
-</div>
 <section>
     <!--progress circular indicator-->
-    <div class="relative">
-        <div class="d-flex progress-pie" >
-            <canvas id="ProgressCircle"></canvas>
-        </div>
-        <div class="absolute-center text-center">
-            <p class="progress-percent" style= "color: coral; margin-top: -58px;">0%</p>
-        </div>
+    <div class="progress-div">
+        <p class="progress-percent">0%</p>
     </div>
     <!--end of progress circular indicator-->
     <!-- Start form -->
@@ -219,7 +198,82 @@
     </div>
 </section>
 <!-- End of plot Section -->
+
+<footer id="footer" class="footer dark-background">
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-4 col-md-6 footer-about">
+            <a href="index.html" class="logo d-flex align-items-center">
+              <span class="sitename">Nutri</span><span style="color: coral;">Ai.</span>
+            </a>
+            <div class="footer-contact pt-3">
+              <p>7918 Avenida Diestro</p>
+              <p>Carlsbad, CA 92009</p>
+              <p class="mt-3"><strong>Phone:</strong> <span>+1 (970) 888-4508</span></p>
+              <p><strong>Email:</strong> <span>info@nutriai.store</span></p>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="blog.html">Blog</a></li>
+              <li><a href="tool.html">Tool</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            <h4>legal</h4>
+            <ul>
+              <li><a href="termsofservice.html">Terms of service</a></li>
+              <li><a href="privacypolicy.html">Privacy policy</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="copyright text-center">
+      <div class="container d-flex flex-column flex-lg-row justify-content-center justify-content-lg-between align-items-center">
+
+        <div class="d-flex flex-column align-items-center align-items-lg-start">
+          <div>
+            © Copyright <strong><span>Nutri</span><span style="color: coral;">Ai.</span></strong>. All Rights Reserved
+          </div>
+          <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/herobiz-bootstrap-business-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+          </div>
+        </div>
+
+        <div class="social-links order-first order-lg-last mb-3 mb-lg-0">
+          <a href=""><i class="bi bi-twitter-x"></i></a>
+          <a href=""><i class="bi bi-facebook"></i></a>
+          <a href=""><i class="bi bi-instagram"></i></a>
+          <a href=""><i class="bi bi-linkedin"></i></a>
+        </div>
+
+      </div>
+    </div>
+
+</footer>
 <!-- Template Main JS File -->
+ <!-- Vendor JS Files -->
+ <script src="../assets/js/bootstrap.bundle.min.js"></script>
+ <script src="../assets/js/validate.js"></script>
+ <script src="../assets/js/aos.js"></script>
+ <script src="../assets/js/glightbox.min.js"></script>
+ <script src="../assets/js/swiper-bundle.min.js"></script>
+ <script src="../assets/js/imagesloaded.pkgd.min.js"></script>
+ <script src="../assets/js/isotope.pkgd.min.js"></script>
 <script src="../assets/js/main.js"></script>
 <script src="../assets/js/aux.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 

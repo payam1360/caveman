@@ -24,22 +24,26 @@ function createClientIdandCampaign($email, $numAllocation, $numCampaign, $accoun
     $dbname      = "Users";
     $table1name  = "userAllocation";
     $table2name  = "authentication";
+    $table3name  = "campaignAlloc";
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
     $sql         = "SELECT userId FROM $table2name WHERE email = '$email';";
     $data        = $conn->query($sql);
     $userId      = $data->fetch_column(0);
     $sql         = "UPDATE " . $table2name . " SET accountType = '" . $accountType . "' WHERE email = '" . $email . "';";
     $conn->query($sql);
+    $telegramNewChat = 0;
     for($kk = 0; $kk < $numAllocation; $kk++) {
         $clientId    = mt_rand(10000, 99999);
-        if($kk < $numCampaign) {
-            $campaignId  = substr(md5(rand()), 0, 7);
-        } else {
-            $campaignId = '';
-        }
-        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, campaignIdSource, used, completed, name, cEmail, gender, goal, nutritionEng, mealEng, descBmi, descBmr, descIf, descMacro, descMicroTrace, descMicroVit, descCal, descMeal) VALUES('$userId','$clientId','', '$campaignId', '0', '0', '', '', '', '', '', '', '', '', '', '', '', '', '', '');";
+        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, name, cEmail, gender, phoneNumber, telegramChatId, telegramUserName, telegramNewChat, goal, nutritionEng, mealEng, descBmi, descBmr, descIf, descMacro, descMicroTrace, descMicroVit, descCal, descMeal) VALUES('$userId','$clientId','', '', '', '', '', '', '', '$telegramNewChat', '', '', '', '', '', '', '', '', '', '', '');";
         $conn->query($sql);
     }
+
+    for($kk = 0; $kk < $numCampaign; $kk++) {
+        $campaignId  = substr(md5(rand()), 0, 7);
+        $sql         = "INSERT INTO $table3name (userId, campaignIdSource, used, completed) VALUES('$userId', '$campaignId', '0', '0');";
+        $conn->query($sql);
+    }
+
     $conn->close();
     
 }

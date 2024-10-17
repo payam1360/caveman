@@ -2,11 +2,26 @@
  * This is the style file for the form
  */
 /* other styles */
-.progress-pie {
-    height: 100px;
+.progress-percent {
+    position: relative; 
+    text-align: center;
+    color: coral; 
+    font-size: 40px; 
+    font-weight: bolder;
+}
+.progress-div {
+    width: 110px;
+    height: 110px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px auto;
 }
 .form-class {
-    margin-top: 100px;
+    margin-top: 50px;
     margin-bottom: 100px;
     justify-content: center;
 }
@@ -24,7 +39,7 @@
 .form-header {
     opacity: 0.0;
     width: 50%;
-    height: 120px;
+    height: 100px;
     transition-property: opacity, width, transform;
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out;
@@ -71,9 +86,9 @@
     color: coral;
 }
 .form-header-style {
-    color: dodgerblue;
+    color: #4285F4;
     font-size: 20px;
-    font-weight: normal;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .form-input-parent,
@@ -222,44 +237,84 @@
 
 
 .client-list {
-    color: black;
-    background-color: white;
-    border-radius: 2%;
     position: relative;
-    border: solid;
-    border-width: 5px;
-    border-color: lightblue;
-    height: 800px;
-    margin: 20px; 
+    border: 0;
     padding: 10px;
-    opacity: 1;
-    transition: opacity 1s ease-in-out, height 0.5s ease-in-out, width 0.5s ease-in-out;
+    height: auto;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+    margin: 50px;
 }
-.client-list:hover {
+
+/* Blue fade effect on all sides */
+.client-list::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    bottom: -10px;
+    left: -10px;
+    right: -10px;
+    background: radial-gradient(rgba(173, 216, 230, 0.4), transparent);
+    z-index: -1;
+    border-radius: 2px;
+}
+
+.client-three-dots {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 5px 5px 5px 5px lightgrey;
 }
+.client-dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 40px;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 1;
+}
+.client-dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+}
+.client-dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+.client-dropdown-item.disabled {
+    color: #6c757d; /* Light grey */
+    cursor: not-allowed; /* Not-allowed cursor */
+    pointer-events: none; /* Disable pointer events */
+    opacity: 0.5; /* Reduce opacity */
+  }
 
 .campaign-list {
     color: black;
     background-color: white;
     border-radius: 1%;
     position: relative;
-    border: solid;
-    border-width: 3px;
-    border-color: lightblue;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+    border: 0;
     height: 200px;
-    margin: 20px; 
+    margin-top: 50px;
     padding: 10px;
     opacity: 1;
     transition: opacity 1s ease-in-out, height 0.5s ease-in-out, width 0.5s ease-in-out;
 }
-.campaign-list:hover {
-    cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 5px 5px 5px 5px lightgrey;
+
+
+/* Blue fade effect on all sides */
+.campaign-list::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    bottom: -10px;
+    left: -10px;
+    right: -10px;
+    background: radial-gradient(rgba(173, 216, 230, 0.4), transparent);
+    z-index: -1;
+    border-radius: 2px;
 }
+
 
 .results-btn {
     display: none;
@@ -856,4 +911,135 @@ input[type="file"] {
     100% {
         transform: rotate(360deg);
     }
+}
+
+/* Light blue fade shadow on all four sides */
+.shadow-card {
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+    border: 0;
+    margin-top: 50px;
+}
+
+/* Blue fade effect on all sides */
+.shadow-card::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    bottom: -10px;
+    left: -10px;
+    right: -10px;
+    background: radial-gradient(rgba(173, 216, 230, 0.4), transparent);
+    z-index: -1;
+    border-radius: 2px;
+}
+
+
+/* Make the titles stand out */
+.card-title {
+    color: #012970;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Button Styling */
+.btn-primary {
+    background-color: #4285F4;
+    color: white;
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s;
+    border-radius: 0px; /* Match the button's border radius */
+    position: absolute; 
+    bottom: 20px; 
+    right: 20px;
+}
+
+.btn-primary:hover {
+    background-color: #014599;
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 2px; /* Offset to create a detached effect */
+    left: 2px; /* Offset to create a detached effect */
+    right: -2px; /* Extend beyond the button */
+    bottom: -2px; /* Extend beyond the button */
+    border: 0px solid transparent; /* Transparent border */
+    border-radius: 0px; /* Match the button's border radius */
+}
+/* Ensure icon sizes and spacings are uniform */
+.admin-dash-icon {
+    margin-right: 15px;
+}
+
+.info-card {
+    min-height: 500px; /* Adjust this value as needed */
+    width: 100%; 
+}
+
+/* Popup window styling */
+.campaignSelectWindow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    height: 250px;
+    display: flex;
+    z-index: 1000;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+    background-color: white;
+    border: 1px solid grey;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+}
+.campaignButtonSelect {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.campaignButton {
+    width: 100px;
+    height: 100px;
+    background-color: lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+}
+
+.campaignButton.selected {
+    background-color: lightblue;
+    color: white;
+}
+
+.campaignButton:hover {
+    background-color: lightblue;
+    color: white;
+}
+
+.campaignButton.disabled {
+    background-color: #b9e8ea;
+    color: darkgrey;
+    opacity: 0.5;
+    cursor: default;
+}
+/* OK button */
+.okCampaignbtn {
+    background-color: #4285F4;
+    color: white;
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s;
+    position: absolute; 
+    bottom: 20px; 
+    right: 20px;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+    border: none;
+}
+.okCampaignbtn:hover {
+    background-color: #014599;
 }

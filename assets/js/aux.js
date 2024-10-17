@@ -176,22 +176,32 @@ function moveRight(moveright, input, header, headerTxt, Questions, page){
                 }
                 
             }
-
+            
             // updating the progress
-            if(page == 'main' || page == 'questions' || page == 'register' || page == 'login' || page == 'addClients') {
+            let progress_percent = document.querySelector('.progress-percent');
+            if(progress_percent) {
                 let p = (prog / (MAX_cnt - 1));
-                progChart.data.datasets[0].data.pop();
-                progChart.data.datasets[0].data.pop();
-                progChart.data.datasets[0].data.push(p * 100);
-                progChart.data.datasets[0].data.push((1 - p) * 100);
-                progChart.update();
-                
-                let percent = document.querySelector('.progress-percent');
-                let p_string = Math.round(p * 100);
-                percent.innerHTML = p_string.toString() + '%';
+                animatePercentage(Math.round((prog - 1) / (MAX_cnt - 1) * 100), Math.round(p * 100), 500, progress_percent);
             }
         });
     }
+}
+
+function animatePercentage(start, stop, duration, element) {
+    let current = start;
+    const range = stop - start;
+    const stepTime = 10; // Update every 10 milliseconds
+    const totalSteps = duration / stepTime;
+    const increment = range / totalSteps; // Calculate the increment to move from start to stop
+
+    const interval = setInterval(() => {
+        current += increment;
+        if ((increment > 0 && current >= stop) || (increment < 0 && current <= stop)) {
+            current = stop;
+            clearInterval(interval); // Stop the interval once stop value is reached
+        }
+        element.innerHTML = Math.floor(current) + '%'; // Update innerHTML
+    }, stepTime); // Update every 10 milliseconds
 }
 
 
@@ -698,7 +708,7 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
     header[1].setAttribute('serverStruct', 0);
     header[0].style.width = '0%';
     header[0].setAttribute('serverStruct', 0);
-
+   
     if(questionPageResetFlag){
         counter = 1;
         input[2].setAttribute('serverStruct', 1);
@@ -810,41 +820,14 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
     }
 
     prog = 0;
+    let progress_percent = document.querySelector('.progress-percent');
+    progress_percent.innerHTML = '0%';
     //flush the choiceTracker
     choiceTracker = [[0],[0]];
     multiButtonSelect = [];
     multiTextSelect = [];
-    // reset the progress bar
-    let ctx = document.querySelector('#ProgressCircle');
-    if(typeof ctx !== undefined){
-        const progress = {
-        datasets: [{
-            data: [0, 100],
-            backgroundColor: [
-                '#FF7F50',
-                '#808080'
-                ],
-            }]
-        };
-        const config = {
-        type: 'doughnut',
-        data: progress,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: 35,
-            }
-        };
-        // generate the chart
-        
-        if(progChart.length != 0 ){
-            
-            progChart.destroy(); 
-        }
-        if(ctx){
-            progChart = new Chart(ctx, config);
-        }
-    }
+ 
+
     if(page == 'finances' || page == 'financesSearch'){
         plotPaymentsInvoices();
         plotRevenue();
@@ -856,7 +839,6 @@ function resetStart(input, header, headerTxt, page, questionPageResetFlag = 0) {
         connectStripe.addEventListener('click', function(s) {
             connectUserToStripe();
         });
-        InvoiceCreate = document.getElementsByClassName('invoice-create');
         if(InvoiceCreate) {
             InvoiceCreate[0].addEventListener('click', function(s) {
                 if(InvoiceCreate[0].innerHTML == 'create') {
@@ -1893,19 +1875,26 @@ function submitaddClients(header, headerTxt, input, Questions) {
 }
 
 
-function getUserInfo(userTxt, welcomeTxt){
+function getUserInfo(){
     // enter here from form design page. 
     let address = window.location.href;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          
             user = JSON.parse(this.response);
             if(user.status == 1) {
                 window.location.assign('login.html');
             } else {
-                userTxt.innerHTML = user.username;
-                welcomeTxt.innerHTML = 'Hello ' + user.username + '!';
+                let userTxt = document.querySelector('.user-text');
+                let welcomeTxt = document.querySelector('.user-profile');
+                if(userTxt){
+                    userTxt.innerHTML = user.username;
+                    userTxt.style.color = 'coral';
+                }
+                if(welcomeTxt){
+                    welcomeTxt.innerHTML += user.username;
+                    welcomeTxt.style.color = 'coral';
+                }
                 let postCreator = document.querySelector('.postCreator');
                 if(postCreator) {
                     postCreator.innerHTML = user.username;
@@ -2611,7 +2600,9 @@ function handleAi(inPut) {
             break;
         }
     }
-    spinner[activeSSE].style.opacity = 1;
+    if(typeof activeSSE !== 'undefined' && spinner){
+        spinner[activeSSE].style.opacity = 1;
+    }
     if(allowNewAiStream == true && (mealEng == 0 || nutritionEng == 0)) {
         if(userPage == 0){
             eventSource = new EventSource("assets/php/ai.php?type=" + typeEventSource);
@@ -2629,7 +2620,9 @@ function handleAi(inPut) {
                 allowNewAiStream = true;
             } else {
                 // styling the text as it comes through
-                spinner[activeSSE].style.opacity = 0;
+                if(typeof activeSSE !== 'undefined' && typeof spinner !== 'undefined'){
+                    spinner[activeSSE].style.opacity = 0;
+                }
                 aiText = aiText.replace(/NewLine/g, '<br>');
                 if(aiText.includes('AI:') || aiText.includes('Trainer:') || aiText.includes('Q:')) {
                     s = document.createElement('span');
@@ -2675,10 +2668,9 @@ function fetchCampaigns() {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             user = JSON.parse(this.response);
-            let username = user.username;
             let userid = user.userid;
             let campaignSourceInfo = user.campaignSourceInfo;
-            constructCampaigns(userid, username, campaignSourceInfo);
+            constructCampaigns(userid, campaignSourceInfo);
         }
     };
     // sending the request
@@ -2689,53 +2681,71 @@ function fetchCampaigns() {
     xmlhttp.send(request);
 }
 
-function constructCampaigns(userid, username, campaignSourceInfo){
+function constructCampaigns(userid, campaignSourceInfo){
     let parentNode = document.querySelector('.campaign-list-parent');
     cleanCampaignDiv(parentNode);
-    kk = 0;
-    while(campaignSourceInfo.campaignIdSource[kk] != '') {
+    let kk = 0;
+    while(campaignSourceInfo.campaignIdSource[kk]) {
+        m = kk+1;
+        let aDiv = document.createElement('div');
+        aDiv.setAttribute('class', 'col-sm-12 col-md-6 col-lg-3');
         let mDiv = document.createElement('div');
-        mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 campaign-list');
-        mDiv.setAttribute('cidx', kk);
-        mDiv.setAttribute('userid', userid);
-        mDiv.setAttribute('username', username);
-        mDiv.setAttribute('campaignids', campaignSourceInfo.campaignIdSource[kk]);
-        mDiv.setAttribute('campaignTimeStamp', campaignSourceInfo.campaignTimeStamp[kk]);
-        mDiv.addEventListener('click', function(){
-            campaignDetail(campaignSourceInfo, mDiv.getAttribute('userid'), mDiv.getAttribute('cidx'));
-        });
+        mDiv.setAttribute('class', ' campaign-list info-card');
         nameP        = document.createElement('p');
-        nameP.innerHTML = 'Campaign name: ';
-        nameP.style.marginTop = '-50px';
-        idP          = document.createElement('p');
-        idP.innerHTML = 'ID: ';
-        idPStyle     = document.createElement('span');
+        nameP.innerHTML = 'Campaign ' + m;
+        nameP.style.color = '#012970';
+        nameP.style.fontWeight = '600';
+        nameP.style.fontSize = '1.1rem';
+        idP             = document.createElement('p');
+        idP.innerHTML   = 'Campaign ID: ';
+        idP.style.color = '#012970';
+        idPStyle        = document.createElement('span');
         idPStyle.textContent = campaignSourceInfo.campaignIdSource[kk];
         idPStyle.style.color = 'brown';
-        idPStyle.style.fontSize = '24px';
+        idPStyle.style.fontSize = '1.1rem';
         idP.appendChild(idPStyle);
         CtimeP          = document.createElement('p');
-        CtimeP.innerHTML = 'Campaign created: ';
+        CtimeP.innerHTML = 'Created on: ';
+        CtimeP.style.color = '#012970';
         CtPStyle     = document.createElement('span');
         if(campaignSourceInfo.campaignTimeStamp[kk] == null) {
-            CtPStyle.textContent = 'Not created';
+            CtPStyle.textContent = '';
         } else {
             CtPStyle.textContent = campaignSourceInfo.campaignTimeStamp[kk];
         }
-        CtPStyle.style.color = 'seagreen';
-        CtPStyle.style.fontSize = '20px';
+        CtPStyle.style.color = '#012970';
+        CtPStyle.style.fontSize = '1.1rem';
+        CtPStyle.style.fontWeight = '600';
         CtimeP.appendChild(CtPStyle);
+        let imgDiv = document.createElement('div');
+        imgDiv.setAttribute('class', 'infographic-image');
         avatar       = document.createElement('img');
-        m = kk+1;
-        avatar.setAttribute('src', './assets/img/ask' + m.toString() + '.png');
-        avatar.style.width = '20%';
-        avatar.style.display = 'block';
-        avatar.style.marginLeft = 'auto';
-        mDiv.appendChild(avatar);
+        avatar.setAttribute('src', './assets/img/ask' + m + '.png');
+        avatar.setAttribute('class', 'card-img-top');
+        avatar.style.maxHeight = '200px';
+        avatar.style.objectFit = 'cover';
+        let btnDiv = document.createElement('div');
+        btnDiv.setAttribute('class', 'mt-3');
+        let campaignBtn = document.createElement('button');
+        campaignBtn.setAttribute('class', 'btn btn-primary border-0 btn-admin');
+        if(campaignSourceInfo.campaignTimeStamp[kk] == null) {
+            campaignBtn.textContent = 'Add';
+        } else {
+            campaignBtn.textContent = 'View';
+        }
+        campaignBtn.setAttribute('alt', kk);
+        campaignBtn.addEventListener('click', function(e){
+            campaignDetail(campaignSourceInfo, userid, e.target.attributes.alt.value);
+        });
+        btnDiv.appendChild(campaignBtn)
+        imgDiv.appendChild(avatar);
+        mDiv.appendChild(imgDiv);
         mDiv.appendChild(nameP);
         mDiv.appendChild(idP);
         mDiv.appendChild(CtimeP);
-        parentNode.appendChild(mDiv);
+        mDiv.appendChild(btnDiv);
+        aDiv.appendChild(mDiv);
+        parentNode.appendChild(aDiv);
         kk++;
     }
 }
@@ -2774,9 +2784,15 @@ function displayClients(results, userid, username, searchStruct) {
     blur.style.filter = 'blur(0px)';
     let parentNode = document.querySelector('.client-list-parent');
     cleanClientDiv(parentNode);
-    numClients = results.names.length;
+    
+    if (results.names.every(el => el === "")) {
+        numClients = 1;
+    } else {
+        maxLength = results.names.length;
+        let nonEmptyCount = results.names.filter(el => el !== "").length;
+        numClients = Math.min(nonEmptyCount + 1, maxLength);
+    }
     for(let kk = 0; kk < numClients; kk++) {
-
         // only display matching search strings
         if(typeof(searchStruct) == 'undefined' || searchStruct == '') {
         } else if(typeof(searchStruct) !== 'undefined' ) {
@@ -2799,31 +2815,18 @@ function displayClients(results, userid, username, searchStruct) {
             }
         } 
 
-        CampaignIdSelected = results.campaignidAssigned[kk];
-        CampaignTimeSelected = '';
-        kx = 0;
-        while(results.campaigntime[kx] != null){
-            if(CampaignIdSelected != '' && CampaignIdSelected == results.campaignids[kx]) {
-                CampaignTimeSelected = results.campaigntime[kx];
-                break;
-            } else {
-                CampaignTimeSelected = '';
-            }
-            kx++;
-        }
+        let aDiv = document.createElement('div');
+        aDiv.setAttribute('class', 'col-sm-12 col-md-6 col-lg-3');
         let mDiv = document.createElement('div');
-        mDiv.setAttribute('class', 'col-sm-6 col-md-4 col-lg-4 client-list');
+        mDiv.setAttribute('class', 'client-list info-card');
         mDiv.setAttribute('cidx', kk);
         mDiv.setAttribute('userid', userid);
         mDiv.setAttribute('username', username);
-        mDiv.setAttribute('campaignids', CampaignIdSelected);
-        mDiv.setAttribute('campaigntime', CampaignTimeSelected);       
+        mDiv.setAttribute('campaignids', results.campaignids); 
+        mDiv.setAttribute('campaigntime', results.campaigntime);
+        mDiv.setAttribute('selectedCampaign', results.campaignidAssigned[kk]);      
         mDiv.setAttribute('clientid', results.ids[kk]);
-        mDiv.addEventListener('click', function (e){
-            getClientDetails(parentNode, results, this.getAttribute('cidx'));
-        });
         nameP        = document.createElement('p');
-        nameP.setAttribute('class', 'updateName');
         idP          = document.createElement('p');
         idPStyle     = document.createElement('span');
         genderP      = document.createElement('p');
@@ -2833,12 +2836,62 @@ function displayClients(results, userid, username, searchStruct) {
         goalP        = document.createElement('p');
         goalPStyle   = document.createElement('span');
         campaignP    = document.createElement('p');
-        campaignP.setAttribute('class', 'updatePlink');
-        campaignP.style.opacity = 0;
-        createQP     = document.createElement('p');
-        createQPStyle= document.createElement('span');
-        createQPStyle.setAttribute('class', 'updateCampaign');
+
+        threeDots = document.createElement('i');
+        threeDots.className = 'bi bi-three-dots-vertical client-three-dots'; // Bootstrap icon
+        threeDots.style.fontSize = '1.4rem';
+        threeDots.setAttribute('cidx', kk);
+        threeDots.addEventListener('click', (event) => clientToggleDropdown(event)); // Add click event to toggle the dropdown
+        mDiv.appendChild(threeDots);
+        
+        // Create the dropdown menu
+        dropdownMenu = document.createElement('div');
+        dropdownMenu.className = 'client-dropdown-menu';
+        // Define the dropdown items with icons
+        menuItems = [
+            { text: 'Add', icon: 'bi bi-plus-circle', action: clientAddItem, enable: (results.names[kk] == "") ? true : false},
+            { text: 'Set campaign', icon: 'bi bi-ui-radios-grid', action: clientAssignCampaign, enable: (results.names[kk] !== "" && !results.clientHasResponded) ? true : false }, // can change until the client responded 
+            { text: 'View', icon: 'bi bi-eye', action: clientviewItem , enable: (results.names[kk] !== "" && results.campaignidAssigned[kk] !== "") ? true : false},
+            { text: 'Download PDF', icon: 'bi bi-file-earmark-pdf', action: clientDownloadPDF, enable: (results.names[kk] !== "" && results.clientHasResponded) ? true : false },
+            { text: 'Email Report', icon: 'bi bi-send', action: clientEmailReport, enable: (results.emails[kk] !== "" && results.clientHasResponded) ? true : false },
+            { text: 'Email Form', icon: 'bi bi-envelope', action: clientEmailForm, enable: (results.emails[kk] !== "" && results.campaignidAssigned[kk] !== "" && !results.clientHasResponded) ? true : false },
+            { text: 'Delete Client', icon: 'bi bi-trash', action: clientDeleteClient, enable: (results.names[kk] !== "") ? true : false }
+        ];
+        // Add each item to the dropdown menu
+        menuItems.forEach(item => {
+            menuItem = document.createElement('div');
+            menuItem.className = 'client-dropdown-item';
+            
+            itemIcon = document.createElement('i');
+            itemIcon.className = item.icon;
+            itemIcon.setAttribute('midx', kk);
+            menuItem.appendChild(itemIcon);
+            
+            itemText = document.createElement('span');
+            itemText.textContent = ` ${item.text}`;
+            itemText.setAttribute('midx', kk);
+            menuItem.appendChild(itemText);
+            menuItem.setAttribute('midx', kk);
+            // Add disabled logic via CSS class
+            if (item.enable) {
+                menuItem.addEventListener('click', (event) => {
+                    item.action(event); // Pass the event and any additional argument
+                });              
+            } else {
+                menuItem.classList.add('disabled'); // Add a disabled class for CSS styling
+            }
+            
+            dropdownMenu.appendChild(menuItem);
+        });
+        
+        // Append the dropdown to mDiv
+
+        let imgDiv = document.createElement('div');
+        imgDiv.setAttribute('class', 'infographic-image');
         avatar       = document.createElement('img');
+        avatar.setAttribute('class', 'card-img-top');
+        avatar.style.maxHeight = '200px';
+        avatar.style.objectFit = 'cover';
         if(results.genders[kk] == 'female') {
             avatar.setAttribute('src', './assets/img/woman.png');
         } else if (results.genders[kk] == 'male') {
@@ -2846,97 +2899,266 @@ function displayClients(results, userid, username, searchStruct) {
         } else {
             avatar.setAttribute('src', './assets/img/addNew.png');
         }
-        avatar.style.width = '60%';
-        avatar.style.display = 'block';
-        avatar.style.margin = '0 auto';
+        imgDiv.appendChild(avatar);
         nameP.innerHTML = results.names[kk];
-        nameP.style.color = '#4285F4';
-        nameP.style.fontSize = '30px';
-        idP.innerHTML = 'ID: ';
-        idPStyle.textContent = results.ids[kk];
-        idPStyle.style.color = 'brown';
-        idPStyle.style.fontSize = '24px';
+        nameP.style.color = '#012970';
+        nameP.style.fontWeight = '600';
+        nameP.style.fontSize = '1.2rem';
+
+        idP.innerHTML = (results.names[kk] == '') ? '' : 'client ID: ';
+        idPStyle.textContent = (results.names[kk] == '') ? '' : results.ids[kk];
+        idP.style.color = '#012970';
         idP.appendChild(idPStyle);
-        genderP.innerHTML = 'Gender: ';
-        genderPStyle.textContent = results.genders[kk];
-        genderPStyle.style.color = '#F4B400';
-        genderPStyle.style.fontSize = '24px';
+
+        genderP.innerHTML = '';
+        genderPStyle.textContent = (results.names[kk] == '') ? '' : results.genders[kk];
+        genderPStyle.style.color = '#012970';
         genderP.appendChild(genderPStyle);
 
-        emailP.innerHTML = 'Email: ';
-        emailPStyle.textContent = results.emails[kk];
-        emailPStyle.style.color = '#DB4437';
-        emailPStyle.style.fontSize = '20px';
+        emailP.innerHTML = '';
+        emailPStyle.textContent = (results.names[kk] == '') ? '' : results.emails[kk];
+        emailPStyle.style.color = '#012970';
         emailP.appendChild(emailPStyle);
 
-        goalP.innerHTML = 'Goal: ';
-        goalPStyle.textContent = results.goals[kk];    
-        goalPStyle.style.fontSize = '24px';  
+        goalP.innerHTML = (results.names[kk] == '') ? '' : 'goal: ';
+        goalP.style.color = '#012970';
+        goalPStyle.textContent = (results.names[kk] == '') ? '' : results.goals[kk];    
+        goalPStyle.style.color = '#012970';
         goalP.appendChild(goalPStyle); 
-        // create a list input for campaigns
-        campaignList = document.createElement('select');
-        campaignList.setAttribute('id', 'campaignList');
-        campaignOption = document.createElement('option');
-        campaignOption.innerHTML = 'select campaign';
-        campaignList.appendChild(campaignOption);
         
-        campaignList.addEventListener('change', function(e){
-            CampaignTimeSelected = e.target.value;
-            for(ky = 0; ky < e.target.childElementCount; ky++) {
-                if(e.target.children[ky].innerHTML == CampaignTimeSelected) {
-                    CampaignIdSelected = e.target.children[ky].getAttribute('campaignid');
-                }
-            }
-            getnameP = document.querySelectorAll('.updateName');
-            if(getnameP.innerHTML != ''){
-                getQPStyle = document.querySelectorAll('.updateCampaign');
-                getQPStyle[mDiv.getAttribute('cidx')].textContent = CampaignTimeSelected;
-            }
-            userFile =  userid + results.ids[mDiv.getAttribute('cidx')] + CampaignIdSelected; 
-            link = '/userPages/' + userFile + '.html';
-            if(results.campaignidAssigned[mDiv.getAttribute('cidx')] != '') {
-                getcampaignP = document.querySelectorAll('.updatePlink');
-                getcampaignP[mDiv.getAttribute('cidx')].innerHTML = 'Link to ' + results.names[mDiv.getAttribute('cidx')] + ' <a href="' + link + '"> Campaign page</a>';
-                getcampaignP[mDiv.getAttribute('cidx')].style.opacity = 1;
-            }
-            updatedBonNewCampaignAssignment(CampaignIdSelected, mDiv.getAttribute('clientid'),  mDiv.getAttribute('userid'));
-        })
-        // list
-        i = 0;
-        while(results.campaigntime[i] != null){
-            campaignOption = document.createElement('option');
-            campaignOption.innerHTML = results.campaigntime[i];
-            campaignOption.setAttribute('campaignid', results.campaignids[i])
-            campaignList.appendChild(campaignOption);
-            i++;
-        }
-        userFile =  userid + results.ids[kk] + CampaignIdSelected; 
-        createQP.innerHTML = 'Campaign created on : ';
-        createQPStyle.style.fontSize = '18px';
-        createQPStyle.style.color = 'seagreen';
-        createQPStyle.textContent = CampaignTimeSelected;
-        createQP.appendChild(createQPStyle);
-        link = '/userPages/' + userFile + '.html';
-        campaignP.innerHTML = 'Link to ' + results.names[kk] + ': <a href="' + link + '"> Campaign page</a>';
-        mDiv.appendChild(avatar);
+        campaignP.innerHTML = (results.campaignidAssigned[kk] == '') ? '' : 'campaign ID: ' + results.campaignidAssigned[kk];
+        campaignP.style.color = '#012970';
+
+
+        mDiv.appendChild(dropdownMenu);
+        mDiv.appendChild(imgDiv);
         mDiv.appendChild(nameP);
         mDiv.appendChild(emailP);
         mDiv.appendChild(genderP);
         mDiv.appendChild(goalP);
         mDiv.appendChild(idP);
         mDiv.appendChild(campaignP);
-
-        if(nameP.innerHTML != ''){
-            mDiv.appendChild(createQP);
-            mDiv.appendChild(campaignList);
-        }
-        if(results.campaignidAssigned[kk] != ''){
-            campaignP.style.opacity = 1;
-        }
-        parentNode.appendChild(mDiv);
-        
+        aDiv.appendChild(mDiv);
+        parentNode.appendChild(aDiv);
+        parentNode.addEventListener('click', (event) => {closeAllDropdown(event)});
+        blur.addEventListener('click', (event) => {closeAllDropdown(event)});
     }
 }
+
+// Function to toggle dropdown visibility
+function clientToggleDropdown(event) {
+
+    dropdownMenu = document.querySelectorAll('.client-dropdown-menu');
+    if(typeof event.target.attributes.cidx !== 'undefined') {
+        idx = event.target.attributes.cidx.value;
+        dropdownMenu = dropdownMenu[idx];
+        
+    } else if(typeof event.target.attributes.midx !== 'undefined') {
+        idx = event.target.attributes.midx.value;
+        dropdownMenu = dropdownMenu[idx];
+    }
+
+    if (dropdownMenu.style.display === 'block') {
+        dropdownMenu.style.display = 'none';
+    } else {
+        dropdownMenu.style.display = 'block';
+    }
+}
+
+// Function to toggle dropdown visibility
+function closeAllDropdown(event) {
+
+    if(typeof event.target.attributes.cidx == 'undefined') {
+        dropdownMenu = document.querySelectorAll('.client-dropdown-menu');
+        for(kk = 0; kk < dropdownMenu.length; kk++){
+            dropdownMenu[kk].style.display = 'none';
+        }
+    }
+}
+
+
+function clientAddItem(event){
+    window.location.assign('addClients.html');
+    clientToggleDropdown(event);
+}
+
+function clientAssignCampaign(event){
+    
+ 
+    mDiv = document.querySelectorAll('.client-list');
+    idx  = event.target.attributes.midx.value;
+    mDiv = mDiv[idx];
+    userid   = mDiv.getAttribute('userid');
+    clientid = mDiv.getAttribute('clientid');
+    campaignids = mDiv.getAttribute('campaignids');
+    campaignids = campaignids.split(',');
+    campaignTime = mDiv.getAttribute('campaigntime');
+    campaignTime = campaignTime.split(',');
+
+    let parentNode = document.querySelector('.client-list-parent');
+    cleanClientDiv(parentNode);
+
+    let blur = document.querySelector('.blur');
+    blur.style.filter = 'blur(10px)';
+    
+    const popupWindow = document.createElement('div');
+    popupWindow.classList.add('campaignSelectWindow');
+    // Create popup window div
+
+    const buttonGroup = document.createElement('div');
+    buttonGroup.classList.add('campaignButtonSelect');
+
+    // Create 5 square buttons
+    for (let i = 0; i < campaignids.length; i++) {
+        const button = document.createElement('div');
+        button.classList.add('campaignButton');
+        
+        button.textContent = campaignids[i]; // Set the button label
+        button.dataset.value = campaignids[i]; // Set a value to track
+        if(campaignTime[i] == ""){
+            button.classList.add('disabled');
+        } else {
+        // Add click event listener to each button
+            button.addEventListener('click', function() {
+                // Remove 'selected' class from all buttons
+                document.querySelectorAll('.campaignButton').forEach(btn => btn.classList.remove('selected'));
+                // Add 'selected' class to the clicked button
+                button.classList.add('selected');
+                const selectedButton = document.querySelector('.campaignButton.selected');
+                updatedBonNewCampaignAssignment(selectedButton.innerHTML, clientid,  userid);
+            });
+        }
+        // Append button to the button group
+        buttonGroup.appendChild(button);
+    }
+
+    // Create OK button
+    const okButton = document.createElement('button');
+    okButton.textContent = 'Assign Campaign';
+    okButton.classList.add('okCampaignbtn');
+
+    // Add click event to OK button
+    okButton.addEventListener('click', function() {
+        // Get the selected button
+        const selectedButton = document.querySelector('.campaignButton.selected');
+        if (selectedButton) {
+            constructClients(userid, [], []);
+        } else {
+            alert('Please select a button!');
+        }
+    });
+
+    // Append button group and OK button to the popup window
+    popupWindow.appendChild(buttonGroup);
+    popupWindow.appendChild(okButton);
+    parentNode.appendChild(popupWindow);
+}
+
+function clientviewItem(event){
+
+    let parentNode = document.querySelector('.client-list-parent');
+    mDiv = document.querySelectorAll('.client-list');
+    idx  = event.target.attributes.midx.value;
+    mDiv = mDiv[idx];
+    userid   = mDiv.getAttribute('userid');
+    clientid = mDiv.getAttribute('clientid');
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            clientData = JSON.parse(this.response);
+            displayClientsDetails(parentNode, clientData.client, clientData.input, clientData, idx);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/results.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'userId': userid, 'clientId': clientid};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+    
+}
+
+function clientDeleteClient(event){
+    
+    mDiv = document.querySelectorAll('.client-list');
+    idx  = event.target.attributes.midx.value;
+    mDiv = mDiv[idx];
+    userid   = mDiv.getAttribute('userid');
+    clientid = mDiv.getAttribute('clientid');
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            window.alert('client successfully removed !');
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/results.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'flag': 'deleteClient', 'userId': userid, 'clientId': clientid};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+    clientToggleDropdown(event);
+}
+
+function clientEmailForm(event){
+    mDiv = document.querySelectorAll('.client-list');
+    idx  = event.target.attributes.midx.value;
+    mDiv = mDiv[idx];
+    clientid = mDiv.getAttribute('clientid');
+    userid   = mDiv.getAttribute('userid');
+    campaignid = mDiv.getAttribute('selectedCampaign');
+    sendEmailForm(userid, clientid, campaignid);
+    clientToggleDropdown(event);
+}
+
+function clientDownloadPDF(event){
+
+    mDiv = document.querySelectorAll('.client-list');
+    idx  = event.target.attributes.midx.value;
+    mDiv = mDiv[idx];
+    clientid = mDiv.getAttribute('clientid');
+    userid   = mDiv.getAttribute('userid');
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            clientData = JSON.parse(this.response);
+            createPdf(clientData.client);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/results.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'userId': userid, 'clientId': clientid};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+    clientToggleDropdown(event);
+}
+
+function clientEmailReport(event){
+
+    mDiv = document.querySelectorAll('.client-list');
+    let parentNode = document.querySelector('.client-list-parent');
+    idx  = event.target.attributes.midx.value;
+    mDiv = mDiv[idx];
+    clientid = mDiv.getAttribute('clientid');
+    userid   = mDiv.getAttribute('userid');
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            clientData = JSON.parse(this.response);
+            sendEmail(parentNode, clientData, userid, clientid);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/results.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'userId': userid, 'clientId': clientid};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+    clientToggleDropdown(event);
+}
+
+
 function updatedBonNewCampaignAssignment(CampaignIdSelected, clientId, userId) {
 
     var xmlhttp = new XMLHttpRequest();
@@ -2957,32 +3179,33 @@ function updatedBonNewCampaignAssignment(CampaignIdSelected, clientId, userId) {
 // will be available.
 
 function getClientDetails(parentNode, result, cidx){
-        userid = parentNode.children[cidx].getAttribute('userid');
-        clientid = parentNode.children[cidx].getAttribute('clientid');
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                clientData = JSON.parse(this.response);
-                    displayClientsDetails(parentNode, clientData.client, clientData.input, result, cidx);
-            }
-        };
-        // sending the request
-        xmlhttp.open("POST", "assets/php/results.php", true);
-        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        let info = {'userId': userid, 'clientId': clientid};
-        var userdata = "userInfo="+JSON.stringify(info);
-        xmlhttp.send(userdata);
+    
+    userid = parentNode.children[cidx].children[0].getAttribute('userid');
+    clientid = parentNode.children[cidx].children[0].getAttribute('clientid');
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            clientData = JSON.parse(this.response);
+            displayClientsDetails(parentNode, clientData.client, clientData.input, result, cidx);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/results.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'userId': userid, 'clientId': clientid};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
 }
 
 
 function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx) {
     
-    userid = parentNode.children[cidx].getAttribute('userid');
-    clientid = parentNode.children[cidx].getAttribute('clientid');
+    userid = parentNode.children[cidx].children[0].getAttribute('userid');
+    clientid = parentNode.children[cidx].children[0].getAttribute('clientid');
     // if not set, go to add client page.
     cleanClientDiv(parentNode);
-    if(results.campaignidAssigned[cidx] == '' && results.names[cidx] == '' && results.genders[cidx] == 'No response' && results.goals[cidx] == 'No response') {
-        window.location.assign('addClients.html');
+    if(results.campaignidAssigned[cidx] == '' && results.names[cidx] == '' && results.genders[cidx] == '' && results.goals[cidx] == '') {
+        
     } else {  
         let accountType = results.accountType[0];
         if(accountType == 'free') {
@@ -3009,26 +3232,6 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
             displayClients(results, userid);
         });
         
-        let pdfBtn = document.createElement('button');
-        pdfBtn.setAttribute('class', 'pdfReport');
-        spn = document.createElement('span');
-        spn.setAttribute('class', 'fa-regular fa-file-pdf');
-        spn.style.fontSize = '50px';
-        pdfBtn.appendChild(spn);
-        pdfBtn.addEventListener('click', function(){
-            createPdf(clientData);
-        });
-
-        let emailBtn = document.createElement('button');
-        emailBtn.setAttribute('class', 'emailReport');
-        spn = document.createElement('span');
-        spn.setAttribute('class', 'fa-regular fa-paper-plane');
-        spn.style.fontSize = '50px';
-        emailBtn.appendChild(spn);
-        emailBtn.addEventListener('click', function(){
-            // send email from the server side ... prefer send a copy to nutritionist as well
-            sendEmail(parentNode, clientData, userid, clientid);
-        });
         
         let nameP = document.createElement('p');
         let namePstyle = document.createElement('span');
@@ -3726,10 +3929,6 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         // appending to mDiv from here:
 
         mDiv.appendChild(closeBtn);
-        if(!accessDenied){
-            mDiv.appendChild(pdfBtn);
-            mDiv.appendChild(emailBtn);
-        }
         mDiv.appendChild(nameP);
         mDiv.appendChild(emailP);
         mDiv.appendChild(genderP);
@@ -4246,6 +4445,7 @@ function sendEmail(parentNode, clientData, userid, clientid) {
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     let info = 
             {
+                'flag':          'sendReport',
                 'parentNode':    parentNode.outerHTML, 
                 'bmiImg':        canvasImgBmi, 
                 'ifImg':         canvasImgIf,
@@ -4261,6 +4461,30 @@ function sendEmail(parentNode, clientData, userid, clientid) {
     xmlhttp.send(userdata);
 }
 
+function sendEmailForm(userid, clientid, campaignid) {
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            data = JSON.parse(this.response);
+            if(data['status'] == 0) {
+                window.alert('email sent to the client!');
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/contact.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = 
+            {
+                'flag':          'sendForm',
+                'userId':        userid, 
+                'clientId':      clientid,
+                'campaignId':    campaignid
+            };
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+}
 
 function addUsersuggestionContent(data, desc, Btn, descField, mealFlag = 0) {
     
@@ -4351,9 +4575,8 @@ function FinanceOpenTab(tabName) {
     let input = document.querySelectorAll('.form-input');
     let header = document.querySelectorAll('.form-header');
     let headerTxt = document.querySelectorAll('.form-header-style');
-    let userTxt = document.querySelector('.user-text');
-    let welcomeTxt = document.querySelector('.navbar-brand');
-    getUserInfo(userTxt, welcomeTxt);
+
+    getUserInfo();
     if(tabName == 'trackInvoice') {
         questionCreate(headerTxt[1], header[1], input[1], 'financesSearch', userPage);
         const moveright = document.querySelector('.form-go-right');
@@ -4388,6 +4611,14 @@ function createFormDiv(tab) {
     parentNode = document.getElementById(tab);
     const mainDiv = document.createElement('div');
     mainDiv.className = 'mainFormDiv';
+    // create progress circle
+    const progressDiv = document.createElement('div');
+    progressDiv.className = 'progress-div';
+    const progressPercent = document.createElement('p');
+    progressPercent.className = 'progress-percent';
+    progressPercent.innerHTML = '0%';
+    progressDiv.appendChild(progressPercent);
+    mainDiv.appendChild(progressDiv);
     // Create the form
     const form = document.createElement('form');
     form.className = 'form-class';
@@ -4612,35 +4843,36 @@ function generateClientCircles(uId) {
             let clients = JSON.parse(this.response);
             let userSlider = document.querySelector('.user-slider');
             for(kk = 0; kk < clients.names.length; kk++){
-                if(clients.names[kk] == ''){
-                    continue;
+                
+                let userCir  = document.createElement('div');
+                let upperTxt = document.createElement('p');
+                let lowerTxt = document.createElement('p');
+                let image    = document.createElement('img');
+                lowerTxt.setAttribute('alt', kk);
+                upperTxt.setAttribute('alt', kk);
+                image.setAttribute('alt', kk);
+                userCir.setAttribute('alt', kk);
+                if(clients.genders[kk] == '1') {
+                    image.setAttribute('src', 'assets/img/woman.png');
+                } else if(clients.genders[kk] == '0') {
+                    image.setAttribute('src', 'assets/img/man.png');
                 } else {
-                    let userCir  = document.createElement('div');
-                    let upperTxt = document.createElement('p');
-                    let lowerTxt = document.createElement('p');
-                    let image    = document.createElement('img');
-                    lowerTxt.setAttribute('alt', kk);
-                    upperTxt.setAttribute('alt', kk);
-                    image.setAttribute('alt', kk);
-                    userCir.setAttribute('alt', kk);
-                    if(clients.genders[kk] == '1') {
-                        image.setAttribute('src', 'assets/img/woman.png');
-                    } else {
-                        image.setAttribute('src', 'assets/img/man.png');
-                    }
-                    userCir.classList.add('user-circle');
-                    if(clients.telegramNewChats[kk] == '1') {
-                        userCir.style.border = '5px solid purple';
-                        userCir.style.boxShadow =  '0 0 10px rgba(0, 0, 0, 0.2)';  
-                        userCir.style.animation = 'changeColor 2s infinite';
-                    } 
-                    
-                    userCir.addEventListener('mouseenter',function(e) {
-                        userCir.style.boxShadow = '0 5px 5px rgba(0, 0, 0, 0.5)';
-                    });
-                    userCir.addEventListener('mouseleave',function(e) {
-                        userCir.style.boxShadow = '';
-                    });
+                    image.setAttribute('src', 'assets/img/nuetral.png');
+                }
+                userCir.classList.add('user-circle');
+                if(clients.telegramNewChats[kk] == '1') {
+                    userCir.style.border = '5px solid purple';
+                    userCir.style.boxShadow =  '0 0 10px rgba(0, 0, 0, 0.2)';  
+                    userCir.style.animation = 'changeColor 2s infinite';
+                } 
+                
+                userCir.addEventListener('mouseenter',function(e) {
+                    userCir.style.boxShadow = '0 5px 5px rgba(0, 0, 0, 0.5)';
+                });
+                userCir.addEventListener('mouseleave',function(e) {
+                    userCir.style.boxShadow = '';
+                });
+                if(clients.names[kk] != ''){
                     userCir.addEventListener('click',function(e) {
                         if(chatArea == ''){
                             window.alert('please select the chat App: Telegram or Zalo.');
@@ -4666,16 +4898,15 @@ function generateClientCircles(uId) {
                             } 
                         }
                     });
-                    
-                    upperTxt.classList.add('top-text');
-                    upperTxt.innerHTML = clients.names[kk];
-                    lowerTxt.classList.add('bottom-text');
-                    lowerTxt.innerHTML = clients.ids[kk];
-                    userCir.appendChild(upperTxt);
-                    userCir.appendChild(image);
-                    userCir.appendChild(lowerTxt);
-                    userSlider.appendChild(userCir);
                 }
+                upperTxt.classList.add('top-text');
+                upperTxt.innerHTML = clients.names[kk];
+                lowerTxt.classList.add('bottom-text');
+                lowerTxt.innerHTML = clients.ids[kk];
+                userCir.appendChild(upperTxt);
+                userCir.appendChild(image);
+                userCir.appendChild(lowerTxt);
+                userSlider.appendChild(userCir);
             }
         }
     };

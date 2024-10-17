@@ -10,11 +10,24 @@ function extractUserInfo($userId) {
     $table1name   = "userAllocation";
     $table2name   = "Users";
     $table3name   = "authentication";
+    $table4name   = "campaignAlloc";
     // Create connection
     $conn         = new mysqli($servername, $loginname, $password, $dbname);
+    // get the campaign source IDs
+    $sql          = "SELECT campaignIdSource, completed, campaignTimeStamp FROM $table4name WHERE userId = '$userId';";
+    $r            = $conn->query($sql);
+    $campaignids  = array();
+    $formFlag     = array();
+    $campaigntime = array();
+    while($c = $r->fetch_assoc()) {
+        array_push($campaignids, $c['campaignIdSource']);
+        array_push($campaigntime, $c['campaignTimeStamp']);
+        array_push($formFlag, $c['completed']);
+    }
+
     // check if the client exists.
     $sql          = "SELECT accountType FROM $table3name WHERE userId = '$userId';";
-    $r  = $conn->query($sql);
+    $r            = $conn->query($sql);
     $accountType  = $r->fetch_assoc();
     $accountType  = array($accountType['accountType']);
     $sql          = "SELECT * FROM $table1name WHERE userId = '$userId';";
@@ -24,9 +37,6 @@ function extractUserInfo($userId) {
     $emails       = array();
     $genders      = array();
     $goals        = array();
-    $campaignids  = array();
-    $campaigntime = array();
-    $formFlag     = array();
     $mealEng      = array();
     $nutritionEng = array();
     $campaignidAssigned = array();
@@ -38,13 +48,13 @@ function extractUserInfo($userId) {
         if($database_row['cEmail'] != ''){
             array_push($emails, $database_row['cEmail']);  
         }      
-        array_push($formFlag, $database_row['completed']);
         array_push($mealEng, $database_row['mealEng']);
         array_push($nutritionEng, $database_row['nutritionEng']);
         // --------------- update gender and goal based on possible client's reply
         $tempClientId   = $database_row['clientId'];
         $sqlupdate      = "SELECT qKey, qAnswer, optionsText FROM $table2name WHERE userId = '$userId' AND clientId = '$tempClientId';";
         $dOut           = $conn->query($sqlupdate);
+        $clientHasResponded = false;
         while($dOut_row = $dOut->fetch_assoc()) {
             if($dOut_row['qKey'] == 'gender'){
                 $genderUpdateIndex = $dOut_row['qAnswer'];
@@ -68,6 +78,7 @@ function extractUserInfo($userId) {
         if(isset($updatedGender) && isset($updatedGoal)) {
             array_push($genders, $updatedGender);
             array_push($goals, $updatedGoal);
+            $clientHasResponded = true;
             unset($updatedGoal);
             unset($updatedGender);
         } else {
@@ -76,7 +87,7 @@ function extractUserInfo($userId) {
             } elseif($database_row['gender'] == 1){
                 array_push($genders, 'female');
             } else {
-                array_push($genders, 'No response');
+                array_push($genders, '');
             }
             if($database_row['goal'] == 0) {
                 array_push($goals, 'increase testosterone');
@@ -85,7 +96,7 @@ function extractUserInfo($userId) {
             } elseif($database_row['goal'] == 2) {
                 array_push($goals, 'lose weight');
             } else {
-                array_push($goals, 'No response');
+                array_push($goals, '');
             }
         }
         if(isset($updatedEmail)){
@@ -101,16 +112,14 @@ function extractUserInfo($userId) {
                 if($updatedEmail != $database_row['cEmail']){
                 }   
                 elseif($updatedEmail == $database_row['cEmail']){
-                    array_push($emails, 'No response');
+                    array_push($emails, '');
                 }
             }
         } else {
             if($database_row['cEmail'] == ''){
-                array_push($emails, 'No response');
+                array_push($emails, '');
             }           
         }
-        array_push($campaignids, $database_row['campaignIdSource']);
-        array_push($campaigntime, $database_row['campaignTimeStamp']);
         array_push($campaignidAssigned, $database_row['campaignId']);
         $clientIdx++;
     }
@@ -127,6 +136,7 @@ function extractUserInfo($userId) {
     $userInfo['mealEng']        = $mealEng;
     $userInfo['nutritionEng']   = $nutritionEng;
     $userInfo['accountType']    = $accountType;
+    $userInfo['clientHasResponded'] = $clientHasResponded;
 
     return $userInfo;
 }
@@ -187,6 +197,44 @@ function extractClientInfo($clientId, $userId, $nutritionEng, $mealEng, $clientI
     return $clientInfo;
 }
 
+function deleteClient($userid, $clientid) {
+    $servername   = "127.0.0.1";
+    $loginname    = "root";
+    $password     = "@Ssia123";
+    $dbname       = "Users";
+    $table1name   = "Users";
+    $table2name   = "userAllocation";
+    
+    // Create connection
+    $conn         = new mysqli($servername, $loginname, $password, $dbname);
+    // delete entry from Users table
+    $sql          = "DELETE FROM $table1name WHERE userId = '$userid' AND  clientId = '$clientid';";
+    $conn->query($sql);
+    // delete entry from userAllocation table
+    $sql          = "DELETE FROM $table2name WHERE userId = '$userid' AND  clientId = '$clientid';";
+    $conn->query($sql);
+    // add the entry back into the userAllocation with empty entries
+    $telegramNewChat = 0;
+    $sql          = "INSERT INTO $table2name (userId, clientId, campaignId, name, cEmail, gender, phoneNumber, telegramChatId, telegramUserName, telegramNewChat, goal, nutritionEng, mealEng, descBmi, descBmr, descIf, descMacro, descMicroTrace, descMicroVit, descCal, descMeal) VALUES('$userid','$clientid','', '', '', '', '', '', '', '$telegramNewChat', '', '', '', '', '', '', '', '', '', '', '');";
+    $conn->query($sql);
+    $conn->close();
+    // cleanup the related files
+    // Specify the directory to search
+    $directory = '../../userPages/';
+
+    // Specify the file pattern to search for (e.g., '*.txt')
+    $filePattern = $userid . $clientid . '*.html';
+
+    // Use glob to find the files matching the pattern
+    $files = glob($directory . '/' . $filePattern);
+
+    if (!empty($files)) {
+        foreach ($files as $file) {
+            // Attempt to delete the file
+            unlink($file);
+        }
+    }
+}
 
 
 
@@ -194,6 +242,9 @@ function extractClientInfo($clientId, $userId, $nutritionEng, $mealEng, $clientI
 /// main routin starts here.
 /// -------------------------
 $userdata          = json_decode($_POST['userInfo']);
+if(isset($userdata->flag) && $userdata->flag == 'deleteClient'){
+    deleteClient($userdata->userId, $userdata->clientId);
+}
 $userInfo          = extractUserInfo($userdata->userId);
 if($userdata->clientId != '') {
     $clientInfo    = extractClientInfo($userdata->clientId, $userdata->userId, 

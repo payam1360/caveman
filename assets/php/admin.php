@@ -6,18 +6,23 @@ function getCampaignIdSource($userId){
     $loginname   = "root";
     $password    = "@Ssia123";
     $dbname      = "Users";
-    $tablename  = "userAllocation";
+    $table1name  = "userAllocation";
+    $table2name  = "campaignAlloc";    
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
-    $sql         = "SELECT campaignIdSource, campaignTimeStamp, completed, name FROM $tablename WHERE userId = '$userId';";
+    $sql         = "SELECT name FROM $table1name WHERE userId = '$userId';";
     $data        = $conn->query($sql);
-    $campaignIdSource = array();
+    $sql2        = "SELECT campaignIdSource, campaignTimeStamp, completed FROM $table2name WHERE userId = '$userId';";
+    $data2       = $conn->query($sql2);
+    $campaignIdSource  = array();
     $campaignTimeStamp = array();
-    $completed = array();
-    $name = array();
+    $completed         = array();
+    $name              = array();
+    while($campaign2 = $data2->fetch_assoc()){
+        array_push($campaignIdSource, $campaign2['campaignIdSource']);
+        array_push($campaignTimeStamp, $campaign2['campaignTimeStamp']);
+        array_push($completed, $campaign2['completed']);
+    }
     while($campaign = $data->fetch_assoc()){
-        array_push($campaignIdSource, $campaign['campaignIdSource']);
-        array_push($campaignTimeStamp, $campaign['campaignTimeStamp']);
-        array_push($completed, $campaign['completed']);
         array_push($name, $campaign['name']);
     }
     $data->campaignIdSource = $campaignIdSource;

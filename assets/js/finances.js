@@ -15,9 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let input = document.querySelectorAll('.form-input');
       let header = document.querySelectorAll('.form-header');
       let headerTxt = document.querySelectorAll('.form-header-style');
-      let userTxt = document.querySelector('.user-text');
-      let welcomeTxt = document.querySelector('.navbar-brand');
-      getUserInfo(userTxt, welcomeTxt);
+      getUserInfo();
       // this function will be getting the info from the Admin Panel.
       // initialize the first question and init the load page
       resetStart(input, header, headerTxt, 'finances');

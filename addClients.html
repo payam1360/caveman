@@ -6,93 +6,113 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>ManHub - Admin</title>
+        <title>NutriAi-Admin</title>
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-icons.css" rel="stylesheet">
+        <link href="assets/css/main.css" rel="stylesheet">
         <link href="assets/css/admin.css" rel="stylesheet">
         <link href="assets/css/tools.css" rel="stylesheet">
-        <link  href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
         <link rel="shortcut icon" href="#">
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-        <script src="https://js.stripe.com/v3/"></script>
     </head>
+
     <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="admin.html"></a>
-            <!-- Navbar-->
-            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-            </ul>
+        
+        <nav class="sb-topnav navbar navbar-expand navbar-light bg-light">
+            <a class="navbar-brand ps-3" href="admin.html">
+                <p style="font-size: 30px; font-weight: 50; font-family: sans-serif;">
+                    Nutri<span style="color: coral; font-weight: 500;">Ai.</span>
+                </p>
+            </a>
+            <div>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <p style="font-size: 20px; font-weight: 500; font-family: sans-serif; color: #012970; padding-top: 40px;">
+                            Dashboard / Add New Client
+                        </p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ms-auto me-3 me-lg-4">
+                    <!-- Dropdown menu <p class="user-profile"></p>-->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                            <li>
+                                <a class="dropdown-item" href="profile.html">
+                                    <i class="bi bi-people" style="font-size: 20px;"></i> Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="setting.html">
+                                    <i class="bi bi-gear" style="font-size: 20px;"></i> Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="index.html">
+                                    <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Log out
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </nav>
+
+
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+
+
+                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Home</div>
-                            <a class="nav-link" href="admin.html">
+                            <div class="sb-sidenav-menu-heading">Nutri<span style="color: coral;">Ai.</span></div>
+                            <a class="nav-link" href="admin.html" style="color: #012970;">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Clients
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <div class="sb-sidenav-menu-heading">Management</div>
+                            <a class="nav-link" href="adminQ.html" style="color: #012970;">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-person-circle-question"></i></div>
+                                Manage Campaigns
                             </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="adminQ.html">
-                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-person-circle-question"></i></div>
-                                        Manage Campaigns
-                                    </a>
-                                    <a class="nav-link" href="clients.html">
-                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear"></i></div>
-                                        Manage Clients
-                                    </a>
-                                    <a class="nav-link" href="finances.html">
-                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-person-circle-question"></i></div>
-                                        Manage Finances
-                                    </a>
-                                    <a class="nav-link" href="chat.html">
-                                        <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear"></i></div>
-                                        Contact Clients
-                                    </a>
-                                </nav>
-                            </div>
-                            <a class="nav-link" href="index.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                                Log Out
+                            <a class="nav-link" href="clients.html" style="color: #012970;">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear"></i></div>
+                                Manage Clients
+                            </a>
+                            <a class="nav-link" href="finances.html" style="color: #012970;">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-person-circle-question"></i></div>
+                                Manage Finances
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Social Media</div>
+                            <a class="nav-link" href="chat.html" style="color: #012970;">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-brands fa-whatsapp"></i></div>
+                                Contact Clients
+                            </a>
+                            <a class="nav-link" href="post.html" style="color: #012970;">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-brands fa-facebook"></i></div>
+                                Create Post
                             </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        <div class="user-text"></div>
+                        <div class="small" style="color: #012970;">Logged in as: 
+                            <span class="user-text"></span>
+                        </div>
                     </div>
                 </nav>
+
             </div>
             <div id="layoutSidenav_content">
-                <div class="container">
-                    <div class="d-flex row">
-                        <div>
-                            <a href="admin.html">
-                                <img src="assets/img/nutrition4guys.png" width="150" height="150">
-                            </a>
-                        </div>
-                        <div class="client-page">
-                            <p class="header-clients-text">Add Clients</p>
-                        </div>
-                    </div>
-                </div>
+                
                 <!--progress circular indicator-->
-                <div class="relative">
-                    <div class="d-flex progress-pie" >
-                        <canvas id="ProgressCircle"></canvas>
-                    </div>
-                    <div class="absolute-center text-center">
-                        <p class="progress-percent" style= "color: coral; margin-top: -58px;">0%</p>
-                    </div>
+                <div class="progress-div">
+                    <p class="progress-percent">0%</p>
                 </div>
                 <!--end of progress circular indicator-->
                 <!-- Start form -->
@@ -138,11 +158,11 @@
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; ManHub 2023</div>
+                            <div class="text-muted">Copyright &copy; Nutri<span style="color: coral;">Ai.</span> 2024</div>
                             <div>
-                                <a href="#">Privacy Policy</a>
+                                <a href="privacypolicy.html">Privacy Policy</a>
                                 &middot;
-                                <a href="#">Terms &amp; Conditions</a>
+                                <a href="termsofservice.html">Terms &amp; Conditions</a>
                             </div>
                         </div>
                     </div>
@@ -151,5 +171,6 @@
         </div>
         <script src="assets/js/aux.js"></script>
         <script src="assets/js/addClients.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
