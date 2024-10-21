@@ -29,8 +29,7 @@
 .form-input {
     opacity: 0.0;
     width: 50%;
-    max-height: 140px;
-    height: 60px;
+    height: auto;
     transition-property: opacity, width, transform;
     transition-duration: 0.5s;
     transition-timing-function: ease-in-out;
@@ -61,7 +60,7 @@
 
 .form-input-style {
     width: 100%;
-    height: 60px;
+    height: auto;
     max-height: 170px;
     border: none;
     background-color: transparent;

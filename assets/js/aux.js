@@ -401,15 +401,19 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
             querySelIn.style.borderBottom = '2px solid coral';
             break;
         case 'button':
-            let width = Math.floor(100/userStruct.options[serverStruct].length);
-            width = width.toString().concat('%');
+
+            if (window.innerWidth < 768) {
+                width = '100%'; // Set width to 100% for mobile devices
+            } else {
+                width = Math.floor(100 / userStruct.options[serverStruct].length).toString().concat('%');
+            }
             let i = 0;
             userStruct.options[serverStruct].forEach(function(item){
                 let newInbtn = document.createElement('button');
                 newInbtn.style.width = width;
                 newInbtn.type = 'button';
                 newInbtn.setAttribute('class', 'form-input-style');
-                newInbtn.style.height = '165px';
+                newInbtn.style.height = 'auto';
                 let newImgSpan = document.createElement('span');
                 newImgSpan.setAttribute('class', 'form-button-style');
                 newImgSpan.setAttribute('id', 'form-button');
