@@ -1886,14 +1886,9 @@ function getUserInfo(){
                 window.location.assign('login.html');
             } else {
                 let userTxt = document.querySelector('.user-text');
-                let welcomeTxt = document.querySelector('.user-profile');
                 if(userTxt){
                     userTxt.innerHTML = user.username;
                     userTxt.style.color = 'coral';
-                }
-                if(welcomeTxt){
-                    welcomeTxt.innerHTML += user.username;
-                    welcomeTxt.style.color = 'coral';
                 }
                 let postCreator = document.querySelector('.postCreator');
                 if(postCreator) {
@@ -5019,4 +5014,185 @@ function addClientsTelegramUserName(uId, cId, telegramUserName){
     let info = {'flag': 'addClientsTelegramUserName', 'userId': uId, 'clientId': cId, 'telegramUserName': telegramUserName};
     var userdata = "userInfo="+JSON.stringify(info);
     xmlhttp.send(userdata);
+}
+
+
+
+// Save profile function
+function saveProfileJs(uId) {
+    const field = ['name', 'facebook', 'insta', 'email', 'twitter', 'linkedIn', 'jobTitle', 'phoneNumber'];
+    let fieldValues = {};
+    for (let kk = 0; kk < field.length; kk++) {
+        const fieldValue = document.getElementById('edit-' + field[kk] + '-profile').value;
+        fieldValues[field[kk]] = fieldValue; // Store the value in an object with the field name as key
+    }
+    // Update the info tab with the edited values
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            setupProfile(uId);
+            const infoTab = document.getElementById('info-tab-profile');
+            infoTab.click();
+            for(kk = 0; kk < field.length; kk++){
+                document.getElementById(['edit-' + field[kk] + '-profile']).value = '';
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/profile.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'flag': 'saveProfile', 'userId': uId, 'input': fieldValues};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+}
+
+// Save profile function
+function saveNewPass(uId) {
+    const currentPass = document.getElementById('current-pass-profile').value;
+    const newPass     = document.getElementById('new-pass-profile').value;
+    const newPassRe   = document.getElementById('new-pass-re-enter-profile').value;
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            data = JSON.parse(this.response);
+            if(data['status'] == 0) {
+                document.getElementById('current-pass-profile').value = '';
+                document.getElementById('new-pass-profile').value = '';
+                document.getElementById('new-pass-re-enter-profile').value = '';
+                window.alert('password changed successfully.');
+            } else if(data['status'] == 1) {
+                window.alert('old password is not correct');
+            } else if(data['status'] == 2) {
+                window.alert('new pass is not matching');
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/profile.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'flag': 'changePass', 'userId': uId, 'password': [currentPass, newPass, newPassRe]};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+}
+
+
+// get userId
+function changePassPhp(){
+    
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            user = JSON.parse(this.response);
+            let userid = user.userid;
+            saveNewPass(userid);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/admin.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let address = '';
+    let request = 'address=' + address;
+    xmlhttp.send(request);
+}
+
+
+// get userId
+function getUserId(){
+    
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            user = JSON.parse(this.response);
+            let userid = user.userid;
+            setupProfile(userid);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/admin.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let address = '';
+    let request = 'address=' + address;
+    xmlhttp.send(request);
+}
+
+// get userId
+function saveProfilePhp(){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            user = JSON.parse(this.response);
+            let userid = user.userid;
+            saveProfileJs(userid);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/admin.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let address = '';
+    let request = 'address=' + address;
+    xmlhttp.send(request);
+}
+
+function setupProfile(uId){
+    // Tab switching functionality
+    const infoTab = document.getElementById('info-tab-profile');
+    const editTab = document.getElementById('edit-tab-profile');
+    const settingTab = document.getElementById('setting-tab-profile');
+    const infoContent = document.querySelector('.info-content-profile');
+    const editContent = document.querySelector('.edit-content-profile');
+    const settingContent = document.querySelector('.setting-content-profile');
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            data = JSON.parse(this.response);
+            // set fields here
+            document.querySelector('.info-content-profile-name').innerHTML = '<p style="font-weight: bold; color: #012970"> Name: <span style="font-weight: lighter"> ' + data['name'] + '</span></p>';
+            document.querySelector('.info-content-profile-userId').innerHTML = '<p style="font-weight: bold; color: #012970"> ID: <span style="font-weight: lighter"> ' + data['userId'] + '</span></p>';
+            document.querySelector('.info-content-profile-accountType').innerHTML = '<p style="font-weight: bold; color: #012970"> Account Type: <span style="font-weight: lighter"> ' + data['accountType'] + '</span></p>';
+            document.querySelector('.info-content-profile-jobTitle').innerHTML = '<p style="font-weight: bold; color: #012970"> Job Title: <span style="font-weight: lighter"> ' + data['jobTitle'] + '</span></p>';
+            document.querySelector('.info-content-profile-phoneNumber').innerHTML = '<p style="font-weight: bold; color: #012970"> Phone Number: <span style="font-weight: lighter"> ' + data['phoneNumber'] + '</span></p>';
+            document.querySelector('.info-content-profile-email').innerHTML = '<p style="font-weight: bold; color: #012970"> Email: <span style="font-weight: lighter"> ' + data['email'] + '</span></p>';
+            document.querySelector('.info-content-profile-facebook').innerHTML = '<p style="font-weight: bold; color: #012970"> Facebook: <span style="font-weight: lighter"> ' + data['facebook'] + '</span></p>';
+            document.querySelector('.info-content-profile-insta').innerHTML = '<p style="font-weight: bold; color: #012970"> Instagram: <span style="font-weight: lighter"> ' + data['instagram'] + '</span></p>';
+            document.querySelector('.info-content-profile-twitter').innerHTML = '<p style="font-weight: bold; color: #012970"> Twitter: <span style="font-weight: lighter"> ' + data['twitter'] + '</span></p>';
+            document.querySelector('.info-content-profile-linkedIn').innerHTML = '<p style="font-weight: bold; color: #012970"> LinkedIn: <span style="font-weight: lighter"> ' + data['linkedIn'] + '</span></p>';
+            document.querySelector('.user-profile-name').innerHTML = data['name'];
+            document.querySelector('.user-title-name').innerHTML = data['jobTitle'];
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/profile.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'flag': 'getProfile', 'userId': uId};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+
+    infoTab.addEventListener('click', () => {
+        infoTab.classList.add('active');
+        editTab.classList.remove('active');
+        settingTab.classList.remove('active');
+        infoContent.classList.add('active');
+        editContent.classList.remove('active');
+        settingContent.classList.remove('active');
+    });
+
+    editTab.addEventListener('click', () => {
+        editTab.classList.add('active');
+        infoTab.classList.remove('active');
+        settingTab.classList.remove('active');
+        editContent.classList.add('active');
+        infoContent.classList.remove('active');
+        settingContent.classList.remove('active');
+    });
+
+    settingTab.addEventListener('click', () => {
+        settingTab.classList.add('active');
+        editTab.classList.remove('active');
+        infoTab.classList.remove('active');
+        settingContent.classList.add('active');
+        editContent.classList.remove('active');
+        infoContent.classList.remove('active');
+    });
 }

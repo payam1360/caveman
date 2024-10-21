@@ -188,7 +188,7 @@ function saveVerificationAndEmail($verification_code, $email, $name) {
     $tablename   = "authentication";
     $conn        = new mysqli($servername, $loginname, $password, $dbname);
     $userId      = mt_rand(100000, 999999);
-    $sql         = "INSERT INTO " . $tablename . " (userId, name, email, password, verification, accountType, emailVer, passVer, payVer, userStripeId, userStripeToken) VALUES('" . $userId . "','" . $name . "','" .  $email . "','" . "','" . $verification_code . "', '', '0', '0', '0', '', '');";
+    $sql         = "INSERT INTO " . $tablename . " (userId, name, email, phoneNumber, jobTitle, instagram, twitter, facebook, linkedIn, password, verification, accountType, emailVer, passVer, payVer, userStripeId, userStripeToken) VALUES('" . $userId . "','" . $name . "','" .  $email . "','" . "','" . "','" . "','" . "','" . "','" . "','" . "','" . $verification_code . "', '', '0', '0', '0', '', '');";
     $conn->query($sql);
     $conn->close();
 }
@@ -303,19 +303,14 @@ if($verified_dB['email'] == 0) {
         registerUserCredentials($userdata[PASS]->qAnswer, $userdata[EMAIL]->qAnswer);
         updatePassVerification($userdata[EMAIL]->qAnswer);
         if($userdata[PLAN]->qAnswer == "0") {
-            $numClients = 10;
-            $numCampaign = 1;
+            $numClients = 20;
+            $numCampaign = 2;
             $accountType = 'free';
             $data['status'] = 6;
         } elseif($userdata[PLAN]->qAnswer == "1") {
-            $numClients = 20;
-            $numCampaign = 2;
-            $accountType = 'delux';
-            $data['status'] = 7;
-        } elseif($userdata[PLAN]->qAnswer == "2") {
             $numClients = 50;
             $numCampaign = 5;
-            $accountType = 'premium';
+            $accountType = 'ai';
             $data['status'] = 7;
         } 
         createClientIdandCampaign($userdata[EMAIL]->qAnswer, $numClients, $numCampaign, $accountType);

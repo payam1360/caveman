@@ -188,7 +188,7 @@ function getRegisterForm() {
     $data['qIdx'] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     
     $data['options'] = [
-                            [["fa-solid fa-0","fa-solid fa-mug-saucer","fa-solid fa-sack-dollar"]],
+                            [["fa-solid fa-0","fa-solid fa-sack-dollar"]],
                             [[""]],
                             [[""]],
                             [["fa-regular fa-registered", "fa-solid fa-user-tie"]],
@@ -200,7 +200,7 @@ function getRegisterForm() {
                             [["fa-regular fa-circle-check"]]
                         ];
     $data['optionsText'] = [
-                                [["free","delux","premium"]],
+                                [["free plan", "AI plan"]],
                                 [[""]],
                                 [[""]],
                                 [["user already registered", "new user"]],
@@ -208,8 +208,8 @@ function getRegisterForm() {
                                 [["incorrect code", "continue to password"]],
                                 [[""]],
                                 [[""]],
-                                [["password not matching", "All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"],[""]],
-                                [["All done! please <a style=\"color: dodgerblue; text-decoration: underline;\" href=login.html>login</a>"]]
+                                [["password not matching", "All done! please <a style=\"color: dodgerblue; \" href=login.html> login</a>"],[""]],
+                                [["All done! please <a style=\"color: dodgerblue;\" href=login.html> login</a>"]]
                             ];
     $data['qRequired'] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     $data['qKey'] = [

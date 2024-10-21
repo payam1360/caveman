@@ -1043,3 +1043,174 @@ input[type="file"] {
 .okCampaignbtn:hover {
     background-color: #014599;
 }
+
+/* Blue fade effect on all sides */
+
+
+/* profile page*/
+
+/* Card styling */
+.card-profile {
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+    border: 0;
+    margin-top: 50px;
+}
+
+.card-profile::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    bottom: -10px;
+    left: -10px;
+    right: -10px;
+    background: radial-gradient(rgba(173, 216, 230, 0.4), transparent);
+    z-index: -1;
+    border-radius: 2px;
+}
+
+.user-profile-name {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #012970;
+}
+.user-title-name {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: lighter;
+    color: #012970;
+}
+/* Right card (tabs) */
+.tabs-profile {
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.tab-profile.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.content-profile {
+    display: none;
+}
+
+.content-profile.active {
+    display: block;
+}
+
+/* Info content */
+.info-content-profile p {
+    margin: 15px;
+}
+.edit-content-profile {
+    padding: 10px;
+}
+/* Edit profile content */
+.edit-content-profile input {
+    width: 70%;
+    padding: 8px;
+    margin-top: 10px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.edit-content-profile button {
+    background-color: #4285F4;
+    color: white;
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s;
+    position: absolute; 
+    bottom: 20px; 
+    right: 20px;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+    border: none;
+}
+.edit-content-profile button:hover {
+    background-color: #014599;
+}
+
+.setting-content-profile {
+    padding: 10px;
+}
+/* Edit profile content */
+.setting-content-profile input {
+    width: 70%;
+    padding: 8px;
+    margin-top: 10px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.setting-content-profile button {
+    background-color: #4285F4;
+    color: white;
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s;
+    position: absolute; 
+    bottom: 20px; 
+    right: 20px;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+    border: none;
+}
+.setting-content-profile button:hover {
+    background-color: #014599;
+}
+
+.user-social-media-name {
+    display: flex; /* Use flexbox to align icons */
+    justify-content: center; /* Center icons horizontally */
+    gap: 5px; /* Space between icons */
+    background-color: #ffffff; /* Background color for the container */
+}
+
+.user-social-media-name i {
+    font-size: 24px; /* Size of the icons */
+    color: #3498db; /* Icon color */
+    transition: color 0.3s; /* Smooth color transition */
+    padding: 15px; /* Inner spacing */
+}
+
+.user-social-media-name i:hover {
+    color: #2980b9; /* Darker color on hover */
+}
+
+
+.upgrade-container {
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.upgrade-container p {
+    font-size: 18px;
+    font-weight: lighter;
+    margin-bottom: 20px;
+    color: #014599;
+}
+
+.radio-group-profile {
+    margin: 15px;
+}
+
+.radio-group-profile label {
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.radio-group-profile input[type="radio"] {
+    margin-right: 5px;
+}

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>NutriAi-Admin</title>
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-icons.css" rel="stylesheet">
+        <link href="assets/css/main.css" rel="stylesheet">
+        <link href="assets/css/admin.css" rel="stylesheet">
+        <link href="assets/css/tools.css" rel="stylesheet">
+        <link rel="shortcut icon" href="#">
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed">
+
+        <nav class="sb-topnav navbar navbar-expand navbar-light bg-light">
+            <a class="navbar-brand ps-3" href="admin.html">
+                <p style="font-size: 30px; font-weight: 50; font-family: sans-serif;">
+                    Nutri<span style="color: coral; font-weight: 500;">Ai.</span>
+                </p>
+            </a>
+            <div>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <p style="font-size: 20px; font-weight: 500; font-family: sans-serif; color: #012970; padding-top: 40px;">
+                            Dashboard / Profile
+                        </p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ms-auto me-3 me-lg-4">
+                    <!-- Dropdown menu <p class="user-profile"></p>-->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle" style="font-size: 20px;"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                            <li>
+                                <a class="dropdown-item" href="profile.html">
+                                    <i class="bi bi-people" style="font-size: 20px;"></i> Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="setting.html">
+                                    <i class="bi bi-gear" style="font-size: 20px;"></i> Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="index.html">
+                                    <i class="bi bi-box-arrow-right" style="font-size: 20px;"></i> Log out
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                
+                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Nutri<span style="color: coral;">Ai.</span></div>
+                            <a class="nav-link" href="admin.html" style="color: #012970;">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Dashboard
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Management</div>
+                            <a class="nav-link" href="adminQ.html" style="color: #012970;">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-person-circle-question"></i></div>
+                                Manage Campaigns
+                            </a>
+                            <a class="nav-link" href="clients.html" style="color: #012970;">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear"></i></div>
+                                Manage Clients
+                            </a>
+                            <a class="nav-link" href="finances.html" style="color: #012970;">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-person-circle-question"></i></div>
+                                Manage Finances
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Social Media</div>
+                            <a class="nav-link" href="chat.html" style="color: #012970;">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-brands fa-whatsapp"></i></div>
+                                Contact Clients
+                            </a>
+                            <a class="nav-link" href="post.html" style="color: #012970;">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-brands fa-facebook"></i></div>
+                                Create Post
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small" style="color: #012970;">Logged in as: 
+                            <span class="user-text"></span>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+            <div id="layoutSidenav_content">
+                <div class="container">
+                    <div class="row" style="justify-content: start;">
+                        
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <!-- Left card: Picture and name -->
+                            <div class="card info-card card-profile">
+                                <div class="card-body">
+                                    <div class="infographic-image">
+                                        <img src="assets/img/profile.png" class="card-img-top" alt="Infographic" style="max-height: 400px; object-fit: cover;">
+                                    </div>
+                                    <div class="user-profile-name">John Doe</div>
+                                    <div class="user-title-name">Personal Trainer</div>
+                                    <div class="user-social-media-name"><i class="bi bi-twitter-x"></i><i class="bi bi-instagram"></i><i class="bi bi-facebook"></i><i class="bi bi-linkedin"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Right card: Tabs (Info and Edit Profile) -->
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="card card-profile" style="width: 700px; height: auto;">
+
+                                <ul class="nav nav-tabs tabs-profile">
+                                    <li class="nav-item">
+                                      <a class="nav-link tabs-profile active" id="info-tab-profile" aria-current="page">Info</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a class="nav-link tabs-profile" id="edit-tab-profile">Edit Profile</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link tabs-profile" id="setting-tab-profile">Settings</a>
+                                    </li>
+                                </ul>
+                        
+                                <!-- Info tab content -->
+                                <div class="content-profile info-content-profile">
+                                    <p class="info-content-profile-name"></p>
+                                    <p class="info-content-profile-userId"></p>
+                                    <p class="info-content-profile-accountType"></p>
+                                    <p class="info-content-profile-jobTitle"></p>
+                                    <p class="info-content-profile-phoneNumber"></p>
+                                    <p class="info-content-profile-email"></p>
+                                    <p class="info-content-profile-facebook"></p>
+                                    <p class="info-content-profile-insta"></p>
+                                    <p class="info-content-profile-twitter"></p>
+                                    <p class="info-content-profile-linkedIn"></p>
+                                </div>
+                        
+                                <!-- Edit profile tab content -->
+                                <div class="content-profile edit-content-profile">
+                                    <input type="text" id="edit-name-profile" placeholder="Name">
+                                    <input type="text" id="edit-jobTitle-profile" placeholder="Job title">
+                                    <input type="text" id="edit-phoneNumber-profile" placeholder="Phone number">
+                                    <input type="text" id="edit-facebook-profile" placeholder="Facebook">
+                                    <input type="text" id="edit-insta-profile" placeholder="Instagram">
+                                    <input type="text" id="edit-twitter-profile" placeholder="Twitter">
+                                    <input type="text" id="edit-linkedIn-profile" placeholder="linkedIn">
+                                    <button onclick="saveProfile()">Save</button>
+                                </div>
+
+                                <!-- Settings tab content -->
+                                <div class="content-profile setting-content-profile active">
+                                    <input type="password" id="current-pass-profile" placeholder="current password">
+                                    <input type="password" id="new-pass-profile" placeholder="new password">
+                                    <input type="password" id="new-pass-re-enter-profile" placeholder="re-enter new password">
+                                    <button onclick="changePassPhp()">Save</button>
+                                    <div class="upgrade-container">
+                                        <p>Upgrade Account Type</p>
+                                        <div class="radio-group-profile">
+                                            <input type="radio" id="free" name="account" value="free">
+                                            <label for="free">Free</label>
+                                        </div>
+                                        <div class="radio-group-profile">
+                                            <input type="radio" id="ai-active" name="account" value="ai-active">
+                                            <label for="ai-active">AI</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Nutri<span style="color: coral;">Ai.</span> 2024</div>
+                            <div>
+                                <a href="privacypolicy.html">Privacy Policy</a>
+                                &middot;
+                                <a href="termsofservice.html">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="assets/js/aux.js"></script>
+        <script src="assets/js/profile.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
