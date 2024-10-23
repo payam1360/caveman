@@ -14,6 +14,7 @@
         <link href="assets/css/tools.css" rel="stylesheet">
         <link rel="shortcut icon" href="#">
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="https://js.stripe.com/v3/"></script>
     </head>
     <body class="sb-nav-fixed">
 
@@ -108,24 +109,24 @@
 
             <div id="layoutSidenav_content">
                 <div class="container">
-                    <div class="row" style="justify-content: start;">
+                    <div class="row" style="justify-content: start; flex-wrap: wrap;">
                         
-                        <div class="col-sm-12 col-md-6 col-lg-3">
+                        <div class="col-sm-12 col-md-6 col-lg-3 " style="flex: 1;">
                             <!-- Left card: Picture and name -->
                             <div class="card info-card card-profile">
                                 <div class="card-body">
                                     <div class="infographic-image">
                                         <img src="assets/img/profile.png" class="card-img-top" alt="Infographic" style="max-height: 400px; object-fit: cover;">
                                     </div>
-                                    <div class="user-profile-name">John Doe</div>
-                                    <div class="user-title-name">Personal Trainer</div>
+                                    <div class="user-profile-name"></div>
+                                    <div class="user-title-name"></div>
                                     <div class="user-social-media-name"><i class="bi bi-twitter-x"></i><i class="bi bi-instagram"></i><i class="bi bi-facebook"></i><i class="bi bi-linkedin"></i></div>
                                 </div>
                             </div>
                         </div>
                         <!-- Right card: Tabs (Info and Edit Profile) -->
-                        <div class="col-sm-12 col-md-6 col-lg-3">
-                            <div class="card card-profile" style="width: 700px; height: auto;">
+                        <div class="col-sm-12 col-md-6 col-lg-3" style="flex: 2;">
+                            <div class="card card-profile" style="height: auto;">
 
                                 <ul class="nav nav-tabs tabs-profile">
                                     <li class="nav-item">
@@ -158,11 +159,12 @@
                                     <input type="text" id="edit-name-profile" placeholder="Name">
                                     <input type="text" id="edit-jobTitle-profile" placeholder="Job title">
                                     <input type="text" id="edit-phoneNumber-profile" placeholder="Phone number">
+                                    <input type="text" id="edit-email-profile" placeholder="Email">
                                     <input type="text" id="edit-facebook-profile" placeholder="Facebook">
                                     <input type="text" id="edit-insta-profile" placeholder="Instagram">
                                     <input type="text" id="edit-twitter-profile" placeholder="Twitter">
                                     <input type="text" id="edit-linkedIn-profile" placeholder="linkedIn">
-                                    <button onclick="saveProfile()">Save</button>
+                                    <button onclick="saveProfilePhp()">Save</button>
                                 </div>
 
                                 <!-- Settings tab content -->
@@ -170,18 +172,22 @@
                                     <input type="password" id="current-pass-profile" placeholder="current password">
                                     <input type="password" id="new-pass-profile" placeholder="new password">
                                     <input type="password" id="new-pass-re-enter-profile" placeholder="re-enter new password">
-                                    <button onclick="changePassPhp()">Save</button>
                                     <div class="upgrade-container">
-                                        <p>Upgrade Account Type</p>
+                                        <p>Change Account Type</p>
                                         <div class="radio-group-profile">
                                             <input type="radio" id="free" name="account" value="free">
                                             <label for="free">Free</label>
                                         </div>
                                         <div class="radio-group-profile">
-                                            <input type="radio" id="ai-active" name="account" value="ai-active">
+                                            <input type="radio" id="ai" name="account" value="ai">
                                             <label for="ai-active">AI</label>
                                         </div>
                                     </div>
+                                    <div class="payment-form" style="display: none;">
+                                        <!-- Stripe element will be injected here -->
+                                    </div>
+                                    <button class="setting-btn" onclick="changePassPhp()">Save</button>
+                                    <button class="payment-account" style="margin-right: 50px; display: none;">Pay</button>
                                 </div>
                             </div>
                         </div>

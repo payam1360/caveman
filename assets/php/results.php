@@ -40,8 +40,9 @@ function extractUserInfo($userId) {
     $mealEng      = array();
     $nutritionEng = array();
     $campaignidAssigned = array();
+    $clientHasResponded = array();
     $clientIdx = 0;
-    while($database_row = $database_out->fetch_assoc()) {
+    while($database_row = $database_out->fetch_assoc()) { 
         // filling out info briefs
         array_push($names, $database_row['name']);
         array_push($ids, $database_row['clientId']);
@@ -54,8 +55,12 @@ function extractUserInfo($userId) {
         $tempClientId   = $database_row['clientId'];
         $sqlupdate      = "SELECT qKey, qAnswer, optionsText FROM $table2name WHERE userId = '$userId' AND clientId = '$tempClientId';";
         $dOut           = $conn->query($sqlupdate);
-        $clientHasResponded = false;
+        $numResponses   = 0;
         while($dOut_row = $dOut->fetch_assoc()) {
+            // determine if the client has responded
+            if($dOut_row['qAnswer'] != ''){
+                $numResponses++;
+            }
             if($dOut_row['qKey'] == 'gender'){
                 $genderUpdateIndex = $dOut_row['qAnswer'];
                 $genderText = $dOut_row['optionsText'];
@@ -78,7 +83,6 @@ function extractUserInfo($userId) {
         if(isset($updatedGender) && isset($updatedGoal)) {
             array_push($genders, $updatedGender);
             array_push($goals, $updatedGoal);
-            $clientHasResponded = true;
             unset($updatedGoal);
             unset($updatedGender);
         } else {
@@ -121,6 +125,7 @@ function extractUserInfo($userId) {
             }           
         }
         array_push($campaignidAssigned, $database_row['campaignId']);
+        array_push($clientHasResponded, $numResponses);
         $clientIdx++;
     }
     
@@ -215,7 +220,7 @@ function deleteClient($userid, $clientid) {
     $conn->query($sql);
     // add the entry back into the userAllocation with empty entries
     $telegramNewChat = 0;
-    $sql          = "INSERT INTO $table2name (userId, clientId, campaignId, name, cEmail, gender, phoneNumber, telegramChatId, telegramUserName, telegramNewChat, goal, nutritionEng, mealEng, descBmi, descBmr, descIf, descMacro, descMicroTrace, descMicroVit, descCal, descMeal) VALUES('$userid','$clientid','', '', '', '', '', '', '', '$telegramNewChat', '', '', '', '', '', '', '', '', '', '', '');";
+    $sql          = "INSERT INTO $table2name (userId, clientId, campaignId, name, cEmail, gender, phoneNumber, telegramChatId, telegramUserName, telegramNewChat, goal, nutritionEng, mealEng, descAddress) VALUES('$userid','$clientid','', '', '', '', '', '', '', '$telegramNewChat', '', '', '', '');";
     $conn->query($sql);
     $conn->close();
     // cleanup the related files
@@ -260,7 +265,6 @@ if($userdata->clientId != '') {
     $user_cal      = calculateCalories($clientInfo);    
     $user_meal     = calculateMeal($clientInfo);
     $output        = dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro, $user_cal, $user_meal);
-
 } else {
     $output = '';
     $clientInfo = '';

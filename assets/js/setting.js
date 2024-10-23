@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   "use strict";
     /* define the class for questions*/
     getUserInfo();
+    getUserId();
 });
 
 

@@ -1,7 +1,25 @@
 <?php
 require '../../vendor/autoload.php';
 
-\Stripe\Stripe::setApiKey('sk_test_51Odb1JGvkwgMtml80Bc0CdBOesMqZzMeulH9j8QO03HnfrLniWn96gEYLK9QdLbmmXQ1voYVKBib06UaTdqxgzfP00P41SGnWu');
+function getStripeSecretToken(){
+    // server connect
+    $servername  = "127.0.0.1";
+    $loginname   = "root";
+    $password    = "@Ssia123";
+    $dbname      = "Users";
+    $conn        = new mysqli($servername, $loginname, $password, $dbname);
+    $tablename   = "admin";
+    $sql         = "SELECT stripeSecretToken FROM $tablename;";
+    $db_out      = $conn->query($sql);
+    $stripeSecretToken = $db_out->fetch_assoc();
+    $stripeSecretToken = $stripeSecretToken['stripeSecretToken'];
+    return $stripeSecretToken;
+}
+
+$userInfo      = json_decode($_POST['userInfo']);
+
+$stripeSecretToken = getStripeSecretToken();
+\Stripe\Stripe::setApiKey($stripeSecretToken);
 // Get the authorization code from the query string
 $code = $_GET['code'];
 

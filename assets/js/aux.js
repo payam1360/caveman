@@ -347,7 +347,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
         case 'email':
             newIn = document.createElement('input');
             newIn.setAttribute('class', 'form-input-style');
-            newIn.setAttribute('pattern', '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$');
+            newIn.setAttribute('pattern', '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
             newIn.setAttribute('type', userStruct.qType[serverStruct]);
             newIn.setAttribute('required', userStruct.qRequired);
             querySelIn.appendChild(newIn);
@@ -981,9 +981,9 @@ function getPublicStripeKey(){
         }
     };
     // sending the request
-    xmlhttp.open("POST", "assets/php/getStripePublicKey.php", true);
+    xmlhttp.open("POST", "assets/php/getAdminKeys.php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    let inputData = {'userId': ''};
+    let inputData = {'flag': 'stripeToken'};
     let request = "userInfo="+JSON.stringify(inputData);
     xmlhttp.send(request);
 }
@@ -1840,7 +1840,7 @@ function submitUserData(inputDataBlob, page, userPage) {
                 plotCalories(data.cal); // 5
                 displayMeal(data.meal, inputDataBlob, userPage); // 6
                 callAd();
-                intervalID = setInterval(handleAi, 2000, [userPage, 1, 1]);
+                intervalID = setInterval(handleAi, 2000, [userPage, 1, 1, false, false, [], '', '']);
             }
         }
     };
@@ -2533,6 +2533,11 @@ function handleAi(inPut) {
     userPage     = inPut[0];
     nutritionEng = inPut[1];
     mealEng      = inPut[2];
+    callPdf      = inPut[3];
+    callEmail    = inPut[4];
+    clientData   = inPut[5];
+    userid       = inPut[6];
+    clientid     = inPut[7];
     let spinner  = document.getElementsByClassName('spinner-ai'); 
     contextSet   = ['Bmi', 'If', 'Macro', 'MicroTrace', 'MicroVit', 'Cal', 'Meal'];
     // creating the server side update event source
@@ -2599,7 +2604,7 @@ function handleAi(inPut) {
             break;
         }
     }
-    if(typeof activeSSE !== 'undefined' && spinner){
+    if(typeof activeSSE !== 'undefined' &&  spinner.length !== 0){
         spinner[activeSSE].style.opacity = 1;
     }
     if(allowNewAiStream == true && (mealEng == 0 || nutritionEng == 0)) {
@@ -2609,7 +2614,7 @@ function handleAi(inPut) {
             eventSource = new EventSource("../assets/php/ai.php?type=" + typeEventSource);
         }
         allowNewAiStream = false; // lock serving other evenSources
-        txt_var.innerHTML = '<br> Created by Zephyr 7 billion beta language model from Hugging Face:<br><br>';
+        txt_var.innerHTML = '<br> Created by Zephyr 7 billion beta language model from Hugging Face:<br><br>'; 
         eventSource.onmessage = function (e) {
             aiText = e.data;
             if(aiText.includes("DONE")) {
@@ -2617,9 +2622,34 @@ function handleAi(inPut) {
                 txt_var.innerHTML += "<br><br>Good Luck!";
                 eventSource.close();
                 allowNewAiStream = true;
+                if(callPdf && (mealEng == 1 || (mealEng == 0 && eventSourceQueue['Meal'] == false)) && 
+                              (nutritionEng == 1 || (nutritionEng == 0 && 
+                                                    eventSourceQueue['Bmi'] == false &&
+                                                    eventSourceQueue['If'] == false &&
+                                                    eventSourceQueue['Macro'] == false &&
+                                                    eventSourceQueue['MicroTrace'] == false &&
+                                                    eventSourceQueue['MicroVit'] == false &&
+                                                    eventSourceQueue['Cal'] == false))) {
+                    let parentNode = document.querySelector('.client-list-parent');
+                    parentNode.style.opacity = 1;                                  
+                    createPdf(clientData);
+                }
+                if(callEmail && (mealEng == 1 || (mealEng == 0 && eventSourceQueue['Meal'] == false)) && 
+                (nutritionEng == 1 || (nutritionEng == 0 && 
+                                      eventSourceQueue['Bmi'] == false &&
+                                      eventSourceQueue['If'] == false &&
+                                      eventSourceQueue['Macro'] == false &&
+                                      eventSourceQueue['MicroTrace'] == false &&
+                                      eventSourceQueue['MicroVit'] == false &&
+                                      eventSourceQueue['Cal'] == false))) {  
+                    let parentNode = document.querySelector('.client-list-parent');
+                    parentNode.style.opacity = 1;
+                    sendEmail(parentNode, clientData, userid, clientid);
+                }
+                
             } else {
                 // styling the text as it comes through
-                if(typeof activeSSE !== 'undefined' && typeof spinner !== 'undefined'){
+                if(typeof activeSSE !== 'undefined' && spinner.length !== 0 ){
                     spinner[activeSSE].style.opacity = 0;
                 }
                 aiText = aiText.replace(/NewLine/g, '<br>');
@@ -3112,6 +3142,7 @@ function clientEmailForm(event){
 
 function clientDownloadPDF(event){
 
+    let parentNode = document.querySelector('.client-list-parent');
     mDiv = document.querySelectorAll('.client-list');
     idx  = event.target.attributes.midx.value;
     mDiv = mDiv[idx];
@@ -3121,7 +3152,7 @@ function clientDownloadPDF(event){
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             clientData = JSON.parse(this.response);
-            createPdf(clientData.client);
+            displayClientsDetails(parentNode, clientData.client, clientData.input, clientData, idx, true, false);
         }
     };
     // sending the request
@@ -3145,7 +3176,7 @@ function clientEmailReport(event){
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             clientData = JSON.parse(this.response);
-            sendEmail(parentNode, clientData, userid, clientid);
+            displayClientsDetails(parentNode, clientData.client, clientData.input, clientData, idx, false, true);
         }
     };
     // sending the request
@@ -3197,7 +3228,7 @@ function getClientDetails(parentNode, result, cidx){
 }
 
 
-function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx) {
+function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx, pdfCall = false, emailCall = false) {
     
     userid = parentNode.children[cidx].children[0].getAttribute('userid');
     clientid = parentNode.children[cidx].children[0].getAttribute('clientid');
@@ -4007,8 +4038,7 @@ function displayClientsDetails(parentNode, clientData, inputBlob, results, cidx)
         plotMicroVit(clientData.micro, microVit, microVitTxt, microVitDesc);
         plotCalories(clientData.cal, Cal, calTxt, calDesc);
         displayMeal(clientData.meal, inputBlob, 0); 
-        
-        intervalID = setInterval(handleAi, 2000, [0, results.nutritionEng[cidx], results.mealEng[cidx]]);
+        intervalID = setInterval(handleAi, 2000, [0, results.nutritionEng[cidx], results.mealEng[cidx], pdfCall, emailCall, clientData, userid, clientid]);
     }
 }
 
@@ -4173,7 +4203,7 @@ function createPdf(data) {
     let heightP               = document.getElementById('mDivpHeight');
     let emailP                = document.getElementById('mDivpEmail');
     let waterP                = document.getElementById('mDivpWater');
-
+    let MealText              = document.querySelector('.meal_text');
 
     var pdf = new jsPDF({
                          orientation: 'p',
@@ -4398,7 +4428,12 @@ function createPdf(data) {
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
     drawTextSetting = {x: 50, y: 70, maxWidth: 350, lineHeight: 15};
-    segments = parseHTMLText(data.meal['desc'][0]);
+    if(data.meal['desc'] == null){
+        mealDesc = MealText.innerHTML;
+    } else {
+        mealDesc = data.meal['desc'][0];
+    }
+    segments = parseHTMLText(mealDesc);
     drawText(pdf, segments, drawTextSetting);
 
 
@@ -4436,6 +4471,7 @@ function sendEmail(parentNode, clientData, userid, clientid) {
             data = JSON.parse(this.response);
             if(data['status'] == 0) {
                 window.alert('email sent to the client!');
+
             }
         }
     };
@@ -5056,28 +5092,30 @@ function saveNewPass(uId) {
     const currentPass = document.getElementById('current-pass-profile').value;
     const newPass     = document.getElementById('new-pass-profile').value;
     const newPassRe   = document.getElementById('new-pass-re-enter-profile').value;
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            data = JSON.parse(this.response);
-            if(data['status'] == 0) {
-                document.getElementById('current-pass-profile').value = '';
-                document.getElementById('new-pass-profile').value = '';
-                document.getElementById('new-pass-re-enter-profile').value = '';
-                window.alert('password changed successfully.');
-            } else if(data['status'] == 1) {
-                window.alert('old password is not correct');
-            } else if(data['status'] == 2) {
-                window.alert('new pass is not matching');
+    if(currentPass != ''){
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                data = JSON.parse(this.response);
+                if(data['status'] == 0) {
+                    document.getElementById('current-pass-profile').value = '';
+                    document.getElementById('new-pass-profile').value = '';
+                    document.getElementById('new-pass-re-enter-profile').value = '';
+                    window.alert('password changed successfully.');
+                } else if(data['status'] == 1) {
+                    window.alert('old password is not correct');
+                } else if(data['status'] == 2) {
+                    window.alert('new pass is not matching');
+                }
             }
-        }
-    };
-    // sending the request
-    xmlhttp.open("POST", "assets/php/profile.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    let info = {'flag': 'changePass', 'userId': uId, 'password': [currentPass, newPass, newPassRe]};
-    var userdata = "userInfo="+JSON.stringify(info);
-    xmlhttp.send(userdata);
+        };
+        // sending the request
+        xmlhttp.open("POST", "assets/php/profile.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        let info = {'flag': 'changePass', 'userId': uId, 'password': [currentPass, newPass, newPassRe]};
+        var userdata = "userInfo="+JSON.stringify(info);
+        xmlhttp.send(userdata);
+    }
 }
 
 
@@ -5146,7 +5184,7 @@ function setupProfile(uId){
     const infoContent = document.querySelector('.info-content-profile');
     const editContent = document.querySelector('.edit-content-profile');
     const settingContent = document.querySelector('.setting-content-profile');
-
+    stripe = getPublicStripeKey();
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -5164,6 +5202,7 @@ function setupProfile(uId){
             document.querySelector('.info-content-profile-linkedIn').innerHTML = '<p style="font-weight: bold; color: #012970"> LinkedIn: <span style="font-weight: lighter"> ' + data['linkedIn'] + '</span></p>';
             document.querySelector('.user-profile-name').innerHTML = data['name'];
             document.querySelector('.user-title-name').innerHTML = data['jobTitle'];
+            document.querySelector('input[value="' + data['accountType'] + '"]').checked = true;
         }
     };
     // sending the request
@@ -5199,4 +5238,150 @@ function setupProfile(uId){
         editContent.classList.remove('active');
         infoContent.classList.remove('active');
     });
+    document.querySelectorAll('input[name="account"]').forEach((radio) => {
+        radio.addEventListener('change', handleAccountUpgrade);
+    });
+}
+
+function handleAccountUpgrade(event) {
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            user = JSON.parse(this.response);
+            let userid = user.userid;
+            const selectedValue = event.target.value;
+            // Perform any other logic based on the selected account type
+            if (selectedValue === "free") {
+                updateAccountType('free', userid);
+            } else if (selectedValue === "ai") {
+                updateAccountType('ai', userid);
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/admin.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let address = '';
+    let request = 'address=' + address;
+    xmlhttp.send(request);
+
+}
+function updateAccountType(accountType, uId) {
+    
+    let payDiv  = document.querySelector('.payment-form');
+    let payBtn  = document.querySelector('.payment-account');
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            data = JSON.parse(this.response);
+            if(accountType == 'ai'){ // set stripe charge
+                payDiv.style.display = 'flex';
+                createAccountTypeStripePayment(payDiv, uId);
+            } else if(accountType == 'free') { // remove stripe charge
+                payBtn.style.display = 'none';
+                payDiv.style.display = 'none';
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/profile.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'flag': 'updateAccountType', 'userId': uId, 'accountType': accountType};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+}
+
+
+function createAccountTypeStripePayment(payDiv, uId){
+
+    // check if the user has already paid
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            data = JSON.parse(this.response);
+            if(data['status']){  //
+                let payBtn  = document.querySelector('.payment-account');
+                payBtn.style.display = 'flex';
+                // Define your custom styles for the elements
+                var style = {
+                    base: {
+                    color: '#32325d',
+                    fontFamily: 'Arial, sans-serif',
+                    fontSmoothing: 'antialiased',
+                    fontSize: '16px',
+                    '::placeholder': {
+                        color: '#aab7c4',
+                    },
+                    },
+                    invalid: {
+                    color: '#fa755a',
+                    iconColor: '#fa755a',
+                    },
+                };
+                
+                const appearance = {
+                    theme: 'flat',
+                    variables: {
+                    colorPrimary: '#0570de',
+                    colorBackground: '#ffffff',
+                    colorText: 'mediumseagreen',
+                    colorDanger: '#df1b41',
+                    fontFamily: 'Lucida Casual, Comic Sans MS',
+                    fontSize: '20px',
+                    spacingUnit: '0px',
+                    borderRadius: '10px',
+                    },
+                    rules: {
+                    '.Input': {
+                        border: '1px solid #012970',
+                    },
+                    '.Label': {
+                        opacity: 0,
+                    },
+                    },
+                };
+                
+                // Initialize stripe elements
+                stripeElements = stripe.elements({
+                    mode: 'payment',
+                    currency: 'usd',
+                    amount: 50, // cents
+                    appearance: appearance,
+                });
+                
+                // Create the payment element with the custom style
+                let paymentElement = stripeElements.create('payment', {
+                    paymentMethodOrder: ['card'],
+                    style: style,
+                });
+                
+                // Create the container for the Stripe element
+                let stripeCard = document.createElement('div');
+                stripeCard.setAttribute('id', 'stripeId');
+                
+                // Style the container directly with CSS for width and height
+                stripeCard.style.width = '100%';   // Custom width
+                stripeCard.style.marginBottom = '70px';
+                
+                // Append the container to the target div
+                payDiv.appendChild(stripeCard);
+                
+                // Mount the Stripe element to the container
+                paymentElement.mount('#stripeId');
+                
+                // Apply any additional styles to the containing div
+                payDiv.style.borderBottom = '0px solid coral';
+                                
+            } else { 
+            }
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/profile.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'flag': 'verifyPayment', 'userId': uId};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
+
 }

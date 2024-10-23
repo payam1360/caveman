@@ -1,5 +1,20 @@
 <?php
 
+function getPexelToken(){
+   $servername  = "127.0.0.1";
+   $loginname   = "root";
+   $password    = "@Ssia123";
+   $dbname      = "Users";
+   $conn        = new mysqli($servername, $loginname, $password, $dbname);
+   $tablename   = "admin";
+   $sql         = "SELECT pexelToken FROM $tablename;";
+   $db_out      = $conn->query($sql);
+   $pexelToken = $db_out->fetch_assoc();
+   $pexelToken = $pexelToken['pexelToken'];
+   return $pexelToken;
+}
+
+
 header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
 
@@ -16,7 +31,7 @@ switch ($eventType) {
       $newTokenSize = "10";
       break;
    case 'image':
-      $apiKey = '8iYwOBnGddIiwrlLDNVz6RmT6ATnqjeAy3mA83SLMIBFNqXkqwe6qj6b'; // Replace with your actual Pexels API key
+      $apiKey = getPexelToken(); // Replace with your actual Pexels API key
       $query  = $image; // Search query for images
       $apiUrl = 'https://api.pexels.com/v1/search?query=' . urlencode($query) . '&per_page=1' . '&orienation=landscape';
       // Initialize a cURL session

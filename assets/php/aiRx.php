@@ -11,32 +11,15 @@ $goal   = getGoal($data);   // lose, gain,
 $stress = getStress($data); // lose, gain, 
 $sleep  = getSleep($data);  // lose, gain, 
 
-
-$servername  = "127.0.0.1";
-$loginname   = "root";
-$password    = "@Ssia123";
-$dbname      = "Users";
-$tablename   = "ai";
-// Create connection
-$conn        = new mysqli($servername, $loginname, $password, $dbname);
-// check if the client exists.
-$sql         = "SELECT meal FROM $tablename WHERE 
-                                                    age    = '$age'    AND 
-                                                    gender = '$gender' AND
-                                                    height = '$height' AND
-                                                    weight = '$weight' AND
-                                                    goal   = '$goal'   AND
-                                                    stress = '$stress'  AND
-                                                    sleep  = '$sleep';";
-$db_out   = $conn->query($sql);
-$meal     = $db_out->fetch_assoc();
-
-if(is_null($meal['meal'])) {
-    $meal['meal'] = '';
+$mealPath = '../../descContent/' . $age . $gender . $height . $weight . $goal . $stress . $sleep . '.txt';
+if(file_exists($mealPath)){
+    $desc = [file_get_contents($mealPath)];
+} else {
+    $desc = ['DONE'];
 }
 
 session_start();
-$_SESSION['Meal']['meal']    = json_encode($meal['meal']); // this is either empty or it is already filled by the language model
+$_SESSION['Meal']['meal']    = $desc; // this is either empty or it is already filled by the language model
 $_SESSION['Meal']['gender']  = $gender; 
 $_SESSION['Meal']['age']     = $age; 
 $_SESSION['Meal']['height']  = $height; 

@@ -34,7 +34,7 @@ function createClientIdandCampaign($email, $numAllocation, $numCampaign, $accoun
     $telegramNewChat = 0;
     for($kk = 0; $kk < $numAllocation; $kk++) {
         $clientId    = mt_rand(10000, 99999);
-        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, name, cEmail, gender, phoneNumber, telegramChatId, telegramUserName, telegramNewChat, goal, nutritionEng, mealEng, descBmi, descBmr, descIf, descMacro, descMicroTrace, descMicroVit, descCal, descMeal) VALUES('$userId','$clientId','', '', '', '', '', '', '', '$telegramNewChat', '', '', '', '', '', '', '', '', '', '', '');";
+        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, name, cEmail, gender, phoneNumber, telegramChatId, telegramUserName, telegramNewChat, goal, nutritionEng, mealEng, descAddress) VALUES('$userId','$clientId','', '', '', '', '', '', '', '$telegramNewChat', '', '', '', '');";
         $conn->query($sql);
     }
 

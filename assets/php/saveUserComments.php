@@ -10,22 +10,39 @@ function saveUserComment($clientId, $userId, $comment, $category) {
     // Create connection
     $conn         = new mysqli($servername, $loginname, $password, $dbname);
     // check if the client exists.
+    $descFlag = false;
     if($category == 'Bmi') {
         $field = 'descBmi';
+        $descFlag = true;
     } elseif($category == 'Macro') {
         $field = 'descMacro';
+        $descFlag = true;
     } elseif($category == 'Micro') {
         $field = 'descMicroTrace';
+        $descFlag = true;
     } elseif($category == 'MicroVit') {
         $field = 'descMicroVit';
+        $descFlag = true;
     } elseif($category == 'Meal') {
         $field = 'descMeal';
+        $descFlag = true;
     } elseif($category == 'If') {
         $field = 'descIf';
+        $descFlag = true;
     } elseif($category == 'Cal') {
-            $field = 'descCal';    
+        $field = 'descCal'; 
+        $descFlag = true;   
     } elseif($category == 'campaign') {
         $field = 'campaignId';
+        $descFlag = false;
+    }
+    // save text description in file:
+    if($descFlag) {
+        $descPath = '../../descContent/' . $userId . $clientId . $field . '.txt';
+        file_put_contents($descPath, $comment);
+        // update the field and comment in DB
+        $field = 'descAddress';
+        $comment = '../../descContent/' . $userId . '__' . $clientId; // address
     }
     $sql = "UPDATE $tablename SET 
                                             $field = '$comment'  

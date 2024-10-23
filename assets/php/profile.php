@@ -93,6 +93,27 @@ function saveProfileInfo($conn, $userId, $data) {
 }
 
 
+function updateAccountType($conn, $userId, $accountType) {
+    $tablename = 'authentication';
+    $sql       = "UPDATE $tablename SET accountType = '$accountType' WHERE userId = '$userId';";
+    $db_out    = $conn->query($sql);
+    return true;
+}
+
+function verifyPayment($conn, $userId) {
+    $tablename = 'authentication';
+    $sql       = "SELECT payVer FROM $tablename WHERE userId = '$userId';";
+    $db_out    = $conn->query($sql);
+    $db_out    = $db_out->fetch_assoc();
+    $db_out    = $db_out['payVer'];
+    if($db_out == '1') {
+        $data['status'] = false;
+    } else {
+        $data['status'] = true;
+    }
+    return $data['status'];
+}
+
 // Replace these with your actual credentials
 $userInfo      = json_decode($_POST['userInfo']);
 // server connect
@@ -108,7 +129,11 @@ if($userInfo->flag == 'changePass') {
     $response = saveProfileInfo($conn, $userInfo->userId, $userInfo->input);
 } elseif($userInfo->flag == 'getProfile'){
     $response = getProfileInfo($conn, $userInfo->userId);
-} 
+} elseif($userInfo->flag == 'updateAccountType') {
+    $response = updateAccountType($conn, $userInfo->userId, $userInfo->accountType);
+} elseif($userInfo->flag == 'verifyPayment') {
+    $response = verifyPayment($conn, $userInfo->userId);
+}
 $conn->close();
 echo json_encode($response);
 

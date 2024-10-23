@@ -764,14 +764,14 @@ function calculateMeal($data){
                    'sleep' => $Usersleep, 
                    'age' => $Userage); 
     if(!isset($data[0])){
-        $Meal['desc'] = [''];
+        $Meal['desc'] = '';
     } elseif($data[0]->mealEng == "0") { // AI request has priority 
         $Meal['desc']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Meal'); 
     } elseif($data[0]->mealEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
         $Meal['desc']   = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Meal');
     } else {
-        $Macro['val'] = [];
-        $Macro['desc']  = ['Please provide your comments here'];
+        $Meal['val']  = [];
+        $Meal['desc'] = 'Please provide your comments here. DONE';
     }
     return($Meal);
 }
@@ -873,50 +873,38 @@ function dataPrep($user_bmi, $user_bmr, $user_if, $user_macro, $user_micro, $use
 }
 
 function dbMealCon($weight, $height, $age, $gender, $goal, $stress, $sleep) {
-    $servername   = "127.0.0.1";
-    $loginname    = "root";
-    $password     = "@Ssia123";
-    $dbname       = "Users";
-    $tablename    = "ai";
+    
     // Create connection
-    $query_flag = empty($weight) && empty($height) && empty($age) && empty($gender) && 
-                  empty($goal) && empty($stress) && empty($sleep);
-    $conn         = new mysqli($servername, $loginname, $password, $dbname);
+    $query_flag = empty($weight) && empty($height) && empty($age) && empty($gender) && empty($goal) && empty($stress) && empty($sleep);
+
     if(!$query_flag) {
-        $sql          = "SELECT meal FROM $tablename WHERE 
-                                                        age    = '$age' AND 
-                                                        gender = '$gender' AND 
-                                                        stress = '$stress' AND 
-                                                        sleep  = '$sleep' AND 
-                                                        height = '$height' AND 
-                                                        weight = '$weight' AND 
-                                                        goal   = '$goal';";
-        $database_out = $conn->query($sql);
-        $database_out = $database_out->fetch_assoc();
+        $mealPath = '../../descContent/' . $age . $gender . $height . $weight . $goal . $stress . $sleep . '.txt';
+        if(file_exists($mealPath)){
+            $database_out['meal'] = file_get_contents($mealPath);
+        } else {
+            $database_out['meal'] = 'DONE';
+        }
     } else {
-        $database_out['meal'] = '';
+        $database_out['meal'] = 'DONE';
     }
     return($database_out);
 }
 
-function dbCon($userId, $clientId) {
-    $servername   = "127.0.0.1";
-    $loginname    = "root";
-    $password     = "@Ssia123";
-    $dbname       = "Users";
-    $tablename    = "userAllocation";
-    // Create connection
-    $conn         = new mysqli($servername, $loginname, $password, $dbname);
-    // check if the client exists.
-    $sql          = "SELECT * FROM $tablename WHERE userId = '$userId' AND clientId = '$clientId';";
-    $database_out         = $conn->query($sql); 
+function dbCon($userId, $clientId, $contextFlag) {
+    $field = 'desc' . $contextFlag;
+    
+    $path = '../../descContent/' . $userId . $clientId . $field . '.txt';
+    if (file_exists($path)) {
+        $database_out[$field] = file_get_contents($path);
+    } else {
+        $database_out[$field] = 'DONE';
+    }
     return($database_out);
 }
 
 
 function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $userId, $clientId, $contextFlag){
-    $dbOut    = dbCon($userId, $clientId);
-    $dbOutRow = $dbOut->fetch_assoc();
+    $dbOutRow    = dbCon($userId, $clientId, $contextFlag);
     $desc = [];
     // bunch of mutually exclusive flags
     $HighYoungMaleLose   = $Bmi > 25 && $Usergender == 'male'   && $Userage < 35 && $Usergoal == 'lose';
@@ -938,7 +926,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
     $LowOldFemaleGain  = $Bmi < 25 && $Usergender == 'female' && $Userage >= 35 && $Usergoal == 'gain';
 
     if($contextFlag == 'Bmi') {
-        if(!empty($dbOutRow['descBmi'])) { // use the entry by the user
+        if($dbOutRow['descBmi'] !== 'DONE') { // use the entry by the user
             $desc = [$dbOutRow['descBmi']];
         } else { // use this software intelligence. (pre-set text not GPT ai)
             if($HighYoungMaleLose) {
@@ -1193,7 +1181,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             }
         }
     } elseif($contextFlag == "Bmr") {
-        if(!empty($dbOutRow['descBmr'])) { // use the entry by the user
+        if($dbOutRow['descBmr'] !== 'DONE') { // use the entry by the user
             $desc = [$dbOutRow['descBmr']];
         } else { 
             $desc = ['<b>Basal Metabolic Rate (BMR) Definition and Description:</b><br>
@@ -1221,7 +1209,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             This means she needs approximately 1370 calories per day to maintain basic bodily functions at rest.<br>'];
         }
     } elseif($contextFlag == "If") {
-        if(!empty($dbOutRow['descIf'])) { // use the entry by the user
+        if($dbOutRow['descIf'] !== 'DONE') { // use the entry by the user
             $desc = [$dbOutRow['descIf']];
         } else { 
             if($HighYoungMaleLose) {
@@ -1487,7 +1475,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             }
         }
     } elseif($contextFlag == "Cal") {
-        if(!empty($dbOutRow['descCal'])) { // use the entry by the user
+        if($dbOutRow['descCal'] !== 'DONE') { // use the entry by the user
             $desc = [$dbOutRow['descCal']];
         } else { 
             if($HighYoungMaleLose) {
@@ -1698,7 +1686,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             }
         }
     } elseif($contextFlag == "Macro") {
-        if(!empty($dbOutRow['descMacro'])) { // use the entry by the user
+        if($dbOutRow['descMacro'] !== 'DONE') { // use the entry by the user
             $desc = [$dbOutRow['descMacro']];
         } else { 
             if($HighYoungMaleLose) {
@@ -1824,7 +1812,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             }
         }
     } elseif($contextFlag == "MicroVit") {
-        if(!empty($dbOutRow['descMicroVit'])) { // use the entry by the user
+        if($dbOutRow['descMicroVit'] !== 'DONE') { // use the entry by the user
             $desc = [$dbOutRow['descMicroVit']];
         } else { 
             if($HighYoungMaleLose) {
@@ -1990,7 +1978,7 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             }
         }
     } elseif($contextFlag == "MicroTrace") {
-        if(!empty($dbOutRow['descMicroTrace'])) { // use the entry by the user
+        if($dbOutRow['descMicroTrace'] !== 'DONE') { // use the entry by the user
             $desc = [$dbOutRow['descMicroTrace']];
         } else { 
             if($HighYoungMaleLose) {
@@ -2183,8 +2171,8 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
             } 
         } 
     } elseif($contextFlag == "Meal") {
-        if(!empty($dbOutRow['descMeal'])) { // use the entry by the user
-            $desc = [$dbOutRow['descMeal']];
+        if($dbOutRow['descMeal'] !== 'DONE') { // use the entry by the user
+            $desc = $dbOutRow['descMeal'];
         } else { 
             if($HighYoungMaleLose) {
                 $desc = ['<b>For weight loss, especially with a high BMI, it is important</b> <br>
@@ -3111,20 +3099,15 @@ function requestGpt($weight, $height, $age, $gender, $goal, $stress, $sleep, $co
 
     if($context == 'Meal') {
         $dbOutMeal = dbMealCon($weight, $height, $age, $gender, $goal, $stress, $sleep);
-        if(!empty($dbOutMeal['meal'])){
-            $dbOutMealRow = $dbOutMeal;
+        if($dbOutMeal['meal'] !== 'DONE'){
+            $desc = [$dbOutMeal['meal']];
         } else {
-            $dbOutMealRow['meal'] = '';
+            $desc = ['DONE'];
         }
     } else {
-        $dbOutMealRow['meal'] = '';
+        $desc = ['DONE'];
     }
-    if(!empty($dbOutMealRow['meal'])) { // use the entry by the user
-        $desc = [$dbOutMealRow['meal']];
-    } else { 
-        $desc = [''];
-    }
-    $_SESSION[$context]['meal']    = json_encode($desc); // this is either empty or it is already filled by the language model
+    $_SESSION[$context]['meal']    = $desc; // this is either empty or it is already filled by the language model
     $_SESSION[$context]['gender']  = $gender; 
     $_SESSION[$context]['age']     = $age; 
     $_SESSION[$context]['height']  = $height; 

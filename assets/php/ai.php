@@ -11,13 +11,7 @@ class mealAttributes {
 }
 
 function db_call($process, $location, $rw) {
-   $servername  = "127.0.0.1";
-   $loginname   = "root";
-   $password    = "@Ssia123";
-   $dbname      = "Users";
-   $tablename   = "ai";
-   // Create connection
-   $conn        = new mysqli($servername, $loginname, $password, $dbname);
+   
    // check if the client exists.
    $gender = $location->gender; // male female
    $age    = $location->age;    // young mid old
@@ -26,15 +20,14 @@ function db_call($process, $location, $rw) {
    $goal   = $location->goal;   // lose, gain, 
    $stress = $location->stress; // lose, gain, 
    $sleep  = $location->sleep;  // lose, gain,
-   $process = str_replace('\'','', $process);
-   $query_flag = empty($weight) && empty($height) && empty($age) && empty($gender) && 
-   empty($goal) && empty($stress) && empty($sleep);
+
+   $query_flag = empty($weight) && empty($height) && empty($age) && empty($gender) && empty($goal) && empty($stress) && empty($sleep);
    if($rw == 'w' && !$query_flag) { 
-      $sql      = "INSERT INTO $tablename (age, gender, height, weight, goal, stress, sleep, meal) VALUES('$age', '$gender', '$height', '$weight', '$goal', '$stress','$sleep', '$process');";
-      $db_out   = $conn->query($sql);
-      $meal     = $process;
-   } else {
+      $mealPath = '../../descContent/' . $age . $gender . $height . $weight . $goal . $stress . $sleep . '.txt';
+      file_put_contents($mealPath, $process);
       $meal = $process;
+   } else {
+      $meal = $process[0] . ' DONE';
    }
    return($meal);
 }
@@ -113,7 +106,7 @@ $contentComplete   =  $content . $loc->gender . " , of " . strval($loc->age) .
                      " lb, wanting to " . $loc->goal . " , with " . 
                      $loc->stress . " stress levels who sleeps " . $loc->sleep;
 
-if((json_decode($loc->meal) == '' && $eventType == 'Meal' && !empty($loc->height)) || ($eventType != 'Meal' && $eventType != '') ) { // run the ai model
+if(($loc->meal[0] === 'DONE' && $eventType == 'Meal' && !empty($loc->height)) || ($eventType != 'Meal' && $eventType != '') ) { // run the ai model
    // Call Python script with JSON input
    $pythonScript = '../py/ai.py';
    $message_list = [
@@ -129,8 +122,8 @@ if((json_decode($loc->meal) == '' && $eventType == 'Meal' && !empty($loc->height
    $jsonInput = json_encode($message_list); 
    $command = "python3 " . $pythonScript . " '" . $jsonInput . "'" . " " . $newTokenSize;
 
-   $process = shell_exec($command);
-   //$process = $command . " DONE";
+   //$process = shell_exec($command);
+   $process = $command . " DONE";
    if($eventType == 'Meal') {
      db_call($process, $loc, 'w');
    }
@@ -142,6 +135,7 @@ if((json_decode($loc->meal) == '' && $eventType == 'Meal' && !empty($loc->height
 } else {
    $process = ['please send the form to your client and collect their information. DONE'];
 }
+
 
 $i = 0;
 while (1) {

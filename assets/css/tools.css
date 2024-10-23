@@ -1213,3 +1213,7 @@ input[type="file"] {
 .radio-group-profile input[type="radio"] {
     margin-right: 5px;
 }
+.payment-form {
+    justify-content: center;
+    width: 100%;
+}

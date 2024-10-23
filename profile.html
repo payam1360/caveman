@@ -14,6 +14,7 @@
         <link href="assets/css/tools.css" rel="stylesheet">
         <link rel="shortcut icon" href="#">
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="https://js.stripe.com/v3/"></script>
     </head>
     <body class="sb-nav-fixed">
 
@@ -168,21 +169,25 @@
 
                                 <!-- Settings tab content -->
                                 <div class="content-profile setting-content-profile">
-                                    <input type="text" id="current-pass-profile" placeholder="current password">
-                                    <input type="text" id="new-pass-profile" placeholder="new password">
-                                    <input type="text" id="new-pass-re-enter-profile" placeholder="re-enter new password">
-                                    <button onclick="changePassPhp()">Save</button>
+                                    <input type="password" id="current-pass-profile" placeholder="current password">
+                                    <input type="password" id="new-pass-profile" placeholder="new password">
+                                    <input type="password" id="new-pass-re-enter-profile" placeholder="re-enter new password">
                                     <div class="upgrade-container">
-                                        <p>Upgrade Account Type</p>
+                                        <p>Change Account Type</p>
                                         <div class="radio-group-profile">
                                             <input type="radio" id="free" name="account" value="free">
                                             <label for="free">Free</label>
                                         </div>
                                         <div class="radio-group-profile">
-                                            <input type="radio" id="ai-active" name="account" value="ai-active">
+                                            <input type="radio" id="ai" name="account" value="ai">
                                             <label for="ai-active">AI</label>
                                         </div>
                                     </div>
+                                    <div class="payment-form" style="display: none;">
+                                        <!-- Stripe element will be injected here -->
+                                    </div>
+                                    <button class="setting-btn" onclick="changePassPhp()">Save</button>
+                                    <button class="payment-account" style="margin-right: 50px; display: none;">Pay</button>
                                 </div>
                             </div>
                         </div>
