@@ -260,7 +260,7 @@ function calculateBmi($data){
         }
     } else {
         $BMI['val']  = [];
-        $BMI['desc'] = ['Please provide your comments here'];
+        $BMI['desc'] = ['Please send the campaign form to your client.'];
     }
     return($BMI);
 }
@@ -292,15 +292,11 @@ function calculateBmr($data) {
         } else {
             $BMR['val'] = floor($stressFactor * ( 66.47 + (13.75 * $Userweight) + (5.003 * $Userheight) - (6.75 * $Userage)));
         }
-        if($data[0]->nutritionEng == "0") { // AI request has priority 
-            $BMR['desc'] = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Bmr'); //["This text should be generated using AI request!"];
-        } elseif($data[0]->nutritionEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-            $BMR['desc'] = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Bmr');
-        }
+        $BMR['desc'] = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Bmr');
 
     } else {
         $BMR['val'] = [];
-        $BMR['desc'] = ['Please provide your comments here'];
+        $BMR['desc'] = ['Please send the campaign form to your client.'];
     }
     return($BMR);
 }
@@ -406,7 +402,7 @@ function calculateIf($data){
         }
     } else {
         $IF['val']  = [];
-        $IF['desc'] = ['Please provide your comments here'];
+        $IF['desc'] = ['Please send the campaign form to your client.'];
     }
         // -----------------------------------------------------------
     return($IF);
@@ -520,7 +516,7 @@ function calculateCalories($data){
         }
     } else {
         $CAL['val']  = [];
-        $CAL['desc'] = ['Please provide your comments here'];
+        $CAL['desc'] = ['Please send the campaign form to your client.'];
     }
         // -----------------------------------------------------------
     return($CAL);
@@ -737,7 +733,7 @@ function calculateMacro($data){
         }
     } else {
         $Macro['val'] = [];
-        $Macro['desc']  = ['Please provide your comments here'];
+        $Macro['desc']  = ['Please send the campaign form to your client.'];
     } 
     return($Macro);
 }
@@ -756,22 +752,28 @@ function calculateMeal($data){
     $Userstress = getStress($data);
     $Usersleep  = getSleep($data);
     $BMI        = calculateBmi($data);
-    $Meal['val'] = array('gender' => $Usergender,
-                   'goal' => $Usergoal,
-                   'height' => $Userheight,
-                   'weight' => $Userweight,
-                   'stress' => $Userstress,
-                   'sleep' => $Usersleep, 
-                   'age' => $Userage); 
-    if(!isset($data[0])){
-        $Meal['desc'] = '';
-    } elseif($data[0]->mealEng == "0") { // AI request has priority 
-        $Meal['desc']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Meal'); 
-    } elseif($data[0]->mealEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
-        $Meal['desc']   = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Meal');
+    if($Userweight != []  && $Userage != [] && $Usergender != [] && $Usergoal != []) {
+        $valid = true;
+    } else {
+        $valid = false;       
+    }
+    if($valid) {
+
+        $Meal['val'] = array(   'gender' => $Usergender,
+                                'goal' => $Usergoal,
+                                'height' => $Userheight,
+                                'weight' => $Userweight,
+                                'stress' => $Userstress,
+                                'sleep' => $Usersleep, 
+                                'age' => $Userage   ); 
+        if($data[0]->mealEng == "0") { // AI request has priority 
+            $Meal['desc']   = requestGpt($Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, 'Meal'); 
+        } elseif($data[0]->mealEng == "1") { // check dB, if exists, use it <- nutritionist, otherwise use software
+            $Meal['desc']   = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'Meal');
+        } 
     } else {
         $Meal['val']  = [];
-        $Meal['desc'] = 'Please provide your comments here. DONE';
+        $Meal['desc'] = ['Please send the campaign form to your client.'];
     }
     return($Meal);
 }
@@ -853,8 +855,8 @@ function calculateMicro($data){
             $Micro['descTrace'] = requestdB($BMI['val'], $Userweight, $Userheight, $Userage, $Usergender, $Usergoal, $Userstress, $Usersleep, $data[0]->userId, $data[0]->clientId, 'MicroTrace');
         }
     } else {
-        $Micro['descVit']    = ['Please provide your comments here'];
-        $Micro['descTrace']  = ['Please provide your comments here'];
+        $Micro['descVit']    = ['Please send the campaign form to your client.'];
+        $Micro['descTrace']  = ['Please send the campaign form to your client.'];
     } 
 
     return($Micro);
@@ -3091,7 +3093,6 @@ function requestdB($Bmi, $Userweight, $Userheight, $Userage, $Usergender, $Userg
     }
     return($desc); 
 }
-
 
 // no DB checking ... these will be always from AI. 
 // might need to get a fast GPU when launching on the actual server.

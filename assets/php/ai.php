@@ -27,7 +27,11 @@ function db_call($process, $location, $rw) {
       file_put_contents($mealPath, $process);
       $meal = $process;
    } else {
-      $meal = $process[0] . ' DONE';
+      if($process === 'DONE') {
+         $meal = 'please send the form to your client and collect their information. DONE';
+      } else {
+         $meal = $process . ' DONE';
+      }
    }
    return($meal);
 }
@@ -125,12 +129,12 @@ if(($loc->meal[0] === 'DONE' && $eventType == 'Meal' && !empty($loc->height)) ||
    //$process = shell_exec($command);
    $process = $command . " DONE";
    if($eventType == 'Meal') {
-     db_call($process, $loc, 'w');
+     $process = db_call($process, $loc, 'w');
    }
    $process = explode(' ', $process); 
 
 } elseif($eventType == 'Meal') { // load from the database ...
-   $process = db_call($loc->meal, $loc, 'r');
+   $process = db_call($loc->meal[0], $loc, 'r');
    $process = explode(' ', $process);
 } else {
    $process = ['please send the form to your client and collect their information. DONE'];

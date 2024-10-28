@@ -26,6 +26,7 @@ let clientTelegramUserName = [];
 let chatArea = ''; 
 let blogOffset = 0; // To keep track of the number of posts loaded
 let blogLoading = false; // To avoid multiple requests at once
+let accountType = 'free'; // by default account type is free
 // user <-> client class definition
 class question {
     constructor(userId, qContent, qAnswer, qIdx, qType, options, optionsText, visited, qRequired, qKey, clientId, campaignId){
@@ -340,7 +341,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
             newIn.setAttribute('pattern', '[A-Za-z0-9 _.,!#@"\'/$\\s\\?;-]{1,}');
             newIn.setAttribute('required', userStruct.qRequired);
             newIn.setAttribute('type', userStruct.qType[serverStruct]);
-            newIn.setAttribute('placeholder', userStruct.optionsText[0][0]);
+            newIn.setAttribute('placeholder', userStruct.optionsText[serverStruct][serverStructOption]);
             querySelIn.appendChild(newIn);
             querySelIn.style.borderBottom = '2px solid coral';
             break;
@@ -401,7 +402,7 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
             querySelIn.style.borderBottom = '2px solid coral';
             break;
         case 'button':
-
+            let keyThis = userStruct.qKey[serverStruct];
             if (window.innerWidth < 768) {
                 width = '100%'; // Set width to 100% for mobile devices
             } else {
@@ -421,42 +422,61 @@ function setFormType(querySelIn, userStruct, serverStruct = 0, serverStructOptio
                 newImgSpan.style.display = 'inline-block';
                 newImgSpan.style.height = '140px';
                 newImgSpan.style.width = '90%';
+                if(accountType == 'free' && keyThis == 'engine' && userStruct.optionsText[serverStruct][i] == 'ai'){
+                    disableAi = true;
+                } else {
+                    disableAi = false;
+                }
+                if(disableAi){
+                    newImgSpan.classList.add('disable');
+                }
                 let newI = document.createElement('i');
                 newI.setAttribute('class', item);
                 newI.setAttribute('id', 'form-button');
                 newI.setAttribute('alt', i);
-                newI.style.color = 'mediumseagreen';
+                if(disableAi){
+                    newI.style.color = 'lightgray';
+                } else {
+                    newI.style.color = 'mediumseagreen';
+                }
                 newI.style.height = '50px';
                 newI.style.paddingTop = '40px';
                 let newP = document.createElement('p');
                 newP.setAttribute('class', 'form-button-back-text');
                 newP.innerHTML = userStruct.optionsText[serverStruct][i];
-                newP.style.opacity = 0;
+                if(disableAi){
+                    newP.style.opacity = 1;
+                    newP.style.color = 'lightgray';
+                } else {
+                    newP.style.opacity = 0;
+                }
                 newImgSpan.appendChild(newI);
                 newImgSpan.appendChild(newP);
-                newImgSpan.addEventListener('mouseenter',function(e) {
-                    e.target.children[0].style.opacity = 0;
-                    e.target.children[1].style.opacity = 1;
-                });
-                newImgSpan.addEventListener('mouseleave',function(e) {
-                    e.target.children[0].style.opacity = 1;
-                    e.target.children[1].style.opacity = 0;
-                });
-                newImgSpan.addEventListener('click',function(e){
-                    let alt = [];
-                    if(e.target && e.target.id == 'form-button') {
-                        alt = e.target.attributes.alt;
-                        getUserButtonSelection(alt);
-                    }
-                    else if(e.target && e.target.parentNode.id == 'form-button') {
-                        alt = e.target.parentNode.attributes.alt;
-                        getUserButtonSelection(alt);
-                    }
-                    else if(e.target && e.target.firstChild && e.target.firstChild.id == 'form-button') {
-                        alt = e.target.firstChild.attributes.alt;
-                        getUserButtonSelection(alt);
-                    }
-                });
+                if(!disableAi){
+                    newImgSpan.addEventListener('mouseenter',function(e) {
+                        e.target.children[0].style.opacity = 0;
+                        e.target.children[1].style.opacity = 1;
+                    });
+                    newImgSpan.addEventListener('mouseleave',function(e) {
+                        e.target.children[0].style.opacity = 1;
+                        e.target.children[1].style.opacity = 0;
+                    });
+                    newImgSpan.addEventListener('click',function(e){
+                        let alt = [];
+                        if(e.target && e.target.id == 'form-button') {
+                            alt = e.target.attributes.alt;
+                            getUserButtonSelection(alt);
+                        }
+                        else if(e.target && e.target.parentNode.id == 'form-button') {
+                            alt = e.target.parentNode.attributes.alt;
+                            getUserButtonSelection(alt);
+                        }
+                        else if(e.target && e.target.firstChild && e.target.firstChild.id == 'form-button') {
+                            alt = e.target.firstChild.attributes.alt;
+                            getUserButtonSelection(alt);
+                        }
+                    });
+                }
                 newInbtn.appendChild(newImgSpan);
                 querySelIn.appendChild(newInbtn);
                 i++;
@@ -1735,6 +1755,7 @@ function confirmStripePayment(){
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            window.alert('payment confirmed!, Thank you');
         }
     };
     // sending the request
@@ -1886,6 +1907,7 @@ function getUserInfo(){
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             user = JSON.parse(this.response);
+            accountType = user.accountType;
             if(user.status == 1) {
                 window.location.assign('login.html');
             } else {
@@ -2879,11 +2901,11 @@ function displayClients(results, userid, username, searchStruct) {
         // Define the dropdown items with icons
         menuItems = [
             { text: 'Add', icon: 'bi bi-plus-circle', action: clientAddItem, enable: (results.names[kk] == "") ? true : false},
-            { text: 'Set campaign', icon: 'bi bi-ui-radios-grid', action: clientAssignCampaign, enable: (results.names[kk] !== "" && !results.clientHasResponded) ? true : false }, // can change until the client responded 
+            { text: 'Set campaign', icon: 'bi bi-ui-radios-grid', action: clientAssignCampaign, enable: (results.names[kk] !== "" && results.clientHasResponded[kk] == 0) ? true : false }, // can change until the client responded 
             { text: 'View', icon: 'bi bi-eye', action: clientviewItem , enable: (results.names[kk] !== "" && results.campaignidAssigned[kk] !== "") ? true : false},
-            { text: 'Download PDF', icon: 'bi bi-file-earmark-pdf', action: clientDownloadPDF, enable: (results.names[kk] !== "" && results.clientHasResponded) ? true : false },
-            { text: 'Email Report', icon: 'bi bi-send', action: clientEmailReport, enable: (results.emails[kk] !== "" && results.clientHasResponded) ? true : false },
-            { text: 'Email Form', icon: 'bi bi-envelope', action: clientEmailForm, enable: (results.emails[kk] !== "" && results.campaignidAssigned[kk] !== "" && !results.clientHasResponded) ? true : false },
+            { text: 'Download PDF', icon: 'bi bi-file-earmark-pdf', action: clientDownloadPDF, enable: (results.names[kk] !== "" && results.clientHasResponded[kk] !== 0) ? true : false },
+            { text: 'Email Report', icon: 'bi bi-send', action: clientEmailReport, enable: (results.emails[kk] !== "" && results.clientHasResponded[kk] !== 0) ? true : false },
+            { text: 'Email Form', icon: 'bi bi-envelope', action: clientEmailForm, enable: (results.emails[kk] !== "" && results.campaignidAssigned[kk] !== "" && results.clientHasResponded[kk] == 0) ? true : false },
             { text: 'Delete Client', icon: 'bi bi-trash', action: clientDeleteClient, enable: (results.names[kk] !== "") ? true : false }
         ];
         // Add each item to the dropdown menu
@@ -4203,7 +4225,18 @@ function createPdf(data) {
     let heightP               = document.getElementById('mDivpHeight');
     let emailP                = document.getElementById('mDivpEmail');
     let waterP                = document.getElementById('mDivpWater');
+
+
     let MealText              = document.querySelector('.meal_text');
+    let CalText               = document.querySelector('.Cal_description');
+    let MicroVitText          = document.querySelector('.MICRO_vit_text_description');
+    let MicroTraceText        = document.querySelector('.MICRO_text_description');
+    let MacroText             = document.querySelector('.MACRO_text_description');
+    let IfText                = document.querySelector('.IF_text_description');
+    let BmiText               = document.querySelector('.BMI_text_description');
+    let BmrText               = document.getElementById('mDivBmrSugg');
+
+
 
     var pdf = new jsPDF({
                          orientation: 'p',
@@ -4262,7 +4295,12 @@ function createPdf(data) {
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
     drawTextSetting = {x: 50, y: 350, maxWidth: 350, lineHeight: 15};
-    segments = parseHTMLText(data.bmr['desc'][0]);
+    if(data.bmr['desc'] == null){
+        bmrDesc = BmrText.innerHTML;
+    } else {
+        bmrDesc = data.bmr['desc'][0];
+    }    
+    segments = parseHTMLText(bmrDesc);
     drawText(pdf, segments, drawTextSetting);
 
     pdf.addPage();
@@ -4280,7 +4318,12 @@ function createPdf(data) {
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
     drawTextSetting = {x: 50, y: 330, maxWidth: 350, lineHeight: 15};
-    segments = parseHTMLText(data.bmi['desc'][0]);
+    if(data.bmi['desc'] == null){
+        bmiDesc = BmiText.innerHTML;
+    } else {
+        bmiDesc = data.bmi['desc'][0];
+    }
+    segments = parseHTMLText(bmiDesc);
     drawText(pdf, segments, drawTextSetting);
 
     // page reset
@@ -4303,7 +4346,12 @@ function createPdf(data) {
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
     drawTextSetting = {x: 50, y: 320, maxWidth: 350, lineHeight: 15};
-    segments = parseHTMLText(data.if['desc'][0]);
+    if(data.if['desc'] == null){
+        ifDesc = IfText.innerHTML;
+    } else {
+        ifDesc = data.if['desc'][0];
+    }
+    segments = parseHTMLText(ifDesc);
     drawText(pdf, segments, drawTextSetting);
    
 
@@ -4337,7 +4385,12 @@ function createPdf(data) {
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
     drawTextSetting = {x: 50, y: 420, maxWidth: 350, lineHeight: 15};
-    segments = parseHTMLText(data.macro['desc'][0]);
+    if(data.macro['desc'] == null){
+        macroDesc = MacroText.innerHTML;
+    } else {
+        macroDesc = data.macro['desc'][0];
+    }
+    segments = parseHTMLText(macroDesc);
     drawText(pdf, segments, drawTextSetting);
 
 
@@ -4370,7 +4423,12 @@ function createPdf(data) {
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
     drawTextSetting = {x: 50, y: 320 + 20*kk, maxWidth: 350, lineHeight: 15};
-    segments = parseHTMLText(data.micro['descTrace'][0]);
+    if(data.micro['descTrace'] == null){
+        microTraceDesc = MicroTraceText.innerHTML;
+    } else {
+        microTraceDesc = data.micro['descTrace'][0];
+    }
+    segments = parseHTMLText(microTraceDesc);
     drawText(pdf, segments, drawTextSetting);
 
  
@@ -4404,7 +4462,12 @@ function createPdf(data) {
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
     drawTextSetting = {x: 50, y: 50, maxWidth: 350, lineHeight: 15};
-    segments = parseHTMLText(data.micro['descVit'][0]);
+    if(data.micro['descVit'] == null){
+        microVitDesc = MicroVitText.innerHTML;
+    } else {
+        microVitDesc = data.micro['descVit'][0];
+    }
+    segments = parseHTMLText(microVitDesc);
     drawText(pdf, segments, drawTextSetting);
 
     // page reset
@@ -4416,7 +4479,12 @@ function createPdf(data) {
     pdf.setFontSize(10);
     pdf.setTextColor('#000000');
     drawTextSetting = {x: 50, y: 280, maxWidth: 350, lineHeight: 15};
-    segments = parseHTMLText(data.cal['desc'][0]);
+    if(data.cal['desc'] == null){
+        calDesc = CalText.innerHTML;
+    } else {
+        calDesc = data.cal['desc'][0];
+    }
+    segments = parseHTMLText(calDesc);
     drawText(pdf, segments, drawTextSetting);
 
    
@@ -4840,6 +4908,7 @@ function sendChatContent(uId, chatArea) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             data = JSON.parse(this.response);
+            console.log(data);
         }
     };
     // sending the request
@@ -5267,7 +5336,7 @@ function handleAccountUpgrade(event) {
     xmlhttp.send(request);
 
 }
-function updateAccountType(accountType, uId) {
+function updateAccountType(accountTypeIn, uId) {
     
     let payDiv  = document.querySelector('.payment-form');
     let payBtn  = document.querySelector('.payment-account');
@@ -5275,10 +5344,10 @@ function updateAccountType(accountType, uId) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             data = JSON.parse(this.response);
-            if(accountType == 'ai'){ // set stripe charge
+            if(accountTypeIn == 'ai'){ // set stripe charge
                 payDiv.style.display = 'flex';
                 createAccountTypeStripePayment(payDiv, uId);
-            } else if(accountType == 'free') { // remove stripe charge
+            } else if(accountTypeIn == 'free') { // remove stripe charge
                 payBtn.style.display = 'none';
                 payDiv.style.display = 'none';
             }
@@ -5287,7 +5356,7 @@ function updateAccountType(accountType, uId) {
     // sending the request
     xmlhttp.open("POST", "assets/php/profile.php", true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    let info = {'flag': 'updateAccountType', 'userId': uId, 'accountType': accountType};
+    let info = {'flag': 'updateAccountType', 'userId': uId, 'accountType': accountTypeIn};
     var userdata = "userInfo="+JSON.stringify(info);
     xmlhttp.send(userdata);
 }
@@ -5300,9 +5369,11 @@ function createAccountTypeStripePayment(payDiv, uId){
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             data = JSON.parse(this.response);
-            if(data['status']){  //
+            if(data){  //
                 let payBtn  = document.querySelector('.payment-account');
                 payBtn.style.display = 'flex';
+                payBtn.addEventListener('click', confirmStripePayment);
+                allocateClientsAndCampaigns(uId);
                 // Define your custom styles for the elements
                 var style = {
                     base: {
@@ -5383,5 +5454,22 @@ function createAccountTypeStripePayment(payDiv, uId){
     let info = {'flag': 'verifyPayment', 'userId': uId};
     var userdata = "userInfo="+JSON.stringify(info);
     xmlhttp.send(userdata);
+}
 
+function allocateClientsAndCampaigns(uId){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let stripeDiv = document.getElementById('stripeId');
+            let payBtn  = document.querySelector('.payment-account');
+            payBtn.style.display = 'none';
+            stripeDiv.style.display = 'none';
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/profile.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let info = {'flag': 'allocate', 'userId': uId};
+    var userdata = "userInfo="+JSON.stringify(info);
+    xmlhttp.send(userdata);
 }

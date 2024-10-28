@@ -479,7 +479,7 @@ function PostForm() {
                             ["1. What topic is in your mind ?"],
                             ["2. What is your nutritional philosophy?"],
                             ["3. Choose the content category:"],
-                            ["4. describe the picture you have in mind for your post:"],
+                            ["4. One-word description of the picture you have in mind for your post:"],
                             [""]
                         ];
 
@@ -501,10 +501,10 @@ function PostForm() {
                         [["fa-solid fa-feather-pointed"]]
                         ];
     $data['optionsText'] = [
-                            [["e. g. benefits of red meat, adding plant-based proteins into meals."]],
+                            [["e. g. benefits of red meat, adding plant-based proteins into your diet, etc."]],
                             [[""]],
                             [[""]],
-                            [["e. g. cooked steak on a dining table, lentils."]],
+                            [["e. g. steak, athlete, kale, etc."]],
                             [["Generating your post!"]]
         ];
     $data['qRequired'] = [1, 1, 1, 1, 1];

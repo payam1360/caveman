@@ -107,12 +107,32 @@ function verifyPayment($conn, $userId) {
     $db_out    = $db_out->fetch_assoc();
     $db_out    = $db_out['payVer'];
     if($db_out == '1') {
-        $data['status'] = false;
+        $data = false;
     } else {
-        $data['status'] = true;
+        $data = true;
     }
-    return $data['status'];
+    return $data;
 }
+
+function allocateClientsAndCampaigns($conn, $userId){
+    $table1name  = "userAllocation";
+    $table2name  = "campaignAlloc";
+    $numAllocation = 50 - 20; // allocated 30 more clients
+    $numCampaign = 5 - 2; // allocate 3 more campaigns
+    $telegramNewChat = 0;
+    for($kk = 0; $kk < $numAllocation; $kk++) {
+        $clientId    = mt_rand(10000, 99999);
+        $sql         = "INSERT INTO $table1name (userId, clientId, campaignId, name, cEmail, gender, phoneNumber, telegramChatId, telegramUserName, telegramNewChat, goal, nutritionEng, mealEng, descAddress) VALUES('$userId','$clientId','', '', '', '', '', '', '', '$telegramNewChat', '', '', '', '');";
+        $conn->query($sql);
+    }
+
+    for($kk = 0; $kk < $numCampaign; $kk++) {
+        $campaignId  = substr(md5(rand()), 0, 7);
+        $sql         = "INSERT INTO $table2name (userId, campaignIdSource, used, completed) VALUES('$userId', '$campaignId', '0', '0');";
+        $conn->query($sql);
+    }
+}
+
 
 // Replace these with your actual credentials
 $userInfo      = json_decode($_POST['userInfo']);
@@ -133,6 +153,8 @@ if($userInfo->flag == 'changePass') {
     $response = updateAccountType($conn, $userInfo->userId, $userInfo->accountType);
 } elseif($userInfo->flag == 'verifyPayment') {
     $response = verifyPayment($conn, $userInfo->userId);
+} elseif($userInfo->flag == 'allocate') {
+    $response = allocateClientsAndCampaigns($conn, $userInfo->userId);
 }
 $conn->close();
 echo json_encode($response);

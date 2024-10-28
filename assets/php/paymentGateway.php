@@ -3,10 +3,25 @@
 
 require '../../vendor/autoload.php';
 
+function getStripeSecretToken(){
+    // server connect
+    $servername  = "127.0.0.1";
+    $loginname   = "root";
+    $password    = "@Ssia123";
+    $dbname      = "Users";
+    $conn        = new mysqli($servername, $loginname, $password, $dbname);
+    $tablename   = "admin";
+    $sql         = "SELECT stripeSecretToken FROM $tablename;";
+    $db_out      = $conn->query($sql);
+    $stripeSecretToken = $db_out->fetch_assoc();
+    $stripeSecretToken = $stripeSecretToken['stripeSecretToken'];
+    return $stripeSecretToken;
+}
 
 function processPayment($data) {
 
-    $stripe = new Stripe\StripeClient('sk_test_51Odb1JGvkwgMtml80Bc0CdBOesMqZzMeulH9j8QO03HnfrLniWn96gEYLK9QdLbmmXQ1voYVKBib06UaTdqxgzfP00P41SGnWu');
+    $stripeSecretKey = getStripeSecretToken();
+    $stripe = new Stripe\StripeClient($stripeSecretKey);
     $customer = $stripe->customers->create([
         'description' => $data->name,
         'email' => $data->email,

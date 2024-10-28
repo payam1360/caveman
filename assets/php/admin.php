@@ -1,5 +1,18 @@
 <?php
 
+function getAccountType($userId){
+    $servername  = "127.0.0.1";
+    $loginname   = "root";
+    $password    = "@Ssia123";
+    $dbname      = "Users";
+    $tablename   = "authentication";
+    $conn        = new mysqli($servername, $loginname, $password, $dbname);
+    $sql         = "SELECT accountType FROM $tablename WHERE userId = '$userId';";
+    $data        = $conn->query($sql);
+    $data        = $data->fetch_assoc();
+    $data        = $data['accountType'];
+    return $data;
+}
 
 function getCampaignIdSource($userId){
     $servername  = "127.0.0.1";
@@ -69,8 +82,9 @@ if($data['status'] == 0) {
         $campaignIdLength = 7;
         $campaignIdURL    = substr($userdata, $campaignIdIdx+11, $campaignIdLength);
     }
-
+    $accountType = getAccountType($userId);
     $data['userid'] = $userId;
+    $data['accountType'] = $accountType;
     $data['username'] = $userName;
     $data['clientId'] = $clientIdURL;
     $data['campaignId'] = $campaignIdURL;
