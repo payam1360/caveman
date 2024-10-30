@@ -1307,7 +1307,6 @@ function validate_input(valid, type, required, value){
 
 
 function callGeneratePostTitle(inputData){
-
     const date = new Date();
     const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     let postDate = document.querySelector('.postDate');
@@ -1645,7 +1644,7 @@ function createAndAppendPost(postData) {
     postBody.appendChild(postContent);
 
     postDiv.appendChild(postBody);
-
+    postDiv.setAttribute('id', postData.blogMediaNum);
     // Find the parent div and append the post
     const parentDiv = document.querySelector('.posts-container');
     parentDiv.appendChild(postDiv);
@@ -4908,7 +4907,7 @@ function sendChatContent(uId, chatArea) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             data = JSON.parse(this.response);
-            console.log(data);
+            
         }
     };
     // sending the request
@@ -5472,4 +5471,98 @@ function allocateClientsAndCampaigns(uId){
     let info = {'flag': 'allocate', 'userId': uId};
     var userdata = "userInfo="+JSON.stringify(info);
     xmlhttp.send(userdata);
+}
+
+// Function to be called on fade-up event
+function onFadeUp(e) {
+    // getting different element attributes
+    postInfo = e.getAttribute('recent-post');
+    if(postInfo === null ){
+    } else{
+        let post = document.querySelectorAll('.recentPost');
+        createRecentPost(post, postInfo);
+    }
+    // Add any additional logic here
+}
+
+function createRecentPost(postEntry, idx) {
+
+    // Select the recentPost div
+    const recentPostDiv = postEntry[idx];
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let result = JSON.parse(this.response);
+            data = result[0];
+            // Create new elements
+            const newArticle = document.createElement('article');
+            const newPostImgDiv = document.createElement('div');
+            newPostImgDiv.classList.add('post-img');
+            const newImg = document.createElement('img');
+            newImg.src = '../assets/img/blog/' + data.blogMediaNum + '.jpg'; // Change to your new image path
+            newImg.alt = '';
+            newImg.classList.add('img-fluid');
+            newPostImgDiv.appendChild(newImg);
+
+            const newCategory = document.createElement('p');
+            newCategory.classList.add('post-category');
+            newCategory.textContent = data.blogCategory;
+
+            const newTitle = document.createElement('h2');
+            newTitle.classList.add('title');
+            const newTitleLink = document.createElement('a');
+            newTitleLink.textContent = data.blogTitle;
+            newTitleLink.setAttribute('target', '_blank');
+            newTitleLink.href = 'blog.html#' + data.blogMediaNum; // Open link in new tab
+            newTitle.appendChild(newTitleLink);
+
+            const newMetaDiv = document.createElement('div');
+            newMetaDiv.classList.add('d-flex', 'align-items-center');
+
+            const newPostMeta = document.createElement('div');
+            newPostMeta.classList.add('post-meta');
+            const newAuthor = document.createElement('p');
+            newAuthor.classList.add('post-author');
+            newAuthor.textContent = data.blogAuthor;
+            const newDate = document.createElement('p');
+            newDate.classList.add('post-date');
+            const newTime = document.createElement('time');
+            newTime.datetime = data.blogDate; // Change to your new date
+            newTime.textContent = formatDate(data.blogDate);
+            newDate.appendChild(newTime);
+
+            newPostMeta.appendChild(newAuthor);
+            newPostMeta.appendChild(newDate);
+            newMetaDiv.appendChild(newPostMeta);
+
+            // Assemble the new article
+            newArticle.appendChild(newPostImgDiv);
+            newArticle.appendChild(newCategory);
+            newArticle.appendChild(newTitle);
+            newArticle.appendChild(newMetaDiv);
+            // Append the new article to the recentPost div
+            recentPostDiv.appendChild(newArticle);
+        }
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/blog.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request = {'flag': 'load', 'offset': idx, 'limit': '1'};
+    var request = "userInfo="+JSON.stringify(request);
+    xmlhttp.send(request);
+
+}
+
+function formatDate(dateString) {
+    // Extract year, month, and day from the date string
+    const year = dateString.slice(0, 4);
+    const monthIndex = parseInt(dateString.slice(4, 6), 10) - 1; // Months are zero-indexed
+    const day = dateString.slice(6, 8);
+    
+    // Array of month names
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    
+    // Format the date
+    return `${monthNames[monthIndex]}-${day}-${year}`;
 }

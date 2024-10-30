@@ -8,7 +8,7 @@ import sys
 import os
 os.environ['TRANSFORMERS_NO_TQDM'] = '1'
 logging.set_verbosity_error()  # Or set_verbosity_warning() to show only warnings
-cache_dir = os.path.expanduser("./cache/huggingface/hub/")  # Ensure expanded path
+cache_dir = os.path.expanduser("/Users/payamrabiei/.cache/huggingface/hub/")  # Ensure expanded path
 
 model_name = "HuggingFaceH4/zephyr-7b-beta"
 # Download the model and tokenizer to the local cache directory
@@ -29,6 +29,5 @@ pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, device=devi
 prompt = pipe.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 output = pipe(prompt, max_new_tokens=input_token_size, do_sample=True, temperature=0.4, top_k=50, top_p=0.65)
 output = output[0]['generated_text'] + ' DONE'
-# Print generated text for the current prompt word by word
-print(json.dumps(output))   
-
+# Print generated text for the current prompt word by word 
+print(json.dumps(output)) 

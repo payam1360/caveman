@@ -73,7 +73,7 @@ if($eventType != 'image') {
       ]
    ]; 
    $jsonInput = json_encode($message_list); 
-   $command   = "python3 " . $pythonScript . " " . escapeshellarg($jsonInput) . " " . escapeshellarg($newTokenSize);
+   $command   = "python3 " . $pythonScript . " '" . $jsonInput . "' " . $newTokenSize;
 
    // Optionally: execute the command
    $process = shell_exec($command);

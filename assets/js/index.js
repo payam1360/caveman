@@ -170,6 +170,13 @@
 
   });
 
+// Event listener for AOS
+document.addEventListener('aos:in', (event) => {
+  if (event.detail) {
+    const element = event.detail;
+    onFadeUp(element);
+  }
+});
   /**
    * Correct scrolling position upon page load for URLs containing hash links.
    */
