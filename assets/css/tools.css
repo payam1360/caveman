@@ -1230,3 +1230,22 @@ input[type="file"] {
     justify-content: center;
     width: 100%;
 }
+.searchBlogBtn {
+    background-color: #4285F4;
+    color: white;
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s;
+    border-radius: 0px; /* Match the button's border radius */
+    position: relative; 
+}
+
+.searchBlogBtn::after {
+    content: '';
+    position: absolute;
+    top: 2px; /* Offset to create a detached effect */
+    left: 2px; /* Offset to create a detached effect */
+    right: -2px; /* Extend beyond the button */
+    bottom: -2px; /* Extend beyond the button */
+    border: 0px solid transparent; /* Transparent border */
+    border-radius: 0px; /* Match the button's border radius */
+}

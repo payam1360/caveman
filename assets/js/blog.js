@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     "use strict";
       // Attach the scroll event to the window
     window.addEventListener('scroll', handleBlogScroll);
-
+    let searchBlogBtn = document.querySelector('.searchBlogBtn');
+    if(searchBlogBtn) {
+      searchBlogBtn.addEventListener('click', searchBlogPosts);
+    }
     // Initial load
     loadMoreBlogPosts(); // Load the first set of posts when the page loads
   });

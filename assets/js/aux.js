@@ -1553,7 +1553,49 @@ function loadMoreBlogPosts() {
     xmlhttp.send(userdata);
 }
 
+function searchBlogPosts() {
+    let searchBlogContent = document.getElementById('searchBlogContent').value;
+    let searchBlogCreator = document.getElementById('searchBlogCreator').value;
+    let searchBlogDate = document.getElementById('searchBlogDate').value;
+    let searchBlogRate = document.getElementById('searchBlogRate').value;
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            const parentDiv = document.querySelector('.posts-container');
+            blogOffset = 0;
+            while (parentDiv.firstChild) {
+                parentDiv.removeChild(parentDiv.firstChild);
+            }
+            const postDataArray =  JSON.parse(this.response);
+            // If no posts returned, we stop further requests
+            
+            if (postDataArray.length === 0) {
+                window.removeEventListener('scroll', handleBlogScroll); // No more posts to load
+                return;
+            }
+            // Loop through each post and create elements using the existing function
+            postDataArray.forEach(postData => {
+                createAndAppendPost(postData);
+            });
+            // Update the offset for the next request
+            blogOffset += postDataArray.length;
+            // Reset the loading state
+            blogLoading = false;
+            
+        }
+    };
 
+    xmlhttp.onerror = function () {
+        blogLoading = false; // Allow reattempting the request if there's an error
+    };
+    // sending the request
+    xmlhttp.open("POST", "assets/php/blog.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request = {'flag': 'search', 'searchItems': {searchBlogContent, searchBlogCreator, searchBlogDate, searchBlogRate}};
+    var userdata = "userInfo="+JSON.stringify(request);
+    xmlhttp.send(userdata);        
+    
+}
 
 function createAndAppendPost(postData) {
     // Create the main post div
@@ -1561,7 +1603,6 @@ function createAndAppendPost(postData) {
     postDiv.classList.add('post');
     postDiv.setAttribute('data-aos', 'fade-up');
     postDiv.style.justifyContent = 'center';
-
     // Create the post header
     const postHeader = document.createElement('div');
     postHeader.classList.add('post-header');
@@ -1577,7 +1618,7 @@ function createAndAppendPost(postData) {
     // Author span
     const authorSpan = document.createElement('span');
     authorSpan.classList.add('postCreator');
-    authorSpan.textContent = postData.blogAuthor;
+    authorSpan.textContent = postData.author;
     small.appendChild(authorSpan);
     
     // " on " text
@@ -1586,7 +1627,7 @@ function createAndAppendPost(postData) {
     // Date span
     const dateSpan = document.createElement('span');
     dateSpan.classList.add('postDate');
-    dateSpan.textContent = postData.blogDate;
+    dateSpan.textContent = formatDate(postData.blogDate);
     small.appendChild(dateSpan);
     
     // " | " text
@@ -1602,7 +1643,7 @@ function createAndAppendPost(postData) {
     small.appendChild(document.createTextNode(' users rated | '));
     
     // Star rating (calling a separate function to generate the stars)
-    const starRating = generateStarRating(postData.blogRate);
+    const starRating = generateStarRating(postData.blogRate, postData.blogMediaNum);
     small.appendChild(starRating);  // Assume this returns a document fragment or element
     
     // " rating" text with rating number
@@ -1650,18 +1691,19 @@ function createAndAppendPost(postData) {
     parentDiv.appendChild(postDiv);
 }
 
-// Helper function to generate star rating HTML
-function generateStarRating(rating) {
+function generateStarRating(rating, MediaNum) {
     const fullStars = Math.floor(rating);
     const halfStar = rating % 1 >= 0.5 ? 1 : 0;
     const emptyStars = 5 - fullStars - halfStar;
-    // Create a container for the stars
     const container = document.createElement('div');
+    container.classList.add('ratingStarContainer');
+    container.setAttribute('medianum', MediaNum);
     // Add full stars
     for (let i = 0; i < fullStars; i++) {
         const fullStar = document.createElement('i');
         fullStar.className = 'bi bi-star-fill';
         fullStar.style.color = '#F4B400';
+        fullStar.setAttribute('alt', i);
         container.appendChild(fullStar);
     }
 
@@ -1670,6 +1712,7 @@ function generateStarRating(rating) {
         const halfStarElem = document.createElement('i');
         halfStarElem.className = 'bi bi-star-half';
         halfStarElem.style.color = '#F4B400';
+        halfStarElem.setAttribute('alt', fullStars);
         container.appendChild(halfStarElem);
     }
 
@@ -1678,13 +1721,72 @@ function generateStarRating(rating) {
         const emptyStar = document.createElement('i');
         emptyStar.className = 'bi bi-star';
         emptyStar.style.color = '#F4B400';
+        emptyStar.setAttribute('alt', fullStars + 1 + i);
         container.appendChild(emptyStar);
     }
+
+    // Hover effect to make stars yellow
+    container.querySelectorAll('i').forEach(star => 
+        star.addEventListener('mouseover', (e) => setStarColors(e.target)));
+    // Click event to call the empty function
+    container.querySelectorAll('i').forEach(star => 
+        star.addEventListener('mouseover', (e) => onStarClick(e.target)));
 
     return container;
 }
 
+// Empty function to call on click
+function onStarClick(target) {
+    setStarColors(target);
+    rating = target.getAttribute('alt');
+    blogMediaNum = target.parentNode.getAttribute('medianum');
 
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            const ff =  JSON.parse(this.response);
+            // If no posts returned, we stop further requests
+        }
+    };
+
+    // sending the request
+    xmlhttp.open("POST", "assets/php/blog.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request = {'flag': 'rate', 'values': {rating, blogMediaNum}};
+    var userdata = "userInfo="+JSON.stringify(request);
+    xmlhttp.send(userdata);            
+    
+}
+
+// Function to set star colors on hover
+function setStarColors(target) {
+    idx = target.getAttribute('alt');
+    const containers = document.querySelectorAll('.ratingStarContainer');
+    let container = '';
+    containers.forEach(item => {
+        if (target.parentNode.getAttribute('medianum') === item.getAttribute('medianum')) {
+          // Do something with item
+          container = item;
+        }
+    });
+    let stars = container.querySelectorAll('i');
+    for(kk = 0; kk < 5; kk++) {
+        if(stars[kk].classList.contains('bi bi-star-fill')){ 
+            stars[kk].classList.remove('bi bi-star-fill');
+        }
+        if(stars[kk].classList.contains('bi bi-star-half')){ 
+            stars[kk].classList.remove('bi bi-star-half');
+        }
+    }
+    for(kk = 0; kk < idx; kk++){
+        stars[kk].className = 'bi bi-star-fill';
+        stars[kk].style.color = '#F4B400';
+    }
+    for(kk = idx; kk < 5; kk++){
+        stars[kk].className = 'bi bi-star';
+        stars[kk].style.color = '#F4B400';
+    }
+}
 
 function callLoginUser(header, headerTxt, querySelIn, inputDataBlob){
     var xmlhttp = new XMLHttpRequest();
@@ -4907,7 +5009,7 @@ function sendChatContent(uId, chatArea) {
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             data = JSON.parse(this.response);
-            
+
         }
     };
     // sending the request
