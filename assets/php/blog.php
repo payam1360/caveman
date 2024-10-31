@@ -83,6 +83,72 @@ function loadBlogPost($conn, $fields) {
     return $result;
 }
 
+function searchBlogPost($conn, $searchItems) {
+
+    $searchBlogCreator = $searchItems->searchBlogCreator ?? '';
+    $searchBlogContent = $searchItems->searchBlogContent ?? '';
+    $searchBlogDate = $searchItems->searchBlogDate ?? '';
+    $searchBlogRate = $searchItems->searchBlogRate ?? '';
+
+    $tablename  = 'authentication';
+    $sql        = "SELECT userId FROM $tablename WHERE name = '$searchBlogCreator';";
+    $userId     = $conn->query($sql);
+    $userId     = $userId->fetch_assoc();
+
+
+    
+    $tablename = 'blog';
+    // Start the base query
+    $sql = "SELECT * FROM $tablename WHERE 1=1";
+    
+    // Add conditions based on non-empty search items
+    if (!empty($searchBlogContent)) {
+        $sql .= " AND blogTitle LIKE '%" . $conn->real_escape_string($searchBlogContent) . "%'";
+    }
+    if (!empty($userId)) {
+        $sql .= " AND userId LIKE '%" . $conn->real_escape_string($userId) . "%'";
+    }
+    if (!empty($searchBlogDate)) {
+        $sql .= " AND blogDate = '" . $conn->real_escape_string($searchBlogDate) . "'";
+    }
+    if (!empty($searchBlogRate)) {
+        $sql .= " AND blogRate = '" . $conn->real_escape_string($searchBlogRate) . "'";
+    }
+
+    // Execute the query
+    $dbOut = $conn->query($sql);
+
+    // Fetch results
+    $result   = array();
+    if ($dbOut && $dbOut->num_rows > 0) {
+        while ($data = $dbOut->fetch_assoc()) {
+            $blogMediaNum     = $data['blogMediaNum'];
+            $userId           = $data['userId'];
+            $imgBlogPath      = "../img/blog/" . $blogMediaNum . ".jpg";
+            $blogContentPath  = "../../blogContent/" . $blogMediaNum . ".md";
+            $blogCommentsPath = "../../blogContent/" . $blogMediaNum . ".txt";
+            $data['blogContent'] = file_get_contents($blogContentPath);
+            $data['comments']    = file_get_contents($blogCommentsPath);
+            $imageData           = base64_encode(file_get_contents($imgBlogPath));
+            $imageType           = pathinfo($imgBlogPath, PATHINFO_EXTENSION);  // Get file extension
+            $data['blogImage']   = "data:image/{$imageType};base64,{$imageData}";
+            array_push($result, $data);
+        }
+    }
+
+    return $result;
+}
+
+function rateBlogPost($conn, $info){
+    $tablename     = "blog";
+    $rate = $info->rating;
+    $blogMediaNum = $info->blogMediaNum;
+    $sql           = "UPDATE $tablename SET blogRate = '$rate' WHERE blogMediaNum = '$blogMediaNum';";
+    $conn->query($sql);
+    $sql           = "UPDATE $tablename SET blogNumLikes = blogNumLikes + 1 WHERE blogMediaNum = '$blogMediaNum';";
+    $conn->query($sql);
+}
+
 
 $userInfo        = json_decode($_POST['userInfo']);
 // server connect
@@ -96,6 +162,10 @@ if($userInfo->flag == 'save') {
     $data = saveBlogPost($conn, $userInfo);
 } elseif($userInfo->flag == 'load') {
     $data = loadBlogPost($conn, $userInfo);
+} elseif($userInfo->flag == 'search') {
+    $data = searchBlogPost($conn, $userInfo->searchItems);
+} elseif($userInfo->flag == 'rate') {
+    $data = rateBlogPost($conn, $userInfo->values);
 } 
 $conn->close();
 echo json_encode($data);
